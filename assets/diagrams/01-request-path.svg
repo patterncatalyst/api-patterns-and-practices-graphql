@@ -31,7 +31,7 @@
 <text x="760.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">gRPC</text>
 <rect x="650" y="350" width="220" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
 <text x="760.0" y="378.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Handling event store</text>
-<text x="760.0" y="395.0" font-size="11.5" fill="#555555" text-anchor="middle">history and delivery</text>
+<text x="760.0" y="395.0" font-size="11.5" fill="#555555" text-anchor="middle">handling history</text>
 <path d="M170,90 L205,90" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
 <path d="M360,90 L410,90" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
 <path d="M485,115 L485,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>

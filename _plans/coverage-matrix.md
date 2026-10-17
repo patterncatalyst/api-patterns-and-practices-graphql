@@ -19,8 +19,8 @@ while still guaranteeing no mapped-and-claimed chapter silently disappears.
 | # | Topic | Chapter | File | Status |
 |---|---|---|---|---|
 | T1 | Prerequisites, lab toolchain and the tracking domain | Ch0 | `_docs/00-prerequisites-and-the-lab.md` | verified |
-| T2 | Why GraphQL: from REST/RPC to a query-shaped graph | Ch1 | `_docs/01-from-rest-and-rpc-to-graphql.md` | draft |
-| T3 | GraphQL decision framework | Ch2 | `_docs/02-graphql-decision-framework.md` | draft |
+| T2 | Why GraphQL: from REST/RPC to a query-shaped graph | Ch1 | `_docs/01-from-rest-and-rpc-to-graphql.md` | verified |
+| T3 | GraphQL decision framework | Ch2 | `_docs/02-graphql-decision-framework.md` | verified |
 | T4 | SDL and the type system in depth | Ch3 | `_docs/03-sdl-and-the-type-system.md` | verified |
 | T5 | Nullability and null propagation | Ch4 | `_docs/04-nullability-and-null-propagation.md` | verified |
 | T6 | Schema-first / contract-first (canonical SDL, code-first export, drift gate) | Ch5 | `_docs/05-contract-first-schemas.md` | verified |
@@ -60,8 +60,8 @@ while still guaranteeing no mapped-and-claimed chapter silently disappears.
 | Ch | File | Part | Status |
 |---|---|---|---|
 | 0 | `_docs/00-prerequisites-and-the-lab.md` | Part 0 | verified |
-| 1 | `_docs/01-from-rest-and-rpc-to-graphql.md` | Part 1 | draft |
-| 2 | `_docs/02-graphql-decision-framework.md` | Part 1 | draft |
+| 1 | `_docs/01-from-rest-and-rpc-to-graphql.md` | Part 1 | verified |
+| 2 | `_docs/02-graphql-decision-framework.md` | Part 1 | verified |
 | 3 | `_docs/03-sdl-and-the-type-system.md` | Part 2 | verified |
 | 4 | `_docs/04-nullability-and-null-propagation.md` | Part 2 | verified |
 | 5 | `_docs/05-contract-first-schemas.md` | Part 2 | verified |

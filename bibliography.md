@@ -56,7 +56,7 @@ Each chapter's closing section names the parts of these books that cover the sam
 | Chapter here | Chapter of the book |
 |---|---|
 | [Ch1 · From REST/RPC to GraphQL]({{ '/docs/01-from-rest-and-rpc-to-graphql/' | relative_url }}) | the book as a whole, for the end-to-end application view |
-| [Ch2 · The GraphQL decision framework]({{ '/docs/02-graphql-decision-framework/' | relative_url }}) | the book as a whole, for clients and federation |
+| [Ch2 · The GraphQL decision framework]({{ '/docs/02-graphql-decision-framework/' | relative_url }}) | the book as a whole, for clients and authorization |
 | [Ch12 · Connections and pagination]({{ '/docs/12-connections-and-pagination/' | relative_url }}) | Chapter 9, "Advanced GraphQL considerations" |
 | [Ch18 · AuthN and AuthZ]({{ '/docs/18-authn-and-authz/' | relative_url }}) | Chapter 7, "Adding authorization and authentication" |
 | [Ch22 · Client integration]({{ '/docs/22-client-integration/' | relative_url }}) | the book as a whole, for a React client on Apollo Client |
