@@ -1,0 +1,21 @@
+{{ .Release.Name }} is installed in namespace {{ .Release.Namespace }}.
+
+Prove it:
+  helm test {{ .Release.Name }} -n {{ .Release.Namespace }} --kube-context <context> --logs
+
+Reach it through the NodePorts the cluster publishes on 127.0.0.1:
+{{- if eq .Values.edge.service.type "NodePort" }}
+  Quarkus  {{ ternary "https" "http" .Values.edge.tls.enabled }}://127.0.0.1:{{ .Values.edge.service.nodePorts.quarkus }}/graphql
+  Python   {{ ternary "https" "http" .Values.edge.tls.enabled }}://127.0.0.1:{{ .Values.edge.service.nodePorts.python }}/graphql
+{{- if .Values.edge.tls.enabled }}
+  CA       kubectl --context <context> -n {{ .Release.Namespace }} get secret {{ include "gql.tlsSecretName" . }} -o jsonpath='{.data.ca\.crt}' | base64 -d
+{{- end }}
+{{- else }}
+  The edge Service is {{ .Values.edge.service.type }}; publish it through the platform in front of the cluster.
+{{- end }}
+{{- if and .Values.lgtm.enabled (eq .Values.lgtm.service.type "NodePort") }}
+  Grafana     http://127.0.0.1:{{ .Values.lgtm.service.nodePorts.grafana }}
+  Tempo       http://127.0.0.1:{{ .Values.lgtm.service.nodePorts.tempo }}
+  Prometheus  http://127.0.0.1:{{ .Values.lgtm.service.nodePorts.prometheus }}
+  Loki        http://127.0.0.1:{{ .Values.lgtm.service.nodePorts.loki }}
+{{- end }}

@@ -1,0 +1,29 @@
+{{- if and .Values.openshift.anyuid.enabled .Values.final.lgtm.enabled }}
+{{- $account := required "final.lgtm.serviceAccountName must name the ServiceAccount the observability pod runs as" .Values.final.lgtm.serviceAccountName }}
+# The observability image runs as root and writes under its own directories, so
+# its pod uses a ServiceAccount of its own, bound to the anyuid SCC. Every other
+# workload in the release keeps restricted-v2 and the UID the project assigns.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $account }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "appa.labels" (dict "root" . "name" $account "component" "observability") | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $account }}-anyuid
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "appa.labels" (dict "root" . "name" $account "component" "observability") | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:openshift:scc:anyuid
+subjects:
+  - kind: ServiceAccount
+    name: {{ $account }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

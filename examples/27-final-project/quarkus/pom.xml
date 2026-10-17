@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Ch27 The final project - Quarkus side. The complete canonical schema in one
+  image: Chapter 25's production instance (telemetry, extensions.traceId on every
+  execution error) with Chapter 21's subscription, Chapter 14's limits, Chapter
+  18's bearer-token authorization and Chapter 17's introspection switch.
+
+  Serves the object graph of the tracking view, its one mutation,
+  registerHandlingEvent, and the Subscription root, with the error contract of
+  the chapter (exposed and masked errors), with every source-backed field resolved
+  asynchronously (Mutiny Uni) and every source call logged. The
+  schema is built code-first by SmallRye GraphQL from the annotated classes
+  under src/main/java; nothing is generated from the canonical SDL. verify.sh
+  introspects the running server and diffs the result against contracts/schema/
+  with GraphQL Inspector.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.patterncatalyst.shipping</groupId>
+  <artifactId>ch27-quarkus-final</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.release>25</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+    <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+    <!-- Quarkus platform 3.40.1: newest stable LTS stream in registry.quarkus.io
+         (4.0.0.Beta1 is a prerelease and is not used). -->
+    <quarkus.platform.version>3.40.1</quarkus.platform.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Code-first GraphQL: @GraphQLApi classes become the schema; serves
+         POST /graphql with introspection. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-graphql</artifactId>
+    </dependency>
+    <!-- The lab-only /debug/source-calls resource (off unless
+         TRACKING_DEBUG_ENDPOINTS=true); the GraphQL endpoint itself does not
+         need it. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-jackson</artifactId>
+    </dependency>
+    <!-- Liveness/readiness at /q/health. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+    <!-- Bearer-token authentication (Chapter 18): validates the JWT (signature from the
+         identity provider's JWKS, issuer, audience, expiry), maps its roles to
+         the SecurityIdentity and answers 401 with WWW-Authenticate for a bad
+         token. @Authenticated and @RolesAllowed come with it. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-oidc</artifactId>
+    </dependency>
+    <!-- OpenTelemetry for the HTTP server span, the SDK and the OTLP exporter
+         for traces, metrics and logs. Exports are async, so the app starts and
+         answers while the collector is still coming up. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-opentelemetry</artifactId>
+    </dependency>
+    <!-- The OpenTelemetry project's own graphql-java instrumentation: one
+         operation span per request and one span per data fetcher. It is
+         installed through the GraphQL.Builder event (see Telemetry.java).
+         Its version is managed by the Quarkus platform BOM. -->
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-graphql-java-20.0</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

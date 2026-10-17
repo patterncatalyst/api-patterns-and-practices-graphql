@@ -1,0 +1,93 @@
+{{- $tls := .Values.edge.tls.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "edge" "component" "edge") | nindent 4 }}
+spec:
+  replicas: {{ .Values.edge.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      {{- include "gql.selector" (dict "root" . "name" "edge") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "gql.labels" (dict "root" . "name" "edge" "component" "edge") | nindent 8 }}
+      annotations:
+        # nginx reads its file once at start: a new configuration rolls the pods.
+        checksum/config: {{ include (print $.Template.BasePath "/edge-configmap.yaml") . | sha256sum }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: edge
+          image: "{{ .Values.edge.image.repository }}:{{ .Values.edge.image.tag }}"
+          imagePullPolicy: {{ .Values.edge.image.pullPolicy }}
+          # The image's entrypoint stays; only its default command changes.
+          args: ["nginx", "-g", "daemon off;"]
+          ports:
+            - name: quarkus
+              containerPort: {{ include "gql.edgePort" (dict "root" . "stack" "quarkus") }}
+            - name: python
+              containerPort: {{ include "gql.edgePort" (dict "root" . "stack" "python") }}
+            - name: health
+              containerPort: 8090
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            periodSeconds: 2
+            failureThreshold: 15
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            periodSeconds: 10
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: {{ .Values.preStopSleepSeconds }}
+          resources:
+            {{- toYaml .Values.edge.resources | nindent 12 }}
+          securityContext:
+            {{- include "gql.containerSecurityContext" . | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+            {{- if $tls }}
+            - name: tls
+              mountPath: /etc/nginx/tls
+              readOnly: true
+            {{- end }}
+            # nginx writes its pid file and temporary paths under /tmp.
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: config
+          configMap:
+            name: edge-config
+        {{- if $tls }}
+        - name: tls
+          secret:
+            secretName: {{ include "gql.tlsSecretName" . }}
+            # 0444 (292 in decimal): the edge's user is not the file's owner, and
+            # the chart sets no fsGroup. These are lab keys that the chart generates.
+            defaultMode: 292
+        {{- end }}
+        - name: tmp
+          emptyDir: {}

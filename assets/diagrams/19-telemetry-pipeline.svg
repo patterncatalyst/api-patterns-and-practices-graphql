@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 510" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="60" width="250" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="80" font-size="12" font-weight="700" fill="#1d1d1d">Two stacks</text>
+<rect x="300" y="60" width="680" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="312" y="80" font-size="12" font-weight="700" fill="#1d1d1d">lgtm (grafana/otel-lgtm)</text>
+<rect x="40" y="100" width="210" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="145.0" y="133.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus  :8290</text>
+<text x="145.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">quarkus-opentelemetry</text>
+<text x="145.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">graphql-java instrumentation</text>
+<text x="145.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">Telemetry observer</text>
+<rect x="40" y="290" width="210" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="145.0" y="323.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python  :8291</text>
+<text x="145.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">opentelemetry-instrument</text>
+<text x="145.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">OpenTelemetryExtension</text>
+<text x="145.0" y="370.0" font-size="11.5" fill="#555555" text-anchor="middle">OperationMetrics</text>
+<rect x="330" y="190" width="170" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="415.0" y="223.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">OpenTelemetry</text>
+<text x="415.0" y="240.0" font-size="11.5" fill="#555555" text-anchor="middle">Collector</text>
+<text x="415.0" y="255.0" font-size="11.5" fill="#555555" text-anchor="middle">OTLP gRPC :4317</text>
+<text x="415.0" y="270.0" font-size="11.5" fill="#555555" text-anchor="middle">(not published)</text>
+<rect x="620" y="90" width="160" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="700.0" y="118.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Tempo</text>
+<text x="700.0" y="135.0" font-size="11.5" fill="#555555" text-anchor="middle">traces  :8293</text>
+<rect x="620" y="210" width="160" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="700.0" y="238.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Prometheus</text>
+<text x="700.0" y="255.0" font-size="11.5" fill="#555555" text-anchor="middle">metrics  :8294</text>
+<rect x="620" y="330" width="160" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="700.0" y="358.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Loki</text>
+<text x="700.0" y="375.0" font-size="11.5" fill="#555555" text-anchor="middle">logs  :8295</text>
+<rect x="820" y="210" width="140" height="60" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="890.0" y="238.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Grafana</text>
+<text x="890.0" y="255.0" font-size="11.5" fill="#555555" text-anchor="middle">:8292</text>
+<rect x="60" y="222" width="170" height="46" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="145.0" y="243.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">traceparent in</text>
+<text x="145.0" y="260.0" font-size="11.5" fill="#555555" text-anchor="middle">from the caller</text>
+<path d="M250,150 L330,225" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="286.0" y="173.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="286.0" y="173.5" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M250,340 L330,262" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="286.0" y="323.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="286.0" y="323.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M500,215 L620,125" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="554.0" y="164.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">spans</text>
+<text x="554.0" y="164.0" font-size="11" fill="#555" text-anchor="middle">spans</text>
+<path d="M500,240 L620,240" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="560.0" y="232.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">metrics</text>
+<text x="560.0" y="232.0" font-size="11" fill="#555" text-anchor="middle">metrics</text>
+<path d="M500,265 L620,350" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="526.0" y="325.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">log records</text>
+<text x="526.0" y="325.5" font-size="11" fill="#555" text-anchor="middle">log records</text>
+<path d="M700,150 L700,210" fill="none" stroke="#b8650a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#am)"/>
+<text x="656.0" y="180.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">span metrics</text>
+<text x="656.0" y="180.0" font-size="11" fill="#b8650a" text-anchor="middle">span metrics</text>
+<path d="M780,125 L860,210" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M780,240 L820,240" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M780,355 L870,270" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M145,222 L145,200" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M145,268 L145,290" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Three signals leave over one protocol, and one trace id joins them</text>
+<text x="500" y="490" font-size="12" fill="#555555" text-anchor="middle">The trace id travels in the traceparent header, spans carry it, and log records carry it as structured metadata. Grafana reads all three stores.</text>
+</svg>

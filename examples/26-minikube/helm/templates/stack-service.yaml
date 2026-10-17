@@ -1,0 +1,19 @@
+{{- range $name, $stack := .Values.stacks }}
+---
+# ClusterIP: the edge reaches the stack by this name; nothing else is published.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" $ "name" $name "component" "backend") | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "gql.selector" (dict "root" $ "name" $name) | nindent 4 }}
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+{{- end }}

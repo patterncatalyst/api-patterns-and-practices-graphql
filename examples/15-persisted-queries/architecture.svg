@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="520" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/15-persisted-queries - compose stack (gql-ch15-persisted)</text>
+<rect x="40" y="240" width="150" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="273.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="115.0" y="290.0" font-size="11.5" fill="#555555" text-anchor="middle">client</text>
+<rect x="260" y="70" width="260" height="110" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="390.0" y="108.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus  (apq)</text>
+<text x="390.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">Vert.x route -&gt; SmallRye GraphQL</text>
+<text x="390.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">quarkus-cache, 1000 documents</text>
+<text x="390.0" y="155.0" font-size="11.5" fill="#555555" text-anchor="middle">:8250 /graphql</text>
+<rect x="260" y="200" width="260" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="390.0" y="240.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus-trusted</text>
+<text x="390.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">same image, manifest only</text>
+<text x="390.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">:8252 /graphql</text>
+<rect x="260" y="330" width="260" height="110" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="390.0" y="368.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python  (apq)</text>
+<text x="390.0" y="385.0" font-size="11.5" fill="#555555" text-anchor="middle">SchemaExtension -&gt; Strawberry</text>
+<text x="390.0" y="400.0" font-size="11.5" fill="#555555" text-anchor="middle">cachetools LRUCache, 1000 documents</text>
+<text x="390.0" y="415.0" font-size="11.5" fill="#555555" text-anchor="middle">:8251 /graphql</text>
+<rect x="260" y="455" width="260" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="390.0" y="480.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python-trusted</text>
+<text x="390.0" y="497.5" font-size="11.5" fill="#555555" text-anchor="middle">same image, manifest only</text>
+<text x="390.0" y="512.5" font-size="11.5" fill="#555555" text-anchor="middle">:8253 /graphql</text>
+<rect x="700" y="200" width="250" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="240.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">persisted-documents.json</text>
+<text x="825.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">(Apollo manifest, mounted :ro,z</text>
+<text x="825.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">into the two trusted services)</text>
+<rect x="700" y="70" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="825.0" y="103.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="825.0" y="120.0" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql (canonical SDL)</text>
+<rect x="700" y="455" width="250" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="825.0" y="483.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">otel-lgtm</text>
+<text x="825.0" y="500.0" font-size="11.5" fill="#555555" text-anchor="middle">(compose.observability.yaml)</text>
+<path d="M190,262 L260,125" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="207.0" y="167.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">hash, text</text>
+<text x="207.0" y="167.5" font-size="11" fill="#555" text-anchor="middle">hash, text</text>
+<path d="M190,270 L260,250" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M190,285 L260,385" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M190,300 L260,490" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M520,250 L700,250" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="604.0" y="236.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads at start</text>
+<text x="604.0" y="236.0" font-size="11" fill="#b8650a" text-anchor="middle">reads at start</text>
+<path d="M520,110 L700,105" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="610.0" y="95.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="610.0" y="95.5" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<path d="M520,490 L700,290" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="640.0" y="430.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads at start</text>
+<text x="640.0" y="430.0" font-size="11" fill="#b8650a" text-anchor="middle">reads at start</text>
+<path d="M520,385 L700,130" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="570.0" y="137.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="570.0" y="137.5" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<text x="40" y="538" font-size="12" fill="#555555" text-anchor="start">The trusted pair refuses introspection, so the contract checks run against the apq pair.</text>
+</svg>

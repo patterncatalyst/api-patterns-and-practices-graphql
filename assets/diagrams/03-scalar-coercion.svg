@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 400" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="30" y="70" width="240" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="150.0" y="103.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Literal in the document</text>
+<text x="150.0" y="120.0" font-size="11.5" fill="#555555" text-anchor="middle">completionTime: &quot;2026-10-15T00:00:00Z&quot;</text>
+<rect x="30" y="250" width="240" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="150.0" y="283.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Variable in the JSON</text>
+<text x="150.0" y="300.0" font-size="11.5" fill="#555555" text-anchor="middle">{&quot;t&quot;: &quot;2026-10-15T02:00:00+02:00&quot;}</text>
+<rect x="340" y="70" width="170" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="425.0" y="103.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">parse literal</text>
+<text x="425.0" y="120.0" font-size="11.5" fill="#555555" text-anchor="middle">the AST string value</text>
+<rect x="340" y="250" width="170" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="425.0" y="283.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">parse value</text>
+<text x="425.0" y="300.0" font-size="11.5" fill="#555555" text-anchor="middle">the JSON string</text>
+<rect x="340" y="160" width="170" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="425.0" y="185.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Rejected</text>
+<text x="425.0" y="202.5" font-size="11.5" fill="#555555" text-anchor="middle">number, bad text, no offset</text>
+<text x="425.0" y="217.5" font-size="11.5" fill="#555555" text-anchor="middle">request error, no data</text>
+<rect x="580" y="155" width="180" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="670.0" y="185.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Internal value</text>
+<text x="670.0" y="202.5" font-size="11.5" fill="#555555" text-anchor="middle">Java Instant</text>
+<text x="670.0" y="217.5" font-size="11.5" fill="#555555" text-anchor="middle">Python datetime in UTC</text>
+<rect x="820" y="155" width="140" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="890.0" y="185.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">serialize</text>
+<text x="890.0" y="202.5" font-size="11.5" fill="#555555" text-anchor="middle">UTC, whole seconds,</text>
+<text x="890.0" y="217.5" font-size="11.5" fill="#555555" text-anchor="middle">suffix Z</text>
+<rect x="820" y="275" width="140" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="890.0" y="308.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">JSON output</text>
+<text x="890.0" y="325.0" font-size="11.5" fill="#555555" text-anchor="middle">&quot;2026-10-15T00:00:00Z&quot;</text>
+<path d="M270,105 L340,105" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M270,285 L340,285" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M510,105 L580,175" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M510,285 L580,215" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="579.0" y="278.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">normalized to UTC</text>
+<text x="579.0" y="278.0" font-size="11" fill="#b8650a" text-anchor="middle">normalized to UTC</text>
+<path d="M425,140 L425,160" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M425,250 L425,230" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M760,195 L820,195" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M890,235 L890,275" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="150" y="48" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Input: two entry points</text>
+<text x="670" y="130" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Held as one internal value</text>
+<text x="890" y="130" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Output</text>
+<text x="490" y="385" font-size="12" fill="#555555" text-anchor="middle">Result coercion is serialize; input coercion is parse value (variables) or parse literal (inline arguments).</text>
+</svg>

@@ -1,0 +1,3 @@
+# Diagram specs
+
+Each figure under `assets/diagrams/` is generated from one spec in this directory, named after the figure (`01-request-path.py` produces `01-request-path.svg` and `01-request-path.excalidraw`). Specs call `emit()` from `scripts/generate_diagram.py`. Run a single spec with `python3 -I diagrams/<name>.py`, or regenerate everything with `for f in diagrams/*.py; do python3 -I "$f"; done`. Output is deterministic: the generator seeds its random ids from the figure name, so regenerating an unchanged spec leaves both files byte-identical. Never hand-edit a generated SVG or `.excalidraw` file: change the spec and regenerate. Architecture diagrams for the runnable examples live under `diagrams/examples/`.

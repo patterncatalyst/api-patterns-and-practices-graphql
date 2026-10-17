@@ -1,0 +1,25 @@
+# Ch22 Client integration - the gql client, UBI 10, uv-managed.
+#
+# The canonical schema arrives as the `schema` build context (compose:
+# build.additional_contexts), so the client reads contracts/schema/ without a copy
+# in this example.
+#
+# UBI 10 publishes only the -minimal Python image.
+# Pin: registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506
+
+FROM registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506 AS build
+USER 0
+WORKDIR /app
+RUN pip install --no-cache-dir uv==0.13.1
+# --locked fails the build if uv.lock is out of date with pyproject.toml.
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked --no-dev --no-install-project
+
+FROM registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506
+WORKDIR /app
+COPY --from=build --chown=1001:0 /app/.venv /app/.venv
+COPY --from=schema --chown=1001:0 / /schema
+COPY --chown=1001:0 track.py ./
+ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1
+USER 1001
+ENTRYPOINT ["python", "track.py"]

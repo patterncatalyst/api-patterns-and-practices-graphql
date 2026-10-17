@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 530" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="385" width="960" height="125" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="405" font-size="12" font-weight="700" fill="#1d1d1d">Gates on the canonical SDL itself</text>
+<rect x="20" y="80" width="190" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Quarkus code</text>
+<text x="115.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">@Type, @Query, @Description</text>
+<rect x="20" y="220" width="190" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="253.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Strawberry code</text>
+<text x="115.0" y="270.0" font-size="11.5" fill="#555555" text-anchor="middle">@strawberry.type, fields</text>
+<rect x="250" y="80" width="200" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="350.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">GET schema.graphql</text>
+<text x="350.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">/graphql/schema.graphql, scalars on</text>
+<rect x="250" y="220" width="200" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="350.0" y="253.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">strawberry CLI</text>
+<text x="350.0" y="270.0" font-size="11.5" fill="#555555" text-anchor="middle">export-schema app.schema:schema</text>
+<rect x="490" y="80" width="170" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="575.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus.graphql</text>
+<text x="575.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">exported SDL</text>
+<rect x="490" y="220" width="170" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="575.0" y="253.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python.graphql</text>
+<text x="575.0" y="270.0" font-size="11.5" fill="#555555" text-anchor="middle">exported SDL</text>
+<rect x="710" y="130" width="270" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="845.0" y="170.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">graphql-inspector diff</text>
+<text x="845.0" y="187.5" font-size="11.5" fill="#555555" text-anchor="middle">live to canonical: extra or tighter</text>
+<text x="845.0" y="202.5" font-size="11.5" fill="#555555" text-anchor="middle">canonical to live: changed, not absent</text>
+<rect x="710" y="20" width="270" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="845.0" y="48.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/**/*.graphql</text>
+<text x="845.0" y="65.0" font-size="11.5" fill="#555555" text-anchor="middle">canonical SDL</text>
+<rect x="710" y="290" width="270" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="845.0" y="323.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Gate result</text>
+<text x="845.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">pass, or FAIL naming the field</text>
+<rect x="380" y="430" width="220" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="490.0" y="458.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="490.0" y="475.0" font-size="11.5" fill="#555555" text-anchor="middle">canonical SDL</text>
+<rect x="60" y="430" width="220" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="170.0" y="458.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">npm run lint</text>
+<text x="170.0" y="475.0" font-size="11.5" fill="#555555" text-anchor="middle">descriptions, naming</text>
+<rect x="680" y="430" width="270" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="815.0" y="458.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">npm run breaking</text>
+<text x="815.0" y="475.0" font-size="11.5" fill="#555555" text-anchor="middle">canonical vs origin/main (Ch11)</text>
+<path d="M210,115 L250,115" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M210,255 L250,255" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M450,115 L490,115" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M450,255 L490,255" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M660,115 L710,160" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M660,255 L710,205" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M845,80 L845,130" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="907.0" y="103.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">both directions</text>
+<text x="907.0" y="103.0" font-size="11" fill="#b8650a" text-anchor="middle">both directions</text>
+<path d="M845,230 L845,290" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M575,150 L575,220" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="623.0" y="183.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">same schema</text>
+<text x="623.0" y="183.0" font-size="11" fill="#555" text-anchor="middle">same schema</text>
+<path d="M380,460 L280,460" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M600,460 L680,460" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="115" y="58" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Code, per stack</text>
+<text x="350" y="58" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Export</text>
+<text x="575" y="58" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">SDL file</text>
+<text x="40" y="325" font-size="12" fill="#555555" text-anchor="start">Both stacks stay code-first; the canonical SDL is the yardstick.</text>
+<text x="40" y="345" font-size="12" fill="#555555" text-anchor="start">Drift is seeded into copies of each export and must fail the gate.</text>
+</svg>

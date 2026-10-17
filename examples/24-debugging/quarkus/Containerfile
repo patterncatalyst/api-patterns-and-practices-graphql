@@ -1,0 +1,57 @@
+# Ch24 Debugging - Quarkus, UBI 10, JVM mode (fast-jar), no native.
+# Build (the build context is this directory):
+#   docker build -f examples/24-debugging/quarkus/Containerfile \
+#     -t ch24-debugging-quarkus examples/24-debugging/quarkus
+#
+# The schema is built code-first from the annotated classes, so unlike the
+# gRPC series no contract file is copied into the image.
+#
+# Base image pins (re-check with `skopeo list-tags
+# docker://registry.access.redhat.com/ubi10/openjdk-25`, confirm with
+# `skopeo inspect`; bump deliberately):
+#   registry.access.redhat.com/ubi10/openjdk-25:1.24-16
+#   registry.access.redhat.com/ubi10/openjdk-25-runtime:1.24-16
+
+# -- Stage 1: Build ----------------------------------------------------------
+FROM registry.access.redhat.com/ubi10/openjdk-25:1.24-16 AS build
+
+WORKDIR /build
+ENV MAVEN_RETRY_OPTS="-Dmaven.wagon.http.retryHandler.count=3 -Daether.connector.http.retryHandler.count=3 -Daether.syncContext.named.time=300 -Daether.syncContext.named.time.unit=SECONDS"
+
+# Dependencies first, in their own layer: a source-only change reuses it.
+COPY pom.xml .
+RUN mvn -B $MAVEN_RETRY_OPTS dependency:go-offline
+
+COPY src ./src
+RUN mvn -B $MAVEN_RETRY_OPTS package -DskipTests -Dmaven.javadoc.skip=true
+
+# -- Dev: Quarkus dev mode, from the sources -------------------------------
+# The dev instance of compose.yaml builds this target (`build.target: dev`).
+# Dev mode serves the GraphQL UI at /q/graphql-ui and the Dev UI at /q/dev-ui,
+# reloads on a source change and logs the payload of each request
+# (%dev.quarkus.smallrye-graphql.log-payload). The runtime image below carries
+# none of them. quarkus:go-offline resolves what dev mode needs at start-up.
+FROM build AS dev
+RUN mvn -B $MAVEN_RETRY_OPTS quarkus:go-offline
+EXPOSE 8080
+CMD ["mvn", "-B", "quarkus:dev", "-Dquarkus.http.host=0.0.0.0", "-Ddebug=false", \
+     "-Dquarkus.console.enabled=false", "-Dquarkus.test.continuous-testing=disabled", \
+     "-Dquarkus.analytics.disabled=true"]
+
+# -- Stage 2: Runtime (fast-jar) ---------------------------------------------
+FROM registry.access.redhat.com/ubi10/openjdk-25-runtime:1.24-16
+
+ENV LANGUAGE='en_US:en'
+
+COPY --from=build --chown=185 /build/target/quarkus-app/lib/ /deployments/lib/
+COPY --from=build --chown=185 /build/target/quarkus-app/*.jar /deployments/
+COPY --from=build --chown=185 /build/target/quarkus-app/app/ /deployments/app/
+COPY --from=build --chown=185 /build/target/quarkus-app/quarkus/ /deployments/quarkus/
+
+EXPOSE 8080
+USER 185
+
+ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+
+ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]

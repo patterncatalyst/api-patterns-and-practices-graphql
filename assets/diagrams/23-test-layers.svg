@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="15" y="56" width="970" height="238" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="27" y="76" font-size="12" font-weight="700" fill="#1d1d1d">Run inside each stack&#x27;s test image</text>
+<rect x="15" y="300" width="970" height="240" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="27" y="320" font-size="12" font-weight="700" fill="#1d1d1d">Run from verify.sh against the live stacks</text>
+<rect x="25" y="86" width="170" height="58" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="110.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1  Schema</text>
+<text x="110.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">built from the code</text>
+<rect x="215" y="86" width="220" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="325.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">The built schema</text>
+<text x="325.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">the SDL the framework serves</text>
+<rect x="455" y="86" width="300" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="605.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Types and scalars exist</text>
+<text x="605.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">the SDL is written to /out</text>
+<rect x="775" y="86" width="200" height="58" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="875.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Test image</text>
+<text x="875.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">mvn verify | pytest</text>
+<rect x="25" y="156" width="170" height="58" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="110.0" y="183.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2  Resolver unit</text>
+<text x="110.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">no server, or one resolver</text>
+<rect x="215" y="156" width="220" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="325.0" y="183.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">A function or a resolver</text>
+<text x="325.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">the booking source is stubbed</text>
+<rect x="455" y="156" width="300" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="605.0" y="183.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Values, paths and codes</text>
+<text x="605.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">SERVICE_UNAVAILABLE at cargo</text>
+<rect x="775" y="156" width="200" height="58" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="875.0" y="183.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Test image</text>
+<text x="875.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">mvn verify | pytest</text>
+<rect x="25" y="226" width="170" height="58" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="110.0" y="253.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3  Operation</text>
+<text x="110.0" y="270.0" font-size="11.5" fill="#555555" text-anchor="middle">the app in process</text>
+<rect x="215" y="226" width="220" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="325.0" y="253.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">The app over its HTTP layer</text>
+<text x="325.0" y="270.0" font-size="11.5" fill="#555555" text-anchor="middle">documents/ posted as clients do</text>
+<rect x="455" y="226" width="300" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="605.0" y="253.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data beside errors</text>
+<text x="605.0" y="270.0" font-size="11.5" fill="#555555" text-anchor="middle">8 or 6 calls; 7,651 refused</text>
+<rect x="775" y="226" width="200" height="58" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="875.0" y="253.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Test image</text>
+<text x="875.0" y="270.0" font-size="11.5" fill="#555555" text-anchor="middle">mvn verify | pytest</text>
+<rect x="25" y="330" width="170" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="110.0" y="357.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4  Contract</text>
+<text x="110.0" y="374.0" font-size="11.5" fill="#555555" text-anchor="middle">exported and live SDL</text>
+<rect x="215" y="330" width="220" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="325.0" y="357.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Both schemas</text>
+<text x="325.0" y="374.0" font-size="11.5" fill="#555555" text-anchor="middle">contracts/schema/ is the base</text>
+<rect x="455" y="330" width="300" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="605.0" y="357.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">No breaking change either way</text>
+<text x="605.0" y="374.0" font-size="11.5" fill="#555555" text-anchor="middle">only Subscription is unserved</text>
+<rect x="775" y="330" width="200" height="58" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="875.0" y="357.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">verify.sh</text>
+<text x="875.0" y="374.0" font-size="11.5" fill="#dddddd" text-anchor="middle">graphql-inspector</text>
+<rect x="25" y="400" width="170" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="110.0" y="427.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">5  Client document</text>
+<text x="110.0" y="444.0" font-size="11.5" fill="#555555" text-anchor="middle">what clients send</text>
+<rect x="215" y="400" width="220" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="325.0" y="427.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">documents/ vs the contract</text>
+<text x="325.0" y="444.0" font-size="11.5" fill="#555555" text-anchor="middle">Chapter 22&#x27;s four operations</text>
+<rect x="455" y="400" width="300" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="605.0" y="427.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Valid documents pass</text>
+<text x="605.0" y="444.0" font-size="11.5" fill="#555555" text-anchor="middle">Cargo.weight is refused</text>
+<rect x="775" y="400" width="200" height="58" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="875.0" y="427.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">verify.sh</text>
+<text x="875.0" y="444.0" font-size="11.5" fill="#dddddd" text-anchor="middle">graphql-inspector</text>
+<rect x="25" y="470" width="170" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="110.0" y="497.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">6  Load</text>
+<text x="110.0" y="514.0" font-size="11.5" fill="#555555" text-anchor="middle">the running stack</text>
+<rect x="215" y="470" width="220" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="325.0" y="497.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">k6 virtual users</text>
+<text x="325.0" y="514.0" font-size="11.5" fill="#555555" text-anchor="middle">exact numbers of iterations</text>
+<rect x="455" y="470" width="300" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="605.0" y="497.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Every check true, same calls</text>
+<text x="605.0" y="514.0" font-size="11.5" fill="#555555" text-anchor="middle">per request; one write for 40 retries</text>
+<rect x="775" y="470" width="200" height="58" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="875.0" y="497.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">verify.sh</text>
+<text x="875.0" y="514.0" font-size="11.5" fill="#dddddd" text-anchor="middle">k6 image</text>
+<path d="M195,115 L215,115" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M435,115 L455,115" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M755,115 L775,115" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M195,185 L215,185" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M435,185 L455,185" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M755,185 L775,185" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M195,255 L215,255" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M435,255 L455,255" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M755,255 L775,255" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M195,359 L215,359" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M435,359 L455,359" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M755,359 L775,359" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M195,429 L215,429" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M435,429 L455,429" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M755,429 L775,429" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M195,499 L215,499" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M435,499 L455,499" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M755,499 L775,499" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="25" y="48" font-size="12" fill="#1d1d1d" text-anchor="start" font-weight="700">Layer</text>
+<text x="215" y="48" font-size="12" fill="#1d1d1d" text-anchor="start" font-weight="700">Runs against</text>
+<text x="455" y="48" font-size="12" fill="#1d1d1d" text-anchor="start" font-weight="700">Asserts</text>
+<text x="775" y="48" font-size="12" fill="#1d1d1d" text-anchor="start" font-weight="700">Where it runs</text>
+<text x="500" y="566" font-size="12" fill="#555555" text-anchor="middle">A test that disappears fails the build: verify.sh counts 22 Quarkus and 18 Python tests from the JUnit reports.</text>
+</svg>

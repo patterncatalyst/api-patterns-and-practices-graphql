@@ -1,0 +1,105 @@
+# Ch16 Caching - compose topology.
+#
+# Default `docker compose up` brings up three services from two images and one
+# stock image:
+#
+#   quarkus  8260  Apollo APQ + Cache-Control + field-level source caches
+#   python   8261  the same on Strawberry
+#   edge     8262  nginx in front of quarkus  (container port 8080)
+#            8263  nginx in front of python   (container port 8081)
+#
+# Both stacks build their schema code-first (SmallRye GraphQL, Strawberry) and
+# serve the same slice of the canonical tracking-view SDL
+# (contracts/schema/shipping/*.graphql) as Chapter 15: everything except
+# Subscription, in APQ mode only. This example does not repeat Chapter 14's
+# limits; production would.
+#
+# The direct ports (8260, 8261) are where verify.sh reads the source-call log
+# and checks the server's own caches; the edge ports (8262, 8263) are where
+# it checks the HTTP cache. TRACKING_HANDLING_CACHE_TTL is 20 seconds here so
+# the lab can watch an entry expire; the application default is 60.
+#
+# TRACKING_DEBUG_ENDPOINTS=true turns the /debug/source-calls endpoints on.
+# They are a lab tool: leave them off (the default) anywhere else.
+#
+# Host ports (this chapter): 8260-8263 (chapter NN takes 8100 + 10*NN), all
+# at /graphql; container port 8080 (8081 for the second edge listener).
+#
+# Telemetry is off by default (QUARKUS_OTEL_SDK_DISABLED and OTEL_SDK_DISABLED).
+# To send traces to the Grafana LGTM stack, add the observability file, which
+# adds the lgtm service and switches the SDKs on:
+#   docker compose -f compose.yaml -f compose.observability.yaml up --build
+#
+# Usage:
+#   docker compose up --build   # app stack only, telemetry off
+
+# A fixed project name, the same one verify.sh passes with -p: a manual
+# `docker compose up` and a verify.sh run share one set of container,
+# network and volume names instead of colliding on the container names below.
+name: gql-ch16-caching
+
+services:
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    image: gql-ch16-caching-quarkus:local
+    container_name: ch16-caching-quarkus
+    ports:
+      - "8260:8080"
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_DOCUMENTS_MODE=apq
+      - TRACKING_HANDLING_CACHE_TTL=20S
+    healthcheck:
+      # SmallRye Health readiness; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    image: gql-ch16-caching-python:local
+    container_name: ch16-caching-python
+    ports:
+      - "8261:8080"
+    environment:
+      - OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_DOCUMENTS_MODE=apq
+      - TRACKING_HANDLING_CACHE_TTL_SECONDS=20
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  edge:
+    image: registry.access.redhat.com/ubi10/nginx-126:10.1-1779165744
+    container_name: ch16-caching-edge
+    command: ["nginx", "-g", "daemon off;"]
+    depends_on:
+      quarkus:
+        condition: service_healthy
+      python:
+        condition: service_healthy
+    ports:
+      - "8262:8080" # nginx -> quarkus
+      - "8263:8081" # nginx -> python
+    volumes:
+      # :ro,z - read-only, and relabelled for the container (SELinux hosts).
+      - ./edge/nginx.conf:/etc/nginx/nginx.conf:ro,z
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/graphql?query=%7B__typename%7D"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s

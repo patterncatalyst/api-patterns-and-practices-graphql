@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 515" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="96" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">after the insert, newest first</text>
+<rect x="20" y="170" width="960" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="190" font-size="12" font-weight="700" fill="#1d1d1d">offset: skip 3, take 3</text>
+<rect x="20" y="320" width="960" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="340" font-size="12" font-weight="700" fill="#1d1d1d">keyset: after the cursor of evt_7, take 3</text>
+<rect x="110" y="84" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="160.0" y="107.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_9</text>
+<text x="160.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">10-12 15:00</text>
+<rect x="220" y="84" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="270.0" y="107.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_8</text>
+<text x="270.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">10-12 08:00</text>
+<rect x="330" y="84" width="100" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="380.0" y="107.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_10</text>
+<text x="380.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">10-11 20:00</text>
+<rect x="440" y="84" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="490.0" y="107.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_7</text>
+<text x="490.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">10-11 18:20</text>
+<rect x="550" y="84" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="600.0" y="107.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_6</text>
+<text x="600.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">10-10 06:15</text>
+<rect x="660" y="84" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="710.0" y="107.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_5</text>
+<text x="710.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">10-09 14:30</text>
+<rect x="770" y="84" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="820.0" y="107.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_4</text>
+<text x="820.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">10-01 08:15</text>
+<rect x="880" y="84" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="930.0" y="107.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_3</text>
+<text x="930.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">09-30 15:00</text>
+<rect x="440" y="206" width="100" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="490.0" y="229.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_7</text>
+<text x="490.0" y="246.0" font-size="11.5" fill="#555555" text-anchor="middle">10-11 18:20</text>
+<rect x="550" y="206" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="600.0" y="229.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_6</text>
+<text x="600.0" y="246.0" font-size="11.5" fill="#555555" text-anchor="middle">10-10 06:15</text>
+<rect x="660" y="206" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="710.0" y="229.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_5</text>
+<text x="710.0" y="246.0" font-size="11.5" fill="#555555" text-anchor="middle">10-09 14:30</text>
+<rect x="110" y="206" width="320" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="270.0" y="229.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">skipped: evt_9, evt_8, evt_10</text>
+<text x="270.0" y="246.0" font-size="11.5" fill="#555555" text-anchor="middle">three items</text>
+<rect x="440" y="262" width="100" height="28" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="490.0" y="281.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">repeat</text>
+<rect x="550" y="356" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="600.0" y="379.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_6</text>
+<text x="600.0" y="396.0" font-size="11.5" fill="#555555" text-anchor="middle">10-10 06:15</text>
+<rect x="660" y="356" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="710.0" y="379.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_5</text>
+<text x="710.0" y="396.0" font-size="11.5" fill="#555555" text-anchor="middle">10-09 14:30</text>
+<rect x="770" y="356" width="100" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="820.0" y="379.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">evt_4</text>
+<text x="820.0" y="396.0" font-size="11.5" fill="#555555" text-anchor="middle">10-01 08:15</text>
+<rect x="110" y="356" width="430" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="325.0" y="379.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">seek past the key of evt_7</text>
+<text x="325.0" y="396.0" font-size="11.5" fill="#555555" text-anchor="middle">no counting from the start</text>
+<path d="M490.0,134 L490.0,206" fill="none" stroke="#b8650a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#am)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Offset counts rows from the start, so an insert above the page repeats an item; keyset seeks on the key</text>
+<text x="500" y="478" font-size="12" fill="#555555" text-anchor="middle">Before the insert page 1 was evt_9, evt_8, evt_7 and page 2 was evt_6, evt_5, evt_4. Totals: 7 events, then 8.</text>
+<text x="500" y="496" font-size="12" fill="#555555" text-anchor="middle">DDIA, 2nd ed.: a B-tree index is ordered, so a range scan starts at a key.</text>
+</svg>

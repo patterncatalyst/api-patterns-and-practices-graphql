@@ -1,0 +1,22 @@
+apiVersion: v2
+name: gql-appendix-a
+description: Chapter 27's chart on OpenShift Local - a wrapper chart that depends on it unchanged and adds Routes, Docker-strategy builds, image streams and the one SCC binding the observability image asks for.
+type: application
+version: 1.0.0
+appVersion: "1.0"
+kubeVersion: ">=1.31.0-0"
+keywords:
+  - graphql
+  - openshift
+  - wrapper-chart
+home: https://github.com/patterncatalyst/api-patterns-and-practices-graphql
+dependencies:
+  # The final project's chart, as it is in examples/27-final-project/helm.
+  # `helm dependency build` packages it into charts/. The `app` tag lets the
+  # first install create only the build objects (see scripts/up.sh).
+  - name: gql-ch27-final
+    version: 1.0.0
+    repository: file://../../27-final-project/helm
+    alias: final
+    tags:
+      - app

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 390" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="1060" height="76" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">first request, key k-001</text>
+<rect x="20" y="146" width="1060" height="76" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="166" font-size="12" font-weight="700" fill="#1d1d1d">retry after the lost response, key k-001</text>
+<rect x="20" y="242" width="1060" height="76" rx="12" fill="#ffffff" stroke="#ddd"/>
+<text x="32" y="262" font-size="12" font-weight="700" fill="#1d1d1d">retry without a key</text>
+<rect x="190" y="72" width="125" height="44" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="252.5" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lookup k-001</text>
+<text x="252.5" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">miss</text>
+<rect x="315" y="72" width="125" height="44" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="377.5" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">appendEvent</text>
+<text x="377.5" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">writes evt_3</text>
+<rect x="440" y="72" width="200" height="44" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="540.0" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">response lost</text>
+<text x="540.0" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">client times out</text>
+<rect x="690" y="168" width="125" height="44" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="752.5" y="188.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lookup k-001</text>
+<text x="752.5" y="205.0" font-size="11.5" fill="#555555" text-anchor="middle">hit: evt_3</text>
+<rect x="815" y="168" width="125" height="44" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="877.5" y="188.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">re-read cargo</text>
+<text x="877.5" y="205.0" font-size="11.5" fill="#555555" text-anchor="middle">returns evt_3</text>
+<rect x="690" y="264" width="125" height="44" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="752.5" y="284.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">no lookup</text>
+<text x="752.5" y="301.0" font-size="11.5" fill="#555555" text-anchor="middle">no key</text>
+<rect x="815" y="264" width="125" height="44" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="877.5" y="284.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">appendEvent</text>
+<text x="877.5" y="301.0" font-size="11.5" fill="#555555" text-anchor="middle">writes evt_4</text>
+<path d="M640,94 L690,190" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="691.0" y="136.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">retry</text>
+<text x="691.0" y="136.0" font-size="11" fill="#b8650a" text-anchor="middle">retry</text>
+<text x="540" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">The same retry, with and without an idempotency key</text>
+<text x="954" y="194" font-size="12" fill="#b8650a" text-anchor="start">store: evt_3 only</text>
+<text x="954" y="290" font-size="12" fill="#555555" text-anchor="start">store: evt_3 and evt_4</text>
+<text x="540" y="346" font-size="12" fill="#555555" text-anchor="middle">The key turns a second write into a read. Without it, the store cannot tell a retry from a second event.</text>
+<text x="540" y="366" font-size="12" fill="#555555" text-anchor="middle">Schematic: each source call is 250 ms. Chapter 8&#x27;s verify.sh asserts the order of the calls, never their duration.</text>
+</svg>

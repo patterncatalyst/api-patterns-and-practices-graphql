@@ -1,0 +1,21 @@
+# In the cluster the stacks reach Keycloak as keycloak:8080 (the identity.authServerUrl
+# value). The NodePort equals the host port the profile publishes on 127.0.0.1, which
+# is where a client fetches tokens and so the issuer the stacks compare with.
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "keycloak" "component" "identity") | nindent 4 }}
+spec:
+  type: {{ .Values.keycloak.service.type }}
+  selector:
+    {{- include "gql.selector" (dict "root" . "name" "keycloak") | nindent 4 }}
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      {{- if and (eq .Values.keycloak.service.type "NodePort") .Values.keycloak.service.nodePort }}
+      nodePort: {{ .Values.keycloak.service.nodePort }}
+      {{- end }}

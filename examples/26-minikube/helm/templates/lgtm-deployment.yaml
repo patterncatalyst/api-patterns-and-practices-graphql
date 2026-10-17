@@ -1,0 +1,77 @@
+{{- if .Values.lgtm.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lgtm
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "lgtm" "component" "observability") | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "gql.selector" (dict "root" . "name" "lgtm") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "gql.labels" (dict "root" . "name" "lgtm" "component" "observability") | nindent 8 }}
+    spec:
+      {{- with .Values.lgtm.serviceAccountName }}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: lgtm
+          image: "{{ .Values.lgtm.image.repository }}:{{ .Values.lgtm.image.tag }}"
+          imagePullPolicy: {{ .Values.lgtm.image.pullPolicy }}
+          ports:
+            - {name: grafana, containerPort: 3000}
+            - {name: tempo, containerPort: 3200}
+            - {name: prometheus, containerPort: 9090}
+            - {name: loki, containerPort: 3100}
+            - {name: otlp-grpc, containerPort: 4317}
+            - {name: otlp-http, containerPort: 4318}
+          env:
+            # Lab only: Grafana without a login form.
+            - {name: GF_AUTH_ANONYMOUS_ENABLED, value: "true"}
+            - {name: GF_AUTH_ANONYMOUS_ORG_ROLE, value: Admin}
+            - {name: GF_AUTH_DISABLE_LOGIN_FORM, value: "true"}
+          # Ready means Grafana, Tempo and Loki all answer, as in Chapter 25.
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - curl -fsS -o /dev/null http://localhost:3000/api/health && curl -fsS -o /dev/null http://localhost:3200/ready && curl -fsS -o /dev/null http://localhost:3100/ready
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - curl -fsS -o /dev/null http://localhost:3000/api/health && curl -fsS -o /dev/null http://localhost:3200/ready && curl -fsS -o /dev/null http://localhost:3100/ready
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: grafana
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 6
+          resources:
+            {{- toYaml .Values.lgtm.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+{{- end }}

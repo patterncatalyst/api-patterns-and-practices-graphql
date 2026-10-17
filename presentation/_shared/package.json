@@ -1,0 +1,23 @@
+{
+  "name": "api-patterns-graphql-presentation-shared",
+  "version": "1.0.0",
+  "description": "Shared Red Hat deck scaffold for the API Patterns & Practices: GraphQL decks (100 concepts, Quarkus and Python implementations). Deck helper library, brand assets and the build and QA scripts reused by every deck.",
+  "private": true,
+  "scripts": {
+    "figures": "uv run --no-project --with cairosvg==2.9.1 python -I render_svgs.py",
+    "diagrams": "python3 build_diagrams.py",
+    "build": "bash build.sh",
+    "qa": "python3 -I qa.py"
+  },
+  "author": "Robert Sedor",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "pptxgenjs": "4.0.1"
+  },
+  "overrides": {
+    "image-size": "2.0.4"
+  }
+}

@@ -1,0 +1,22 @@
+[project]
+name = "shipping-python-ch16-caching"
+version = "1.0.0"
+description = "Ch16 Caching - the cargo graph with per-response Cache-Control and field-level source caches (Python side, Strawberry on FastAPI)."
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi==0.143.2",
+    "uvicorn==0.54.0",
+    "strawberry-graphql==0.335.0",
+    "pydantic-settings==2.16.0",
+    "cachetools==7.2.2",
+    "opentelemetry-distro==0.66b1",
+    "opentelemetry-exporter-otlp-proto-grpc==1.45.1",
+    "opentelemetry-instrumentation-fastapi==0.66b1",
+]
+
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]

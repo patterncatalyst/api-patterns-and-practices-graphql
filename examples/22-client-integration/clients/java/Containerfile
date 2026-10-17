@@ -1,0 +1,26 @@
+# Ch22 Client integration - the Java client, UBI 10, Quarkus command mode (fast-jar).
+#   registry.access.redhat.com/ubi10/openjdk-25:1.24-16
+#   registry.access.redhat.com/ubi10/openjdk-25-runtime:1.24-16
+
+FROM registry.access.redhat.com/ubi10/openjdk-25:1.24-16 AS build
+
+WORKDIR /build
+ENV MAVEN_RETRY_OPTS="-Dmaven.wagon.http.retryHandler.count=3 -Daether.connector.http.retryHandler.count=3 -Daether.syncContext.named.time=300 -Daether.syncContext.named.time.unit=SECONDS"
+
+# Dependencies first, in their own layer: a source-only change reuses it.
+COPY pom.xml .
+RUN mvn -B $MAVEN_RETRY_OPTS dependency:go-offline
+
+COPY src ./src
+RUN mvn -B $MAVEN_RETRY_OPTS package -DskipTests -Dmaven.javadoc.skip=true
+
+FROM registry.access.redhat.com/ubi10/openjdk-25-runtime:1.24-16
+
+COPY --from=build --chown=185 /build/target/quarkus-app/lib/ /deployments/lib/
+COPY --from=build --chown=185 /build/target/quarkus-app/*.jar /deployments/
+COPY --from=build --chown=185 /build/target/quarkus-app/app/ /deployments/app/
+COPY --from=build --chown=185 /build/target/quarkus-app/quarkus/ /deployments/quarkus/
+
+USER 185
+ENV JAVA_OPTS_APPEND="-Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENTRYPOINT ["java", "-jar", "/deployments/quarkus-run.jar"]

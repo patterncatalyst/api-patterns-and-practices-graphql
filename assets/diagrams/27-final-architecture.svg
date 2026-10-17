@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 545" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="450" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Compose project gql-ch27-final: networks public, ops and backend (internal)</text>
+<rect x="40" y="120" width="150" height="90" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="155.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client</text>
+<text x="115.0" y="172.5" font-size="11.5" fill="#555555" text-anchor="middle">bearer token,</text>
+<text x="115.0" y="187.5" font-size="11.5" fill="#555555" text-anchor="middle">traceparent</text>
+<rect x="240" y="100" width="210" height="130" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="345.0" y="148.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge (Ch25)</text>
+<text x="345.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">TLS 1.3, 64k body limit</text>
+<text x="345.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">/graphql + upgrade, /events/</text>
+<text x="345.0" y="195.0" font-size="11.5" fill="#555555" text-anchor="middle">host 8370 and 8371</text>
+<rect x="520" y="80" width="220" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="630.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus, python (Ch14, 17, 18, 21)</text>
+<text x="630.0" y="127.5" font-size="11.5" fill="#555555" text-anchor="middle">public, introspection off</text>
+<text x="630.0" y="142.5" font-size="11.5" fill="#555555" text-anchor="middle">publish nothing</text>
+<rect x="520" y="185" width="220" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="630.0" y="215.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">internal instances</text>
+<text x="630.0" y="232.5" font-size="11.5" fill="#555555" text-anchor="middle">same images, introspection on</text>
+<text x="630.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8372, 8373</text>
+<rect x="790" y="80" width="170" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="875.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">keycloak 26.8.1 (Ch18)</text>
+<text x="875.0" y="127.5" font-size="11.5" fill="#555555" text-anchor="middle">realm shipping</text>
+<text x="875.0" y="142.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8374</text>
+<rect x="790" y="185" width="170" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="875.0" y="215.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm 0.37.0 (Ch19, 25)</text>
+<text x="875.0" y="232.5" font-size="11.5" fill="#555555" text-anchor="middle">Tempo, Loki, Prometheus</text>
+<text x="875.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8375 to 8378</text>
+<rect x="240" y="300" width="210" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="345.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client profile (Ch21)</text>
+<text x="345.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch27-client:1.0</text>
+<text x="345.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">wss through the edge</text>
+<rect x="520" y="300" width="220" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="630.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">load profile (Ch23)</text>
+<text x="630.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch27-load:1.0, k6 v2.3.0</text>
+<text x="630.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">fanout and cost runs</text>
+<rect x="790" y="300" width="170" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="875.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="875.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">assert_sdl_equals on</text>
+<text x="875.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">the internal instances</text>
+<rect x="40" y="410" width="460" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="270.0" y="440.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Left in their own chapters</text>
+<text x="270.0" y="457.5" font-size="11.5" fill="#555555" text-anchor="middle">persisted documents (15), caching (16), federation (20),</text>
+<text x="270.0" y="472.5" font-size="11.5" fill="#555555" text-anchor="middle">clients and test suites (22, 23), dev instances (24)</text>
+<path d="M190,165 L240,165" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="215.0" y="153.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">TLS 1.3</text>
+<text x="215.0" y="153.0" font-size="11" fill="#555" text-anchor="middle">TLS 1.3</text>
+<path d="M450,140 L520,120" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="485.0" y="116.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Authorization</text>
+<text x="485.0" y="116.0" font-size="11" fill="#555" text-anchor="middle">Authorization</text>
+<path d="M630,160 L630,185" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M740,120 L790,120" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="765.0" y="108.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">JWKS</text>
+<text x="765.0" y="108.0" font-size="11" fill="#b8650a" text-anchor="middle">JWKS</text>
+<path d="M740,225 L790,225" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="765.0" y="213.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="765.0" y="213.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M740,150 L820,185" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M345,300 L345,230" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M630,300 L480,215" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M790,300 L740,255" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">One edge, two public instances, two internal instances, one identity provider, one observability backend</text>
+<text x="500" y="522" font-size="12" fill="#555555" text-anchor="middle">Every component is the image of an earlier chapter; the chapter adds the wiring between them, not a new feature.</text>
+</svg>

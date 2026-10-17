@@ -1,0 +1,25 @@
+"""
+A scheduled carrier movement made up of one or more legs.
+"""
+type Voyage implements Node {
+  """The globally unique identifier of this voyage."""
+  id: ID!
+  """The carrier's voyage number, for example `V100S`."""
+  number: String!
+  """The scheduled movements of this voyage in departure order."""
+  schedule: [CarrierMovement!]!
+}
+
+"""
+One scheduled departure-to-arrival movement of a voyage between two locations.
+"""
+type CarrierMovement {
+  """Where the movement departs from."""
+  departureLocation: Location!
+  """Where the movement arrives."""
+  arrivalLocation: Location!
+  """Scheduled departure time."""
+  departureTime: DateTime!
+  """Scheduled arrival time."""
+  arrivalTime: DateTime!
+}

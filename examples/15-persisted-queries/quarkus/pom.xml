@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Ch15 Persisted queries and APQ - Quarkus side.
+
+  Serves the object graph of the tracking view and its one mutation,
+  registerHandlingEvent, with the error contract of the chapter (exposed and
+  masked errors), with every source-backed field resolved
+  asynchronously (Mutiny Uni) and every source call logged. A Vert.x route in
+  front of /graphql adds Apollo persisted queries and trusted documents. The
+  schema is built code-first by SmallRye GraphQL from the annotated classes
+  under src/main/java; nothing is generated from the canonical SDL. verify.sh
+  introspects the running server and diffs the result against contracts/schema/
+  with GraphQL Inspector.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.patterncatalyst.shipping</groupId>
+  <artifactId>ch15-quarkus-persisted</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.release>25</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+    <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+    <!-- Quarkus platform 3.40.1: newest stable LTS stream in registry.quarkus.io
+         (4.0.0.Beta1 is a prerelease and is not used). -->
+    <quarkus.platform.version>3.40.1</quarkus.platform.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Code-first GraphQL: @GraphQLApi classes become the schema; serves
+         POST /graphql with introspection. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-graphql</artifactId>
+    </dependency>
+    <!-- The lab-only /debug/source-calls resource (off unless
+         TRACKING_DEBUG_ENDPOINTS=true); the GraphQL endpoint itself does not
+         need it. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-jackson</artifactId>
+    </dependency>
+    <!-- Caffeine-backed caches. The persisted-document store is one of them:
+         bounded by quarkus.cache.caffeine."persisted-documents".maximum-size. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-cache</artifactId>
+    </dependency>
+    <!-- Liveness/readiness at /q/health. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+    <!-- Traces for the GraphQL operations once an OTLP endpoint is reachable
+         (the opt-in `observability` compose profile). Exports are async, so
+         the app starts and answers without a collector. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-opentelemetry</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

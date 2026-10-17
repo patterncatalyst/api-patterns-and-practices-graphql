@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 565" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="470" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">One registration, heard by each subscriber under its own rights</text>
+<rect x="40" y="90" width="160" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="115.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">ana (ACME)</text>
+<text x="120.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">wss, bearer token</text>
+<text x="120.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">subscribe ABC123</text>
+<rect x="40" y="190" width="160" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="215.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">bo (GLOBEX)</text>
+<text x="120.0" y="232.5" font-size="11.5" fill="#555555" text-anchor="middle">wss, bearer token</text>
+<text x="120.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">subscribe ABC123</text>
+<rect x="40" y="290" width="160" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="315.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">ana, plain feed</text>
+<text x="120.0" y="332.5" font-size="11.5" fill="#555555" text-anchor="middle">GET /events/cargos/</text>
+<text x="120.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">ABC123, evt_9</text>
+<rect x="40" y="410" width="160" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="435.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">ops</text>
+<text x="120.0" y="452.5" font-size="11.5" fill="#555555" text-anchor="middle">mutation REG_F1</text>
+<text x="120.0" y="467.5" font-size="11.5" fill="#555555" text-anchor="middle">UNLOAD, DEHAM</text>
+<rect x="260" y="190" width="170" height="170" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="345.0" y="243.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge</text>
+<text x="345.0" y="260.0" font-size="11.5" fill="#555555" text-anchor="middle">TLS 1.3, upgrade headers</text>
+<text x="345.0" y="275.0" font-size="11.5" fill="#555555" text-anchor="middle">Authorization passes</text>
+<text x="345.0" y="290.0" font-size="11.5" fill="#555555" text-anchor="middle">through unchanged</text>
+<text x="345.0" y="305.0" font-size="11.5" fill="#555555" text-anchor="middle">proxy_buffering off</text>
+<text x="345.0" y="320.0" font-size="11.5" fill="#555555" text-anchor="middle">on /events/</text>
+<rect x="490" y="90" width="200" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="590.0" y="115.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">admission, once</text>
+<text x="590.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">signed in, may see ABC123</text>
+<text x="590.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">then the stream starts</text>
+<rect x="490" y="190" width="200" height="70" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="590.0" y="215.5" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">bo: error message,</text>
+<text x="590.0" y="232.5" font-size="11.5" fill="#dddddd" text-anchor="middle">FORBIDDEN, no event follows</text>
+<text x="590.0" y="247.5" font-size="11.5" fill="#dddddd" text-anchor="middle">(subscribers stay 0)</text>
+<rect x="490" y="410" width="200" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="590.0" y="435.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handling store</text>
+<text x="590.0" y="452.5" font-size="11.5" fill="#555555" text-anchor="middle">evt_10 stored, then</text>
+<text x="590.0" y="467.5" font-size="11.5" fill="#555555" text-anchor="middle">broadcast to watchers</text>
+<rect x="490" y="290" width="200" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="590.0" y="315.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">feed: 401 / 403 / 200</text>
+<text x="590.0" y="332.5" font-size="11.5" fill="#555555" text-anchor="middle">evt_9 resume replays</text>
+<text x="590.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">evt_10, then live</text>
+<rect x="750" y="90" width="210" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="855.0" y="120.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">next to ana, a fresh execution</text>
+<text x="855.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">location Hamburg, IN_PORT</text>
+<text x="855.0" y="152.5" font-size="11.5" fill="#555555" text-anchor="middle">registrationTime FORBIDDEN</text>
+<rect x="750" y="200" width="210" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="855.0" y="230.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">next to ops, a fresh execution</text>
+<text x="855.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">same selection, as ops:</text>
+<text x="855.0" y="262.5" font-size="11.5" fill="#555555" text-anchor="middle">registrationTime is a value</text>
+<rect x="750" y="310" width="210" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="855.0" y="335.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">frames of ana&#x27;s run</text>
+<text x="855.0" y="352.5" font-size="11.5" fill="#555555" text-anchor="middle">init, ack, subscribe,</text>
+<text x="855.0" y="367.5" font-size="11.5" fill="#555555" text-anchor="middle">next, complete</text>
+<rect x="750" y="410" width="210" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="855.0" y="443.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">TrackCargo ABC123</text>
+<text x="855.0" y="460.0" font-size="11.5" fill="#555555" text-anchor="middle">then says IN_PORT</text>
+<path d="M200,125 L260,240" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="216.0" y="174.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">upgrade</text>
+<text x="216.0" y="174.5" font-size="11" fill="#555" text-anchor="middle">upgrade</text>
+<path d="M200,225 L260,260" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M200,325 L260,300" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M200,430 L300,360" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="230.0" y="401.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">mutation</text>
+<text x="230.0" y="401.0" font-size="11" fill="#b8650a" text-anchor="middle">mutation</text>
+<path d="M400,360 L490,435" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="485.0" y="393.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">proxied</text>
+<text x="485.0" y="393.5" font-size="11" fill="#b8650a" text-anchor="middle">proxied</text>
+<path d="M430,215 L490,125" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M430,235 L490,225" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M430,325 L490,325" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M590,410 L590,360" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="624.0" y="385.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">broadcast</text>
+<text x="624.0" y="385.0" font-size="11" fill="#b8650a" text-anchor="middle">broadcast</text>
+<path d="M690,125 L750,125" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M690,410 L800,280" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M850,170 L850,200" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M850,280 L850,310" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M690,445 L750,445" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Admission happens once; authorization of fields happens on every event, as the subscriber</text>
+<text x="500" y="542" font-size="12" fill="#555555" text-anchor="middle">Values from verify.sh: evt_10 is the first write of the run on each public instance.</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 450" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="380" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">One bulk call per level: 6 source calls on Python</text>
+<rect x="40" y="190" width="150" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="115.0" y="223.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">listCargos</text>
+<text x="115.0" y="240.0" font-size="11.5" fill="#555555" text-anchor="middle">key *</text>
+<rect x="225" y="190" width="150" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="300.0" y="223.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">getCargos</text>
+<text x="300.0" y="240.0" font-size="11.5" fill="#555555" text-anchor="middle">4 keys</text>
+<rect x="420" y="110" width="190" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="515.0" y="143.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">getItineraries</text>
+<text x="515.0" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">4 keys</text>
+<rect x="420" y="270" width="190" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="515.0" y="303.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">listEventsFor</text>
+<text x="515.0" y="320.0" font-size="11.5" fill="#555555" text-anchor="middle">4 keys</text>
+<rect x="655" y="110" width="160" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="735.0" y="143.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">getVoyages</text>
+<text x="735.0" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">V100S+V200E+V300A</text>
+<rect x="655" y="230" width="160" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="735.0" y="262.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">getLocations</text>
+<text x="735.0" y="279.5" font-size="11.5" fill="#555555" text-anchor="middle">CNSHA+DEHAM+NLRTM</text>
+<text x="735.0" y="294.5" font-size="11.5" fill="#555555" text-anchor="middle">+SGSIN+USNYC</text>
+<rect x="840" y="110" width="125" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="902.5" y="143.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Quarkus:</text>
+<text x="902.5" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">one call per field</text>
+<path d="M190,225 L225,225" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M375,215 L420,145" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M375,235 L420,305" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M610,145 L655,145" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M610,170 L655,250" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">A call starts after the call its keys come from; calls on the same tick run together</text>
+<text x="40" y="350" font-size="12" fill="#555555" text-anchor="start">The four-key calls carry DEF456+STU678+VWX901+XYZ789: the cargos of the page, sorted, joined with +.</text>
+<text x="40" y="380" font-size="12" fill="#555555" text-anchor="start">Quarkus makes 8 calls for the same query: Cargo.itinerary and Cargo.delivery each have a loader, so getItineraries runs twice,</text>
+<text x="40" y="398" font-size="12" fill="#555555" text-anchor="start">and loadLocation and unloadLocation each have one, so getLocations runs twice (DEHAM+SGSIN+USNYC and CNSHA+DEHAM+NLRTM).</text>
+<text x="40" y="416" font-size="12" fill="#555555" text-anchor="start">Both counts are constant in page size.</text>
+</svg>

@@ -1,0 +1,3 @@
+# helm dependency build writes the packaged dependency here; Chart.lock is committed.
+helm/charts/
+*.tgz

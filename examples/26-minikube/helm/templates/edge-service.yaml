@@ -1,0 +1,22 @@
+{{- $nodePort := eq .Values.edge.service.type "NodePort" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: edge
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "edge" "component" "edge") | nindent 4 }}
+spec:
+  type: {{ .Values.edge.service.type }}
+  selector:
+    {{- include "gql.selector" (dict "root" . "name" "edge") | nindent 4 }}
+  ports:
+    {{- range $stack := list "quarkus" "python" }}
+    - name: {{ $stack }}
+      port: {{ include "gql.edgePort" (dict "root" $ "stack" $stack) }}
+      targetPort: {{ $stack }}
+      {{- if $nodePort }}
+      # The NodePort equals the host port the minikube profile publishes on 127.0.0.1.
+      nodePort: {{ get $.Values.edge.service.nodePorts $stack }}
+      {{- end }}
+    {{- end }}

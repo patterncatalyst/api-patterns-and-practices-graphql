@@ -1,0 +1,27 @@
+# Chapter 14's four-cargo page: itinerary legs with voyage and both locations,
+# and the derived delivery status. Four cargos, one request.
+query FanOut {
+  cargos(first: 4) {
+    edges {
+      node {
+        trackingId
+        itinerary {
+          legs {
+            voyage {
+              number
+            }
+            loadLocation {
+              unLocode
+            }
+            unloadLocation {
+              unLocode
+            }
+          }
+        }
+        delivery {
+          transportStatus
+        }
+      }
+    }
+  }
+}

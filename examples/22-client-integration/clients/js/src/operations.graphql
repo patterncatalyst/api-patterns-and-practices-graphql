@@ -1,0 +1,59 @@
+query TrackCargo($id: TrackingId!) {
+  cargo(trackingId: $id) {
+    id
+    trackingId
+    description
+    origin {
+      id
+      name
+    }
+    destination {
+      id
+      name
+    }
+    delivery {
+      transportStatus
+      routingStatus
+    }
+  }
+}
+
+# A subset of TrackCargo's selection on the same root field and arguments.
+query TrackCargoBrief($id: TrackingId!) {
+  cargo(trackingId: $id) {
+    id
+    trackingId
+    delivery {
+      transportStatus
+    }
+  }
+}
+
+mutation RegisterHandling($input: RegisterHandlingEventInput!) {
+  registerHandlingEvent(input: $input) {
+    handlingEvent {
+      id
+    }
+    cargo {
+      id
+      delivery {
+        transportStatus
+      }
+    }
+    userErrors {
+      code
+      message
+    }
+  }
+}
+
+# One of the six cargos fails at the booking service; the others still arrive.
+query ListCargos {
+  cargos(first: 10) {
+    edges {
+      node {
+        trackingId
+      }
+    }
+  }
+}

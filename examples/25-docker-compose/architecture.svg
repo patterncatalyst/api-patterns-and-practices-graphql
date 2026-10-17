@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="480" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/25-docker-compose - compose stack (gql-ch25-compose)</text>
+<rect x="40" y="200" width="160" height="80" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="238.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="120.0" y="255.0" font-size="11.5" fill="#555555" text-anchor="middle">client + traceparent</text>
+<rect x="260" y="150" width="200" height="180" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="360.0" y="215.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge (nginx-126 10.2)</text>
+<text x="360.0" y="232.5" font-size="11.5" fill="#555555" text-anchor="middle">TLS 1.3, 64k body limit</text>
+<text x="360.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">/graphql only</text>
+<text x="360.0" y="262.5" font-size="11.5" fill="#555555" text-anchor="middle">host 8350 -&gt; :8443</text>
+<text x="360.0" y="277.5" font-size="11.5" fill="#555555" text-anchor="middle">host 8351 -&gt; :8444</text>
+<rect x="540" y="70" width="200" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="640.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="640.0" y="127.5" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch25-quarkus:1.0</text>
+<text x="640.0" y="142.5" font-size="11.5" fill="#555555" text-anchor="middle">:8080, backend network</text>
+<rect x="540" y="200" width="200" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="640.0" y="240.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="640.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch25-python:1.0</text>
+<text x="640.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">:8080, backend network</text>
+<rect x="540" y="340" width="200" height="120" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="640.0" y="383.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm (otel-lgtm 0.37.0)</text>
+<text x="640.0" y="400.0" font-size="11.5" fill="#555555" text-anchor="middle">Collector, Tempo, Prometheus,</text>
+<text x="640.0" y="415.0" font-size="11.5" fill="#555555" text-anchor="middle">Loki, Grafana</text>
+<text x="640.0" y="430.0" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8352 to 8355</text>
+<rect x="260" y="370" width="200" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="360.0" y="405.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">configs / secrets</text>
+<text x="360.0" y="422.5" font-size="11.5" fill="#555555" text-anchor="middle">edge_conf, edge_tls_crt,</text>
+<text x="360.0" y="437.5" font-size="11.5" fill="#555555" text-anchor="middle">edge_tls_key</text>
+<rect x="800" y="200" width="160" height="100" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="880.0" y="240.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="880.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql</text>
+<text x="880.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">diffed with both stacks</text>
+<path d="M200,240 L260,240" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="230.0" y="232.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">TLS 1.3</text>
+<text x="230.0" y="232.0" font-size="11" fill="#555" text-anchor="middle">TLS 1.3</text>
+<path d="M460,200 L540,120" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500.0" y="152.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">8080</text>
+<text x="500.0" y="152.0" font-size="11" fill="#555" text-anchor="middle">8080</text>
+<path d="M460,260 L540,250" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500.0" y="247.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">8080</text>
+<text x="500.0" y="247.0" font-size="11" fill="#555" text-anchor="middle">8080</text>
+<path d="M640,300 L640,340" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="690.0" y="320.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP from both</text>
+<text x="690.0" y="320.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP from both</text>
+<path d="M360,370 L360,330" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M740,250 L800,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="40" y="482" font-size="12" fill="#555555" text-anchor="start">verify.sh reads each result through the edge, follows a trace id to Tempo and Loki, and reads limits and policies back from the engine.</text>
+</svg>

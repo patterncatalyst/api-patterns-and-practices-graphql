@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="440" height="380" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Keyed by URL and status</text>
+<rect x="540" y="50" width="440" height="380" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="552" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Keyed by operation name, error code and field</text>
+<rect x="40" y="100" width="400" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="240.0" y="133.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">POST /graphql</text>
+<text x="240.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">9 requests, one route</text>
+<rect x="40" y="195" width="400" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="240.0" y="228.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">status 200</text>
+<text x="240.0" y="245.0" font-size="11.5" fill="#555555" text-anchor="middle">9 of 9, including the request that carried an error</text>
+<rect x="40" y="290" width="400" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="240.0" y="323.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">one latency distribution</text>
+<text x="240.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">the fan-out page and the single lookup share it</text>
+<rect x="560" y="100" width="190" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="655.0" y="123.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">FanOut</text>
+<text x="655.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">1 request</text>
+<rect x="560" y="160" width="190" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="655.0" y="183.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">TrackCargo</text>
+<text x="655.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">3 requests</text>
+<rect x="560" y="220" width="190" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="655.0" y="243.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">TrackLiteral</text>
+<text x="655.0" y="260.0" font-size="11.5" fill="#555555" text-anchor="middle">1 request</text>
+<rect x="560" y="280" width="190" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="655.0" y="303.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">CargoPage</text>
+<text x="655.0" y="320.0" font-size="11.5" fill="#555555" text-anchor="middle">1 request, 1 error</text>
+<rect x="560" y="340" width="190" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="655.0" y="363.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">LegacyArrival</text>
+<text x="655.0" y="380.0" font-size="11.5" fill="#555555" text-anchor="middle">3 requests</text>
+<rect x="770" y="280" width="190" height="50" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="865.0" y="303.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">SERVICE_UNAVAILABLE</text>
+<text x="865.0" y="320.0" font-size="11.5" fill="#dddddd" text-anchor="middle">error.code: 1</text>
+<rect x="770" y="340" width="190" height="50" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="865.0" y="363.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">Itinerary.finalArrivalDate</text>
+<text x="865.0" y="380.0" font-size="11.5" fill="#dddddd" text-anchor="middle">3 uses, 2 by legacy-app</text>
+<rect x="770" y="100" width="190" height="110" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="865.0" y="145.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">latency per operation</text>
+<text x="865.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">FanOut and TrackCargo</text>
+<text x="865.0" y="177.5" font-size="11.5" fill="#555555" text-anchor="middle">each get their own curve</text>
+<path d="M460,240 L540,240" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="500.0" y="232.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">split by name</text>
+<text x="500.0" y="232.0" font-size="11" fill="#b8650a" text-anchor="middle">split by name</text>
+<path d="M750,305 L770,305" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M750,365 L770,365" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">An HTTP dashboard sees one route; the operation name and the code are what tell requests apart</text>
+<text x="500" y="455" font-size="12" fill="#555555" text-anchor="middle">Counts are the nine named requests verify.sh sends to one stack. HTTP status stays 200 whether a response carries errors or not (Chapter 9).</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 990 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="235" y="40" width="425" height="430" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="247" y="60" font-size="12" font-weight="700" fill="#1d1d1d">Docker Compose project gql-ch00-prereq</text>
+<rect x="30" y="70" width="170" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="103.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">verify.sh</text>
+<text x="115.0" y="120.0" font-size="11.5" fill="#555555" text-anchor="middle">examples/00-prerequisites</text>
+<rect x="30" y="200" width="170" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="115.0" y="233.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lib.sh</text>
+<text x="115.0" y="250.0" font-size="11.5" fill="#555555" text-anchor="middle">examples/_lib</text>
+<rect x="265" y="80" width="365" height="95" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="447.5" y="118.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="447.5" y="135.0" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye GraphQL, code-first</text>
+<text x="447.5" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">host :8080  /graphql  /q/health</text>
+<rect x="265" y="225" width="365" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="447.5" y="258.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">otel-lgtm  (compose.observability.yaml)</text>
+<text x="447.5" y="275.0" font-size="11.5" fill="#555555" text-anchor="middle">Grafana :3000  OTLP :4317</text>
+<rect x="265" y="345" width="365" height="95" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="447.5" y="383.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="447.5" y="400.0" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry on FastAPI, code-first</text>
+<text x="447.5" y="415.0" font-size="11.5" fill="#555555" text-anchor="middle">host :8081  /graphql  /health</text>
+<rect x="725" y="70" width="230" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="840.0" y="105.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="840.0" y="122.5" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql</text>
+<text x="840.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">canonical SDL</text>
+<rect x="725" y="225" width="230" height="80" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="840.0" y="263.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">graphql-inspector</text>
+<text x="840.0" y="280.0" font-size="11.5" fill="#555555" text-anchor="middle">run by assert_sdl_conforms</text>
+<path d="M115,140 L115,200" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="143.0" y="170.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">sources</text>
+<text x="143.0" y="170.0" font-size="11" fill="#555" text-anchor="middle">sources</text>
+<path d="M200,220 L265,140" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="210.5" y="174.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">POST</text>
+<text x="210.5" y="174.0" font-size="11" fill="#b8650a" text-anchor="middle">POST</text>
+<path d="M200,250 L265,390" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="210.5" y="330.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">POST</text>
+<text x="210.5" y="330.0" font-size="11" fill="#b8650a" text-anchor="middle">POST</text>
+<path d="M725,250 L630,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="709.5" y="187.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect</text>
+<text x="709.5" y="187.0" font-size="11" fill="#555" text-anchor="middle">introspect</text>
+<path d="M725,282 L630,395" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="709.5" y="346.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect</text>
+<text x="709.5" y="346.5" font-size="11" fill="#555" text-anchor="middle">introspect</text>
+<path d="M840,225 L840,160" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="778.0" y="192.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">diff both ways</text>
+<text x="778.0" y="192.5" font-size="11" fill="#555" text-anchor="middle">diff both ways</text>
+<path d="M447,175 L447,225" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="475.0" y="200.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="475.0" y="200.0" font-size="11" fill="#555" text-anchor="middle">OTLP</text>
+<path d="M447,345 L447,295" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="475.0" y="320.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="475.0" y="320.0" font-size="11" fill="#555" text-anchor="middle">OTLP</text>
+<text x="30" y="495" font-size="12" fill="#555555" text-anchor="start">verify.sh starts the project, drives both stacks through lib.sh and tears it down. Port 8080 is Quarkus, 8081 is Python.</text>
+</svg>

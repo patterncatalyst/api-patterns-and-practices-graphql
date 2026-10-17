@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="752" y="50" width="228" height="300" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="764" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Q_FAN by hand: 53</text>
+<rect x="20" y="368" width="960" height="190" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="388" font-size="12" font-weight="700" fill="#1d1d1d">Cost on a log scale, against the budget</text>
+<rect x="20" y="66" width="150" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="95.0" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargos</text>
+<text x="95.0" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">first: 50, cost 385,151</text>
+<rect x="210" y="66" width="150" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="285.0" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges</text>
+<text x="285.0" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 7,703</text>
+<rect x="400" y="66" width="150" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="475.0" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">node</text>
+<text x="475.0" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 7,702</text>
+<rect x="590" y="66" width="150" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="665.0" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handlingHistory</text>
+<text x="665.0" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">first: 50, cost 7,701</text>
+<rect x="590" y="176" width="150" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="665.0" y="202.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges</text>
+<text x="665.0" y="219.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 154</text>
+<rect x="400" y="176" width="150" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="475.0" y="202.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">node</text>
+<text x="475.0" y="219.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 153</text>
+<rect x="210" y="176" width="150" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="285.0" y="202.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo</text>
+<text x="285.0" y="219.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 152</text>
+<rect x="20" y="176" width="150" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="95.0" y="202.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handlingHistory</text>
+<text x="95.0" y="219.0" font-size="11.5" fill="#555555" text-anchor="middle">first: 50, cost 151</text>
+<rect x="20" y="286" width="150" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="95.0" y="312.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges</text>
+<text x="95.0" y="329.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 3</text>
+<rect x="210" y="286" width="150" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="285.0" y="312.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">node</text>
+<text x="285.0" y="329.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 2</text>
+<rect x="400" y="286" width="150" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="475.0" y="312.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">id</text>
+<text x="475.0" y="329.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 1</text>
+<rect x="200" y="400" width="215" height="28" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="307.5" y="419.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">53</text>
+<rect x="200" y="436" width="369" height="28" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="384.5" y="455.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">901</text>
+<rect x="200" y="472" width="485" height="28" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="442.5" y="491.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">7,651</text>
+<rect x="200" y="508" width="698" height="28" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="549.0" y="527.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">385,151</text>
+<rect x="575" y="392" width="2" height="156" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="576.0" y="475.5" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle"></text>
+<path d="M170,94 L210,94" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="190.0" y="86.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">x 50</text>
+<text x="190.0" y="86.0" font-size="11" fill="#b8650a" text-anchor="middle">x 50</text>
+<path d="M360,94 L400,94" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M550,94 L590,94" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M665.0,122 L665.0,176" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="689.0" y="153.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">x 50</text>
+<text x="689.0" y="153.0" font-size="11" fill="#b8650a" text-anchor="middle">x 50</text>
+<path d="M590,204 L550,204" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M400,204 L360,204" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M210,204 L170,204" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M95.0,232 L95.0,286" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="119.0" y="263.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">x 50</text>
+<text x="119.0" y="263.0" font-size="11" fill="#b8650a" text-anchor="middle">x 50</text>
+<path d="M170,314 L210,314" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M360,314 L400,314" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="766" y="96" font-size="12" fill="#1d1d1d" text-anchor="start">trackingId = 1</text>
+<text x="766" y="123" font-size="12" fill="#1d1d1d" text-anchor="start">voyage { number } = 1 + 1 = 2</text>
+<text x="766" y="150" font-size="12" fill="#1d1d1d" text-anchor="start">load/unloadLocation = 2 each</text>
+<text x="766" y="177" font-size="12" fill="#1d1d1d" text-anchor="start">legs = 1 + (2 + 2 + 2) = 7</text>
+<text x="766" y="204" font-size="12" fill="#1d1d1d" text-anchor="start">itinerary = 1 + 7 = 8</text>
+<text x="766" y="231" font-size="12" fill="#1d1d1d" text-anchor="start">delivery { transportStatus } = 2</text>
+<text x="766" y="258" font-size="12" fill="#1d1d1d" text-anchor="start">node = 1 + (1 + 8 + 2) = 12</text>
+<text x="766" y="285" font-size="12" fill="#1d1d1d" text-anchor="start">edges = 1 + 12 = 13</text>
+<text x="766" y="312" font-size="12" fill="#1d1d1d" text-anchor="start">cargos(first: 4) = 1 + 4 x 13 = 53</text>
+<text x="766" y="339" font-size="12" fill="#555555" text-anchor="start">legs has no page size: m = 1</text>
+<text x="30" y="419" font-size="12" fill="#1d1d1d" text-anchor="start">Q_FAN</text>
+<text x="30" y="455" font-size="12" fill="#1d1d1d" text-anchor="start">Q_EDGE(5)</text>
+<text x="30" y="491" font-size="12" fill="#1d1d1d" text-anchor="start">Q_WIDE_COST</text>
+<text x="30" y="527" font-size="12" fill="#1d1d1d" text-anchor="start">Q_CH1</text>
+<text x="583" y="554" font-size="12" fill="#b8650a" text-anchor="start">budget 1,000</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Cost accumulates from the leaves, and every page size multiplies everything beneath it</text>
+</svg>

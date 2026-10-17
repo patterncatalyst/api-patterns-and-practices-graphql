@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 570" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="470" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">OpenShift Local, project gql-appendix-a</text>
+<rect x="40" y="120" width="150" height="100" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="153.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client</text>
+<text x="115.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">curl --cacert</text>
+<text x="115.0" y="185.0" font-size="11.5" fill="#555555" text-anchor="middle">ingress-ca.crt</text>
+<text x="115.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">HTTPS, WSS, SSE</text>
+<rect x="235" y="100" width="190" height="140" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="330.0" y="138.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">router</text>
+<text x="330.0" y="155.0" font-size="11.5" fill="#555555" text-anchor="middle">edge TLS with the</text>
+<text x="330.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">ingress certificate</text>
+<text x="330.0" y="185.0" font-size="11.5" fill="#555555" text-anchor="middle">HTTP redirected</text>
+<text x="330.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">timeout 1h on</text>
+<text x="330.0" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">the edge Routes</text>
+<rect x="490" y="85" width="200" height="75" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="590.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Routes quarkus, python</text>
+<text x="590.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">to Service edge</text>
+<text x="590.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">plain 8080, 8081</text>
+<rect x="740" y="85" width="220" height="75" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="850.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge (nginx)</text>
+<text x="850.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">64k limit, /graphql, /events/</text>
+<text x="850.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">upgrade headers kept</text>
+<rect x="740" y="180" width="220" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="850.0" y="208.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">public quarkus, python</text>
+<text x="850.0" y="225.0" font-size="11.5" fill="#555555" text-anchor="middle">ClusterIP :8080, introspection off</text>
+<rect x="490" y="270" width="200" height="65" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="590.0" y="300.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Routes quarkus-internal,</text>
+<text x="590.0" y="317.5" font-size="11.5" fill="#555555" text-anchor="middle">python-internal (edge TLS)</text>
+<rect x="740" y="270" width="220" height="65" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="850.0" y="300.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">internal instances</text>
+<text x="850.0" y="317.5" font-size="11.5" fill="#555555" text-anchor="middle">introspection on</text>
+<rect x="490" y="365" width="200" height="65" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="590.0" y="395.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Route keycloak (edge TLS)</text>
+<text x="590.0" y="412.5" font-size="11.5" fill="#555555" text-anchor="middle">X-Forwarded headers</text>
+<rect x="740" y="365" width="220" height="65" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="850.0" y="395.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">keycloak 26.8.1</text>
+<text x="850.0" y="412.5" font-size="11.5" fill="#555555" text-anchor="middle">issuer = the Route&#x27;s URL</text>
+<rect x="490" y="450" width="200" height="55" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="590.0" y="483.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Route grafana (edge TLS)</text>
+<rect x="740" y="450" width="220" height="55" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="850.0" y="483.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm: Grafana, Tempo, Loki</text>
+<path d="M190,170 L235,170" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="212.5" y="158.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">HTTPS</text>
+<text x="212.5" y="158.0" font-size="11" fill="#b8650a" text-anchor="middle">HTTPS</text>
+<path d="M425,140 L490,122" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M425,190 L490,300" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M425,215 L490,395" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M425,235 L490,475" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M690,122 L740,122" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="715.0" y="110.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">HTTP</text>
+<text x="715.0" y="110.0" font-size="11" fill="#b8650a" text-anchor="middle">HTTP</text>
+<path d="M850,160 L850,180" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M690,302 L740,302" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M690,397 L740,397" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M690,477 L740,477" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">TLS ends at the router; everything behind it speaks plain HTTP inside the project</text>
+<text x="500" y="545" font-size="12" fill="#555555" text-anchor="middle">Hosts are &lt;name&gt;-gql-appendix-a.apps-crc.testing. Values from the rendered Routes and Services; no cluster output is shown.</text>
+</svg>

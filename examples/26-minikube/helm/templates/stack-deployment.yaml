@@ -1,0 +1,88 @@
+{{- range $name, $stack := .Values.stacks }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" $ "name" $name "component" "backend") | nindent 4 }}
+spec:
+  {{- if not $.Values.autoscaling.enabled }}
+  replicas: {{ $stack.replicas }}
+  {{- end }}
+  # A new pod must be ready before an old one leaves.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      {{- include "gql.selector" (dict "root" $ "name" $name) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "gql.labels" (dict "root" $ "name" $name "component" "backend") | nindent 8 }}
+      annotations:
+        # A change to the stack's environment changes this hash, which rolls the pods.
+        checksum/config: {{ include "gql.stackConfigMap" (dict "root" $ "name" $name "stack" $stack) | sha256sum }}
+    spec:
+      terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- toYaml $.Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ $name }}
+          image: "{{ $stack.image.repository }}:{{ $stack.image.tag }}"
+          imagePullPolicy: {{ $stack.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ $stack.containerPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ $name }}-config
+          env:
+            # The downward API names the pod, and OpenTelemetry resource
+            # attributes carry the name into every span, metric and log record.
+            - name: K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: K8S_NAMESPACE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "k8s.pod.name=$(K8S_POD_NAME),k8s.namespace.name=$(K8S_NAMESPACE_NAME),k8s.node.name=$(K8S_NODE_NAME)"
+          startupProbe:
+            httpGet:
+              path: {{ $stack.probes.startup.path }}
+              port: http
+            periodSeconds: {{ $stack.probes.startup.periodSeconds }}
+            failureThreshold: {{ $stack.probes.startup.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ $stack.probes.readiness.path }}
+              port: http
+            periodSeconds: {{ $stack.probes.readiness.periodSeconds }}
+            failureThreshold: {{ $stack.probes.readiness.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              path: {{ $stack.probes.liveness.path }}
+              port: http
+            periodSeconds: {{ $stack.probes.liveness.periodSeconds }}
+            failureThreshold: {{ $stack.probes.liveness.failureThreshold }}
+            timeoutSeconds: 3
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: {{ $.Values.preStopSleepSeconds }}
+          resources:
+            {{- toYaml $stack.resources | nindent 12 }}
+          securityContext:
+            {{- include "gql.containerSecurityContext" $ | nindent 12 }}
+{{- end }}
