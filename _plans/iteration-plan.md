@@ -69,7 +69,7 @@ file tracks the build order.
 | S11 | done (Ch25–27 + Appendix A; see `r01-wave-f-plan.md`) |
 | S12 | done (bibliography, voice pass and site chrome; see `r01-wave-g-plan.md`) |
 | S13 | done (three decks; see `r01-wave-h-plan.md`) |
-| S14 | next |
+| S14 | done (2026-10-17, r1.0) |
 
 The authoritative, detailed status is the RESUME POINTER in `r01-execution-plan.md`.
 
