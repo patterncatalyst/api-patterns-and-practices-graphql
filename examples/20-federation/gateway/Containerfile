@@ -1,0 +1,38 @@
+# Ch20 Federation - the gateway image, UBI 10, Node 24. One image, two roles:
+#   node compose-supergraph.mjs ...                      the composer (a one-shot build step)
+#   node_modules/.bin/hive-gateway supergraph <file>     the gateway
+# Build (the build context is this directory):
+#   docker build -f examples/20-federation/gateway/Containerfile \
+#     -t gql-ch20-federation-gateway:local examples/20-federation/gateway
+#
+# Base image pins (re-check with `skopeo list-tags
+# docker://registry.access.redhat.com/ubi10/nodejs-24`; bump deliberately):
+#   registry.access.redhat.com/ubi10/nodejs-24:10.2-1791943587
+#   registry.access.redhat.com/ubi10/nodejs-24-minimal:10.2-1791916595
+
+# -- Stage 1: Build ----------------------------------------------------------
+FROM registry.access.redhat.com/ubi10/nodejs-24:10.2-1791943587 AS build
+
+USER 0
+WORKDIR /app
+
+# npm ci installs exactly what package-lock.json records and fails when the
+# lockfile and package.json disagree.
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --no-audit --no-fund
+
+# The directory the composer writes the supergraph files to. A named volume
+# mounted here starts with this owner, so the non-root user can write to it.
+RUN mkdir /supergraph && chown 1001:0 /supergraph
+
+# -- Stage 2: Runtime --------------------------------------------------------
+FROM registry.access.redhat.com/ubi10/nodejs-24-minimal:10.2-1791916595
+
+WORKDIR /app
+COPY --from=build --chown=1001:0 /app/node_modules ./node_modules
+COPY --from=build --chown=1001:0 /supergraph /supergraph
+COPY --chown=1001:0 package.json compose-supergraph.mjs ./
+
+ENV NODE_ENV=production
+EXPOSE 4000
+USER 1001

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 500" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="30" y="70" width="250" height="54" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="155.0" y="102.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">query { ... }</text>
+<rect x="390" y="70" width="190" height="54" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="485.0" y="95.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Query</text>
+<text x="485.0" y="112.0" font-size="11.5" fill="#555555" text-anchor="middle">root operation type</text>
+<rect x="670" y="70" width="290" height="54" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="815.0" y="102.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">{ &quot;data&quot;: {</text>
+<rect x="42" y="150" width="238" height="54" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="161.0" y="182.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo(trackingId: &quot;ABC123&quot;)</text>
+<rect x="390" y="150" width="190" height="54" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="485.0" y="175.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cargo</text>
+<text x="485.0" y="192.0" font-size="11.5" fill="#555555" text-anchor="middle">nullable</text>
+<rect x="680" y="150" width="280" height="54" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="820.0" y="182.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">&quot;cargo&quot;: {</text>
+<rect x="54" y="230" width="226" height="54" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="167.0" y="262.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">itinerary</text>
+<rect x="390" y="230" width="190" height="54" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="485.0" y="255.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Itinerary</text>
+<text x="485.0" y="272.0" font-size="11.5" fill="#555555" text-anchor="middle">nullable</text>
+<rect x="690" y="230" width="270" height="54" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="825.0" y="262.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">&quot;itinerary&quot;: {</text>
+<rect x="66" y="310" width="214" height="54" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="173.0" y="342.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">legs</text>
+<rect x="390" y="310" width="190" height="54" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="485.0" y="335.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">[Leg!]!</text>
+<text x="485.0" y="352.0" font-size="11.5" fill="#555555" text-anchor="middle">list of non-null Leg</text>
+<rect x="700" y="310" width="260" height="54" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="830.0" y="342.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">&quot;legs&quot;: [ {</text>
+<rect x="78" y="390" width="202" height="54" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="179.0" y="422.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">voyage { number }</text>
+<rect x="390" y="390" width="190" height="54" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="485.0" y="415.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Voyage</text>
+<text x="485.0" y="432.0" font-size="11.5" fill="#555555" text-anchor="middle">nullable</text>
+<rect x="710" y="390" width="250" height="54" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="835.0" y="422.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">&quot;voyage&quot;: { &quot;number&quot;: &quot;V100S&quot; } ...</text>
+<path d="M280,97.0 L390,97.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M580,97.0 L670,97.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M280,177.0 L390,177.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M580,177.0 L680,177.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M280,257.0 L390,257.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M580,257.0 L690,257.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M280,337.0 L390,337.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M580,337.0 L700,337.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M280,417.0 L390,417.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M580,417.0 L710,417.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M485.0,124 L485.0,150" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="533.0" y="141.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">cargo</text>
+<text x="533.0" y="141.0" font-size="11" fill="#555" text-anchor="middle">cargo</text>
+<path d="M485.0,204 L485.0,230" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="533.0" y="221.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">itinerary</text>
+<text x="533.0" y="221.0" font-size="11" fill="#555" text-anchor="middle">itinerary</text>
+<path d="M485.0,284 L485.0,310" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="533.0" y="301.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">legs</text>
+<text x="533.0" y="301.0" font-size="11" fill="#555" text-anchor="middle">legs</text>
+<path d="M485.0,364 L485.0,390" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="533.0" y="381.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">voyage</text>
+<text x="533.0" y="381.0" font-size="11" fill="#555" text-anchor="middle">voyage</text>
+<text x="155" y="44" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Selection (query text)</text>
+<text x="485" y="44" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Type each field lands on</text>
+<text x="820" y="44" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Response (same nesting)</text>
+<text x="490" y="480" font-size="12" fill="#555555" text-anchor="middle">Each field name in the query picks an edge in the type graph; the result is nested in the same shape.</text>
+</svg>

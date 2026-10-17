@@ -1,0 +1,589 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "gql-ch27-final values",
+  "type": "object",
+  "required": [
+    "stacks",
+    "edge",
+    "lgtm",
+    "keycloak",
+    "identity"
+  ],
+  "properties": {
+    "stacks": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "enum": [
+          "quarkus",
+          "python"
+        ]
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/stack"
+      }
+    },
+    "terminationGracePeriodSeconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "preStopSleepSeconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "edge": {
+      "type": "object",
+      "required": [
+        "image",
+        "tls",
+        "service",
+        "bodyLimit"
+      ],
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/image"
+        },
+        "replicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "tls": {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "validityDays": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "sans": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "service": {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "NodePort",
+                "ClusterIP"
+              ]
+            },
+            "nodePorts": {
+              "type": "object",
+              "required": [
+                "quarkus",
+                "python"
+              ],
+              "properties": {
+                "quarkus": {
+                  "$ref": "#/$defs/nodePort"
+                },
+                "python": {
+                  "$ref": "#/$defs/nodePort"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "bodyLimit": {
+          "type": "string",
+          "pattern": "^[0-9]+[kKmM]?$"
+        },
+        "resources": {
+          "$ref": "#/$defs/resources"
+        }
+      },
+      "additionalProperties": false
+    },
+    "lgtm": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "image",
+        "service"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "$ref": "#/$defs/image"
+        },
+        "service": {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "NodePort",
+                "ClusterIP"
+              ]
+            },
+            "nodePorts": {
+              "type": "object",
+              "required": [
+                "grafana",
+                "tempo",
+                "prometheus",
+                "loki"
+              ],
+              "properties": {
+                "grafana": {
+                  "$ref": "#/$defs/nodePort"
+                },
+                "tempo": {
+                  "$ref": "#/$defs/nodePort"
+                },
+                "prometheus": {
+                  "$ref": "#/$defs/nodePort"
+                },
+                "loki": {
+                  "$ref": "#/$defs/nodePort"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "serviceAccountName": {
+          "type": "string"
+        },
+        "dropAllCapabilities": {
+          "type": "boolean"
+        },
+        "resources": {
+          "$ref": "#/$defs/resources"
+        },
+        "seccompProfile": {
+          "enum": [
+            "",
+            "RuntimeDefault"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "required": [
+        "runAsNonRoot"
+      ],
+      "properties": {
+        "runAsNonRoot": {
+          "const": true
+        }
+      },
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "runAsUser"
+            ]
+          },
+          {
+            "required": [
+              "runAsGroup"
+            ]
+          },
+          {
+            "required": [
+              "fsGroup"
+            ]
+          }
+        ]
+      }
+    },
+    "containerSecurityContext": {
+      "type": "object",
+      "required": [
+        "allowPrivilegeEscalation",
+        "capabilities"
+      ],
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "const": false
+        }
+      },
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "runAsUser"
+            ]
+          },
+          {
+            "required": [
+              "runAsGroup"
+            ]
+          }
+        ]
+      }
+    },
+    "networkPolicy": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "autoscaling": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "minReplicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxReplicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "targetCPUUtilizationPercentage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "test": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "global": {
+      "type": "object"
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "issuer",
+        "authServerUrl"
+      ],
+      "properties": {
+        "issuer": {
+          "type": "string",
+          "pattern": "^https?://"
+        },
+        "authServerUrl": {
+          "type": "string",
+          "pattern": "^https?://"
+        }
+      },
+      "additionalProperties": false
+    },
+    "keycloak": {
+      "type": "object",
+      "required": [
+        "image",
+        "service"
+      ],
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/image"
+        },
+        "adminUsername": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adminPassword": {
+          "type": "string",
+          "minLength": 1
+        },
+        "service": {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "NodePort",
+                "ClusterIP"
+              ]
+            },
+            "nodePort": {
+              "$ref": "#/$defs/nodePort"
+            }
+          },
+          "additionalProperties": false
+        },
+        "probes": {
+          "type": "object",
+          "properties": {
+            "startup": {
+              "type": "object",
+              "properties": {
+                "periodSeconds": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "failureThreshold": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "resources": {
+          "$ref": "#/$defs/resources"
+        },
+        "proxyHeaders": {
+          "enum": [
+            "",
+            "forwarded",
+            "xforwarded"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nodePort": {
+      "type": "integer",
+      "minimum": 30000,
+      "maximum": 32767
+    },
+    "image": {
+      "type": "object",
+      "required": [
+        "repository",
+        "tag",
+        "pullPolicy"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tag": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pullPolicy": {
+          "enum": [
+            "Never",
+            "IfNotPresent",
+            "Always"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "type": "object"
+        },
+        "limits": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "probe": {
+      "type": "object",
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "stack": {
+      "type": "object",
+      "required": [
+        "image",
+        "containerPort",
+        "probes",
+        "resources",
+        "env",
+        "introspectionOff",
+        "identityEnv",
+        "instances"
+      ],
+      "properties": {
+        "image": {
+          "$ref": "#/$defs/image"
+        },
+        "containerPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "probes": {
+          "type": "object",
+          "required": [
+            "startup",
+            "readiness",
+            "liveness"
+          ],
+          "properties": {
+            "startup": {
+              "$ref": "#/$defs/probe"
+            },
+            "readiness": {
+              "$ref": "#/$defs/probe"
+            },
+            "liveness": {
+              "$ref": "#/$defs/probe"
+            }
+          },
+          "additionalProperties": false
+        },
+        "resources": {
+          "$ref": "#/$defs/resources"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "introspectionOff": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "identityEnv": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "issuer",
+              "authServer",
+              "jwks"
+            ]
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "instances": {
+          "type": "object",
+          "required": [
+            "public",
+            "internal"
+          ],
+          "properties": {
+            "public": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/instance"
+                },
+                {
+                  "properties": {
+                    "introspection": {
+                      "const": false
+                    }
+                  }
+                }
+              ]
+            },
+            "internal": {
+              "$ref": "#/$defs/instance"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "instance": {
+      "type": "object",
+      "required": [
+        "introspection",
+        "replicas"
+      ],
+      "properties": {
+        "introspection": {
+          "type": "boolean"
+        },
+        "replicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "service": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "NodePort",
+                "ClusterIP"
+              ]
+            },
+            "nodePort": {
+              "$ref": "#/$defs/nodePort"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

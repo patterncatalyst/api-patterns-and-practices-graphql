@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 436" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="30" y="80" width="320" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="190.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1. Read cargo(ABC123) delivery</text>
+<text x="190.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">handling-events:ABC123 is empty</text>
+<text x="190.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">listEventsFor:ABC123, 1 call</text>
+<text x="190.0" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">transportStatus: ONBOARD_CARRIER</text>
+<rect x="390" y="80" width="320" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="550.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2. Read it again</text>
+<text x="550.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">entry found</text>
+<text x="550.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">0 handling calls</text>
+<text x="550.0" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">transportStatus: ONBOARD_CARRIER</text>
+<rect x="750" y="80" width="320" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="910.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3. registerHandlingEvent</text>
+<text x="910.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">UNLOAD at DEHAM on V100S</text>
+<text x="910.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">appendEvent, 1 call: evt_10</text>
+<text x="910.0" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">the owner now holds 3 events</text>
+<rect x="750" y="250" width="320" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="910.0" y="283.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4. Evict handling-events:ABC123</text>
+<text x="910.0" y="300.0" font-size="11.5" fill="#555555" text-anchor="middle">after the append,</text>
+<text x="910.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">before the payload reads the cargo</text>
+<text x="910.0" y="330.0" font-size="11.5" fill="#555555" text-anchor="middle">so it cannot see the old list</text>
+<rect x="390" y="250" width="320" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="550.0" y="283.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">5. Payload reads cargo.delivery</text>
+<text x="550.0" y="300.0" font-size="11.5" fill="#555555" text-anchor="middle">entry missing: listEventsFor:ABC123</text>
+<text x="550.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">1 call, refills the entry</text>
+<text x="550.0" y="330.0" font-size="11.5" fill="#555555" text-anchor="middle">transportStatus: IN_PORT</text>
+<rect x="30" y="250" width="320" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="190.0" y="283.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">6. Read cargo(ABC123) again</text>
+<text x="190.0" y="300.0" font-size="11.5" fill="#555555" text-anchor="middle">entry found</text>
+<text x="190.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">0 handling calls</text>
+<text x="190.0" y="330.0" font-size="11.5" fill="#555555" text-anchor="middle">transportStatus: IN_PORT</text>
+<path d="M350,130 L390,130" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M710,130 L750,130" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M910,180 L910,250" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M750,300 L710,300" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M390,300 L350,300" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="550" y="36" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Invalidation on write: evict before the payload re-reads</text>
+<text x="550" y="392" font-size="12" fill="#555555" text-anchor="middle">Without step 4 the payload would answer ONBOARD_CARRIER for the event it had just recorded.</text>
+<text x="550" y="412" font-size="12" fill="#555555" text-anchor="middle">The TTL (20 s here, 60 s by default) bounds staleness from writers that never call this service.</text>
+</svg>

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="340" height="520" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">The fuses in the tracking schema</text>
+<rect x="380" y="20" width="290" height="520" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="392" y="40" font-size="12" font-weight="700" fill="#1d1d1d">Canonical: CargoEdge.node is Cargo</text>
+<rect x="690" y="20" width="290" height="520" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="702" y="40" font-size="12" font-weight="700" fill="#1d1d1d">Strict: CargoEdge.node is Cargo!</text>
+<rect x="40" y="56" width="300" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="190.0" y="80.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Query.cargo: Cargo</text>
+<text x="190.0" y="97.0" font-size="11.5" fill="#555555" text-anchor="middle">fuse: a failed cargo nulls only itself</text>
+<rect x="60" y="122" width="280" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="200.0" y="146.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cargo.itinerary: Itinerary</text>
+<text x="200.0" y="163.0" font-size="11.5" fill="#555555" text-anchor="middle">fuse: also null until routed</text>
+<rect x="80" y="188" width="260" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="210.0" y="212.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Itinerary.legs: [Leg!]!</text>
+<text x="210.0" y="229.0" font-size="11.5" fill="#555555" text-anchor="middle">non-null: passes a null up</text>
+<rect x="100" y="254" width="240" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="220.0" y="278.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Leg.voyage: Voyage</text>
+<text x="220.0" y="295.0" font-size="11.5" fill="#555555" text-anchor="middle">fuse: voyage service may be down</text>
+<rect x="40" y="346" width="300" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="190.0" y="370.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Query.cargos: CargoConnection!</text>
+<text x="190.0" y="387.0" font-size="11.5" fill="#555555" text-anchor="middle">non-null: passes a null up</text>
+<rect x="60" y="412" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="200.0" y="436.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges: [CargoEdge!]!</text>
+<text x="200.0" y="453.0" font-size="11.5" fill="#555555" text-anchor="middle">non-null: passes a null up</text>
+<rect x="80" y="478" width="260" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="210.0" y="502.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">CargoEdge.node: Cargo</text>
+<text x="210.0" y="519.0" font-size="11.5" fill="#555555" text-anchor="middle">fuse: one bad item nulls its edge</text>
+<rect x="400" y="56" width="250" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="525.0" y="78.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data</text>
+<text x="525.0" y="95.0" font-size="11.5" fill="#555555" text-anchor="middle">kept</text>
+<rect x="400" y="132" width="250" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="525.0" y="154.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Query.cargos: CargoConnection!</text>
+<text x="525.0" y="171.0" font-size="11.5" fill="#555555" text-anchor="middle">kept</text>
+<rect x="400" y="208" width="250" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="525.0" y="230.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges: [CargoEdge!]!</text>
+<text x="525.0" y="247.0" font-size="11.5" fill="#555555" text-anchor="middle">kept: 3 edges</text>
+<rect x="400" y="284" width="250" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="525.0" y="306.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1]: CargoEdge!</text>
+<text x="525.0" y="323.0" font-size="11.5" fill="#555555" text-anchor="middle">kept: { node: null }</text>
+<rect x="400" y="360" width="250" height="48" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="525.0" y="382.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1].node: Cargo</text>
+<text x="525.0" y="399.0" font-size="11.5" fill="#555555" text-anchor="middle">nullable: becomes null</text>
+<rect x="710" y="56" width="250" height="48" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="835.0" y="78.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data</text>
+<text x="835.0" y="95.0" font-size="11.5" fill="#555555" text-anchor="middle">null: no nullable parent left</text>
+<rect x="710" y="132" width="250" height="48" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="835.0" y="154.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Query.cargos: CargoConnection!</text>
+<text x="835.0" y="171.0" font-size="11.5" fill="#555555" text-anchor="middle">null: cannot hold it</text>
+<rect x="710" y="208" width="250" height="48" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="835.0" y="230.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges: [CargoEdge!]!</text>
+<text x="835.0" y="247.0" font-size="11.5" fill="#555555" text-anchor="middle">null: cannot hold it</text>
+<rect x="710" y="284" width="250" height="48" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="835.0" y="306.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1]: CargoEdge!</text>
+<text x="835.0" y="323.0" font-size="11.5" fill="#555555" text-anchor="middle">null: cannot hold it</text>
+<rect x="710" y="360" width="250" height="48" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="835.0" y="382.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1].node: Cargo!</text>
+<text x="835.0" y="399.0" font-size="11.5" fill="#555555" text-anchor="middle">fails: null plus an error</text>
+<rect x="400" y="448" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="525.0" y="481.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2 of 3 cargos delivered</text>
+<text x="525.0" y="498.0" font-size="11.5" fill="#555555" text-anchor="middle">1 error, data present</text>
+<rect x="710" y="448" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="835.0" y="481.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">0 of 3 cargos delivered</text>
+<text x="835.0" y="498.0" font-size="11.5" fill="#555555" text-anchor="middle">1 error, data: null</text>
+<path d="M835,132 L835,104" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M835,208 L835,180" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M835,284 L835,256" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M835,360 L835,332" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M525,360 L525,332" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="563.0" y="350.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">stops here</text>
+<text x="563.0" y="350.0" font-size="11" fill="#555" text-anchor="middle">stops here</text>
+<text x="525" y="432" font-size="12" fill="#1d1d1d" text-anchor="middle" font-weight="700">Blast radius: one edge</text>
+<text x="835" y="432" font-size="12" fill="#1d1d1d" text-anchor="middle" font-weight="700">Blast radius: the whole page</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 530" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="1060" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Round trip 1: the client sends the hash alone, and the store is empty</text>
+<rect x="20" y="200" width="1060" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="220" font-size="12" font-weight="700" fill="#1d1d1d">Round trip 2: the client sends the hash and the text, and the server stores it</text>
+<rect x="20" y="350" width="1060" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="370" font-size="12" font-weight="700" fill="#1d1d1d">Round trip 3: the hash alone again, this time as a GET with no body</text>
+<rect x="45" y="88" width="290" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="190.0" y="121.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">POST /graphql</text>
+<text x="190.0" y="138.0" font-size="11.5" fill="#555555" text-anchor="middle">163 bytes: variables and sha256Hash</text>
+<rect x="405" y="88" width="290" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="550.0" y="121.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">look the hash up</text>
+<text x="550.0" y="138.0" font-size="11.5" fill="#555555" text-anchor="middle">not in the manifest or the store</text>
+<rect x="765" y="88" width="290" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="910.0" y="121.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">200 PersistedQueryNotFound</text>
+<text x="910.0" y="138.0" font-size="11.5" fill="#555555" text-anchor="middle">99 bytes, no data</text>
+<rect x="45" y="238" width="290" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="190.0" y="271.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">POST /graphql</text>
+<text x="190.0" y="288.0" font-size="11.5" fill="#555555" text-anchor="middle">756 bytes: text, variables, sha256Hash</text>
+<rect x="405" y="238" width="290" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="550.0" y="271.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">recompute sha256(text)</text>
+<text x="550.0" y="288.0" font-size="11.5" fill="#555555" text-anchor="middle">match: store the text, then execute</text>
+<rect x="765" y="238" width="290" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="910.0" y="271.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">200 data</text>
+<text x="910.0" y="288.0" font-size="11.5" fill="#555555" text-anchor="middle">2,412 bytes</text>
+<rect x="45" y="388" width="290" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="190.0" y="421.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">GET /graphql?variables&amp;extensions</text>
+<text x="190.0" y="438.0" font-size="11.5" fill="#555555" text-anchor="middle">204 bytes of URL, no body</text>
+<rect x="405" y="388" width="290" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="550.0" y="421.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">store hit: reuse the text</text>
+<text x="550.0" y="438.0" font-size="11.5" fill="#555555" text-anchor="middle">execute as if it had been sent</text>
+<rect x="765" y="388" width="290" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="910.0" y="421.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">200 data</text>
+<text x="910.0" y="438.0" font-size="11.5" fill="#555555" text-anchor="middle">2,412 bytes</text>
+<path d="M335,123 L405,123" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M695,123 L765,123" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M335,273 L405,273" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M695,273 L765,273" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M335,423 L405,423" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M695,423 L765,423" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="550" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Apollo&#x27;s persisted-query handshake: three round trips for one document</text>
+<text x="550" y="504" font-size="12" fill="#555555" text-anchor="middle">The plain POST of the same document and variables is 624 bytes. After registration each request is 163 bytes, or a URL.</text>
+</svg>

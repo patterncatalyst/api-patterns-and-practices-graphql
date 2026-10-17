@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1210 430" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="170" width="110" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="75.0" y="198.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Query</text>
+<text x="75.0" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">root value</text>
+<rect x="180" y="170" width="220" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="290.0" y="198.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1  cargo</text>
+<text x="290.0" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">booking.getCargo(ABC123)</text>
+<rect x="470" y="80" width="230" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="585.0" y="108.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2  itinerary</text>
+<text x="585.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">routing.getItinerary(ABC123)</text>
+<rect x="470" y="300" width="230" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="585.0" y="328.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3  delivery</text>
+<text x="585.0" y="345.0" font-size="11.5" fill="#555555" text-anchor="middle">delivery.getDelivery(ABC123)</text>
+<rect x="770" y="80" width="110" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="825.0" y="108.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">legs</text>
+<text x="825.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">no source call</text>
+<rect x="960" y="20" width="230" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="1075.0" y="48.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4  legs[0].loadLocation</text>
+<text x="1075.0" y="65.0" font-size="11.5" fill="#555555" text-anchor="middle">location.getLocation(USNYC)</text>
+<rect x="960" y="140" width="230" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="1075.0" y="168.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">5  legs[1].loadLocation</text>
+<text x="1075.0" y="185.0" font-size="11.5" fill="#555555" text-anchor="middle">location.getLocation(DEHAM)</text>
+<path d="M130,200 L180,200" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="161.0" y="192.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">root</text>
+<text x="161.0" y="192.0" font-size="11" fill="#555" text-anchor="middle">root</text>
+<path d="M400,190 L470,115" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="423.0" y="138.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Cargo</text>
+<text x="423.0" y="138.5" font-size="11" fill="#555" text-anchor="middle">Cargo</text>
+<path d="M400,210 L470,325" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="423.0" y="291.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Cargo</text>
+<text x="423.0" y="291.5" font-size="11" fill="#555" text-anchor="middle">Cargo</text>
+<path d="M700,110 L770,110" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="741.0" y="100.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Itinerary</text>
+<text x="741.0" y="100.0" font-size="11" fill="#555" text-anchor="middle">Itinerary</text>
+<path d="M880,100 L960,50" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="898.0" y="65.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Leg 0</text>
+<text x="898.0" y="65.0" font-size="11" fill="#555" text-anchor="middle">Leg 0</text>
+<path d="M880,120 L960,170" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="898.0" y="169.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Leg 1</text>
+<text x="898.0" y="169.0" font-size="11" fill="#555" text-anchor="middle">Leg 1</text>
+<text x="585" y="388" font-size="12" fill="#555555" text-anchor="middle">2 and 3 start together once 1 returns; 4 and 5 start together once 2 returns</text>
+<text x="585" y="410" font-size="12" fill="#555555" text-anchor="middle">Each box is a resolver call. The label on an edge is the parent value it receives.</text>
+<text x="585" y="44" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Field walk for cargo { itinerary { legs { loadLocation } } delivery }</text>
+</svg>

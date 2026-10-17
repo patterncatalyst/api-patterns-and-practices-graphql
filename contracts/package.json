@@ -1,0 +1,24 @@
+{
+  "name": "api-patterns-graphql-contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Canonical GraphQL SDL, lint and breaking-change gate",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lint": "eslint \"schema/**/*.graphql\"",
+    "breaking": "bash scripts/breaking.sh"
+  },
+  "devDependencies": {
+    "@graphql-eslint/eslint-plugin": "4.4.2",
+    "@graphql-inspector/cli": "7.0.1",
+    "eslint": "10.12.0",
+    "graphql": "16.14.2"
+  },
+  "overrides": {
+    "@graphql-eslint/eslint-plugin": {
+      "@graphql-tools/utils": "12.1.0"
+    }
+  }
+}

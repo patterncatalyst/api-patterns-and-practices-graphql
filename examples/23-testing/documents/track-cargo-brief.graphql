@@ -1,0 +1,10 @@
+# A subset of TrackCargo's selection on the same root field and arguments.
+query TrackCargoBrief($id: TrackingId!) {
+  cargo(trackingId: $id) {
+    id
+    trackingId
+    delivery {
+      transportStatus
+    }
+  }
+}

@@ -1,0 +1,120 @@
+# Appendix A - Chapter 27's chart on OpenShift Local.
+#
+# `final` holds the values handed to the dependency (examples/27-final-project/helm).
+# The same keys are in that chart's ci-values-appendix-a.yaml, which CI renders. The
+# `openshift` block configures what this chart adds.
+
+final:
+  # The edge keeps plain listeners (8080, 8081) because the router terminates TLS.
+  edge:
+    image:
+      pullPolicy: IfNotPresent
+    tls:
+      enabled: false
+    service:
+      type: ClusterIP
+  lgtm:
+    image:
+      pullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    # The ServiceAccount of the observability pod; the RoleBinding below is for it.
+    serviceAccountName: gql-lgtm
+    # The image runs as root and creates its data directories under a root directory that only
+    # root with CAP_DAC_OVERRIDE can write, so the container keeps the SCC's default capability set.
+    dropAllCapabilities: false
+    # The anyuid SCC admits a pod that sets no seccomp profile, so the field is empty for this pod.
+    seccompProfile: ""
+  keycloak:
+    image:
+      pullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    # The router terminates TLS and sends X-Forwarded-Proto and X-Forwarded-Host,
+    # so a token fetched at the Route carries the Route's https URL.
+    proxyHeaders: xforwarded
+  # Tokens are fetched at the Keycloak Route, so its URL is the issuer the stacks
+  # pin. scripts/up.sh passes the cluster's ingress domain, which is the value here
+  # for apps-crc.testing and the project gql-appendix-a.
+  identity:
+    issuer: https://keycloak-gql-appendix-a.apps-crc.testing/realms/shipping
+  # The images come from the image streams of this project. The tag is set here as well as
+  # in the dependency because the build objects are created while the dependency is off.
+  stacks:
+    quarkus:
+      image:
+        repository: image-registry.openshift-image-registry.svc:5000/gql-appendix-a/gql-ch27-quarkus
+        tag: "1.0"
+        pullPolicy: IfNotPresent
+      instances:
+        internal:
+          service:
+            type: ClusterIP
+    python:
+      image:
+        repository: image-registry.openshift-image-registry.svc:5000/gql-appendix-a/gql-ch27-python
+        tag: "1.0"
+        pullPolicy: IfNotPresent
+      instances:
+        internal:
+          service:
+            type: ClusterIP
+
+openshift:
+  # The wildcard domain of the cluster's router. OpenShift Local serves apps-crc.testing.
+  domain: apps-crc.testing
+
+  routes:
+    enabled: true
+    # Idle time the router keeps a subscription or an event feed open.
+    longLivedTimeout: 1h
+    # One Route per entry; the host is <name>-<project>.<domain>.
+    items:
+      quarkus:
+        description: The Quarkus stack through the edge, on the plain listener.
+        service: edge
+        port: quarkus
+        tls: true
+        longLived: true
+      python:
+        description: The Python stack through the edge, on the plain listener.
+        service: edge
+        port: python
+        tls: true
+        longLived: true
+      quarkus-internal:
+        description: The Quarkus internal instance, introspection on.
+        service: quarkus-internal
+        port: http
+        tls: true
+      python-internal:
+        description: The Python internal instance, introspection on.
+        service: python-internal
+        port: http
+        tls: true
+      keycloak:
+        description: Keycloak. Tokens are fetched here, so this host is the issuer the stacks compare with.
+        service: keycloak
+        port: http
+        tls: true
+      grafana:
+        description: Grafana of the observability backend (anonymous, lab only).
+        service: lgtm-ui
+        port: grafana
+        tls: true
+
+  builds:
+    enabled: true
+    dockerfilePath: Containerfile
+    # The Quarkus build runs Maven and the Python build runs uv inside the build pod.
+    resources:
+      requests:
+        cpu: "1"
+        memory: 2Gi
+      limits:
+        cpu: "4"
+        memory: 4Gi
+
+  # The one SCC binding: the observability image runs as root.
+  anyuid:
+    enabled: true

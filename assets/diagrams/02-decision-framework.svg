@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="30" y="40" width="240" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="150.0" y="62.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Client diversity</text>
+<text x="150.0" y="79.0" font-size="11.5" fill="#555555" text-anchor="middle">shape variance</text>
+<rect x="30" y="98" width="240" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="150.0" y="120.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Aggregation</text>
+<text x="150.0" y="137.0" font-size="11.5" fill="#555555" text-anchor="middle">across sources</text>
+<rect x="30" y="156" width="240" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="150.0" y="178.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Read and write</text>
+<text x="150.0" y="195.0" font-size="11.5" fill="#555555" text-anchor="middle">balance</text>
+<rect x="30" y="214" width="240" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="150.0" y="236.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Caching needs</text>
+<text x="150.0" y="253.0" font-size="11.5" fill="#555555" text-anchor="middle">edge and server</text>
+<rect x="30" y="272" width="240" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="150.0" y="294.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Contract</text>
+<text x="150.0" y="311.0" font-size="11.5" fill="#555555" text-anchor="middle">and evolution style</text>
+<rect x="30" y="330" width="240" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="150.0" y="352.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Operational</text>
+<text x="150.0" y="369.0" font-size="11.5" fill="#555555" text-anchor="middle">and security cost</text>
+<rect x="30" y="388" width="240" height="48" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="150.0" y="410.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Team ownership</text>
+<text x="150.0" y="427.0" font-size="11.5" fill="#555555" text-anchor="middle">and federation</text>
+<rect x="340" y="40" width="200" height="396" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="440.0" y="206.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">Run each interaction</text>
+<text x="440.0" y="223.0" font-size="11.5" fill="#dddddd" text-anchor="middle">through the axes</text>
+<text x="440.0" y="238.0" font-size="11.5" fill="#dddddd" text-anchor="middle"></text>
+<text x="440.0" y="253.0" font-size="11.5" fill="#dddddd" text-anchor="middle">Score each axis</text>
+<text x="440.0" y="268.0" font-size="11.5" fill="#dddddd" text-anchor="middle">Write the reason down</text>
+<text x="440.0" y="283.0" font-size="11.5" fill="#dddddd" text-anchor="middle">Then choose</text>
+<rect x="620" y="70" width="250" height="64" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="745.0" y="100.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">GraphQL</text>
+<text x="745.0" y="117.0" font-size="11.5" fill="#555555" text-anchor="middle">Customer tracking view</text>
+<rect x="620" y="160" width="250" height="64" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="745.0" y="190.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">REST</text>
+<text x="745.0" y="207.0" font-size="11.5" fill="#555555" text-anchor="middle">Booking writes</text>
+<rect x="620" y="250" width="250" height="64" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="745.0" y="280.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">gRPC</text>
+<text x="745.0" y="297.0" font-size="11.5" fill="#555555" text-anchor="middle">Internal routing</text>
+<rect x="620" y="340" width="250" height="64" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="745.0" y="370.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Not GraphQL</text>
+<text x="745.0" y="387.0" font-size="11.5" fill="#555555" text-anchor="middle">Partner bulk feeds</text>
+<path d="M270,64 L340,64" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M270,122 L340,122" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M270,180 L340,180" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M270,238 L340,238" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M270,296 L340,296" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M270,354 L340,354" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M270,412 L340,412" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M540,102 L620,102" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M540,192 L620,192" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M540,282 L620,282" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M540,372 L620,372" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="150" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Seven axes</text>
+<text x="745" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">One answer per interaction</text>
+</svg>

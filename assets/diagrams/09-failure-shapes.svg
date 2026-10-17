@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 475" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="340" height="380" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Top-level errors[]</text>
+<rect x="380" y="50" width="340" height="380" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="392" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Payload userErrors (served)</text>
+<rect x="740" y="50" width="340" height="380" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="752" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Result union (sketch)</text>
+<rect x="40" y="90" width="300" height="120" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="190.0" y="133.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">errors[0]</text>
+<text x="190.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">message: unknown voyage</text>
+<text x="190.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">extensions.code</text>
+<text x="190.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">data: null</text>
+<rect x="40" y="240" width="300" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="190.0" y="280.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Client branches on</text>
+<text x="190.0" y="297.5" font-size="11.5" fill="#555555" text-anchor="middle">errors present, then</text>
+<text x="190.0" y="312.5" font-size="11.5" fill="#555555" text-anchor="middle">extensions.code</text>
+<rect x="40" y="360" width="300" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="190.0" y="390.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Counted by monitors as a failure</text>
+<rect x="400" y="90" width="300" height="120" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="550.0" y="133.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data.registerHandlingEvent</text>
+<text x="550.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">handlingEvent: null</text>
+<text x="550.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">userErrors[0].code UNKNOWN_VOYAGE</text>
+<text x="550.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">field [&quot;input&quot;,&quot;voyageNumber&quot;]</text>
+<rect x="400" y="240" width="300" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="550.0" y="280.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Client branches on</text>
+<text x="550.0" y="297.5" font-size="11.5" fill="#555555" text-anchor="middle">userErrors non-empty,</text>
+<text x="550.0" y="312.5" font-size="11.5" fill="#555555" text-anchor="middle">then code and field</text>
+<rect x="400" y="360" width="300" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="550.0" y="390.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">No errors key; HTTP and monitors stay quiet</text>
+<rect x="760" y="90" width="300" height="120" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="910.0" y="133.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data.registerHandlingEvent</text>
+<text x="910.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">__typename: ValidationFailed</text>
+<text x="910.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">code UNKNOWN_VOYAGE</text>
+<text x="910.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">field, message</text>
+<rect x="760" y="240" width="300" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="910.0" y="280.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Client branches on</text>
+<text x="910.0" y="297.5" font-size="11.5" fill="#555555" text-anchor="middle">__typename in an inline</text>
+<text x="910.0" y="312.5" font-size="11.5" fill="#555555" text-anchor="middle">fragment per member</text>
+<rect x="760" y="360" width="300" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="910.0" y="390.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Adding a member is a dangerous change</text>
+<text x="550" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">One failure, three envelopes</text>
+<text x="550" y="454" font-size="12" fill="#555555" text-anchor="middle">The book serves the middle shape. The union is shown as SDL in the chapter and is not part of the example.</text>
+</svg>

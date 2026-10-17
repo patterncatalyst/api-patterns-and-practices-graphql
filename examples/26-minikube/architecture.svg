@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="560" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/26-minikube - Helm release gql-ch26 on minikube profile gql-tracking</text>
+<rect x="40" y="250" width="170" height="80" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="125.0" y="280.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">scripts/smoke.sh</text>
+<text x="125.0" y="297.5" font-size="11.5" fill="#555555" text-anchor="middle">curl + trace id</text>
+<text x="125.0" y="312.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1:30360-30365</text>
+<rect x="280" y="230" width="200" height="120" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="380.0" y="273.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge (nginx, TLS 1.3)</text>
+<text x="380.0" y="290.0" font-size="11.5" fill="#555555" text-anchor="middle">Secret gql-ch26-edge-tls</text>
+<text x="380.0" y="305.0" font-size="11.5" fill="#555555" text-anchor="middle">ConfigMap edge-config</text>
+<text x="380.0" y="320.0" font-size="11.5" fill="#555555" text-anchor="middle">NodePort 30360, 30361</text>
+<rect x="560" y="70" width="220" height="110" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="670.0" y="108.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="670.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch25-quarkus:1.0</text>
+<text x="670.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">3 probes, ConfigMap, downward API</text>
+<text x="670.0" y="155.0" font-size="11.5" fill="#555555" text-anchor="middle">ClusterIP :8080</text>
+<rect x="560" y="230" width="220" height="110" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="670.0" y="268.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="670.0" y="285.0" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch25-python:1.0</text>
+<text x="670.0" y="300.0" font-size="11.5" fill="#555555" text-anchor="middle">3 probes, ConfigMap, downward API</text>
+<text x="670.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">ClusterIP :8080</text>
+<rect x="560" y="410" width="380" height="120" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="750.0" y="453.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm (otel-lgtm 0.37.0)</text>
+<text x="750.0" y="470.0" font-size="11.5" fill="#555555" text-anchor="middle">OTLP :4317 (ClusterIP lgtm)</text>
+<text x="750.0" y="485.0" font-size="11.5" fill="#555555" text-anchor="middle">Grafana 30362, Tempo 30363,</text>
+<text x="750.0" y="500.0" font-size="11.5" fill="#555555" text-anchor="middle">Prometheus 30364, Loki 30365</text>
+<rect x="280" y="430" width="200" height="90" rx="9" fill="#f4f4f4" stroke="#6a6e73" stroke-width="1.5"/>
+<text x="380.0" y="465.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">NetworkPolicy</text>
+<text x="380.0" y="482.5" font-size="11.5" fill="#555555" text-anchor="middle">backends accept edge and test</text>
+<text x="380.0" y="497.5" font-size="11.5" fill="#555555" text-anchor="middle">lgtm accepts OTLP in-release</text>
+<rect x="820" y="70" width="140" height="190" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="890.0" y="148.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">helm test</text>
+<text x="890.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch26-graphql-test</text>
+<text x="890.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">queries both stacks</text>
+<text x="890.0" y="195.0" font-size="11.5" fill="#555555" text-anchor="middle">through the edge</text>
+<path d="M210,290 L280,290" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="245.0" y="282.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">HTTPS</text>
+<text x="245.0" y="282.0" font-size="11" fill="#b8650a" text-anchor="middle">HTTPS</text>
+<path d="M480,270 L560,125" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="514.0" y="183.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">/graphql</text>
+<text x="514.0" y="183.5" font-size="11" fill="#555" text-anchor="middle">/graphql</text>
+<path d="M480,300 L560,285" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="520.0" y="306.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">/graphql</text>
+<text x="520.0" y="306.5" font-size="11" fill="#555" text-anchor="middle">/graphql</text>
+<path d="M670,340 L670,410" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="692.0" y="375.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="692.0" y="375.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M210,330 L560,450" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="365.0" y="378.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Tempo and Loki by trace id</text>
+<text x="365.0" y="378.0" font-size="11" fill="#555" text-anchor="middle">Tempo and Loki by trace id</text>
+<text x="50" y="555" font-size="12" fill="#555555" text-anchor="start">smoke.sh sends its own trace id through the edge, reads the trace from Tempo and checks the pod name in it.</text>
+</svg>

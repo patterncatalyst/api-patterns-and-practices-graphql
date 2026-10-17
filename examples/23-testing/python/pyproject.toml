@@ -1,0 +1,35 @@
+[project]
+name = "shipping-python-ch23-testing"
+version = "1.0.0"
+description = "Ch23 Testing GraphQL APIs - the cargo graph with asynchronous sources and a source-call log (Python side, Strawberry on FastAPI)."
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi==0.143.2",
+    "uvicorn==0.54.0",
+    "strawberry-graphql==0.335.0",
+    "pydantic-settings==2.16.0",
+    "opentelemetry-distro==0.66b1",
+    "opentelemetry-exporter-otlp-proto-grpc==1.45.1",
+    "opentelemetry-instrumentation-fastapi==0.66b1",
+]
+
+# The test layers. `uv sync --locked` installs this group by default; the
+# production stage of the Containerfile passes --no-dev.
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "anyio==4.15.1",
+    "httpx==0.28.1",
+    "httpx2==2.13.1",
+    "asgi-lifespan==2.1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]

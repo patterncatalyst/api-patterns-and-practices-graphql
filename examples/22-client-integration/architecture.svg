@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="500" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/22-client-integration - compose stack (gql-ch22-clients)</text>
+<rect x="620" y="50" width="340" height="340" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="632" y="70" font-size="12" font-weight="700" fill="#1d1d1d">servers (each client runs against each)</text>
+<rect x="40" y="215" width="170" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="125.0" y="250.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="125.0" y="267.5" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql</text>
+<text x="125.0" y="282.5" font-size="11.5" fill="#555555" text-anchor="middle">build context: schema</text>
+<rect x="300" y="60" width="190" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="395.0" y="85.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">js-client</text>
+<text x="395.0" y="102.5" font-size="11.5" fill="#555555" text-anchor="middle">Apollo Client 4, Node 24</text>
+<text x="395.0" y="117.5" font-size="11.5" fill="#555555" text-anchor="middle">no port</text>
+<rect x="300" y="170" width="190" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="395.0" y="195.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python-client</text>
+<text x="395.0" y="212.5" font-size="11.5" fill="#555555" text-anchor="middle">gql 4.4.0, httpx</text>
+<text x="395.0" y="227.5" font-size="11.5" fill="#555555" text-anchor="middle">no port</text>
+<rect x="300" y="280" width="190" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="395.0" y="305.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">java-client</text>
+<text x="395.0" y="322.5" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye typesafe + dynamic</text>
+<text x="395.0" y="337.5" font-size="11.5" fill="#555555" text-anchor="middle">no port</text>
+<rect x="300" y="390" width="190" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="395.0" y="415.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">codegen-check</text>
+<text x="395.0" y="432.5" font-size="11.5" fill="#555555" text-anchor="middle">build stage of js-client</text>
+<text x="395.0" y="447.5" font-size="11.5" fill="#555555" text-anchor="middle">no port</text>
+<rect x="650" y="90" width="280" height="110" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="790.0" y="128.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="790.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye GraphQL</text>
+<text x="790.0" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">the Chapter 13 tracking view</text>
+<text x="790.0" y="175.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8320 /graphql</text>
+<rect x="650" y="240" width="280" height="110" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="790.0" y="278.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="790.0" y="295.0" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry on FastAPI</text>
+<text x="790.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">the Chapter 13 tracking view</text>
+<text x="790.0" y="325.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8321 /graphql</text>
+<path d="M210,245 L300,100" fill="none" stroke="#b8650a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#am)"/>
+<text x="225.0" y="142.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">schema at image build</text>
+<text x="225.0" y="142.5" font-size="11" fill="#b8650a" text-anchor="middle">schema at image build</text>
+<path d="M210,260 L300,205" fill="none" stroke="#b8650a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#am)"/>
+<path d="M210,285 L300,425" fill="none" stroke="#b8650a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#am)"/>
+<path d="M490,95 L620,150" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="555.0" y="110.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">POST /graphql</text>
+<text x="555.0" y="110.5" font-size="11" fill="#555" text-anchor="middle">POST /graphql</text>
+<path d="M490,205 L620,205" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="555.0" y="197.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">POST /graphql</text>
+<text x="555.0" y="197.0" font-size="11" fill="#555" text-anchor="middle">POST /graphql</text>
+<path d="M490,315 L620,260" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="555.0" y="305.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">POST /graphql</text>
+<text x="555.0" y="305.5" font-size="11" fill="#555" text-anchor="middle">POST /graphql</text>
+<text x="40" y="500" font-size="12" fill="#555555" text-anchor="start">Clients run on demand through compose_run; the servers are the ones from Chapter 13, unchanged apart from names and ports.</text>
+</svg>

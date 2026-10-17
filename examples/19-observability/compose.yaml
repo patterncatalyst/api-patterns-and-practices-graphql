@@ -1,0 +1,103 @@
+# Ch19 Observability - compose topology.
+#
+# `docker compose up` brings up: lgtm, quarkus, python. Both apps build their
+# schema code-first (SmallRye GraphQL, Strawberry) and serve the same slice of
+# the canonical tracking-view SDL (contracts/schema/shipping/*.graphql) as
+# Chapter 13: everything except Subscription, with batched sources, the error
+# contract of Chapter 9 and the seeded fault (booking GHI345). What this
+# chapter adds is telemetry. Both apps export traces, metrics and logs over OTLP
+# to the collector inside `lgtm` (grafana/otel-lgtm: OpenTelemetry Collector,
+# Tempo, Prometheus, Loki and Grafana in one container). verify.sh sends a
+# trace id of its own with every request, reads that trace back from Tempo,
+# and reads the metrics and the log records from Prometheus and Loki.
+#
+# TRACKING_DEBUG_ENDPOINTS=true turns the /debug/source-calls endpoints on.
+# They are a lab tool: leave them off (the default) anywhere else.
+#
+# Host ports (this chapter): Quarkus 8290, Python 8291, both at /graphql.
+# Chapter NN takes 8100 + 10*NN (Quarkus) and +1 (Python), then the extras:
+#   8292  Grafana     (lgtm :3000)
+#   8293  Tempo API   (lgtm :3200)
+#   8294  Prometheus  (lgtm :9090)
+#   8295  Loki        (lgtm :3100)
+# The collector's OTLP ports (4317 gRPC, 4318 HTTP) stay inside the compose
+# network. The chapter's block keeps this stack off the usual 3000, 4317,
+# 9090, 3100 and 3200, so it can run beside an observability stack of your own.
+#
+# Usage:
+#   docker compose up --build        # lgtm + both apps
+#   open http://localhost:8292       # Grafana, anonymous Admin (lab only)
+
+# A fixed project name, the same one verify.sh passes with -p: a manual
+# `docker compose up` and a verify.sh run share one set of container,
+# network and volume names instead of colliding on the container names below.
+name: gql-ch19-observability
+
+services:
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    container_name: ch19-observability-quarkus
+    ports:
+      - "8290:8080"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+    depends_on:
+      lgtm:
+        condition: service_healthy
+    healthcheck:
+      # SmallRye Health readiness; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    container_name: ch19-observability-python
+    ports:
+      - "8291:8080"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+    depends_on:
+      lgtm:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # The observability backend: OpenTelemetry Collector (OTLP in), Tempo
+  # (traces, with the span-metrics generator), Prometheus (metrics), Loki
+  # (logs) and Grafana, preconfigured with all three data sources.
+  lgtm:
+    image: docker.io/grafana/otel-lgtm:0.37.0
+    container_name: ch19-observability-lgtm
+    ports:
+      - "8292:3000" # Grafana UI
+      - "8293:3200" # Tempo API
+      - "8294:9090" # Prometheus query API
+      - "8295:3100" # Loki query API
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    healthcheck:
+      # curl ships in the image. Ready means Grafana, Tempo and Loki all answer.
+      test:
+        - CMD-SHELL
+        - curl -fsS -o /dev/null http://localhost:3000/api/health && curl -fsS -o /dev/null http://localhost:3200/ready && curl -fsS -o /dev/null http://localhost:3100/ready
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="470" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Strawberry: an exception instance at one position</text>
+<rect x="510" y="50" width="470" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="522" y="70" font-size="12" font-weight="700" fill="#1d1d1d">SmallRye: one result list for the batch</text>
+<rect x="45" y="95" width="420" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="255.0" y="121.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">booking.getCargos ABC123+GHI345</text>
+<text x="255.0" y="138.0" font-size="11.5" fill="#555555" text-anchor="middle">GHI345 fails</text>
+<rect x="45" y="185" width="420" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="255.0" y="211.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">load_fn returns [Cargo ABC123, SourceUnavailable]</text>
+<text x="255.0" y="228.0" font-size="11.5" fill="#555555" text-anchor="middle">the instance is placed at its key&#x27;s position</text>
+<rect x="45" y="275" width="200" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="145.0" y="301.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[0].node</text>
+<text x="145.0" y="318.0" font-size="11.5" fill="#555555" text-anchor="middle">ABC123 resolved</text>
+<rect x="265" y="275" width="200" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="365.0" y="301.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1].node</text>
+<text x="365.0" y="318.0" font-size="11.5" fill="#555555" text-anchor="middle">null</text>
+<rect x="45" y="365" width="420" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="255.0" y="393.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1 error, path cargos, edges, 1, node</text>
+<text x="255.0" y="410.0" font-size="11.5" fill="#555555" text-anchor="middle">code SERVICE_UNAVAILABLE</text>
+<rect x="535" y="95" width="420" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="745.0" y="121.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">booking.getCargos ABC123+GHI345</text>
+<text x="745.0" y="138.0" font-size="11.5" fill="#555555" text-anchor="middle">GHI345 fails</text>
+<rect x="535" y="185" width="420" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="745.0" y="211.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">the batch method fails its whole Uni</text>
+<text x="745.0" y="228.0" font-size="11.5" fill="#555555" text-anchor="middle">every parent in the batch gets the failure</text>
+<rect x="535" y="275" width="200" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="635.0" y="301.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[0].node</text>
+<text x="635.0" y="318.0" font-size="11.5" fill="#555555" text-anchor="middle">null (ABC123 lost)</text>
+<rect x="755" y="275" width="200" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="855.0" y="301.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1].node</text>
+<text x="855.0" y="318.0" font-size="11.5" fill="#555555" text-anchor="middle">null</text>
+<rect x="535" y="365" width="420" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="745.0" y="393.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2 errors, one per path</text>
+<text x="745.0" y="410.0" font-size="11.5" fill="#555555" text-anchor="middle">code SERVICE_UNAVAILABLE at edges 0 and 1</text>
+<path d="M255,151 L255,185" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M150,241 L145,275" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M360,241 L365,275" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M255,331 L255,365" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M745,151 L745,185" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M640,241 L635,275" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M850,241 L855,275" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M745,331 L745,365" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">A failing key inside a batch: one null edge on Strawberry, the whole batch on SmallRye</text>
+<text x="500" y="474" font-size="12" fill="#555555" text-anchor="middle">Both responses carry the same code and message. They differ in how many nodes the one failure takes with it.</text>
+</svg>

@@ -1,0 +1,111 @@
+# Ch23 Testing GraphQL APIs - compose topology.
+#
+# Default `docker compose up` brings up: quarkus, python. Both serve the
+# Chapter 14 tracking view unchanged: the canonical tracking-view SDL
+# (contracts/schema/shipping/*.graphql) except Subscription, with batching,
+# pagination, the error contract and the request limits (cost budget 1,000).
+# What this chapter adds is the test layers around that server:
+#
+#   quarkus-test, python-test   the in-process suites, profile `test`, one-off
+#                               containers (docker compose run); each writes its
+#                               reports and the schema it exported to /out
+#   load                        the k6 runner, profile `load`, one-off container
+#                               aimed at quarkus or python on the compose network
+#
+# verify.sh runs both profiles through `docker compose run`, mounts a scratch
+# directory at /out, and reads the JUnit reports and the exported SDL from it.
+#
+# TRACKING_SOURCE_LATENCY_MS=50 keeps a source call short so a load run of a
+# few hundred requests finishes in seconds; the call counts do not depend on
+# it. TRACKING_DEBUG_ENDPOINTS=true turns the /debug/source-calls endpoints on
+# (a lab tool: leave them off, the default, anywhere else).
+#
+# Host ports (this chapter): Quarkus 8330, Python 8331, both at /graphql.
+# Chapter NN takes 8100 + 10*NN (Quarkus) and +1 (Python), so examples never
+# collide with each other or with the Ch0 skeleton on 8080/8081. The test and
+# load containers publish nothing.
+#
+# Telemetry is off (QUARKUS_OTEL_SDK_DISABLED and OTEL_SDK_DISABLED);
+# Chapter 19 turns it on.
+#
+# Usage:
+#   docker compose up --build   # the two servers
+#   docker compose run --rm --build -v "$PWD/out:/out" quarkus-test
+
+# A fixed project name, the same one verify.sh passes with -p: a manual
+# `docker compose up` and a verify.sh run share one set of container,
+# network and volume names instead of colliding on the container names below.
+name: gql-ch23-testing
+
+services:
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    container_name: ch23-testing-quarkus
+    ports:
+      - "8330:8080"
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=50
+      - TRACKING_DEBUG_ENDPOINTS=true
+    healthcheck:
+      # SmallRye Health readiness; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    container_name: ch23-testing-python
+    ports:
+      - "8331:8080"
+    environment:
+      - OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=50
+      - TRACKING_DEBUG_ENDPOINTS=true
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # The Quarkus suite: the `test` stage of quarkus/Containerfile runs
+  # `mvn verify`. The client documents arrive through the `documents` build
+  # context, so the suite and the load runner read the same files.
+  quarkus-test:
+    profiles: ["test"]
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+      target: test
+      additional_contexts:
+        documents: ./documents
+    container_name: ch23-testing-quarkus-test
+
+  # The Python suite: the `test` stage of python/Containerfile runs pytest.
+  python-test:
+    profiles: ["test"]
+    build:
+      context: ./python
+      dockerfile: Containerfile
+      target: test
+      additional_contexts:
+        documents: ./documents
+    container_name: ch23-testing-python-test
+
+  # k6, run as `k6 run /scripts/tracking.js` with TARGET, RUN and STACK in the
+  # environment. The documents it sends are the same files again.
+  load:
+    profiles: ["load"]
+    build:
+      context: ./load
+      dockerfile: Containerfile
+      additional_contexts:
+        documents: ./documents
+    container_name: ch23-testing-load

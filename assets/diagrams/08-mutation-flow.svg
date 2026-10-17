@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="100" width="136" height="84" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="88.0" y="132.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Variables</text>
+<text x="88.0" y="149.5" font-size="11.5" fill="#555555" text-anchor="middle">JSON object</text>
+<text x="88.0" y="164.5" font-size="11.5" fill="#555555" text-anchor="middle">$input</text>
+<rect x="184" y="100" width="136" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="252.0" y="132.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Input coercion</text>
+<text x="252.0" y="149.5" font-size="11.5" fill="#555555" text-anchor="middle">scalars, enums,</text>
+<text x="252.0" y="164.5" font-size="11.5" fill="#555555" text-anchor="middle">unknown fields</text>
+<rect x="348" y="100" width="136" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="416.0" y="132.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Domain validation</text>
+<text x="416.0" y="149.5" font-size="11.5" fill="#555555" text-anchor="middle">cargo, location,</text>
+<text x="416.0" y="164.5" font-size="11.5" fill="#555555" text-anchor="middle">voyage, time</text>
+<rect x="512" y="100" width="136" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="580.0" y="132.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Key lookup</text>
+<text x="580.0" y="149.5" font-size="11.5" fill="#555555" text-anchor="middle">findByIdempotencyKey</text>
+<text x="580.0" y="164.5" font-size="11.5" fill="#555555" text-anchor="middle">only with a key</text>
+<rect x="676" y="100" width="136" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="744.0" y="132.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">appendEvent</text>
+<text x="744.0" y="149.5" font-size="11.5" fill="#555555" text-anchor="middle">atomic check</text>
+<text x="744.0" y="164.5" font-size="11.5" fill="#555555" text-anchor="middle">and insert</text>
+<rect x="840" y="100" width="136" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="908.0" y="132.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Re-read</text>
+<text x="908.0" y="149.5" font-size="11.5" fill="#555555" text-anchor="middle">Cargo.delivery from</text>
+<text x="908.0" y="164.5" font-size="11.5" fill="#555555" text-anchor="middle">listEvents</text>
+<rect x="1004" y="100" width="136" height="84" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="1072.0" y="132.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Payload</text>
+<text x="1072.0" y="149.5" font-size="11.5" fill="#555555" text-anchor="middle">handlingEvent, cargo,</text>
+<text x="1072.0" y="164.5" font-size="11.5" fill="#555555" text-anchor="middle">userErrors</text>
+<rect x="177" y="270" width="150" height="84" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="252.0" y="302.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">errors[]</text>
+<text x="252.0" y="319.5" font-size="11.5" fill="#555555" text-anchor="middle">data absent or null</text>
+<text x="252.0" y="334.5" font-size="11.5" fill="#555555" text-anchor="middle">nothing written</text>
+<rect x="341" y="270" width="150" height="84" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="416.0" y="302.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">userErrors[]</text>
+<text x="416.0" y="319.5" font-size="11.5" fill="#555555" text-anchor="middle">event and cargo null</text>
+<text x="416.0" y="334.5" font-size="11.5" fill="#555555" text-anchor="middle">nothing written</text>
+<rect x="532" y="270" width="150" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="607.0" y="302.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Key hit</text>
+<text x="607.0" y="319.5" font-size="11.5" fill="#555555" text-anchor="middle">the original event</text>
+<text x="607.0" y="334.5" font-size="11.5" fill="#555555" text-anchor="middle">nothing written</text>
+<path d="M156,142.0 L184,142.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M320,142.0 L348,142.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M484,142.0 L512,142.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M648,142.0 L676,142.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M812,142.0 L840,142.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M976,142.0 L1004,142.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M252.0,184 L252.0,270" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="276.0" y="227.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">fails</text>
+<text x="276.0" y="227.0" font-size="11" fill="#555" text-anchor="middle">fails</text>
+<path d="M416.0,184 L416.0,270" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="440.0" y="227.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">fails</text>
+<text x="440.0" y="227.0" font-size="11" fill="#555" text-anchor="middle">fails</text>
+<path d="M580.0,184 L600.0,270" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="570.0" y="227.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">hit</text>
+<text x="570.0" y="227.0" font-size="11" fill="#b8650a" text-anchor="middle">hit</text>
+<path d="M682,312 L938.0,184" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="834.0" y="270.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">re-read</text>
+<text x="834.0" y="270.0" font-size="11" fill="#b8650a" text-anchor="middle">re-read</text>
+<text x="600" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">registerHandlingEvent: from the input object to the payload</text>
+<text x="600" y="392" font-size="12" fill="#555555" text-anchor="middle">Coercion belongs to the engine and runs before the resolver. Validation, lookup, append and re-read run in the resolver.</text>
+<text x="600" y="412" font-size="12" fill="#555555" text-anchor="middle">A request with a new key, or no key, takes the full path to appendEvent. A key hit skips the append and goes straight to the re-read.</text>
+</svg>

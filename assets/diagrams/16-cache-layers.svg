@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 370" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="30" y="70" width="235" height="150" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="147.5" y="120.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1. Client cache</text>
+<text x="147.5" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">key: __typename + id</text>
+<text x="147.5" y="152.5" font-size="11.5" fill="#555555" text-anchor="middle">removed by: a newer response</text>
+<text x="147.5" y="167.5" font-size="11.5" fill="#555555" text-anchor="middle">for the same object</text>
+<text x="147.5" y="182.5" font-size="11.5" fill="#555555" text-anchor="middle">(Chapter 22)</text>
+<rect x="305" y="70" width="235" height="150" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="422.5" y="120.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2. Edge: nginx proxy_cache</text>
+<text x="422.5" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">key: method + URL</text>
+<text x="422.5" y="152.5" font-size="11.5" fill="#555555" text-anchor="middle">stores what Cache-Control allows</text>
+<text x="422.5" y="167.5" font-size="11.5" fill="#555555" text-anchor="middle">skips: Authorization, no-store</text>
+<text x="422.5" y="182.5" font-size="11.5" fill="#555555" text-anchor="middle">removed by: max-age</text>
+<rect x="580" y="70" width="235" height="150" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="697.5" y="120.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3. Server: field caches</text>
+<text x="697.5" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">key: voyage no., UN/LOCODE,</text>
+<text x="697.5" y="152.5" font-size="11.5" fill="#555555" text-anchor="middle">tracking id</text>
+<text x="697.5" y="167.5" font-size="11.5" fill="#555555" text-anchor="middle">removed by: TTL, or a write</text>
+<text x="697.5" y="182.5" font-size="11.5" fill="#555555" text-anchor="middle">(registerHandlingEvent)</text>
+<rect x="855" y="70" width="215" height="150" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="962.5" y="120.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4. Source: the owners</text>
+<text x="962.5" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">booking, routing, voyage,</text>
+<text x="962.5" y="152.5" font-size="11.5" fill="#555555" text-anchor="middle">location, handling</text>
+<text x="962.5" y="167.5" font-size="11.5" fill="#555555" text-anchor="middle">the system of record</text>
+<text x="962.5" y="182.5" font-size="11.5" fill="#555555" text-anchor="middle">every call is logged</text>
+<rect x="580" y="260" width="490" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="825.0" y="288.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Chapter 13 loader cache: one request, then gone</text>
+<text x="825.0" y="305.0" font-size="11.5" fill="#555555" text-anchor="middle">it sits above layer 3 and shares nothing between requests</text>
+<path d="M265,145 L305,145" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="285.0" y="137.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">GET</text>
+<text x="285.0" y="137.0" font-size="11" fill="#555" text-anchor="middle">GET</text>
+<path d="M540,145 L580,145" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="560.0" y="137.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">miss</text>
+<text x="560.0" y="137.0" font-size="11" fill="#555" text-anchor="middle">miss</text>
+<path d="M815,145 L855,145" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="835.0" y="137.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">miss</text>
+<text x="835.0" y="137.0" font-size="11" fill="#555" text-anchor="middle">miss</text>
+<text x="550" y="32" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Four places to keep an answer, nearest the caller first</text>
+<text x="30" y="300" font-size="12" fill="#555555" text-anchor="start">Layer 2 can see only the URL.</text>
+<text x="30" y="320" font-size="12" fill="#555555" text-anchor="start">Layer 3 sees keys and ignores who asked.</text>
+<text x="30" y="345" font-size="12" fill="#555555" text-anchor="start">A hit at any layer ends the request there; the layers below never see it.</text>
+</svg>

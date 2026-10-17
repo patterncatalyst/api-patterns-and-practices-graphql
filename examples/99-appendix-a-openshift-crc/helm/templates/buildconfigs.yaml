@@ -1,0 +1,30 @@
+{{- if .Values.openshift.builds.enabled }}
+{{- range $stack, $spec := .Values.final.stacks }}
+{{- $image := include "appa.imageName" $spec.image.repository }}
+---
+# Builds the Containerfile of the stack's directory, unchanged. The directory is
+# uploaded by `oc start-build {{ $image }} --from-dir examples/27-final-project/{{ $stack }}`.
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: {{ $image }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "appa.labels" (dict "root" $ "name" $image "component" "build") | nindent 4 }}
+spec:
+  runPolicy: Serial
+  source:
+    type: Binary
+    binary: {}
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: {{ $.Values.openshift.builds.dockerfilePath }}
+  output:
+    to:
+      kind: ImageStreamTag
+      name: {{ $image }}:{{ $spec.image.tag }}
+  resources:
+    {{- toYaml $.Values.openshift.builds.resources | nindent 4 }}
+{{- end }}
+{{- end }}

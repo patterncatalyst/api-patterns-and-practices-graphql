@@ -1,0 +1,97 @@
+package com.patterncatalyst.shipping.tracking;
+
+import java.util.List;
+
+import io.quarkus.cache.Cache;
+import io.quarkus.cache.CacheInvalidate;
+import io.quarkus.cache.CacheKey;
+import io.quarkus.cache.CacheName;
+import io.quarkus.cache.CaffeineCache;
+import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+
+/**
+ * The handling service's side of the tracking view: the reads {@code listEvents},
+ * {@code listEventsFor}, {@code pageEvents}, {@code getEvent} and {@code findByIdempotencyKey}, and the write
+ * {@code appendEvent}. The bulk read {@code listEventsFor} sits behind the
+ * {@code handling-events} cache (a short TTL, evicted by {@link #evict} when an
+ * event is appended); hits are not calls to the owner and are not logged.
+ */
+@ApplicationScoped
+public class HandlingSource {
+
+    private final HandlingStore store;
+    private final SourceCalls calls;
+    private final CaffeineCache cache;
+
+    HandlingSource(HandlingStore store, SourceCalls calls, @CacheName("handling-events") Cache cache) {
+        this.store = store;
+        this.calls = calls;
+        this.cache = cache.as(CaffeineCache.class);
+    }
+
+    /**
+     * Every event recorded for the cargo; empty when there are none.
+     */
+    public Uni<List<HandlingRecord>> listEvents(String request, String trackingId) {
+        return calls.call(request, "handling", "listEvents", trackingId, () -> store.events(trackingId));
+    }
+
+    /**
+     * The events of many cargos in one call: one outcome per tracking id, in the
+     * order asked, each an empty list when the cargo has none.
+     */
+    public Uni<List<Outcome<List<HandlingRecord>>>> listEventsFor(String request, List<String> trackingIds) {
+        return BulkCache.through(
+                cache,
+                List.class,
+                trackingIds,
+                misses -> calls.callBatch(request, "handling", "listEventsFor", misses, store::events));
+    }
+
+    /**
+     * Drops the cargo's cached events. Registration calls it after a successful
+     * append and before it reads the cargo for the payload, so the payload sees the
+     * new event. The annotation evicts when the returned {@code Uni} completes.
+     */
+    @CacheInvalidate(cacheName = "handling-events")
+    public Uni<Void> evict(@CacheKey String trackingId) {
+        return Uni.createFrom().voidItem();
+    }
+
+    /** One page of the cargo's events, newest completion first. The log key is the tracking id. */
+    public Uni<Pagination.Slice<HandlingRecord>> pageEvents(
+            String request, String trackingId, Pagination.Page<Pagination.EventKey> page) {
+        return calls.call(
+                request,
+                "handling",
+                "pageEvents",
+                trackingId,
+                () -> Pagination.slice(store.events(trackingId), HandlingRecord::key, page));
+    }
+
+    /** Null when no event has that id. */
+    public Uni<HandlingRecord> getEvent(String request, String id) {
+        return calls.call(request, "handling", "getEvent", id, () -> store.event(id).orElse(null));
+    }
+
+    /** The event a key already produced, or null when the key is new. */
+    public Uni<HandlingRecord> findByIdempotencyKey(String request, String key) {
+        return calls.call(
+                request, "handling", "findByIdempotencyKey", key, () -> store.findByIdempotencyKey(key).orElse(null));
+    }
+
+    /**
+     * Records the event, or returns the event the key already produced. The
+     * log entry is keyed by the new event's id and exists only when this call
+     * wrote: a call that lost a race to the same key writes, and logs, nothing.
+     */
+    public Uni<HandlingStore.Appended> appendEvent(String request, NewHandling handling, String idempotencyKey) {
+        return calls.write(
+                request,
+                "handling",
+                "appendEvent",
+                () -> store.append(handling, idempotencyKey),
+                appended -> appended.created() ? appended.event().id() : null);
+    }
+}

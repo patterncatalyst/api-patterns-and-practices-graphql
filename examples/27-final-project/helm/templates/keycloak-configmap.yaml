@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-realm
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "keycloak" "component" "identity") | nindent 4 }}
+data:
+  # Chapter 18's realm, imported at start: users ana, bo and ops, and the
+  # clients tracking-cli, other-cli and short-cli (lab fixtures).
+  shipping-realm.json: |
+    {{- .Files.Get "files/shipping-realm.json" | nindent 4 }}

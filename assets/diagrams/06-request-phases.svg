@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 380" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="70" width="140" height="84" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="90.0" y="102.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">POST /graphql</text>
+<text x="90.0" y="119.5" font-size="11.5" fill="#555555" text-anchor="middle">query, variables,</text>
+<text x="90.0" y="134.5" font-size="11.5" fill="#555555" text-anchor="middle">operationName</text>
+<rect x="200" y="70" width="140" height="84" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="270.0" y="102.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Parse</text>
+<text x="270.0" y="119.5" font-size="11.5" fill="#555555" text-anchor="middle">text to a document</text>
+<text x="270.0" y="134.5" font-size="11.5" fill="#555555" text-anchor="middle">(syntax)</text>
+<rect x="380" y="70" width="140" height="84" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="450.0" y="102.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Validate</text>
+<text x="450.0" y="119.5" font-size="11.5" fill="#555555" text-anchor="middle">document against</text>
+<text x="450.0" y="134.5" font-size="11.5" fill="#555555" text-anchor="middle">the schema</text>
+<rect x="560" y="70" width="160" height="84" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="640.0" y="102.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Coerce variables</text>
+<text x="640.0" y="119.5" font-size="11.5" fill="#555555" text-anchor="middle">JSON values to</text>
+<text x="640.0" y="134.5" font-size="11.5" fill="#555555" text-anchor="middle">declared types</text>
+<rect x="750" y="70" width="140" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="820.0" y="102.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Execute</text>
+<text x="820.0" y="119.5" font-size="11.5" fill="#555555" text-anchor="middle">walk the selection,</text>
+<text x="820.0" y="134.5" font-size="11.5" fill="#555555" text-anchor="middle">call resolvers</text>
+<rect x="940" y="70" width="140" height="84" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="1010.0" y="102.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Response</text>
+<text x="1010.0" y="119.5" font-size="11.5" fill="#555555" text-anchor="middle">data, errors,</text>
+<text x="1010.0" y="134.5" font-size="11.5" fill="#555555" text-anchor="middle">or both</text>
+<rect x="200" y="250" width="500" height="74" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="450.0" y="285.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Request error</text>
+<text x="450.0" y="302.0" font-size="11.5" fill="#555555" text-anchor="middle">errors, no data, and zero source calls: nothing ran, so a retry is safe</text>
+<rect x="750" y="250" width="140" height="74" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="820.0" y="277.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Sources</text>
+<text x="820.0" y="294.5" font-size="11.5" fill="#555555" text-anchor="middle">booking, routing,</text>
+<text x="820.0" y="309.5" font-size="11.5" fill="#555555" text-anchor="middle">voyage, location, delivery</text>
+<path d="M160,112.0 L200,112.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M340,112.0 L380,112.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M520,112.0 L560,112.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M720,112.0 L750,112.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M890,112.0 L940,112.0" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M270.0,154 L270.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M450.0,154 L450.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M640.0,154 L640.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M820.0,154 L820.0,250" fill="none" stroke="#b8650a" stroke-width="2" marker-start="url(#am)" marker-end="url(#am)"/>
+<text x="872.0" y="206.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">resolver calls</text>
+<text x="872.0" y="206.0" font-size="11" fill="#b8650a" text-anchor="middle">resolver calls</text>
+<text x="490" y="34" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Three stages run before any resolver; a failure in any of them ends the request</text>
+<text x="490" y="360" font-size="12" fill="#555555" text-anchor="middle">Execution errors are different: they arrive beside partial data from the Execute stage.</text>
+</svg>

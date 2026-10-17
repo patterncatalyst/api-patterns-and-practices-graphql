@@ -1,0 +1,80 @@
+{{- if .Values.test.enabled }}
+# helm test: a pod in the release checks each stack through the edge, with the
+# chart's own CA: the schema answers, an anonymous request is refused for a
+# protected field, a lab endpoint is not routed, and Keycloak serves the realm.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-graphql-test
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "graphql-test" "component" "test") | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  restartPolicy: Never
+  securityContext:
+    {{- toYaml .Values.podSecurityContext | nindent 4 }}
+  containers:
+    - name: curl
+      image: "{{ .Values.edge.image.repository }}:{{ .Values.edge.image.tag }}"
+      imagePullPolicy: {{ .Values.edge.image.pullPolicy }}
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          set -eu
+          {{- $tls := .Values.edge.tls.enabled }}
+          {{- $opts := ternary "--tlsv1.3 --cacert /tls/ca.crt" "" $tls }}
+          for target in quarkus:{{ include "gql.edgePort" (dict "root" . "stack" "quarkus") }} python:{{ include "gql.edgePort" (dict "root" . "stack" "python") }}; do
+            stack="${target%%:*}"
+            base="{{ ternary "https" "http" $tls }}://edge:${target##*:}"
+            out="$(curl -fsS {{ $opts }} -H 'Content-Type: application/json' \
+              -d '{"query":"{ __typename }"}' "$base/graphql")"
+            echo "$stack $out"
+            case "$out" in
+              *'"__typename":"Query"'*) ;;
+              *) echo "$stack: unexpected answer" >&2; exit 1 ;;
+            esac
+            out="$(curl -fsS {{ $opts }} -H 'Content-Type: application/json' \
+              -d '{"query":"{ cargo(trackingId: \"ABC123\") { trackingId } }"}' "$base/graphql")"
+            echo "$stack $out"
+            case "$out" in
+              *'"code":"UNAUTHENTICATED"'*) ;;
+              *) echo "$stack: an anonymous caller was not refused" >&2; exit 1 ;;
+            esac
+            status="$(curl -sS {{ $opts }} -o /dev/null -w '%{http_code}' "$base/debug/source-calls")"
+            echo "$stack /debug/source-calls $status"
+            [ "$status" = "404" ] || { echo "$stack: a lab endpoint is routed" >&2; exit 1; }
+          done
+          out="$(curl -fsS http://keycloak:8080/realms/shipping)"
+          echo "keycloak $out" | cut -c1-120
+          case "$out" in
+            *'"realm":"shipping"'*) ;;
+            *) echo "keycloak: the realm is not served" >&2; exit 1 ;;
+          esac
+          echo "helm test: both stacks answer through the edge and keycloak serves the realm"
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          memory: 64Mi
+      securityContext:
+        {{- include "gql.containerSecurityContext" . | nindent 8 }}
+      {{- if $tls }}
+      volumeMounts:
+        - name: tls
+          mountPath: /tls
+          readOnly: true
+      {{- end }}
+  {{- if $tls }}
+  volumes:
+    - name: tls
+      secret:
+        secretName: {{ include "gql.tlsSecretName" . }}
+        items:
+          - key: ca.crt
+            path: ca.crt
+  {{- end }}
+{{- end }}

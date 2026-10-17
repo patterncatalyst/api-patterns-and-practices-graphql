@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 570" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="120" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">1  Connected: the feed names each event</text>
+<rect x="20" y="190" width="960" height="110" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="210" font-size="12" font-weight="700" fill="#1d1d1d">2  Dropped: the store keeps what nobody heard</text>
+<rect x="20" y="320" width="960" height="200" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="340" font-size="12" font-weight="700" fill="#1d1d1d">3  Reconnected: replay, then live</text>
+<rect x="40" y="90" width="250" height="64" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="165.0" y="120.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">GET /events/cargos/ABC123</text>
+<text x="165.0" y="137.0" font-size="11.5" fill="#555555" text-anchor="middle">Accept: text/event-stream</text>
+<rect x="370" y="90" width="290" height="64" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="515.0" y="120.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">id: evt_10  event: handled</text>
+<text x="515.0" y="137.0" font-size="11.5" fill="#555555" text-anchor="middle">data: {id, trackingId, type, ...}</text>
+<rect x="740" y="90" width="220" height="64" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="850.0" y="120.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">the client remembers</text>
+<text x="850.0" y="137.0" font-size="11.5" fill="#555555" text-anchor="middle">Last-Event-ID = evt_10</text>
+<rect x="40" y="232" width="250" height="56" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="165.0" y="258.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">connection lost</text>
+<text x="165.0" y="275.0" font-size="11.5" fill="#dddddd" text-anchor="middle">the watcher leaves</text>
+<rect x="370" y="232" width="590" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="665.0" y="258.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">events registered for ABC123 meanwhile are stored</text>
+<text x="665.0" y="275.0" font-size="11.5" fill="#555555" text-anchor="middle">evt_12 to evt_18</text>
+<rect x="40" y="362" width="250" height="64" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="165.0" y="392.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">GET /events/cargos/ABC123</text>
+<text x="165.0" y="409.0" font-size="11.5" fill="#555555" text-anchor="middle">Last-Event-ID: evt_10</text>
+<rect x="370" y="362" width="290" height="64" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="515.0" y="392.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1  join the broadcast</text>
+<text x="515.0" y="409.0" font-size="11.5" fill="#555555" text-anchor="middle">so no live event can slip by</text>
+<rect x="690" y="362" width="270" height="64" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="392.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2  replay in registration order</text>
+<text x="825.0" y="409.0" font-size="11.5" fill="#555555" text-anchor="middle">evt_12 to evt_18</text>
+<rect x="740" y="450" width="220" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="850.0" y="476.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3  live</text>
+<text x="850.0" y="493.0" font-size="11.5" fill="#555555" text-anchor="middle">evt_19</text>
+<rect x="370" y="450" width="290" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="515.0" y="476.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">drop live ids already replayed</text>
+<text x="515.0" y="493.0" font-size="11.5" fill="#555555" text-anchor="middle">no id is sent twice</text>
+<path d="M290,122 L370,122" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="330.0" y="114.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">200</text>
+<text x="330.0" y="114.0" font-size="11" fill="#555" text-anchor="middle">200</text>
+<path d="M660,122 L740,122" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M290,260 L370,260" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M290,394 L370,394" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M660,394 L690,394" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M850,426 L850,450" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M740,478 L660,478" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Resume is a header and a store, not a protocol</text>
+<text x="500" y="544" font-size="12" fill="#555555" text-anchor="middle">EventSource reconnects by itself and sends the last id it saw. A GraphQL subscription has no such id: the client subscribes again.</text>
+</svg>

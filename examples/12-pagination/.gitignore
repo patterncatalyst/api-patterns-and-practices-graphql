@@ -1,0 +1,6 @@
+# Build output and local virtual environments for runs outside Docker
+# (the Containerfiles build everything inside the image).
+quarkus/target/
+python/.venv/
+python/.ruff_cache/
+python/__pycache__/

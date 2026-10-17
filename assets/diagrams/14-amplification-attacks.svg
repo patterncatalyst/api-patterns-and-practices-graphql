@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 590" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="310" height="240" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Deep nesting</text>
+<rect x="345" y="50" width="310" height="240" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="357" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Aliases</text>
+<rect x="670" y="50" width="310" height="240" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="682" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Huge page</text>
+<rect x="20" y="305" width="310" height="240" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="325" font-size="12" font-weight="700" fill="#1d1d1d">Token flood</text>
+<rect x="345" y="305" width="310" height="240" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="357" y="325" font-size="12" font-weight="700" fill="#1d1d1d">Batch array</text>
+<rect x="32" y="82" width="286" height="62" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="175.0" y="111.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">D_DEEP: 231 bytes</text>
+<text x="175.0" y="128.0" font-size="11.5" fill="#555555" text-anchor="middle">16 fields deep, first: 1 throughout</text>
+<rect x="32" y="154" width="286" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="175.0" y="172.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Work</text>
+<text x="175.0" y="189.5" font-size="11.5" fill="#555555" text-anchor="middle">Cost 16</text>
+<text x="175.0" y="204.5" font-size="11.5" fill="#555555" text-anchor="middle">depth grows with the text, not the data</text>
+<rect x="32" y="220" width="286" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="175.0" y="240.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Caught by</text>
+<text x="175.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: depth exceeded 16 &gt; 15</text>
+<text x="175.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">Python: operation depth of 14</text>
+<rect x="357" y="82" width="286" height="62" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="500.0" y="111.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">A_BOMB: 16,093 bytes</text>
+<text x="500.0" y="128.0" font-size="11.5" fill="#555555" text-anchor="middle">150 aliases of one 7-field lookup</text>
+<rect x="357" y="154" width="286" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="500.0" y="172.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Work</text>
+<text x="500.0" y="189.5" font-size="11.5" fill="#555555" text-anchor="middle">150 lookups in one request</text>
+<text x="500.0" y="204.5" font-size="11.5" fill="#555555" text-anchor="middle">each alias runs its own lookup</text>
+<rect x="357" y="220" width="286" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="500.0" y="240.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Caught by</text>
+<text x="500.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">Both: 150 aliases found</text>
+<text x="500.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">Allowed: 20</text>
+<rect x="682" y="82" width="286" height="62" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="825.0" y="111.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">first: 5000: 57 bytes</text>
+<text x="825.0" y="128.0" font-size="11.5" fill="#555555" text-anchor="middle">one cargos selection</text>
+<rect x="682" y="154" width="286" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="825.0" y="172.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Work</text>
+<text x="825.0" y="189.5" font-size="11.5" fill="#555555" text-anchor="middle">Cost 15,001</text>
+<text x="825.0" y="204.5" font-size="11.5" fill="#555555" text-anchor="middle">and 5,000 rows to assemble</text>
+<rect x="682" y="220" width="286" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="240.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Caught by</text>
+<text x="825.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">Both: cost 15001 &gt; 1000</text>
+<text x="825.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">first: 51 reaches the page cap</text>
+<rect x="32" y="337" width="286" height="62" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="175.0" y="366.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">T_FLOOD: 66,003 bytes</text>
+<text x="175.0" y="383.0" font-size="11.5" fill="#555555" text-anchor="middle">6,002 tokens of __typename</text>
+<rect x="32" y="409" width="286" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="175.0" y="427.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Work</text>
+<text x="175.0" y="444.5" font-size="11.5" fill="#555555" text-anchor="middle">Parser and validator work</text>
+<text x="175.0" y="459.5" font-size="11.5" fill="#555555" text-anchor="middle">no resolver runs</text>
+<rect x="32" y="475" width="286" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="175.0" y="495.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Caught by</text>
+<text x="175.0" y="512.5" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: Unparseable input document</text>
+<text x="175.0" y="527.5" font-size="11.5" fill="#555555" text-anchor="middle">Python: more than 5000 tokens</text>
+<rect x="357" y="337" width="286" height="62" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="500.0" y="366.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">B_ARRAY: 55 bytes</text>
+<text x="500.0" y="383.0" font-size="11.5" fill="#555555" text-anchor="middle">two operations in one body</text>
+<rect x="357" y="409" width="286" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="500.0" y="427.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Work</text>
+<text x="500.0" y="444.5" font-size="11.5" fill="#555555" text-anchor="middle">Every operation costs what it costs</text>
+<text x="500.0" y="459.5" font-size="11.5" fill="#555555" text-anchor="middle">N operations, one HTTP request</text>
+<rect x="357" y="475" width="286" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="500.0" y="495.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Caught by</text>
+<text x="500.0" y="512.5" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: 200, Unparseable request</text>
+<text x="500.0" y="527.5" font-size="11.5" fill="#555555" text-anchor="middle">Python: 400, batching not enabled</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Five requests, each small next to the work it asks for</text>
+<text x="500" y="568" font-size="12" fill="#555555" text-anchor="middle">Every refused request makes 0 source calls. Sizes are the text of the query; costs use the formula of this chapter.</text>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="40" width="310" height="275" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="60" font-size="12" font-weight="700" fill="#1d1d1d">Cargo service (REST)</text>
+<rect x="350" y="40" width="320" height="275" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="362" y="60" font-size="12" font-weight="700" fill="#1d1d1d">Routing service (gRPC)</text>
+<rect x="20" y="340" width="650" height="190" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="360" font-size="12" font-weight="700" fill="#1d1d1d">Handling event store</text>
+<rect x="700" y="40" width="280" height="490" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="712" y="60" font-size="12" font-weight="700" fill="#1d1d1d">Shared reference types</text>
+<rect x="40" y="75" width="270" height="115" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="175.0" y="108.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cargo (Node)</text>
+<text x="175.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">id, trackingId, description</text>
+<text x="175.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">origin, destination: Location</text>
+<text x="175.0" y="155.0" font-size="11.5" fill="#555555" text-anchor="middle">routeSpecification, delivery, itinerary?</text>
+<text x="175.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">handlingHistory(first, after, last, before)</text>
+<rect x="40" y="235" width="150" height="65" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="115.0" y="258.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">RouteSpecification</text>
+<text x="115.0" y="275.0" font-size="11.5" fill="#555555" text-anchor="middle">origin, destination</text>
+<text x="115.0" y="290.0" font-size="11.5" fill="#555555" text-anchor="middle">arrivalDeadline</text>
+<rect x="370" y="75" width="280" height="65" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="98.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Itinerary</text>
+<text x="510.0" y="115.0" font-size="11.5" fill="#555555" text-anchor="middle">legs: [Leg!]!</text>
+<text x="510.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">finalArrivalDate</text>
+<rect x="370" y="185" width="280" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="218.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Leg</text>
+<text x="510.0" y="235.0" font-size="11.5" fill="#555555" text-anchor="middle">voyage?</text>
+<text x="510.0" y="250.0" font-size="11.5" fill="#555555" text-anchor="middle">loadLocation, unloadLocation</text>
+<text x="510.0" y="265.0" font-size="11.5" fill="#555555" text-anchor="middle">loadTime, unloadTime</text>
+<rect x="40" y="380" width="200" height="125" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="140.0" y="418.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">HandlingEvent (Node)</text>
+<text x="140.0" y="435.0" font-size="11.5" fill="#555555" text-anchor="middle">trackingId, type, location</text>
+<text x="140.0" y="450.0" font-size="11.5" fill="#555555" text-anchor="middle">voyage?, cargo?</text>
+<text x="140.0" y="465.0" font-size="11.5" fill="#555555" text-anchor="middle">completionTime</text>
+<text x="140.0" y="480.0" font-size="11.5" fill="#555555" text-anchor="middle">registrationTime</text>
+<rect x="255" y="380" width="210" height="125" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="360.0" y="410.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Delivery</text>
+<text x="360.0" y="427.5" font-size="11.5" fill="#555555" text-anchor="middle">transportStatus, routingStatus</text>
+<text x="360.0" y="442.5" font-size="11.5" fill="#555555" text-anchor="middle">misdirected</text>
+<text x="360.0" y="457.5" font-size="11.5" fill="#555555" text-anchor="middle">estimatedTimeOfArrival?</text>
+<text x="360.0" y="472.5" font-size="11.5" fill="#555555" text-anchor="middle">lastKnownLocation?, currentVoyage?</text>
+<text x="360.0" y="487.5" font-size="11.5" fill="#555555" text-anchor="middle">nextExpectedActivity?</text>
+<rect x="500" y="380" width="150" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="575.0" y="410.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">HandlingActivity</text>
+<text x="575.0" y="427.5" font-size="11.5" fill="#555555" text-anchor="middle">type, location</text>
+<text x="575.0" y="442.5" font-size="11.5" fill="#555555" text-anchor="middle">voyage?</text>
+<rect x="725" y="75" width="230" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="840.0" y="113.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Location (Node)</text>
+<text x="840.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">unLocode, name, country</text>
+<rect x="725" y="215" width="230" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="840.0" y="250.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Voyage (Node)</text>
+<text x="840.0" y="267.5" font-size="11.5" fill="#555555" text-anchor="middle">number</text>
+<text x="840.0" y="282.5" font-size="11.5" fill="#555555" text-anchor="middle">schedule: [CarrierMovement!]!</text>
+<path d="M100,190 L100,235" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="158.0" y="212.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">routeSpecification</text>
+<text x="158.0" y="212.5" font-size="11" fill="#555" text-anchor="middle">routeSpecification</text>
+<path d="M310,107 L370,107" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="338.0" y="97.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">itinerary?</text>
+<text x="338.0" y="97.0" font-size="11" fill="#b8650a" text-anchor="middle">itinerary?</text>
+<path d="M510,140 L510,185" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="530.0" y="162.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">legs</text>
+<text x="530.0" y="162.5" font-size="11" fill="#555" text-anchor="middle">legs</text>
+<path d="M650,205 L725,125" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="659.5" y="157.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">locations</text>
+<text x="659.5" y="157.0" font-size="11" fill="#555" text-anchor="middle">locations</text>
+<path d="M650,260 L725,260" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="693.5" y="252.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">voyage?</text>
+<text x="693.5" y="252.0" font-size="11" fill="#b8650a" text-anchor="middle">voyage?</text>
+<path d="M220,190 L220,380" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="250.0" y="255.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">history</text>
+<text x="250.0" y="255.0" font-size="11" fill="#555" text-anchor="middle">history</text>
+<path d="M285,190 L285,380" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="317.0" y="315.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">delivery</text>
+<text x="317.0" y="315.0" font-size="11" fill="#555" text-anchor="middle">delivery</text>
+<path d="M465,420 L500,420" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="20" y="555" font-size="12" fill="#555555" text-anchor="start">? marks a nullable field; every other field is non-null in the SDL.</text>
+<text x="20" y="575" font-size="12" fill="#555555" text-anchor="start">Location is also referenced by origin, destination, lastKnownLocation and each event location.</text>
+</svg>

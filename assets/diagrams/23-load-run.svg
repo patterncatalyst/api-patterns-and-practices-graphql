@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 490" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="235" y="48" width="440" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="247" y="68" font-size="12" font-weight="700" fill="#1d1d1d">Server: quarkus or python</text>
+<rect x="20" y="96" width="150" height="64" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="95.0" y="126.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4 virtual users</text>
+<text x="95.0" y="143.0" font-size="11.5" fill="#555555" text-anchor="middle">80 x FanOut</text>
+<rect x="20" y="340" width="150" height="64" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="95.0" y="370.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4 virtual users</text>
+<text x="95.0" y="387.0" font-size="11.5" fill="#555555" text-anchor="middle">80 x OverBudget</text>
+<rect x="255" y="96" width="170" height="64" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="340.0" y="126.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cost check</text>
+<text x="340.0" y="143.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 53, budget 1,000</text>
+<rect x="485" y="96" width="170" height="64" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="570.0" y="126.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Execution</text>
+<text x="570.0" y="143.0" font-size="11.5" fill="#555555" text-anchor="middle">batched resolvers</text>
+<rect x="485" y="196" width="170" height="96" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="570.0" y="227.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Bulk source calls</text>
+<text x="570.0" y="244.0" font-size="11.5" fill="#555555" text-anchor="middle">booking.getCargos</text>
+<text x="570.0" y="259.0" font-size="11.5" fill="#555555" text-anchor="middle">routing.getItineraries</text>
+<text x="570.0" y="274.0" font-size="11.5" fill="#555555" text-anchor="middle">8 per request, 6 on Python</text>
+<rect x="255" y="340" width="170" height="64" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="340.0" y="370.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cost check</text>
+<text x="340.0" y="387.0" font-size="11.5" fill="#555555" text-anchor="middle">cost 7,651, budget 1,000</text>
+<rect x="485" y="340" width="170" height="64" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="570.0" y="370.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">Refused</text>
+<text x="570.0" y="387.0" font-size="11.5" fill="#dddddd" text-anchor="middle">error, no data</text>
+<rect x="730" y="196" width="240" height="120" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="850.0" y="239.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">Source-call log</text>
+<text x="850.0" y="256.0" font-size="11.5" fill="#dddddd" text-anchor="middle">grouped by request id</text>
+<text x="850.0" y="271.0" font-size="11.5" fill="#dddddd" text-anchor="middle">80 request ids, 8 or 6 calls each</text>
+<text x="850.0" y="286.0" font-size="11.5" fill="#dddddd" text-anchor="middle">none from OverBudget</text>
+<path d="M170,128 L255,128" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="212.5" y="120.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">FanOut</text>
+<text x="212.5" y="120.0" font-size="11" fill="#555" text-anchor="middle">FanOut</text>
+<path d="M425,128 L485,128" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="455.0" y="120.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">runs</text>
+<text x="455.0" y="120.0" font-size="11" fill="#b8650a" text-anchor="middle">runs</text>
+<path d="M570,160 L570,196" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M655,244 L730,244" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="692.5" y="236.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">logged</text>
+<text x="692.5" y="236.0" font-size="11" fill="#b8650a" text-anchor="middle">logged</text>
+<path d="M170,372 L255,372" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="212.5" y="364.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OverBudget</text>
+<text x="212.5" y="364.0" font-size="11" fill="#555" text-anchor="middle">OverBudget</text>
+<path d="M425,372 L485,372" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="455.0" y="364.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">over</text>
+<text x="455.0" y="364.0" font-size="11" fill="#555" text-anchor="middle">over</text>
+<path d="M655,372 L800,316" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="761.5" y="352.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">no call</text>
+<text x="761.5" y="352.0" font-size="11" fill="#555" text-anchor="middle">no call</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">One load run: accepted requests fan out into calls, refused requests stop at the cost check</text>
+<text x="500" y="474" font-size="12" fill="#555555" text-anchor="middle">160 requests in, 80 request ids in the log. Counts are exact on any machine; latency is printed and not asserted.</text>
+</svg>

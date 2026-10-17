@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="520" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/20-federation - compose stack (gql-ch20-federation)</text>
+<rect x="40" y="240" width="150" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="273.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="115.0" y="290.0" font-size="11.5" fill="#555555" text-anchor="middle">client</text>
+<rect x="250" y="70" width="190" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="345.0" y="103.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">gateway-a</text>
+<text x="345.0" y="120.0" font-size="11.5" fill="#555555" text-anchor="middle">Hive Gateway, host 8300</text>
+<rect x="250" y="410" width="190" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="345.0" y="443.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">gateway-b</text>
+<text x="345.0" y="460.0" font-size="11.5" fill="#555555" text-anchor="middle">Hive Gateway, host 8301</text>
+<rect x="520" y="50" width="210" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="625.0" y="78.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo-quarkus</text>
+<text x="625.0" y="95.0" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye, host 8302</text>
+<rect x="520" y="125" width="210" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="625.0" y="153.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handling-python</text>
+<text x="625.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry, host 8305</text>
+<rect x="520" y="235" width="210" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="625.0" y="268.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">composer-a, composer-b</text>
+<text x="625.0" y="285.0" font-size="11.5" fill="#555555" text-anchor="middle">one-shot, same image as the gateways</text>
+<rect x="520" y="355" width="210" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="625.0" y="383.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo-python</text>
+<text x="625.0" y="400.0" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry, host 8303</text>
+<rect x="520" y="430" width="210" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="625.0" y="458.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handling-quarkus</text>
+<text x="625.0" y="475.0" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye, host 8304</text>
+<rect x="790" y="235" width="170" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="875.0" y="268.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">volume supergraph</text>
+<text x="875.0" y="285.0" font-size="11.5" fill="#555555" text-anchor="middle">supergraph-a, supergraph-b</text>
+<rect x="790" y="360" width="170" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="875.0" y="388.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">fixtures/</text>
+<text x="875.0" y="405.0" font-size="11.5" fill="#555555" text-anchor="middle">two failing subgraphs</text>
+<path d="M190,265 L250,110" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="194.0" y="169.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">POST /graphql</text>
+<text x="194.0" y="169.5" font-size="11" fill="#555" text-anchor="middle">POST /graphql</text>
+<path d="M190,285 L250,440" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="194.0" y="386.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">POST /graphql</text>
+<text x="194.0" y="386.5" font-size="11" fill="#555" text-anchor="middle">POST /graphql</text>
+<path d="M440,90 L520,80" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M440,120 L520,150" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M440,440 L520,385" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M440,460 L520,460" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M625,185 L625,235" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="659.0" y="210.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">_service</text>
+<text x="659.0" y="210.0" font-size="11" fill="#555" text-anchor="middle">_service</text>
+<path d="M625,355 L625,305" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="659.0" y="330.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">_service</text>
+<text x="659.0" y="330.0" font-size="11" fill="#555" text-anchor="middle">_service</text>
+<path d="M730,270 L790,270" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="760.0" y="260.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">writes</text>
+<text x="760.0" y="260.0" font-size="11" fill="#b8650a" text-anchor="middle">writes</text>
+<path d="M830,360 L730,295" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="794.0" y="345.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">--file</text>
+<text x="794.0" y="345.5" font-size="11" fill="#555" text-anchor="middle">--file</text>
+<text x="40" y="520" font-size="12" fill="#555555" text-anchor="start">The gateways mount the supergraph volume read-only and load the file; the composers publish no port.</text>
+</svg>

@@ -1,0 +1,8 @@
+[project]
+name = "shipping-python-ch22-client"
+version = "1.0.0"
+description = "Ch22 Client integration - the gql client with local schema validation and the DSL."
+requires-python = ">=3.14"
+dependencies = [
+    "gql[httpx]==4.4.0",
+]

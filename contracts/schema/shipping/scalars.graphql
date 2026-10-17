@@ -1,0 +1,40 @@
+"""
+An RFC 3339 date-time in UTC, for example `2026-10-15T09:30:00Z`.
+"""
+scalar DateTime @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc3339")
+
+"""
+A cargo tracking identifier issued at booking time, for example `ABC123`.
+Opaque to clients; compare for equality only.
+"""
+scalar TrackingId
+
+"""
+A UN/LOCODE port or terminal code: two letters of country plus three of
+location, for example `USNYC`, `NLRTM` or `SGSIN`.
+"""
+scalar UnLocode @specifiedBy(url: "https://unece.org/trade/uncefact/unlocode")
+
+"""
+A global object identifier, unique across the whole graph. Implements the
+Relay Global Object Identification contract used by `Query.node`.
+"""
+interface Node {
+  """The globally unique, opaque identifier of this object."""
+  id: ID!
+}
+
+"""
+Relay cursor-connection page metadata.
+See https://relay.dev/graphql/connections.htm
+"""
+type PageInfo {
+  """True when more edges exist after `endCursor`."""
+  hasNextPage: Boolean!
+  """True when more edges exist before `startCursor`."""
+  hasPreviousPage: Boolean!
+  """Cursor of the first edge in this page; null when the page is empty."""
+  startCursor: String
+  """Cursor of the last edge in this page; null when the page is empty."""
+  endCursor: String
+}

@@ -1,0 +1,4 @@
+# Chart dependency output and packaged charts (none today; the Chapter 27 and
+# Appendix A charts build on this layout).
+helm/charts/
+*.tgz

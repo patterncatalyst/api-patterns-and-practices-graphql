@@ -1,0 +1,162 @@
+# Chapter 26 - the tracking view as one Helm release.
+#
+# One chart deploys both stacks. Each entry of `stacks` becomes a ConfigMap, a
+# Deployment and a ClusterIP Service; the edge and the observability backend
+# are shared. The images are the ones Chapter 25 builds, loaded into the node
+# with `minikube image load`, so the pull policy is Never.
+
+stacks:
+  quarkus:
+    image:
+      repository: gql-ch25-quarkus
+      tag: "1.0"
+      pullPolicy: Never
+    containerPort: 8080
+    replicas: 1
+    probes:
+      startup:
+        path: /q/health/started
+        periodSeconds: 2
+        failureThreshold: 60
+      readiness:
+        path: /q/health/ready
+        periodSeconds: 5
+        failureThreshold: 3
+      liveness:
+        path: /q/health/live
+        periodSeconds: 10
+        failureThreshold: 3
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: "1"
+        memory: 768Mi
+    # The environment contract of Chapter 25, rendered as the stack's ConfigMap.
+    env:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://lgtm:4317
+      QUARKUS_OTEL_SERVICE_NAME: ch26-quarkus
+      TRACKING_SOURCE_LATENCY_MS: "250"
+      TRACKING_DEBUG_ENDPOINTS: "true"
+  python:
+    image:
+      repository: gql-ch25-python
+      tag: "1.0"
+      pullPolicy: Never
+    containerPort: 8080
+    replicas: 1
+    probes:
+      startup:
+        path: /health/live
+        periodSeconds: 2
+        failureThreshold: 30
+      readiness:
+        path: /health/ready
+        periodSeconds: 5
+        failureThreshold: 3
+      liveness:
+        path: /health/live
+        periodSeconds: 10
+        failureThreshold: 3
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 384Mi
+    env:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://lgtm:4317
+      OTEL_SERVICE_NAME: ch26-python
+      TRACKING_SOURCE_LATENCY_MS: "250"
+      TRACKING_DEBUG_ENDPOINTS: "true"
+
+# The kubelet waits this long for a pod to exit after SIGTERM. The applications
+# stop within 10 s; preStopSleepSeconds gives the Service time to drop the pod
+# from its endpoints before the signal arrives.
+terminationGracePeriodSeconds: 30
+preStopSleepSeconds: 5
+
+edge:
+  image:
+    repository: registry.access.redhat.com/ubi10/nginx-126
+    tag: 10.2-1791973310
+    pullPolicy: Never
+  replicas: 1
+  # TLS 1.3 on 8443 (Quarkus) and 8444 (Python). With tls.enabled=false the
+  # listeners are plain, 8080 and 8081, for a router or mesh that terminates TLS.
+  tls:
+    enabled: true
+    validityDays: 365
+    # Names and addresses in the certificate. The published NodePorts are
+    # reached as localhost or 127.0.0.1; the chart adds the edge Service's
+    # namespaced names (edge.<namespace>.svc and so on) for pods in the cluster.
+    sans:
+      - localhost
+      - 127.0.0.1
+      - edge
+  service:
+    type: NodePort
+    nodePorts:
+      quarkus: 30360
+      python: 30361
+  bodyLimit: 64k
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 250m
+      memory: 64Mi
+
+lgtm:
+  enabled: true
+  image:
+    repository: docker.io/grafana/otel-lgtm
+    tag: 0.37.0
+    pullPolicy: Never
+  # The OTLP receivers (4317, 4318) are always a ClusterIP Service named lgtm.
+  # The UIs and query APIs follow service.type.
+  service:
+    type: NodePort
+    nodePorts:
+      grafana: 30362
+      tempo: 30363
+      prometheus: 30364
+      loki: 30365
+  serviceAccountName: ""
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+
+# The restricted Pod Security profile. No runAsUser, runAsGroup or fsGroup: the
+# images run as numeric non-root users and accept the one the cluster assigns.
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+networkPolicy:
+  enabled: true
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+
+# The helm test pod runs the nginx image, which carries curl and a numeric user.
+test:
+  enabled: true

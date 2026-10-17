@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="300" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Operation</text>
+<rect x="340" y="50" width="320" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="352" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Object</text>
+<rect x="680" y="50" width="300" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="692" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Field</text>
+<rect x="40" y="90" width="260" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="170.0" y="120.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">@Authenticated, @RolesAllowed</text>
+<text x="170.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">IsAuthenticated, IsOperator</text>
+<text x="170.0" y="152.5" font-size="11.5" fill="#555555" text-anchor="middle">on cargo, cargos, registerHandlingEvent</text>
+<rect x="40" y="200" width="260" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="170.0" y="228.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">refusal: an error with a code</text>
+<text x="170.0" y="245.0" font-size="11.5" fill="#555555" text-anchor="middle">UNAUTHENTICATED or FORBIDDEN</text>
+<rect x="40" y="290" width="260" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="170.0" y="315.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">no source is called</text>
+<text x="170.0" y="332.5" font-size="11.5" fill="#555555" text-anchor="middle">cargo nulls itself;</text>
+<text x="170.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">cargos and the mutation null data</text>
+<rect x="360" y="90" width="280" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="500.0" y="118.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo, cargos + totalCount, node,</text>
+<text x="500.0" y="135.0" font-size="11.5" fill="#555555" text-anchor="middle">nodes, edge node, HandlingEvent.cargo</text>
+<rect x="360" y="190" width="280" height="70" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="500.0" y="223.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">BookingSource</text>
+<text x="500.0" y="240.0" font-size="11.5" fill="#dddddd" text-anchor="middle">the one place the owner is checked</text>
+<rect x="360" y="290" width="280" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="500.0" y="323.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">refusal: null, no error</text>
+<text x="500.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">the same answer as an unknown id</text>
+<rect x="700" y="90" width="260" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="830.0" y="123.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">HandlingEvent.registrationTime</text>
+<text x="830.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">operator only</text>
+<rect x="685" y="190" width="290" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="830.0" y="218.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">refusal: FORBIDDEN at the field&#x27;s path</text>
+<text x="830.0" y="235.0" font-size="11.5" fill="#555555" text-anchor="middle">operator role required</text>
+<rect x="700" y="290" width="260" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="830.0" y="323.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">the null climbs to the nearest</text>
+<text x="830.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">nullable parent: the edge&#x27;s node</text>
+<path d="M170,170 L170,200" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M170,260 L170,290" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M500,150 L500,190" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M500,260 L500,290" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M830,160 L830,190" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M830,250 L830,290" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Where each rule refuses</text>
+<text x="500" y="478" font-size="12" fill="#555555" text-anchor="middle">Operations and fields refuse with an error; objects refuse with a null, so a caller cannot tell absent from not yours.</text>
+</svg>

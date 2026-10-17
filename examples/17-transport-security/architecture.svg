@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="520" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/17-transport-security - compose stack (gql-ch17-transport), HTTPS only</text>
+<rect x="50" y="240" width="170" height="80" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="135.0" y="270.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="135.0" y="287.5" font-size="11.5" fill="#555555" text-anchor="middle">client</text>
+<text x="135.0" y="302.5" font-size="11.5" fill="#555555" text-anchor="middle">trusts ca.crt only</text>
+<rect x="300" y="60" width="270" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="435.0" y="93.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus (public)</text>
+<text x="435.0" y="110.0" font-size="11.5" fill="#555555" text-anchor="middle">TLS registry, TLS 1.3 only</text>
+<text x="435.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">introspection off, 415, 413</text>
+<text x="435.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">:8443 -&gt; host :8270</text>
+<rect x="300" y="175" width="270" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="208.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus-internal</text>
+<text x="435.0" y="225.0" font-size="11.5" fill="#555555" text-anchor="middle">same image, introspection on</text>
+<text x="435.0" y="240.0" font-size="11.5" fill="#555555" text-anchor="middle"></text>
+<text x="435.0" y="255.0" font-size="11.5" fill="#555555" text-anchor="middle">:8443 -&gt; host :8272</text>
+<rect x="300" y="290" width="270" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="435.0" y="323.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python (public)</text>
+<text x="435.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">uvicorn TLS, DisableIntrospection</text>
+<text x="435.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">no suggestions, IDE or GET</text>
+<text x="435.0" y="370.0" font-size="11.5" fill="#555555" text-anchor="middle">:8443 -&gt; host :8271</text>
+<rect x="300" y="405" width="270" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="438.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python-internal</text>
+<text x="435.0" y="455.0" font-size="11.5" fill="#555555" text-anchor="middle">same image, introspection on</text>
+<text x="435.0" y="470.0" font-size="11.5" fill="#555555" text-anchor="middle"></text>
+<text x="435.0" y="485.0" font-size="11.5" fill="#555555" text-anchor="middle">:8443 -&gt; host :8273</text>
+<rect x="700" y="60" width="250" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="825.0" y="100.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">gen-certs.sh</text>
+<text x="825.0" y="117.5" font-size="11.5" fill="#555555" text-anchor="middle">ca.crt, tls.crt, tls.key</text>
+<text x="825.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">(scratch dir, git-ignored)</text>
+<rect x="700" y="240" width="250" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="280.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="825.0" y="297.5" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql</text>
+<text x="825.0" y="312.5" font-size="11.5" fill="#555555" text-anchor="middle">(canonical SDL, single source)</text>
+<rect x="700" y="440" width="250" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="825.0" y="468.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">otel-lgtm</text>
+<text x="825.0" y="485.0" font-size="11.5" fill="#555555" text-anchor="middle">(compose.observability.yaml)</text>
+<path d="M220,270 L300,110" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="238.0" y="160.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">https</text>
+<text x="238.0" y="160.0" font-size="11" fill="#555" text-anchor="middle">https</text>
+<path d="M220,275 L300,225" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M220,290 L300,340" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M220,305 L300,455" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M700,110 L570,110" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="629.0" y="94.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">mounted /certs</text>
+<text x="629.0" y="94.0" font-size="11" fill="#555" text-anchor="middle">mounted /certs</text>
+<path d="M570,225 L700,280" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="649.0" y="234.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="649.0" y="234.5" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<path d="M570,455 L700,315" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="657.0" y="429.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="657.0" y="429.0" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<path d="M570,490 L700,480" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="633.0" y="503.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="633.0" y="503.0" font-size="11" fill="#555" text-anchor="middle">OTLP</text>
+<text x="50" y="525" font-size="12" fill="#555555" text-anchor="start">Only the internal instances are diffed against the canonical SDL; the public ones refuse introspection.</text>
+</svg>

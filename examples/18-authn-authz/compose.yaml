@@ -1,0 +1,117 @@
+# Ch18 AuthN and AuthZ - compose topology.
+#
+# Default `docker compose up` brings up: keycloak, quarkus, python. Keycloak is
+# the identity provider: `start-dev --import-realm` loads keycloak/shipping-realm.json
+# (realm `shipping`, users ana, bo and ops, clients tracking-cli, other-cli and short-cli).
+# Both apps build their schema code-first (SmallRye GraphQL, Strawberry) and
+# serve the same slice of the canonical tracking-view SDL
+# (contracts/schema/shipping/*.graphql) as Chapter 13: the whole schema except
+# Subscription. What changes is who may see it. A request with no token is
+# anonymous. A bearer token is validated (signature from the realm's JWKS,
+# issuer, audience, expiry): Quarkus does it with quarkus-oidc, Python with PyJWT.
+# A bad token is HTTP 401 before any GraphQL runs. Operations, cargos and one
+# field of HandlingEvent are then authorized per caller. Every source call takes
+# TRACKING_SOURCE_LATENCY_MS, and each call is logged. verify.sh reads the
+# response and /debug/source-calls, and diffs each live schema against the
+# canonical SDL.
+#
+# Tokens must be fetched at http://localhost:8282, the address Keycloak is
+# published on: its `iss` claim is that address, and the apps pin it. The apps
+# read the signing keys over the compose network (keycloak:8080).
+#
+# The users, passwords and the Keycloak admin login are test fixtures for this
+# lab. sslRequired is none and the password grant is on for the same reason;
+# production uses TLS and the authorization code flow with PKCE.
+#
+# TRACKING_DEBUG_ENDPOINTS=true turns the /debug/source-calls endpoints on.
+# They are a lab tool: leave them off (the default) anywhere else.
+#
+# Host ports (this chapter): Quarkus 8280, Python 8281, both at /graphql;
+# Keycloak 8282 (its management port 9000 is not published).
+# Chapter NN takes 8100 + 10*NN (Quarkus) and +1 (Python), so examples never
+# collide with each other or with the Ch0 skeleton on 8080/8081.
+#
+# Telemetry is off by default (QUARKUS_OTEL_SDK_DISABLED and OTEL_SDK_DISABLED).
+# To send traces to the Grafana LGTM stack, add the observability file, which
+# adds the lgtm service and switches the SDKs on:
+#   docker compose -f compose.yaml -f compose.observability.yaml up --build
+#
+# Usage:
+#   docker compose up --build   # app stack only, telemetry off
+
+# A fixed project name, the same one verify.sh passes with -p: a manual
+# `docker compose up` and a verify.sh run share one set of container,
+# network and volume names instead of colliding on the container names below.
+name: gql-ch18-authn-authz
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    container_name: ch18-authn-authz-keycloak
+    command: ["start-dev", "--import-realm"]
+    ports:
+      - "8282:8080"
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin-fixture-pw
+      - KC_HEALTH_ENABLED=true
+    volumes:
+      - ./keycloak/shipping-realm.json:/opt/keycloak/data/import/shipping-realm.json:ro,z
+    healthcheck:
+      # Readiness is on the management port (9000), which is not published. The
+      # image has bash but no curl, so the probe is a bash /dev/tcp request.
+      test:
+        - CMD
+        - bash
+        - -c
+        - >-
+          exec 3<>/dev/tcp/localhost/9000 &&
+          printf 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 &&
+          grep -q '"UP"' <&3
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    container_name: ch18-authn-authz-quarkus
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    ports:
+      - "8280:8080"
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+    healthcheck:
+      # SmallRye Health readiness; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    container_name: ch18-authn-authz-python
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    ports:
+      - "8281:8080"
+    environment:
+      - OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s

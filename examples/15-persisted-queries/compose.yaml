@@ -1,0 +1,117 @@
+# Ch15 Persisted queries and APQ - compose topology.
+#
+# Default `docker compose up` brings up four services from two images:
+#
+#   quarkus          8250  Apollo APQ: clients register documents at run time
+#   python           8251  Apollo APQ
+#   quarkus-trusted  8252  trusted documents: only persisted-documents.json runs
+#   python-trusted   8253  trusted documents
+#
+# Both stacks build their schema code-first (SmallRye GraphQL, Strawberry) and
+# serve the same slice of the canonical tracking-view SDL
+# (contracts/schema/shipping/*.graphql) as Chapter 13: everything except
+# Subscription. The persisted-document protocol sits in front of the engine
+# (a Vert.x route on Quarkus, a Strawberry extension on Python). This example
+# does not repeat Chapter 14's limits; production would.
+#
+# The trusted services reuse the APQ service's image (one build, two
+# containers) and differ only in TRACKING_DOCUMENTS_MODE and the manifest
+# they mount. Each container has its own in-memory handling store.
+#
+# TRACKING_DEBUG_ENDPOINTS=true turns the /debug/source-calls endpoints on.
+# They are a lab tool: leave them off (the default) anywhere else.
+#
+# Host ports (this chapter): 8250-8253 (chapter NN takes 8100 + 10*NN), all
+# at /graphql; container port 8080.
+#
+# Telemetry is off by default (QUARKUS_OTEL_SDK_DISABLED and OTEL_SDK_DISABLED).
+# To send traces to the Grafana LGTM stack, add the observability file, which
+# adds the lgtm service and switches the SDKs on:
+#   docker compose -f compose.yaml -f compose.observability.yaml up --build
+#
+# Usage:
+#   docker compose up --build   # app stack only, telemetry off
+
+# A fixed project name, the same one verify.sh passes with -p: a manual
+# `docker compose up` and a verify.sh run share one set of container,
+# network and volume names instead of colliding on the container names below.
+name: gql-ch15-persisted
+
+services:
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    image: gql-ch15-persisted-quarkus:local
+    container_name: ch15-persisted-quarkus
+    ports:
+      - "8250:8080"
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_DOCUMENTS_MODE=apq
+    healthcheck: &quarkus-health
+      # SmallRye Health readiness; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  quarkus-trusted:
+    image: gql-ch15-persisted-quarkus:local
+    container_name: ch15-persisted-quarkus-trusted
+    depends_on:
+      quarkus:
+        condition: service_healthy
+    ports:
+      - "8252:8080"
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_DOCUMENTS_MODE=trusted
+      - TRACKING_DOCUMENTS_MANIFEST=/deployments/config/persisted-documents.json
+    volumes:
+      # :ro,z - read-only, and shared-label because two containers mount the file.
+      - ./persisted-documents.json:/deployments/config/persisted-documents.json:ro,z
+    healthcheck: *quarkus-health
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    image: gql-ch15-persisted-python:local
+    container_name: ch15-persisted-python
+    ports:
+      - "8251:8080"
+    environment:
+      - OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_DOCUMENTS_MODE=apq
+    healthcheck: &python-health
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  python-trusted:
+    image: gql-ch15-persisted-python:local
+    container_name: ch15-persisted-python-trusted
+    depends_on:
+      python:
+        condition: service_healthy
+    ports:
+      - "8253:8080"
+    environment:
+      - OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_DOCUMENTS_MODE=trusted
+      - TRACKING_DOCUMENTS_MANIFEST=/opt/app-root/src/persisted-documents.json
+    volumes:
+      - ./persisted-documents.json:/opt/app-root/src/persisted-documents.json:ro,z
+    healthcheck: *python-health

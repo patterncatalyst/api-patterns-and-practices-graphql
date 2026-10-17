@@ -1,0 +1,17 @@
+{{- if .Values.openshift.builds.enabled }}
+{{- range $stack, $spec := .Values.final.stacks }}
+{{- $image := include "appa.imageName" $spec.image.repository }}
+---
+# The Deployments of stack {{ $stack }} read {{ $image }}:{{ $spec.image.tag }} from this stream.
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: {{ $image }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "appa.labels" (dict "root" $ "name" $image "component" "image") | nindent 4 }}
+spec:
+  lookupPolicy:
+    local: false
+{{- end }}
+{{- end }}

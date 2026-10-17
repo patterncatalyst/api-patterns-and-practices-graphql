@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 510" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="45" width="1060" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="65" font-size="12" font-weight="700" fill="#1d1d1d">Request error: the engine rejects the document</text>
+<rect x="20" y="190" width="1060" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="210" font-size="12" font-weight="700" fill="#1d1d1d">Execution error: a resolver fails</text>
+<rect x="20" y="335" width="1060" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="355" font-size="12" font-weight="700" fill="#1d1d1d">Domain failure: the mutation refuses the input</text>
+<rect x="50" y="90" width="130" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="115.0" y="123.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Parse</text>
+<rect x="200" y="90" width="130" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="265.0" y="123.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Validate</text>
+<rect x="350" y="90" width="130" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="415.0" y="123.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Coerce variables</text>
+<rect x="500" y="90" width="130" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="565.0" y="123.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Select operation</text>
+<rect x="670" y="80" width="390" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="865.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">errors with locations, no path</text>
+<text x="865.0" y="127.5" font-size="11.5" fill="#555555" text-anchor="middle">no data (Python: data null), no resolver ran</text>
+<text x="865.0" y="142.5" font-size="11.5" fill="#555555" text-anchor="middle">draft: 4xx/5xx; both stacks answer 200</text>
+<rect x="50" y="235" width="190" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="145.0" y="268.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Resolver runs</text>
+<rect x="290" y="222" width="160" height="38" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="370.0" y="246.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Exposed: allowlisted</text>
+<rect x="290" y="266" width="160" height="38" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="370.0" y="290.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Unexpected: masked</text>
+<rect x="670" y="225" width="390" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="865.0" y="255.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data plus errors with path</text>
+<text x="865.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">the null lands at the nearest nullable ancestor</text>
+<text x="865.0" y="287.5" font-size="11.5" fill="#555555" text-anchor="middle">draft: 294 (SHOULD); both stacks answer 200</text>
+<rect x="50" y="380" width="400" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="250.0" y="406.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Mutation validates the input</text>
+<text x="250.0" y="423.0" font-size="11.5" fill="#555555" text-anchor="middle">VOYAGE_REQUIRED, UNKNOWN_VOYAGE, ...</text>
+<rect x="670" y="370" width="390" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="865.0" y="400.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data with userErrors, no errors key</text>
+<text x="865.0" y="417.5" font-size="11.5" fill="#555555" text-anchor="middle">the payload is an ordinary value</text>
+<text x="865.0" y="432.5" font-size="11.5" fill="#555555" text-anchor="middle">200 on both stacks</text>
+<path d="M180,118 L200,118" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M330,118 L350,118" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M480,118 L500,118" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M630,118 L670,118" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M240,263 L290,241" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M240,263 L290,285" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M450,241 L670,260" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M450,285 L670,275" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M450,408 L670,410" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="550" y="24" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Three kinds of failure, three response shapes</text>
+<text x="550" y="488" font-size="12" fill="#555555" text-anchor="middle">The current GraphQL-over-HTTP draft requires 4xx/5xx for a request error and asks for the same under application/json. Both stacks answer 200 (verify.sh).</text>
+</svg>

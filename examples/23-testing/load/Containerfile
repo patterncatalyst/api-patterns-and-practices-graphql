@@ -1,0 +1,54 @@
+# Ch23 Testing GraphQL APIs - the load runner: Grafana k6 on UBI 10.
+# Build (the build context is this directory; the client documents come from
+# the `documents` context):
+#   docker build -f examples/23-testing/load/Containerfile \
+#     --build-context documents=examples/23-testing/documents \
+#     -t ch23-testing-load examples/23-testing/load
+#
+# k6 v2.3.0 is a single static binary. The build stage downloads the release
+# tarball and checks it twice: against the SHA-256 pinned below and against the
+# release's own checksums file. The runtime stage holds the binary and nothing
+# else, and runs as a non-root user.
+#
+# Base image pin (re-check with `skopeo list-tags
+# docker://registry.access.redhat.com/ubi10/ubi-minimal`, confirm with
+# `skopeo inspect`; bump deliberately):
+#   registry.access.redhat.com/ubi10/ubi-minimal:10.2-1791891203
+
+# -- Stage 1: fetch and verify k6 --------------------------------------------
+FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2-1791891203 AS fetch
+
+ARG K6_VERSION=2.3.0
+# k6-v2.3.0-linux-amd64.tar.gz, from k6-v2.3.0-checksums.txt on the release page.
+ARG K6_SHA256=39c3117b6af817592dcd0ce4242105c0a7af10948c2a425306f0be8f7a8a8ab1
+
+RUN microdnf install -y tar gzip && microdnf clean all
+
+WORKDIR /fetch
+RUN set -eu; \
+    base="https://github.com/grafana/k6/releases/download/v${K6_VERSION}"; \
+    tarball="k6-v${K6_VERSION}-linux-amd64.tar.gz"; \
+    curl -fsSL --retry 5 --retry-delay 2 -o "$tarball" "${base}/${tarball}"; \
+    curl -fsSL --retry 5 --retry-delay 2 -o checksums.txt "${base}/k6-v${K6_VERSION}-checksums.txt"; \
+    echo "${K6_SHA256}  ${tarball}" | sha256sum -c -; \
+    grep "  ${tarball}\$" checksums.txt | sha256sum -c -; \
+    tar -xzf "$tarball" --strip-components=1 "k6-v${K6_VERSION}-linux-amd64/k6"; \
+    ./k6 version
+
+# -- Stage 2: runtime --------------------------------------------------------
+FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2-1791891203
+
+COPY --from=fetch /fetch/k6 /usr/local/bin/k6
+COPY tracking.js /scripts/tracking.js
+COPY --from=documents . /documents
+
+# Fail the image build, not the first load run, when the script does not parse.
+RUN k6 inspect /scripts/tracking.js > /dev/null
+
+USER 1001
+WORKDIR /scripts
+
+# TARGET (the GraphQL URL), RUN (fanout, cost, retry, mix) and STACK
+# (quarkus, python) come from the environment. The runner is invoked as
+#   docker compose run -e TARGET=... -e RUN=... -e STACK=... load run --quiet /scripts/tracking.js
+ENTRYPOINT ["k6"]

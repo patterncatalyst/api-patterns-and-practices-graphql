@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="470" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">graphql-transport-ws: one subscription</text>
+<rect x="140" y="80" width="180" height="50" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="230.0" y="103.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client</text>
+<text x="230.0" y="120.0" font-size="11.5" fill="#555555" text-anchor="middle">gql WebsocketsTransport</text>
+<rect x="680" y="80" width="180" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="770.0" y="103.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">server</text>
+<text x="770.0" y="120.0" font-size="11.5" fill="#555555" text-anchor="middle">/graphql, subprotocol offered</text>
+<path d="M230,130 L230,500" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M770,130 L770,500" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M230,180 L770,180" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500.0" y="172.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">connection_init  {}</text>
+<text x="500.0" y="172.0" font-size="11" fill="#555" text-anchor="middle">connection_init  {}</text>
+<path d="M770,232 L230,232" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500.0" y="224.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">connection_ack</text>
+<text x="500.0" y="224.0" font-size="11" fill="#555" text-anchor="middle">connection_ack</text>
+<path d="M230,284 L770,284" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500.0" y="276.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">subscribe  id 1, subscription Watch, trackingId ABC123</text>
+<text x="500.0" y="276.0" font-size="11" fill="#555" text-anchor="middle">subscribe  id 1, subscription Watch, trackingId ABC123</text>
+<path d="M770,342 L230,342" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="500.0" y="334.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">next  id 1  evt_10, UNLOAD, Hamburg, IN_PORT</text>
+<text x="500.0" y="334.0" font-size="11" fill="#b8650a" text-anchor="middle">next  id 1  evt_10, UNLOAD, Hamburg, IN_PORT</text>
+<path d="M770,400 L230,400" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="500.0" y="392.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">next  id 1  evt_12, LOAD, Hamburg, ONBOARD_CARRIER</text>
+<text x="500.0" y="392.0" font-size="11" fill="#b8650a" text-anchor="middle">next  id 1  evt_12, LOAD, Hamburg, ONBOARD_CARRIER</text>
+<path d="M230,458 L770,458" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500.0" y="450.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">complete  id 1</text>
+<text x="500.0" y="450.0" font-size="11" fill="#555" text-anchor="middle">complete  id 1</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Six frames for a subscription that delivers two events</text>
+<text x="790" y="346" font-size="11" fill="#555555" text-anchor="start">evt_10 registered</text>
+<text x="790" y="404" font-size="11" fill="#555555" text-anchor="start">evt_12 registered</text>
+<text x="40" y="346" font-size="11" fill="#555555" text-anchor="start">DEF456 event: no frame</text>
+<text x="500" y="506" font-size="12" fill="#555555" text-anchor="middle">The client sends complete after its second event; the server removes the subscriber.</text>
+</svg>

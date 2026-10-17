@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="400" height="480" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Chapter 25: Compose</text>
+<rect x="580" y="50" width="400" height="480" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="592" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Chapter 26: Helm chart on Kubernetes</text>
+<rect x="40" y="80" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="99.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">services: quarkus, python</text>
+<text x="220.0" y="116.0" font-size="11.5" fill="#555555" text-anchor="middle">compose.yaml</text>
+<rect x="600" y="80" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="99.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Deployment + ClusterIP Service per stack</text>
+<text x="780.0" y="116.0" font-size="11.5" fill="#555555" text-anchor="middle">stack-deployment.yaml, stack-service.yaml</text>
+<rect x="40" y="129" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="148.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">ports: 8350:8443, 8351:8444</text>
+<text x="220.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">compose.yaml, edge</text>
+<rect x="600" y="129" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="148.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">NodePort Service 30360, 30361</text>
+<text x="780.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">edge-service.yaml</text>
+<rect x="40" y="178" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="197.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">env_file: env/quarkus.env</text>
+<text x="220.0" y="214.0" font-size="11.5" fill="#555555" text-anchor="middle">env/*.env</text>
+<rect x="600" y="178" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="197.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">ConfigMap, read with envFrom</text>
+<text x="780.0" y="214.0" font-size="11.5" fill="#555555" text-anchor="middle">stack-configmap.yaml</text>
+<rect x="40" y="227" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="246.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">configs: edge_conf</text>
+<text x="220.0" y="263.0" font-size="11.5" fill="#555555" text-anchor="middle">compose.yaml</text>
+<rect x="600" y="227" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="246.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">ConfigMap mounted as nginx.conf</text>
+<text x="780.0" y="263.0" font-size="11.5" fill="#555555" text-anchor="middle">edge-configmap.yaml</text>
+<rect x="40" y="276" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="295.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">secrets: edge_tls_crt, edge_tls_key</text>
+<text x="220.0" y="312.0" font-size="11.5" fill="#555555" text-anchor="middle">gen-certs.sh</text>
+<rect x="600" y="276" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="295.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">TLS Secret from genCA, kept with lookup</text>
+<text x="780.0" y="312.0" font-size="11.5" fill="#555555" text-anchor="middle">tls-secret.yaml</text>
+<rect x="40" y="325" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="344.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">healthcheck + depends_on</text>
+<text x="220.0" y="361.0" font-size="11.5" fill="#555555" text-anchor="middle">service_healthy</text>
+<rect x="600" y="325" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="344.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">startup, readiness, liveness probes</text>
+<text x="780.0" y="361.0" font-size="11.5" fill="#555555" text-anchor="middle">stack-deployment.yaml</text>
+<rect x="40" y="374" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="393.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">deploy.resources.limits</text>
+<text x="220.0" y="410.0" font-size="11.5" fill="#555555" text-anchor="middle">cpus, memory</text>
+<rect x="600" y="374" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="393.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">resources requests and limits</text>
+<text x="780.0" y="410.0" font-size="11.5" fill="#555555" text-anchor="middle">values.yaml</text>
+<rect x="40" y="423" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="442.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">restart + stop_grace_period</text>
+<text x="220.0" y="459.0" font-size="11.5" fill="#555555" text-anchor="middle">unless-stopped, 15s</text>
+<rect x="600" y="423" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="442.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">kubelet restarts; grace period 30s</text>
+<text x="780.0" y="459.0" font-size="11.5" fill="#555555" text-anchor="middle">preStop sleep, rolling update</text>
+<rect x="40" y="472" width="360" height="42" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="491.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">networks: backend (internal)</text>
+<text x="220.0" y="508.0" font-size="11.5" fill="#555555" text-anchor="middle">public, ops</text>
+<rect x="600" y="472" width="360" height="42" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="780.0" y="491.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">NetworkPolicy per tier</text>
+<text x="780.0" y="508.0" font-size="11.5" fill="#555555" text-anchor="middle">networkpolicy.yaml</text>
+<path d="M400,101 L600,101" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M400,150 L600,150" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M400,199 L600,199" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M400,248 L600,248" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M400,297 L600,297" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M400,346 L600,346" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M400,395 L600,395" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M400,444 L600,444" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M400,493 L600,493" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Each Compose concept and the chart template that carries it</text>
+<text x="500" y="556" font-size="12" fill="#555555" text-anchor="middle">The images, the environment contract and the edge configuration do not change between the two tiers.</text>
+</svg>

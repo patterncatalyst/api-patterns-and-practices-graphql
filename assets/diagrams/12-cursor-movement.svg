@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="110" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">the booking index, newest booking first</text>
+<rect x="20" y="190" width="960" height="140" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="210" font-size="12" font-weight="700" fill="#1d1d1d">forward: first: 2, each page after the previous endCursor</text>
+<rect x="20" y="360" width="960" height="140" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="380" font-size="12" font-weight="700" fill="#1d1d1d">backward: last: 2, before: the cursor of ABC123</text>
+<rect x="45" y="84" width="140" height="62" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="115.0" y="105.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">VWX901</text>
+<text x="115.0" y="122.5" font-size="11.5" fill="#555555" text-anchor="middle">booked 09-29</text>
+<text x="115.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">cursor ...VldYOTAx</text>
+<rect x="199" y="84" width="140" height="62" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="269.0" y="105.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">XYZ789</text>
+<text x="269.0" y="122.5" font-size="11.5" fill="#555555" text-anchor="middle">booked 09-28</text>
+<text x="269.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">cursor ...WFlaNzg5</text>
+<rect x="353" y="84" width="140" height="62" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="423.0" y="105.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">STU678</text>
+<text x="423.0" y="122.5" font-size="11.5" fill="#555555" text-anchor="middle">booked 09-27</text>
+<text x="423.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">cursor ...U1RVNjc4</text>
+<rect x="507" y="84" width="140" height="62" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="577.0" y="105.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">DEF456</text>
+<text x="577.0" y="122.5" font-size="11.5" fill="#555555" text-anchor="middle">booked 09-26</text>
+<text x="577.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">cursor ...REVGNDU2</text>
+<rect x="661" y="84" width="140" height="62" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="731.0" y="105.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">ABC123</text>
+<text x="731.0" y="122.5" font-size="11.5" fill="#555555" text-anchor="middle">booked 09-25</text>
+<text x="731.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">cursor ...QUJDMTIz</text>
+<rect x="815" y="84" width="140" height="62" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="885.0" y="105.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">GHI345</text>
+<text x="885.0" y="122.5" font-size="11.5" fill="#555555" text-anchor="middle">booked 09-24</text>
+<text x="885.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">cursor ...R0hJMzQ1</text>
+<rect x="50" y="228" width="224" height="62" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="162.0" y="257.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">page 1: VWX901, XYZ789</text>
+<text x="162.0" y="274.0" font-size="11.5" fill="#555555" text-anchor="middle">hasNext true, hasPrev false</text>
+<rect x="358" y="228" width="224" height="62" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="470.0" y="257.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">page 2: STU678, DEF456</text>
+<text x="470.0" y="274.0" font-size="11.5" fill="#555555" text-anchor="middle">hasNext true, hasPrev true</text>
+<rect x="666" y="228" width="224" height="62" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="778.0" y="257.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">page 3: ABC123, GHI345</text>
+<text x="778.0" y="274.0" font-size="11.5" fill="#555555" text-anchor="middle">hasNext false, hasPrev true</text>
+<rect x="353" y="398" width="294" height="62" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="500.0" y="427.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">STU678, DEF456</text>
+<text x="500.0" y="444.0" font-size="11.5" fill="#555555" text-anchor="middle">hasNext true, hasPrev true</text>
+<path d="M274,259 L358,259" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="316.0" y="251.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">endCursor</text>
+<text x="316.0" y="251.0" font-size="11" fill="#b8650a" text-anchor="middle">endCursor</text>
+<path d="M582,259 L666,259" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="624.0" y="251.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">endCursor</text>
+<text x="624.0" y="251.0" font-size="11" fill="#b8650a" text-anchor="middle">endCursor</text>
+<path d="M671,146 L587,398" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="689.0" y="347.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">before = cursor of ABC123</text>
+<text x="689.0" y="347.0" font-size="11" fill="#b8650a" text-anchor="middle">before = cursor of ABC123</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Three pages forward, one page backward: the cursors are positions in the index, not page numbers</text>
+<text x="500" y="522" font-size="12" fill="#555555" text-anchor="middle">Backward results keep connection order (newest first). Both flags are computed from the index, not approximated.</text>
+</svg>

@@ -1,0 +1,44 @@
+# Ch6 The execution model - Quarkus, UBI 10, JVM mode (fast-jar), no native.
+# Build (the build context is this directory):
+#   docker build -f examples/06-execution-model/quarkus/Containerfile \
+#     -t ch06-exec-quarkus examples/06-execution-model/quarkus
+#
+# The schema is built code-first from the annotated classes, so unlike the
+# gRPC series no contract file is copied into the image.
+#
+# Base image pins (re-check with `skopeo list-tags
+# docker://registry.access.redhat.com/ubi10/openjdk-25`, confirm with
+# `skopeo inspect`; bump deliberately):
+#   registry.access.redhat.com/ubi10/openjdk-25:1.24-16
+#   registry.access.redhat.com/ubi10/openjdk-25-runtime:1.24-16
+
+# -- Stage 1: Build ----------------------------------------------------------
+FROM registry.access.redhat.com/ubi10/openjdk-25:1.24-16 AS build
+
+WORKDIR /build
+ENV MAVEN_RETRY_OPTS="-Dmaven.wagon.http.retryHandler.count=3 -Daether.connector.http.retryHandler.count=3 -Daether.syncContext.named.time=300 -Daether.syncContext.named.time.unit=SECONDS"
+
+# Dependencies first, in their own layer: a source-only change reuses it.
+COPY pom.xml .
+RUN mvn -B $MAVEN_RETRY_OPTS dependency:go-offline
+
+COPY src ./src
+RUN mvn -B $MAVEN_RETRY_OPTS package -DskipTests -Dmaven.javadoc.skip=true
+
+# -- Stage 2: Runtime (fast-jar) ---------------------------------------------
+FROM registry.access.redhat.com/ubi10/openjdk-25-runtime:1.24-16
+
+ENV LANGUAGE='en_US:en'
+
+COPY --from=build --chown=185 /build/target/quarkus-app/lib/ /deployments/lib/
+COPY --from=build --chown=185 /build/target/quarkus-app/*.jar /deployments/
+COPY --from=build --chown=185 /build/target/quarkus-app/app/ /deployments/app/
+COPY --from=build --chown=185 /build/target/quarkus-app/quarkus/ /deployments/quarkus/
+
+EXPOSE 8080
+USER 185
+
+ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+
+ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]

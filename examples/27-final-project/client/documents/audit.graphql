@@ -1,0 +1,18 @@
+# Chapter 27: the field rule of Chapter 18 applied to every event of a subscription.
+# registrationTime is for operators; the history page sits under a nullable parent,
+# so a caller without the role gets the event with the refused fields as errors.
+subscription Audit($id: TrackingId!) {
+  cargoHandled(trackingId: $id) {
+    id
+    cargo {
+      handlingHistory(first: 2) {
+        edges {
+          node {
+            id
+            registrationTime
+          }
+        }
+      }
+    }
+  }
+}

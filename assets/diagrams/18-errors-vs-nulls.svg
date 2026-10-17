@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="560" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">A refused field: an error and a null node</text>
+<rect x="600" y="50" width="380" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="612" y="70" font-size="12" font-weight="700" fill="#1d1d1d">A refused object: only a null</text>
+<rect x="45" y="90" width="510" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="300.0" y="116.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handlingHistory(first: 2) with node { id registrationTime }</text>
+<text x="300.0" y="133.0" font-size="11.5" fill="#555555" text-anchor="middle">cargo(ABC123), as ana (a shipper, not an operator)</text>
+<rect x="45" y="180" width="240" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="165.0" y="206.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[0].node = null</text>
+<text x="165.0" y="223.0" font-size="11.5" fill="#555555" text-anchor="middle">cursor survives</text>
+<rect x="315" y="180" width="240" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="435.0" y="206.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1].node = null</text>
+<text x="435.0" y="223.0" font-size="11.5" fill="#555555" text-anchor="middle">cursor survives</text>
+<rect x="45" y="270" width="510" height="70" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="300.0" y="303.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">2 errors, code FORBIDDEN, operator role required</text>
+<text x="300.0" y="320.0" font-size="11.5" fill="#dddddd" text-anchor="middle">paths cargo, handlingHistory, edges, 0|1, node, registrationTime</text>
+<rect x="45" y="370" width="510" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="300.0" y="396.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">DateTime! cannot be null, so the null climbs one step</text>
+<text x="300.0" y="413.0" font-size="11.5" fill="#555555" text-anchor="middle">to the nullable node; the page and cargo survive</text>
+<rect x="625" y="90" width="330" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="790.0" y="116.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo(XYZ789) { trackingId }</text>
+<text x="790.0" y="133.0" font-size="11.5" fill="#555555" text-anchor="middle">as ana (ACME); XYZ789 is GLOBEX&#x27;s</text>
+<rect x="625" y="180" width="330" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="790.0" y="206.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data.cargo = null</text>
+<text x="790.0" y="223.0" font-size="11.5" fill="#555555" text-anchor="middle">no errors</text>
+<rect x="625" y="270" width="330" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="790.0" y="303.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo(ZZZ999) gives the identical body</text>
+<text x="790.0" y="320.0" font-size="11.5" fill="#555555" text-anchor="middle">the caller cannot enumerate other shippers</text>
+<path d="M165,146 L165,180" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M435,146 L435,180" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M165,236 L165,270" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M435,236 L435,270" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M290,340 L290,370" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M790,146 L790,180" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M790,236 L790,270" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Fields: error. Objects: null.</text>
+<text x="500" y="474" font-size="12" fill="#555555" text-anchor="middle">A field that exists but is not yours says so. An object that is not yours looks like one that does not exist.</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="480" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/27-final-project - compose stack (gql-ch27-final)</text>
+<rect x="40" y="200" width="150" height="80" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="238.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="115.0" y="255.0" font-size="11.5" fill="#555555" text-anchor="middle">bearer token</text>
+<rect x="240" y="140" width="200" height="200" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="340.0" y="215.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge (nginx-126 10.2)</text>
+<text x="340.0" y="232.5" font-size="11.5" fill="#555555" text-anchor="middle">TLS 1.3, 64k body limit</text>
+<text x="340.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">/graphql, /events/</text>
+<text x="340.0" y="262.5" font-size="11.5" fill="#555555" text-anchor="middle">host 8370 -&gt; :8443</text>
+<text x="340.0" y="277.5" font-size="11.5" fill="#555555" text-anchor="middle">host 8371 -&gt; :8444</text>
+<rect x="510" y="50" width="210" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="615.0" y="85.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus, python</text>
+<text x="615.0" y="102.5" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch27-*:1.0</text>
+<text x="615.0" y="117.5" font-size="11.5" fill="#555555" text-anchor="middle">public, introspection off</text>
+<rect x="510" y="160" width="210" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="615.0" y="195.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">internal instances</text>
+<text x="615.0" y="212.5" font-size="11.5" fill="#555555" text-anchor="middle">same images, introspection on</text>
+<text x="615.0" y="227.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8372, 8373</text>
+<rect x="780" y="50" width="180" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="870.0" y="85.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">keycloak 26.8.1</text>
+<text x="870.0" y="102.5" font-size="11.5" fill="#555555" text-anchor="middle">realm shipping</text>
+<text x="870.0" y="117.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8374</text>
+<rect x="780" y="160" width="180" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="870.0" y="203.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm 0.37.0</text>
+<text x="870.0" y="220.0" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8375 to 8378</text>
+<rect x="510" y="290" width="210" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="615.0" y="323.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client (profile)</text>
+<text x="615.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch27-client:1.0</text>
+<rect x="510" y="390" width="210" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="615.0" y="423.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">load (profile)</text>
+<text x="615.0" y="440.0" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch27-load:1.0, k6 v2.3.0</text>
+<rect x="240" y="390" width="200" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="340.0" y="415.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">configs / secrets</text>
+<text x="340.0" y="432.5" font-size="11.5" fill="#555555" text-anchor="middle">edge_conf, ca_crt,</text>
+<text x="340.0" y="447.5" font-size="11.5" fill="#555555" text-anchor="middle">edge_tls_crt, edge_tls_key</text>
+<path d="M190,240 L240,240" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="215.0" y="232.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">TLS 1.3</text>
+<text x="215.0" y="232.0" font-size="11" fill="#555" text-anchor="middle">TLS 1.3</text>
+<path d="M440,200 L510,100" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="475.0" y="142.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">8080</text>
+<text x="475.0" y="142.0" font-size="11" fill="#555" text-anchor="middle">8080</text>
+<path d="M720,95 L780,95" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="750.0" y="87.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">JWKS</text>
+<text x="750.0" y="87.0" font-size="11" fill="#b8650a" text-anchor="middle">JWKS</text>
+<path d="M720,205 L780,205" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="750.0" y="197.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="750.0" y="197.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M510,325 L440,280" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M510,425 L440,300" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M340,390 L340,340" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="40" y="482" font-size="12" fill="#555555" text-anchor="start">verify.sh reads each result through the edge, runs the subscription client and k6 on the backend network, and diffs the internal instances with the contract.</text>
+</svg>

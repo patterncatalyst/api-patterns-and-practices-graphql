@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 455" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="200" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="83.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Status header</text>
+<text x="120.0" y="100.0" font-size="11.5" fill="#555555" text-anchor="middle">state, ETA, next step</text>
+<rect x="20" y="200" width="200" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="233.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Route</text>
+<text x="120.0" y="250.0" font-size="11.5" fill="#555555" text-anchor="middle">legs, ports, vessels</text>
+<rect x="20" y="320" width="200" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="353.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Timeline</text>
+<text x="120.0" y="370.0" font-size="11.5" fill="#555555" text-anchor="middle">handling events</text>
+<rect x="330" y="15" width="250" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="455.0" y="48.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo(trackingId)</text>
+<text x="455.0" y="65.0" font-size="11.5" fill="#555555" text-anchor="middle">trackingId, description</text>
+<rect x="330" y="105" width="250" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="455.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo.delivery</text>
+<text x="455.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">transportStatus, ETA,</text>
+<text x="455.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">nextExpectedActivity</text>
+<rect x="330" y="200" width="250" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="455.0" y="225.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo.itinerary.legs</text>
+<text x="455.0" y="242.5" font-size="11.5" fill="#555555" text-anchor="middle">loadLocation, voyage,</text>
+<text x="455.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">unloadLocation</text>
+<rect x="330" y="320" width="250" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="455.0" y="345.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo.handlingHistory</text>
+<text x="455.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">type, location,</text>
+<text x="455.0" y="377.5" font-size="11.5" fill="#555555" text-anchor="middle">completionTime</text>
+<rect x="700" y="20" width="200" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="800.0" y="50.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">booking</text>
+<rect x="700" y="100" width="200" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="800.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">routing</text>
+<rect x="700" y="180" width="200" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="800.0" y="210.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">voyage</text>
+<rect x="700" y="260" width="200" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="800.0" y="290.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">location</text>
+<rect x="700" y="340" width="200" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="800.0" y="370.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handling</text>
+<path d="M220,75 L330,50" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="275.0" y="52.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">selects</text>
+<text x="275.0" y="52.5" font-size="11" fill="#555" text-anchor="middle">selects</text>
+<path d="M220,100 L330,135" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="275.0" y="139.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">selects</text>
+<text x="275.0" y="139.5" font-size="11" fill="#b8650a" text-anchor="middle">selects</text>
+<path d="M220,235 L330,235" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="281.0" y="225.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">selects</text>
+<text x="281.0" y="225.0" font-size="11" fill="#b8650a" text-anchor="middle">selects</text>
+<path d="M220,355 L330,355" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="281.0" y="345.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">selects</text>
+<text x="281.0" y="345.0" font-size="11" fill="#b8650a" text-anchor="middle">selects</text>
+<path d="M580,50 L700,45" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="646.0" y="37.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads</text>
+<text x="646.0" y="37.5" font-size="11" fill="#555" text-anchor="middle">reads</text>
+<path d="M580,130 L700,125" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="646.0" y="117.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads</text>
+<text x="646.0" y="117.5" font-size="11" fill="#555" text-anchor="middle">reads</text>
+<path d="M580,235 L700,205" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="630.0" y="190.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads</text>
+<text x="630.0" y="190.0" font-size="11" fill="#555" text-anchor="middle">reads</text>
+<path d="M580,250 L700,285" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="640.0" y="289.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads</text>
+<text x="640.0" y="289.5" font-size="11" fill="#555" text-anchor="middle">reads</text>
+<path d="M580,355 L700,365" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="646.0" y="350.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads</text>
+<text x="646.0" y="350.0" font-size="11" fill="#555" text-anchor="middle">reads</text>
+<path d="M580,215 L700,115" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M580,340 L700,300" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M580,155 L700,355" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="470" y="420" font-size="12" fill="#555555" text-anchor="middle">One screen, one query, five owners. The client names the fields; the graph decides which source answers.</text>
+<text x="470" y="438" font-size="12" fill="#555555" text-anchor="middle">Money and booking writes stay out of the graph: no screen reads them.</text>
+</svg>

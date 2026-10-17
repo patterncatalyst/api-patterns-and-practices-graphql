@@ -1,0 +1,17 @@
+# A page of 50 cargos, each with a page of 50 events: priced at 7,651 against
+# a budget of 1,000, so the server refuses it before any source call.
+query OverBudget {
+  cargos(first: 50) {
+    edges {
+      node {
+        handlingHistory(first: 50) {
+          edges {
+            node {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+}

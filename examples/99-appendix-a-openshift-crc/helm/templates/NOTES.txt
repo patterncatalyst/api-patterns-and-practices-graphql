@@ -1,0 +1,14 @@
+{{ .Release.Name }} is installed in project {{ .Release.Namespace }}.
+
+Routes (edge TLS at the router, verify with the cluster's ingress CA):
+{{- range $name, $route := .Values.openshift.routes.items }}
+  {{ $name }}  {{ ternary "https" "http" $route.tls }}://{{ include "appa.host" (dict "root" $ "name" $name) }}
+{{- end }}
+
+Ingress CA:
+  oc --context crc-admin -n openshift-config-managed get configmap default-ingress-cert -o jsonpath='{.data.ca-bundle\.crt}' > ingress-ca.crt
+
+Images are built in the cluster:
+{{- range $stack, $spec := .Values.final.stacks }}
+  oc --context crc-admin -n {{ $.Release.Namespace }} start-build {{ include "appa.imageName" $spec.image.repository }} --from-dir examples/27-final-project/{{ $stack }} --follow
+{{- end }}

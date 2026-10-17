@@ -1,0 +1,70 @@
+{{- if .Values.test.enabled }}
+# helm test: a pod in the release posts a query to each stack through the edge
+# and verifies the edge with the chart's own CA.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-graphql-test
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "graphql-test" "component" "test") | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  restartPolicy: Never
+  securityContext:
+    {{- toYaml .Values.podSecurityContext | nindent 4 }}
+  containers:
+    - name: curl
+      image: "{{ .Values.edge.image.repository }}:{{ .Values.edge.image.tag }}"
+      imagePullPolicy: {{ .Values.edge.image.pullPolicy }}
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          set -eu
+          {{- $tls := .Values.edge.tls.enabled }}
+          {{- $opts := ternary "--tlsv1.3 --cacert /tls/ca.crt" "" $tls }}
+          for target in quarkus:{{ include "gql.edgePort" (dict "root" . "stack" "quarkus") }} python:{{ include "gql.edgePort" (dict "root" . "stack" "python") }}; do
+            stack="${target%%:*}"
+            url="{{ ternary "https" "http" $tls }}://edge:${target##*:}/graphql"
+            out="$(curl -fsS {{ $opts }} -H 'Content-Type: application/json' \
+              -d '{"query":"{ __typename }"}' "$url")"
+            echo "$stack $out"
+            case "$out" in
+              *'"__typename":"Query"'*) ;;
+              *) echo "$stack: unexpected answer" >&2; exit 1 ;;
+            esac
+            out="$(curl -fsS {{ $opts }} -H 'Content-Type: application/json' \
+              -d '{"query":"query TrackCargo($id: TrackingId!) { cargo(trackingId: $id) { trackingId delivery { transportStatus } } }","variables":{"id":"ABC123"}}' "$url")"
+            echo "$stack $out"
+            case "$out" in
+              *'"transportStatus":"ONBOARD_CARRIER"'*) ;;
+              *) echo "$stack: unexpected cargo" >&2; exit 1 ;;
+            esac
+          done
+          echo "helm test: both stacks answer through the edge"
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          memory: 64Mi
+      securityContext:
+        {{- include "gql.containerSecurityContext" . | nindent 8 }}
+      {{- if $tls }}
+      volumeMounts:
+        - name: tls
+          mountPath: /tls
+          readOnly: true
+      {{- end }}
+  {{- if $tls }}
+  volumes:
+    - name: tls
+      secret:
+        secretName: {{ include "gql.tlsSecretName" . }}
+        items:
+          - key: ca.crt
+            path: ca.crt
+  {{- end }}
+{{- end }}

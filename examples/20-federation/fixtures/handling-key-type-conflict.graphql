@@ -1,0 +1,324 @@
+schema @link(url: "https://specs.apollo.dev/federation/v2.7", import: ["@key", "@shareable"]) {
+  query: Query
+  mutation: Mutation
+}
+
+"""
+A consignment of goods being shipped, tracked end to end by its tracking id.
+"""
+type Cargo @key(fields: "trackingId") {
+  """The public tracking identifier."""
+  trackingId: TrackingId!
+
+  """Delivery status derived from handling history."""
+  delivery: Delivery!
+
+  """Handling events for this cargo, newest first, as a Relay connection."""
+  handlingHistory(
+    """Return the first N events."""
+    first: Int
+
+    """Return events after this cursor."""
+    after: String
+
+    """Return the last N events."""
+    last: Int
+
+    """Return events before this cursor."""
+    before: String
+  ): HandlingEventConnection!
+}
+
+"""An RFC 3339 date-time in UTC, for example `2026-10-15T09:30:00Z`."""
+scalar DateTime @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc3339")
+
+"""The derived delivery state of a cargo."""
+type Delivery {
+  """Current transport status."""
+  transportStatus: TransportStatus!
+
+  """Whether the cargo follows its itinerary."""
+  routingStatus: RoutingStatus!
+
+  """True when the last handling event was off-itinerary."""
+  misdirected: Boolean!
+
+  """
+  Where the cargo was last handled. Null before the first handling event.
+  """
+  lastKnownLocation: Location
+
+  """The voyage the cargo is on. Null unless aboard a carrier."""
+  currentVoyage: Voyage
+
+  """Estimated arrival. Null when the estimate is unavailable."""
+  estimatedTimeOfArrival: DateTime
+
+  """The next expected handling. Null when none is expected."""
+  nextExpectedActivity: HandlingActivity
+}
+
+"""An expected future handling of a cargo."""
+type HandlingActivity {
+  """The kind of handling expected."""
+  type: HandlingEventType!
+
+  """Where it is expected."""
+  location: Location!
+
+  """On which voyage. Null for handling not tied to a voyage."""
+  voyage: Voyage
+}
+
+"""A recorded handling of a cargo at a location, optionally on a voyage."""
+type HandlingEvent implements Node @key(fields: "id") {
+  """The globally unique identifier of this event."""
+  id: ID!
+
+  """The tracking id of the cargo that was handled."""
+  trackingId: TrackingId!
+
+  """What kind of handling occurred."""
+  type: HandlingEventType!
+
+  """When the handling actually happened."""
+  completionTime: DateTime!
+
+  """When the event was registered in the system."""
+  registrationTime: DateTime!
+
+  """
+  The cargo that was handled. Null when the cargo service is unavailable.
+  """
+  cargo: Cargo
+
+  """Where it occurred."""
+  location: Location!
+
+  """The voyage involved. Null for RECEIVE, CUSTOMS and CLAIM."""
+  voyage: Voyage
+}
+
+"""A Relay connection of handling events."""
+type HandlingEventConnection {
+  """The edges in this page."""
+  edges: [HandlingEventEdge!]!
+
+  """Pagination metadata."""
+  pageInfo: PageInfo!
+
+  """Total events for the cargo. Null when counting is too expensive."""
+  totalCount: Int
+}
+
+"""A handling event and its cursor."""
+type HandlingEventEdge {
+  """An opaque cursor for this edge."""
+  cursor: String!
+
+  """
+  The event at this edge. Null when the event failed to resolve, so one bad item nulls its edge instead of the whole page.
+  """
+  node: HandlingEvent
+}
+
+"""The kind of handling a cargo underwent."""
+enum HandlingEventType {
+  """Received from the shipper at origin."""
+  RECEIVE
+
+  """Loaded onto a vessel."""
+  LOAD
+
+  """Unloaded from a vessel."""
+  UNLOAD
+
+  """Cleared by customs."""
+  CUSTOMS
+
+  """Claimed by the consignee at destination."""
+  CLAIM
+}
+
+"""A port or terminal, identified by its UN/LOCODE."""
+type Location @key(fields: "unLocode", resolvable: false) {
+  """The UN/LOCODE, for example `NLRTM`."""
+  unLocode: String!
+}
+
+"""
+The write surface; deliberately small because writes belong to the owning services.
+"""
+type Mutation {
+  """
+  Record that a cargo was handled. Domain failures are returned in `userErrors`.
+  """
+  registerHandlingEvent(
+    """The handling to record."""
+    input: RegisterHandlingEventInput!
+  ): RegisterHandlingEventPayload!
+}
+
+"""
+A global object identifier, unique across the whole graph. Implements the
+Relay Global Object Identification contract used by `Query.node`.
+"""
+interface Node {
+  """The globally unique, opaque identifier of this object."""
+  id: ID!
+}
+
+"""
+Relay cursor-connection page metadata.
+See https://relay.dev/graphql/connections.htm
+"""
+type PageInfo @shareable {
+  """True when more edges exist after `endCursor`."""
+  hasNextPage: Boolean!
+
+  """True when more edges exist before `startCursor`."""
+  hasPreviousPage: Boolean!
+
+  """Cursor of the first edge in this page; null when the page is empty."""
+  startCursor: String
+
+  """Cursor of the last edge in this page; null when the page is empty."""
+  endCursor: String
+}
+
+type Query {
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+}
+
+"""Input for `Mutation.registerHandlingEvent`."""
+input RegisterHandlingEventInput {
+  """The cargo that was handled."""
+  trackingId: TrackingId!
+
+  """What kind of handling occurred."""
+  type: HandlingEventType!
+
+  """Where it occurred."""
+  location: UnLocode!
+
+  """The voyage number; required for LOAD and UNLOAD, forbidden otherwise."""
+  voyageNumber: String
+
+  """When the handling actually happened."""
+  completionTime: DateTime!
+
+  """
+  Client-supplied key making retries safe: a repeated request with the same key returns the originally recorded event instead of recording a second one.
+  """
+  idempotencyKey: String
+}
+
+"""Result of `Mutation.registerHandlingEvent`."""
+type RegisterHandlingEventPayload {
+  """The recorded event. Null when `userErrors` is non-empty."""
+  handlingEvent: HandlingEvent
+
+  """
+  The cargo with its delivery state recomputed. Null when `userErrors` is non-empty.
+  """
+  cargo: Cargo
+
+  """
+  Domain validation failures returned as data; empty on success. Distinct from the response's top-level `errors`.
+  """
+  userErrors: [UserError!]!
+}
+
+"""Whether the cargo is following its itinerary."""
+enum RoutingStatus {
+  """No itinerary has been assigned."""
+  NOT_ROUTED
+
+  """The itinerary satisfies the route specification."""
+  ROUTED
+
+  """The itinerary no longer satisfies the route specification."""
+  MISROUTED
+}
+
+"""
+A cargo tracking identifier issued at booking time, for example `ABC123`.
+Opaque to clients; compare for equality only.
+"""
+scalar TrackingId
+
+"""Where a cargo currently is relative to its plan."""
+enum TransportStatus {
+  """Booked but not yet received."""
+  NOT_RECEIVED
+
+  """Received at origin and awaiting loading."""
+  IN_PORT
+
+  """Aboard a vessel."""
+  ONBOARD_CARRIER
+
+  """Handed over at the final destination."""
+  CLAIMED
+
+  """Whereabouts unknown."""
+  UNKNOWN
+}
+
+"""
+A UN/LOCODE port or terminal code: two letters of country plus three of
+location, for example `USNYC`, `NLRTM` or `SGSIN`.
+"""
+scalar UnLocode @specifiedBy(url: "https://unece.org/trade/uncefact/unlocode")
+
+"""
+A domain validation failure returned as data, not as a top-level error.
+"""
+type UserError {
+  """A stable machine-readable code."""
+  code: UserErrorCode!
+
+  """A human-readable explanation."""
+  message: String!
+
+  """
+  Path to the input field the error concerns, for example `["input", "voyageNumber"]`. Null when it concerns the whole input.
+  """
+  field: [String!]
+}
+
+"""Machine-readable reasons a mutation input was rejected."""
+enum UserErrorCode {
+  """No cargo exists with the given tracking id."""
+  UNKNOWN_CARGO
+
+  """No location exists with the given UN/LOCODE."""
+  UNKNOWN_LOCATION
+
+  """No voyage exists with the given voyage number."""
+  UNKNOWN_VOYAGE
+
+  """LOAD and UNLOAD events must name a voyage."""
+  VOYAGE_REQUIRED
+
+  """RECEIVE, CUSTOMS and CLAIM events must not name a voyage."""
+  VOYAGE_NOT_ALLOWED
+
+  """The completion time is in the future or otherwise invalid."""
+  INVALID_COMPLETION_TIME
+}
+
+"""A scheduled carrier movement made up of one or more legs."""
+type Voyage @key(fields: "number", resolvable: false) {
+  """The carrier's voyage number, for example `V100S`."""
+  number: String!
+}
+
+scalar _Any
+
+union _Entity = Cargo | HandlingEvent | Location | Voyage
+
+type _Service {
+  sdl: String!
+}

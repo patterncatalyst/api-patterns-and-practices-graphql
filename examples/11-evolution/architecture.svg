@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="520" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/11-evolution - compose stack (gql-ch11-evolution)</text>
+<rect x="50" y="150" width="170" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="135.0" y="183.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="135.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">client</text>
+<rect x="300" y="60" width="270" height="140" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="98.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="435.0" y="115.0" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye GraphQL (code-first)</text>
+<text x="435.0" y="130.0" font-size="11.5" fill="#555555" text-anchor="middle">finalArrivalTime + deprecated finalArrivalDate</text>
+<text x="435.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">5 sources, 250 ms each, each call logged</text>
+<text x="435.0" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">/debug/source-calls (lab only)</text>
+<text x="435.0" y="175.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8210 /graphql</text>
+<rect x="300" y="240" width="270" height="140" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="278.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="435.0" y="295.0" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry on FastAPI (code-first)</text>
+<text x="435.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">finalArrivalTime + deprecated finalArrivalDate</text>
+<text x="435.0" y="325.0" font-size="11.5" fill="#555555" text-anchor="middle">5 sources, 250 ms each, each call logged</text>
+<text x="435.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">/debug/source-calls (lab only)</text>
+<text x="435.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8211 /graphql</text>
+<rect x="700" y="100" width="250" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="140.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="825.0" y="157.5" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql</text>
+<text x="825.0" y="172.5" font-size="11.5" fill="#555555" text-anchor="middle">(canonical SDL, single source)</text>
+<rect x="700" y="250" width="250" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="290.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">gate fixtures</text>
+<text x="825.0" y="307.5" font-size="11.5" fill="#555555" text-anchor="middle">copies of the SDL with one edit</text>
+<text x="825.0" y="322.5" font-size="11.5" fill="#555555" text-anchor="middle">(temporary, in verify.sh)</text>
+<rect x="700" y="400" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="825.0" y="433.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/scripts/breaking.sh</text>
+<text x="825.0" y="450.0" font-size="11.5" fill="#555555" text-anchor="middle">graphql-inspector diff</text>
+<rect x="300" y="440" width="270" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="435.0" y="468.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">otel-lgtm</text>
+<text x="435.0" y="485.0" font-size="11.5" fill="#555555" text-anchor="middle">(compose.observability.yaml)</text>
+<path d="M220,170 L300,120" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="230.0" y="123.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">query, introspection</text>
+<text x="230.0" y="123.0" font-size="11" fill="#555" text-anchor="middle">query, introspection</text>
+<path d="M220,200 L300,290" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="230.0" y="271.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">query, introspection</text>
+<text x="230.0" y="271.0" font-size="11" fill="#555" text-anchor="middle">query, introspection</text>
+<path d="M570,100 L700,130" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="649.0" y="97.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="649.0" y="97.0" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<path d="M570,330 L700,180" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="657.0" y="285.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="657.0" y="285.0" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<path d="M825,200 L825,250" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="885.0" y="225.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">copy + one edit</text>
+<text x="885.0" y="225.0" font-size="11" fill="#555" text-anchor="middle">copy + one edit</text>
+<path d="M825,350 L825,400" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="875.0" y="375.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">base vs new</text>
+<text x="875.0" y="375.0" font-size="11" fill="#b8650a" text-anchor="middle">base vs new</text>
+<path d="M435,380 L435,440" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="497.0" y="410.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP (both stacks)</text>
+<text x="497.0" y="410.0" font-size="11" fill="#555" text-anchor="middle">OTLP (both stacks)</text>
+<text x="50" y="516" font-size="12" fill="#555555" text-anchor="start">verify.sh checks the deprecation on both stacks, then runs the breaking gate once on fixtures, not per stack.</text>
+</svg>

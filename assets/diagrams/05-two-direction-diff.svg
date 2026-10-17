@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 460" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="540" height="420" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">live to canonical: does the stack expose more, or tighter?</text>
+<rect x="580" y="20" width="540" height="420" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="592" y="40" font-size="12" font-weight="700" fill="#1d1d1d">canonical to live: does what the stack serves differ?</text>
+<rect x="40" y="60" width="190" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="135.0" y="93.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Extra field</text>
+<text x="135.0" y="110.0" font-size="11.5" fill="#555555" text-anchor="middle">weightKg: Float on Cargo</text>
+<rect x="260" y="60" width="280" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="400.0" y="85.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">FAIL: breaking</text>
+<text x="400.0" y="102.5" font-size="11.5" fill="#555555" text-anchor="middle">Field weightKg was removed from</text>
+<text x="400.0" y="117.5" font-size="11.5" fill="#555555" text-anchor="middle">object type Cargo</text>
+<rect x="40" y="150" width="190" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="135.0" y="183.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Tightened output</text>
+<text x="135.0" y="200.0" font-size="11.5" fill="#555555" text-anchor="middle">itinerary: Itinerary!</text>
+<rect x="260" y="150" width="280" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="400.0" y="175.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">FAIL: breaking</text>
+<text x="400.0" y="192.5" font-size="11.5" fill="#555555" text-anchor="middle">Field Cargo.itinerary changed type</text>
+<text x="400.0" y="207.5" font-size="11.5" fill="#555555" text-anchor="middle">from Itinerary! to Itinerary</text>
+<rect x="40" y="240" width="190" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="135.0" y="273.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Slice</text>
+<text x="135.0" y="290.0" font-size="11.5" fill="#555555" text-anchor="middle">HandlingEvent not served</text>
+<rect x="260" y="240" width="280" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="400.0" y="273.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Safe, ignored</text>
+<text x="400.0" y="290.0" font-size="11.5" fill="#555555" text-anchor="middle">Type HandlingEvent was added</text>
+<rect x="600" y="60" width="190" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="695.0" y="88.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Slice</text>
+<text x="695.0" y="105.0" font-size="11.5" fill="#555555" text-anchor="middle">HandlingEvent not served</text>
+<rect x="820" y="60" width="280" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="960.0" y="88.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Allowed: slice removal</text>
+<text x="960.0" y="105.0" font-size="11.5" fill="#555555" text-anchor="middle">Type HandlingEvent was removed</text>
+<rect x="600" y="135" width="190" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="695.0" y="163.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Loosened output</text>
+<text x="695.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">trackingId: TrackingId</text>
+<rect x="820" y="135" width="280" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="960.0" y="155.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">FAIL: drift</text>
+<text x="960.0" y="172.5" font-size="11.5" fill="#555555" text-anchor="middle">Field Cargo.trackingId changed</text>
+<text x="960.0" y="187.5" font-size="11.5" fill="#555555" text-anchor="middle">type from TrackingId! to TrackingId</text>
+<rect x="600" y="210" width="190" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="695.0" y="238.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Enum value removed</text>
+<text x="695.0" y="255.0" font-size="11.5" fill="#555555" text-anchor="middle">UNKNOWN</text>
+<rect x="820" y="210" width="280" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="960.0" y="230.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">FAIL: drift</text>
+<text x="960.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">Enum value UNKNOWN was removed</text>
+<text x="960.0" y="262.5" font-size="11.5" fill="#555555" text-anchor="middle">from enum TransportStatus</text>
+<rect x="600" y="285" width="190" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="695.0" y="313.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Description changed</text>
+<text x="695.0" y="330.0" font-size="11.5" fill="#555555" text-anchor="middle">Tracking id.</text>
+<rect x="820" y="285" width="280" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="960.0" y="305.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">FAIL: drift, though marked safe</text>
+<text x="960.0" y="322.5" font-size="11.5" fill="#555555" text-anchor="middle">Field Cargo.trackingId description</text>
+<text x="960.0" y="337.5" font-size="11.5" fill="#555555" text-anchor="middle">changed from The public ...</text>
+<path d="M230,95 L260,95" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M230,185 L260,185" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M230,275 L260,275" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M790,90 L820,90" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M790,165 L820,165" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M790,240 L820,240" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M790,315 L820,315" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="40" y="345" font-size="12" fill="#555555" text-anchor="start">Reported by the live-to-canonical diff only:</text>
+<text x="40" y="363" font-size="12" fill="#555555" text-anchor="start">the opposite diff lists a tighter output as safe (a check mark).</text>
+<text x="40" y="395" font-size="12" fill="#1d1d1d" text-anchor="start" font-weight="700">One direction would pass a tightened field.</text>
+<text x="600" y="370" font-size="12" fill="#555555" text-anchor="start">Reported by the canonical-to-live diff only: a loosened type, a missing</text>
+<text x="600" y="388" font-size="12" fill="#555555" text-anchor="start">enum value or argument, a changed description.</text>
+<text x="600" y="420" font-size="12" fill="#1d1d1d" text-anchor="start" font-weight="700">Only whole types, output fields and roots may be absent.</text>
+</svg>

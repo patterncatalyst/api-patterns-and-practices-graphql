@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="300" height="432" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">SmallRye typesafe and dynamic (Java)</text>
+<rect x="340" y="50" width="300" height="432" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="352" y="70" font-size="12" font-weight="700" fill="#1d1d1d">gql (Python)</text>
+<rect x="660" y="50" width="300" height="432" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="672" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Apollo Client (TypeScript)</text>
+<rect x="30" y="100" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="170.0" y="124.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Document</text>
+<text x="170.0" y="141.0" font-size="11.5" fill="#555555" text-anchor="middle">annotated interface; return type = selection</text>
+<rect x="30" y="162" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="170.0" y="186.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Typing</text>
+<text x="170.0" y="203.0" font-size="11.5" fill="#555555" text-anchor="middle">records and enums</text>
+<rect x="30" y="224" width="280" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="170.0" y="248.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Schema check</text>
+<text x="170.0" y="265.0" font-size="11.5" fill="#555555" text-anchor="middle">the server validates</text>
+<rect x="30" y="286" width="280" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="170.0" y="310.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cache</text>
+<text x="170.0" y="327.0" font-size="11.5" fill="#555555" text-anchor="middle">none built in</text>
+<rect x="30" y="348" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="170.0" y="372.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Partial result</text>
+<text x="170.0" y="389.0" font-size="11.5" fill="#555555" text-anchor="middle">ErrorOr&lt;T&gt; on the field that may fail</text>
+<rect x="30" y="410" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="170.0" y="434.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Subscriptions</text>
+<text x="170.0" y="451.0" font-size="11.5" fill="#555555" text-anchor="middle">Multi&lt;T&gt; methods</text>
+<rect x="350" y="100" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="490.0" y="124.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Document</text>
+<text x="490.0" y="141.0" font-size="11.5" fill="#555555" text-anchor="middle">gql(&quot;...&quot;) text, or gql.dsl built from the schema</text>
+<rect x="350" y="162" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="490.0" y="186.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Typing</text>
+<text x="490.0" y="203.0" font-size="11.5" fill="#555555" text-anchor="middle">dicts; ariadne-codegen adds models</text>
+<rect x="350" y="224" width="280" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="490.0" y="248.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Schema check</text>
+<text x="490.0" y="265.0" font-size="11.5" fill="#555555" text-anchor="middle">local, against the SDL given to Client</text>
+<rect x="350" y="286" width="280" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="490.0" y="310.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cache</text>
+<text x="490.0" y="327.0" font-size="11.5" fill="#555555" text-anchor="middle">none built in</text>
+<rect x="350" y="348" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="490.0" y="372.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Partial result</text>
+<text x="490.0" y="389.0" font-size="11.5" fill="#555555" text-anchor="middle">TransportQueryError carries data and errors</text>
+<rect x="350" y="410" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="490.0" y="434.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Subscriptions</text>
+<text x="490.0" y="451.0" font-size="11.5" fill="#555555" text-anchor="middle">session.subscribe over WebSocket</text>
+<rect x="670" y="100" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="810.0" y="124.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Document</text>
+<text x="810.0" y="141.0" font-size="11.5" fill="#555555" text-anchor="middle">.graphql files compiled by codegen</text>
+<rect x="670" y="162" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="810.0" y="186.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Typing</text>
+<text x="810.0" y="203.0" font-size="11.5" fill="#555555" text-anchor="middle">TypedDocumentNode from the client preset</text>
+<rect x="670" y="224" width="280" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="810.0" y="248.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Schema check</text>
+<text x="810.0" y="265.0" font-size="11.5" fill="#555555" text-anchor="middle">at build time, by codegen</text>
+<rect x="670" y="286" width="280" height="52" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="810.0" y="310.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cache</text>
+<text x="810.0" y="327.0" font-size="11.5" fill="#555555" text-anchor="middle">normalized InMemoryCache</text>
+<rect x="670" y="348" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="810.0" y="372.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Partial result</text>
+<text x="810.0" y="389.0" font-size="11.5" fill="#555555" text-anchor="middle">errors beside data (errorPolicy)</text>
+<rect x="670" y="410" width="280" height="52" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="810.0" y="434.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Subscriptions</text>
+<text x="810.0" y="451.0" font-size="11.5" fill="#555555" text-anchor="middle">GraphQLWsLink over graphql-ws</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Three clients, one contract: what each one adds over curl</text>
+<text x="20" y="506" font-size="12" fill="#555555" text-anchor="start">All three send the same documents to both servers; verify.sh runs each against Quarkus and Python.</text>
+</svg>

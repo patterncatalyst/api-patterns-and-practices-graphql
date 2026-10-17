@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">One client request, three subgraph fetches</text>
+<rect x="40" y="215" width="150" height="80" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="245.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">gateway</text>
+<text x="115.0" y="262.5" font-size="11.5" fill="#555555" text-anchor="middle">TrackCargo(ABC123)</text>
+<text x="115.0" y="277.5" font-size="11.5" fill="#555555" text-anchor="middle">one request</text>
+<rect x="250" y="80" width="220" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="360.0" y="115.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1. cargo subgraph</text>
+<text x="360.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">cargo, description, itinerary,</text>
+<text x="360.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">legs { loadLocation { name } }</text>
+<rect x="250" y="190" width="220" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="360.0" y="225.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2. handling subgraph</text>
+<text x="360.0" y="242.5" font-size="11.5" fill="#555555" text-anchor="middle">_entities(Cargo): delivery,</text>
+<text x="360.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">handlingHistory(first: 2)</text>
+<rect x="250" y="300" width="220" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="360.0" y="335.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3. cargo subgraph</text>
+<text x="360.0" y="352.5" font-size="11.5" fill="#555555" text-anchor="middle">_entities(Location):</text>
+<text x="360.0" y="367.5" font-size="11.5" fill="#555555" text-anchor="middle">name of each location handling named</text>
+<rect x="540" y="80" width="420" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="750.0" y="115.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">booking.getCargo:ABC123</text>
+<text x="750.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">routing.getItineraries:ABC123</text>
+<text x="750.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">location.getLocations:DEHAM+USNYC</text>
+<rect x="540" y="190" width="420" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="750.0" y="225.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">booking.getCargos:ABC123, routing.getItineraries:ABC123</text>
+<text x="750.0" y="242.5" font-size="11.5" fill="#555555" text-anchor="middle">handling.pageEvents:ABC123</text>
+<text x="750.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">handling.listEventsFor:ABC123</text>
+<rect x="540" y="300" width="420" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="750.0" y="343.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">location.getLocations:USNYC</text>
+<text x="750.0" y="360.0" font-size="11.5" fill="#555555" text-anchor="middle">one bulk call, however many references</text>
+<path d="M190,240 L250,135" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M190,255 L250,235" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M190,270 L250,345" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M470,125 L540,125" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M470,235 L540,235" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M470,345 L540,345" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">The cargo subgraph is asked twice, the handling subgraph once</text>
+<text x="40" y="425" font-size="12" fill="#555555" text-anchor="start">Fetch 3 waits for fetch 2: only handling knows which locations the events and the delivery name.</text>
+<text x="40" y="442" font-size="12" fill="#555555" text-anchor="start">Distinct request ids in the source-call logs: cargo 2, handling 1.</text>
+</svg>

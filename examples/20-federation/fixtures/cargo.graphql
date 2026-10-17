@@ -1,0 +1,248 @@
+schema @link(url: "https://specs.apollo.dev/federation/v2.7", import: ["@key", "@shareable"]) {
+  query: Query
+}
+
+"""
+A consignment of goods being shipped, tracked end to end by its tracking id.
+"""
+type Cargo implements Node @key(fields: "trackingId") {
+  """The globally unique identifier of this cargo."""
+  id: ID!
+
+  """The public tracking identifier."""
+  trackingId: TrackingId!
+
+  """Free-text description of the goods."""
+  description: String!
+
+  """Where the cargo was booked from."""
+  origin: Location!
+
+  """Where the cargo is booked to."""
+  destination: Location!
+
+  """What the customer asked for and the route must satisfy."""
+  routeSpecification: RouteSpecification!
+
+  """The planned route. Null until the routing service has assigned one."""
+  itinerary: Itinerary
+}
+
+"""A Relay connection of cargos."""
+type CargoConnection {
+  """The edges in this page."""
+  edges: [CargoEdge!]!
+
+  """Pagination metadata."""
+  pageInfo: PageInfo!
+
+  """Total matching cargos. Null when counting is too expensive."""
+  totalCount: Int
+}
+
+"""A cargo and its cursor."""
+type CargoEdge {
+  """An opaque cursor for this edge."""
+  cursor: String!
+
+  """
+  The cargo at this edge. Null when the cargo failed to resolve, so one bad item nulls its edge instead of the whole page.
+  """
+  node: Cargo
+}
+
+"""
+One scheduled departure-to-arrival movement of a voyage between two locations.
+"""
+type CarrierMovement {
+  """Where the movement departs from."""
+  departureLocation: Location!
+
+  """Where the movement arrives."""
+  arrivalLocation: Location!
+
+  """Scheduled departure time."""
+  departureTime: DateTime!
+
+  """Scheduled arrival time."""
+  arrivalTime: DateTime!
+}
+
+"""An RFC 3339 date-time in UTC, for example `2026-10-15T09:30:00Z`."""
+scalar DateTime @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc3339")
+
+"""
+The planned sequence of legs moving a cargo from origin to destination.
+"""
+type Itinerary {
+  """Ordered legs of the route; never empty for an assigned itinerary."""
+  legs: [Leg!]!
+
+  """When the final leg arrives."""
+  finalArrivalTime: DateTime!
+
+  """When the final leg arrives."""
+  finalArrivalDate: DateTime! @deprecated(reason: "Use `finalArrivalTime`.")
+}
+
+"""One hop of an itinerary on a single voyage."""
+type Leg {
+  """When the cargo is loaded."""
+  loadTime: DateTime!
+
+  """When the cargo is unloaded."""
+  unloadTime: DateTime!
+
+  """
+  The voyage that carries this leg. Null when the voyage service is unavailable.
+  """
+  voyage: Voyage
+
+  """Where the cargo is loaded."""
+  loadLocation: Location!
+
+  """Where the cargo is unloaded."""
+  unloadLocation: Location!
+}
+
+"""A port or terminal, identified by its UN/LOCODE."""
+type Location implements Node @key(fields: "unLocode") {
+  """The globally unique identifier of this location."""
+  id: ID!
+
+  """The UN/LOCODE, for example `NLRTM`."""
+  unLocode: UnLocode!
+
+  """The human-readable name, for example `Rotterdam`."""
+  name: String!
+
+  """The ISO 3166-1 alpha-2 country code, for example `NL`."""
+  country: String!
+}
+
+"""
+A global object identifier, unique across the whole graph. Implements the
+Relay Global Object Identification contract used by `Query.node`.
+"""
+interface Node {
+  """The globally unique, opaque identifier of this object."""
+  id: ID!
+}
+
+"""
+Relay cursor-connection page metadata.
+See https://relay.dev/graphql/connections.htm
+"""
+type PageInfo @shareable {
+  """True when more edges exist after `endCursor`."""
+  hasNextPage: Boolean!
+
+  """True when more edges exist before `startCursor`."""
+  hasPreviousPage: Boolean!
+
+  """Cursor of the first edge in this page; null when the page is empty."""
+  startCursor: String
+
+  """Cursor of the last edge in this page; null when the page is empty."""
+  endCursor: String
+}
+
+"""
+The tracking view: read-oriented aggregation of cargo, routing and handling data.
+"""
+type Query {
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+
+  """Look up one cargo by its tracking id. Null when no such cargo exists."""
+  cargo(
+    """The tracking id issued at booking."""
+    trackingId: TrackingId!
+  ): Cargo
+
+  """Look up a location by UN/LOCODE. Null when unknown."""
+  location(
+    """The UN/LOCODE to look up, for example `NLRTM`."""
+    unLocode: UnLocode!
+  ): Location
+
+  """Look up a voyage by voyage number. Null when unknown."""
+  voyage(
+    """The carrier's voyage number, for example `V100S`."""
+    voyageNumber: String!
+  ): Voyage
+
+  """List cargos, newest first, as a Relay connection."""
+  cargos(
+    """Return the first N cargos."""
+    first: Int
+
+    """Return cargos after this cursor."""
+    after: String
+
+    """Return the last N cargos."""
+    last: Int
+
+    """Return cargos before this cursor."""
+    before: String
+
+    """Only cargos with this routing status."""
+    routingStatus: RoutingStatus
+  ): CargoConnection!
+}
+
+"""The customer's routing requirements for a cargo."""
+type RouteSpecification {
+  """Required origin."""
+  origin: Location!
+
+  """Required destination."""
+  destination: Location!
+
+  """The date by which the cargo must arrive."""
+  arrivalDeadline: DateTime!
+}
+
+"""Whether the cargo is following its itinerary."""
+enum RoutingStatus {
+  """No itinerary has been assigned."""
+  NOT_ROUTED
+
+  """The itinerary satisfies the route specification."""
+  ROUTED
+
+  """The itinerary no longer satisfies the route specification."""
+  MISROUTED
+}
+
+"""
+A cargo tracking identifier issued at booking time, for example `ABC123`.
+Opaque to clients; compare for equality only.
+"""
+scalar TrackingId
+
+"""
+A UN/LOCODE port or terminal code: two letters of country plus three of
+location, for example `USNYC`, `NLRTM` or `SGSIN`.
+"""
+scalar UnLocode @specifiedBy(url: "https://unece.org/trade/uncefact/unlocode")
+
+"""A scheduled carrier movement made up of one or more legs."""
+type Voyage implements Node @key(fields: "number") {
+  """The globally unique identifier of this voyage."""
+  id: ID!
+
+  """The carrier's voyage number, for example `V100S`."""
+  number: String!
+
+  """The scheduled movements of this voyage in departure order."""
+  schedule: [CarrierMovement!]!
+}
+
+scalar _Any
+
+union _Entity = Cargo | Location | Voyage
+
+type _Service {
+  sdl: String!
+}

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="520" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/99-appendix-a-openshift-crc - release gql-appendix-a in project gql-appendix-a on OpenShift Local</text>
+<rect x="40" y="240" width="170" height="90" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="125.0" y="275.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">scripts/smoke.sh</text>
+<text x="125.0" y="292.5" font-size="11.5" fill="#555555" text-anchor="middle">curl --cacert ingress CA</text>
+<text x="125.0" y="307.5" font-size="11.5" fill="#555555" text-anchor="middle">*.apps-crc.testing</text>
+<rect x="260" y="220" width="190" height="130" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="355.0" y="268.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">router</text>
+<text x="355.0" y="285.0" font-size="11.5" fill="#555555" text-anchor="middle">6 Routes</text>
+<text x="355.0" y="300.0" font-size="11.5" fill="#555555" text-anchor="middle">edge TLS, HTTP redirected</text>
+<text x="355.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">ingress certificate</text>
+<rect x="520" y="70" width="200" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="620.0" y="105.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge (nginx)</text>
+<text x="620.0" y="122.5" font-size="11.5" fill="#555555" text-anchor="middle">plain 8080, 8081</text>
+<text x="620.0" y="137.5" font-size="11.5" fill="#555555" text-anchor="middle">from Chapter 27&#x27;s chart</text>
+<rect x="520" y="190" width="200" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="620.0" y="225.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus, python</text>
+<text x="620.0" y="242.5" font-size="11.5" fill="#555555" text-anchor="middle">public and internal</text>
+<text x="620.0" y="257.5" font-size="11.5" fill="#555555" text-anchor="middle">restricted-v2</text>
+<rect x="520" y="310" width="200" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="620.0" y="343.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">keycloak 26.8.1</text>
+<text x="620.0" y="360.0" font-size="11.5" fill="#555555" text-anchor="middle">issuer = its Route URL</text>
+<rect x="520" y="410" width="200" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="620.0" y="445.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm (otel-lgtm 0.37.0)</text>
+<text x="620.0" y="462.5" font-size="11.5" fill="#555555" text-anchor="middle">ServiceAccount gql-lgtm</text>
+<text x="620.0" y="477.5" font-size="11.5" fill="#555555" text-anchor="middle">anyuid RoleBinding</text>
+<rect x="780" y="70" width="180" height="130" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="870.0" y="118.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">BuildConfig x2</text>
+<text x="870.0" y="135.0" font-size="11.5" fill="#555555" text-anchor="middle">ImageStream x2</text>
+<text x="870.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">Docker strategy</text>
+<text x="870.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">binary source</text>
+<rect x="780" y="240" width="180" height="110" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="870.0" y="285.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">scripts/up.sh</text>
+<text x="870.0" y="302.5" font-size="11.5" fill="#555555" text-anchor="middle">inventory, build,</text>
+<text x="870.0" y="317.5" font-size="11.5" fill="#555555" text-anchor="middle">rollout, helm test</text>
+<rect x="780" y="390" width="180" height="110" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="870.0" y="435.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">scripts/down.sh</text>
+<text x="870.0" y="452.5" font-size="11.5" fill="#555555" text-anchor="middle">uninstall, delete project,</text>
+<text x="870.0" y="467.5" font-size="11.5" fill="#555555" text-anchor="middle">compare, crc stop</text>
+<path d="M210,285 L260,285" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="235.0" y="277.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">HTTPS</text>
+<text x="235.0" y="277.0" font-size="11" fill="#b8650a" text-anchor="middle">HTTPS</text>
+<path d="M450,260 L520,115" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="471.0" y="179.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">/graphql</text>
+<text x="471.0" y="179.5" font-size="11" fill="#555" text-anchor="middle">/graphql</text>
+<path d="M450,285 L520,235" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M450,310 L520,345" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M450,340 L520,450" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M620,160 L620,190" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M780,135 L720,235" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="764.0" y="179.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">images</text>
+<text x="764.0" y="179.0" font-size="11" fill="#555" text-anchor="middle">images</text>
+<text x="50" y="525" font-size="12" fill="#555555" text-anchor="start">Validated without a cluster: helm lint, kubeconform with the OpenShift schemas, ShellCheck.</text>
+</svg>

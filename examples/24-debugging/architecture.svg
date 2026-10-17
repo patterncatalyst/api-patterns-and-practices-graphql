@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="560" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/24-debugging - compose stack (gql-ch24-debugging)</text>
+<rect x="40" y="250" width="160" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="283.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="120.0" y="300.0" font-size="11.5" fill="#555555" text-anchor="middle">client + traceparent</text>
+<rect x="280" y="60" width="250" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="405.0" y="100.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus (production)</text>
+<text x="405.0" y="117.5" font-size="11.5" fill="#555555" text-anchor="middle">fast-jar, SmallRye GraphQL</text>
+<text x="405.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8340 /graphql</text>
+<rect x="280" y="180" width="250" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="405.0" y="213.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus-dev (development)</text>
+<text x="405.0" y="230.0" font-size="11.5" fill="#555555" text-anchor="middle">mvn quarkus:dev</text>
+<text x="405.0" y="245.0" font-size="11.5" fill="#555555" text-anchor="middle">GraphQL UI, Dev UI</text>
+<text x="405.0" y="260.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8342</text>
+<rect x="280" y="300" width="250" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="405.0" y="340.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python (profile prod)</text>
+<text x="405.0" y="357.5" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry on FastAPI</text>
+<text x="405.0" y="372.5" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8341 /graphql</text>
+<rect x="280" y="420" width="250" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="405.0" y="460.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python-dev (profile dev)</text>
+<text x="405.0" y="477.5" font-size="11.5" fill="#555555" text-anchor="middle">the same image, GraphiQL</text>
+<text x="405.0" y="492.5" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8343 /graphql</text>
+<rect x="700" y="60" width="250" height="360" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="215.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm (otel-lgtm 0.37.0)</text>
+<text x="825.0" y="232.5" font-size="11.5" fill="#555555" text-anchor="middle">Collector, Tempo, Prometheus,</text>
+<text x="825.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">Loki, Grafana</text>
+<text x="825.0" y="262.5" font-size="11.5" fill="#555555" text-anchor="middle">Grafana 8344, Tempo 8345,</text>
+<text x="825.0" y="277.5" font-size="11.5" fill="#555555" text-anchor="middle">Prometheus 8346, Loki 8347</text>
+<rect x="700" y="460" width="250" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="490.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="825.0" y="507.5" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql</text>
+<text x="825.0" y="522.5" font-size="11.5" fill="#555555" text-anchor="middle">(canonical SDL, single source)</text>
+<path d="M200,275 L280,110" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="222.0" y="162.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">F1, F2</text>
+<text x="222.0" y="162.5" font-size="11" fill="#555" text-anchor="middle">F1, F2</text>
+<path d="M200,280 L280,230" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="226.0" y="243.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">F1, F2</text>
+<text x="226.0" y="243.0" font-size="11" fill="#555" text-anchor="middle">F1, F2</text>
+<path d="M200,290 L280,350" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="226.0" y="334.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">F1, F2</text>
+<text x="226.0" y="334.0" font-size="11" fill="#555" text-anchor="middle">F1, F2</text>
+<path d="M200,300 L280,470" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="222.0" y="421.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">F1, F2</text>
+<text x="222.0" y="421.0" font-size="11" fill="#555" text-anchor="middle">F1, F2</text>
+<path d="M530,110 L700,110" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="615.0" y="102.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="615.0" y="102.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M530,230 L700,230" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="615.0" y="222.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="615.0" y="222.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M530,350 L700,350" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="615.0" y="342.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="615.0" y="342.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M530,450 L700,400" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="615.0" y="417.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="615.0" y="417.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M530,500 L700,500" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="615.0" y="492.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">schema diff (production)</text>
+<text x="615.0" y="492.0" font-size="11" fill="#555" text-anchor="middle">schema diff (production)</text>
+<text x="50" y="555" font-size="12" fill="#555555" text-anchor="start">verify.sh sends its own trace id with F1 and F2, reads the trace from Tempo and the log records from Loki, and switches the debug category on and off.</text>
+</svg>

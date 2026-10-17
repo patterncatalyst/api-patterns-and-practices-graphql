@@ -1,0 +1,71 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+"""
+The tracking view: read-oriented aggregation of cargo, routing and handling data.
+"""
+type Query {
+  """Look up one cargo by its tracking id. Null when no such cargo exists."""
+  cargo(
+    """The tracking id issued at booking."""
+    trackingId: TrackingId!
+  ): Cargo
+  """List cargos, newest first, as a Relay connection."""
+  cargos(
+    """Return the first N cargos."""
+    first: Int
+    """Return cargos after this cursor."""
+    after: String
+    """Return the last N cargos."""
+    last: Int
+    """Return cargos before this cursor."""
+    before: String
+    """Only cargos with this routing status."""
+    routingStatus: RoutingStatus
+  ): CargoConnection!
+  """Look up a location by UN/LOCODE. Null when unknown."""
+  location(
+    """The UN/LOCODE to look up, for example `NLRTM`."""
+    unLocode: UnLocode!
+  ): Location
+  """Look up a voyage by voyage number. Null when unknown."""
+  voyage(
+    """The carrier's voyage number, for example `V100S`."""
+    voyageNumber: String!
+  ): Voyage
+  """Fetch any object by its global id (Relay Global Object Identification)."""
+  node(
+    """The global id of the object to fetch."""
+    id: ID!
+  ): Node
+  """Fetch several objects by their global ids, in the order given. An unknown id yields null at its position."""
+  nodes(
+    """The global ids of the objects to fetch."""
+    ids: [ID!]!
+  ): [Node]!
+}
+
+"""
+The write surface; deliberately small because writes belong to the owning services.
+"""
+type Mutation {
+  """Record that a cargo was handled. Domain failures are returned in `userErrors`."""
+  registerHandlingEvent(
+    """The handling to record."""
+    input: RegisterHandlingEventInput!
+  ): RegisterHandlingEventPayload!
+}
+
+"""
+Push-based updates for live tracking.
+"""
+type Subscription {
+  """Emits each new handling event for one cargo as it is registered."""
+  cargoHandled(
+    """The tracking id of the cargo to watch."""
+    trackingId: TrackingId!
+  ): HandlingEvent!
+}

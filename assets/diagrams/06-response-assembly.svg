@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 390" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="90" width="290" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="165.0" y="115.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Finished 1st</text>
+<text x="165.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">a: cargo(ABC123)</text>
+<text x="165.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">returned Cargo ABC123</text>
+<rect x="20" y="230" width="290" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="165.0" y="255.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Finished 2nd</text>
+<text x="165.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">b: cargo(XYZ789)</text>
+<text x="165.0" y="287.5" font-size="11.5" fill="#555555" text-anchor="middle">returned Cargo XYZ789</text>
+<rect x="450" y="90" width="250" height="62" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="575.0" y="119.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">&quot;b&quot;</text>
+<text x="575.0" y="136.0" font-size="11.5" fill="#555555" text-anchor="middle">first in the selection</text>
+<rect x="450" y="238" width="250" height="62" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="575.0" y="267.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">&quot;a&quot;</text>
+<text x="575.0" y="284.0" font-size="11.5" fill="#555555" text-anchor="middle">second in the selection</text>
+<rect x="830" y="140" width="290" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="975.0" y="165.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">{ &quot;data&quot;: { &quot;b&quot;: {...}, &quot;a&quot;: {...} } }</text>
+<text x="975.0" y="182.5" font-size="11.5" fill="#555555" text-anchor="middle">keys in selection order,</text>
+<text x="975.0" y="197.5" font-size="11.5" fill="#555555" text-anchor="middle">named by alias</text>
+<rect x="830" y="290" width="290" height="62" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="975.0" y="319.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">&quot;errors&quot;: [ { message, path } ]</text>
+<text x="975.0" y="336.0" font-size="11.5" fill="#555555" text-anchor="middle">only when a resolver failed</text>
+<path d="M310,125 L450,270" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M310,265 L450,121" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M700,121 L830,165" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M700,269 L830,185" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M975,290 L975,210" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="975.0" y="242.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">path names the failed field</text>
+<text x="975.0" y="242.0" font-size="11" fill="#555" text-anchor="middle">path names the failed field</text>
+<text x="570" y="44" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Completion order does not matter: the response follows the selection</text>
+<text x="570" y="360" font-size="12" fill="#555555" text-anchor="middle">Execution errors sit beside data, never inside it: data keeps every field that did resolve.</text>
+</svg>

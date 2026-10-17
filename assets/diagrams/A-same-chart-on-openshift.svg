@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="290" height="300" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Chapter 27 values on minikube</text>
+<rect x="345" y="50" width="310" height="300" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="357" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Chapter 27 chart, unchanged</text>
+<rect x="690" y="50" width="290" height="300" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="702" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Appendix A wrapper chart</text>
+<rect x="40" y="95" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="165.0" y="128.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">NodePort Services</text>
+<text x="165.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">30370 to 30378 on 127.0.0.1</text>
+<rect x="40" y="180" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="165.0" y="213.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">imagePullPolicy: Never</text>
+<text x="165.0" y="230.0" font-size="11.5" fill="#555555" text-anchor="middle">images loaded into the node</text>
+<rect x="40" y="265" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="165.0" y="298.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge terminates TLS 1.3</text>
+<text x="165.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">chart-generated certificate</text>
+<rect x="365" y="95" width="270" height="110" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="500.0" y="133.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">gql-ch27-final 1.0.0</text>
+<text x="500.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">edge, quarkus, python, keycloak,</text>
+<text x="500.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">lgtm, NetworkPolicy, helm test</text>
+<text x="500.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">no OpenShift kind, no UID</text>
+<rect x="365" y="225" width="270" height="120" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="500.0" y="260.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">values it exposes</text>
+<text x="500.0" y="277.5" font-size="11.5" fill="#555555" text-anchor="middle">edge.tls.enabled, *.service.type</text>
+<text x="500.0" y="292.5" font-size="11.5" fill="#555555" text-anchor="middle">image.repository and pullPolicy</text>
+<text x="500.0" y="307.5" font-size="11.5" fill="#555555" text-anchor="middle">identity.issuer, keycloak.proxyHeaders</text>
+<text x="500.0" y="322.5" font-size="11.5" fill="#555555" text-anchor="middle">lgtm.serviceAccountName, seccompProfile</text>
+<rect x="710" y="95" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="835.0" y="128.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Chart.yaml dependency, alias final</text>
+<text x="835.0" y="145.0" font-size="11.5" fill="#555555" text-anchor="middle">file://../../27-final-project/helm</text>
+<rect x="710" y="180" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="835.0" y="213.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">final.* values</text>
+<text x="835.0" y="230.0" font-size="11.5" fill="#555555" text-anchor="middle">ClusterIP, plain edge, IfNotPresent</text>
+<rect x="710" y="265" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="835.0" y="298.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Routes x6, BuildConfigs x2,</text>
+<text x="835.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">ImageStreams x2, anyuid RoleBinding</text>
+<rect x="40" y="385" width="920" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="500.0" y="420.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Application code, Containerfiles and images: the same in every tier</text>
+<text x="500.0" y="437.5" font-size="11.5" fill="#555555" text-anchor="middle">quarkus/ and python/ of Chapter 27 build with their Containerfile unchanged;</text>
+<text x="500.0" y="452.5" font-size="11.5" fill="#555555" text-anchor="middle">the cluster only changes who builds them, who terminates TLS and which SCC admits a pod</text>
+<path d="M290,130 L365,150" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="327.5" y="128.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">values</text>
+<text x="327.5" y="128.0" font-size="11" fill="#b8650a" text-anchor="middle">values</text>
+<path d="M710,130 L635,150" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="672.5" y="128.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">depends on</text>
+<text x="672.5" y="128.0" font-size="11" fill="#b8650a" text-anchor="middle">depends on</text>
+<path d="M710,215 L635,280" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="672.5" y="237.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">override</text>
+<text x="672.5" y="237.5" font-size="11" fill="#b8650a" text-anchor="middle">override</text>
+<path d="M500,335 L500,385" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">The wrapper adds Routes, builds and one SCC binding; the chart it depends on does not change</text>
+<text x="500" y="500" font-size="12" fill="#555555" text-anchor="middle">Only examples/99-appendix-a-openshift-crc renders route.openshift.io, build.openshift.io and image.openshift.io objects.</text>
+</svg>

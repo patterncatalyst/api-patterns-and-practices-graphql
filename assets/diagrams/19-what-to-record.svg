@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 510" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="470" height="330" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Record: a small set of names</text>
+<rect x="510" y="50" width="470" height="330" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="522" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Leave out: anything that is a value</text>
+<rect x="20" y="395" width="960" height="75" rx="12" fill="#ffffff" stroke="#ddd"/>
+<text x="32" y="415" font-size="12" font-weight="700" fill="#1d1d1d">Label cardinality</text>
+<rect x="40" y="88" width="430" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="255.0" y="111.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">operation name and type</text>
+<text x="255.0" y="128.0" font-size="11.5" fill="#555555" text-anchor="middle">TrackCargo, query</text>
+<rect x="40" y="146" width="430" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="255.0" y="169.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">field coordinate</text>
+<text x="255.0" y="186.0" font-size="11.5" fill="#555555" text-anchor="middle">Itinerary.finalArrivalDate</text>
+<rect x="40" y="204" width="430" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="255.0" y="227.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">error code</text>
+<text x="255.0" y="244.0" font-size="11.5" fill="#555555" text-anchor="middle">SERVICE_UNAVAILABLE, BAD_USER_INPUT</text>
+<rect x="40" y="262" width="430" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="255.0" y="285.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client name</text>
+<text x="255.0" y="302.0" font-size="11.5" fill="#555555" text-anchor="middle">the X-Client-Name header, or unknown</text>
+<rect x="40" y="320" width="430" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="255.0" y="343.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">source name and operation</text>
+<text x="255.0" y="360.0" font-size="11.5" fill="#555555" text-anchor="middle">booking.getCargos</text>
+<rect x="530" y="88" width="430" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="745.0" y="111.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">variable values</text>
+<text x="745.0" y="128.0" font-size="11.5" fill="#555555" text-anchor="middle">ABC123 in {&quot;id&quot;: &quot;ABC123&quot;}</text>
+<rect x="530" y="146" width="430" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="745.0" y="169.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">resolver arguments</text>
+<text x="745.0" y="186.0" font-size="11.5" fill="#555555" text-anchor="middle">no graphql.param.* attribute</text>
+<rect x="530" y="204" width="430" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="745.0" y="227.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">credentials</text>
+<text x="745.0" y="244.0" font-size="11.5" fill="#555555" text-anchor="middle">the Authorization header, tokens</text>
+<rect x="530" y="262" width="430" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="745.0" y="285.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">owner lists and personal data</text>
+<text x="745.0" y="302.0" font-size="11.5" fill="#555555" text-anchor="middle">shipper names, booking owners</text>
+<rect x="530" y="320" width="430" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="745.0" y="343.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">literals in a document</text>
+<text x="745.0" y="360.0" font-size="11.5" fill="#555555" text-anchor="middle">replaced by ? on Quarkus; send values as variables</text>
+<rect x="40" y="420" width="270" height="36" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="175.0" y="443.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">label: operation name (tens of values)</text>
+<rect x="355" y="420" width="270" height="36" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="490.0" y="443.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">label: field coordinate, error code</text>
+<rect x="670" y="420" width="290" height="36" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="815.0" y="443.5" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">not a label: document, tracking id</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Record the shape of a request; keep its values out</text>
+<text x="500" y="490" font-size="12" fill="#555555" text-anchor="middle">Every distinct label value is a new time series in Prometheus. A tracking id would make one per cargo.</text>
+</svg>

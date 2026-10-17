@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="290" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">A traced request</text>
+<rect x="20" y="360" width="960" height="130" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="380" font-size="12" font-weight="700" fill="#1d1d1d">A refused request</text>
+<rect x="40" y="100" width="160" height="80" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client</text>
+<text x="120.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">traceparent 00-e317abd0...</text>
+<text x="120.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">-00f067aa0ba902b7-01</text>
+<rect x="240" y="100" width="170" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="325.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge :8351</text>
+<text x="325.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">TLS 1.3, /graphql only,</text>
+<text x="325.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">body under 64k</text>
+<rect x="460" y="100" width="160" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="540.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="540.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">query ListCargos</text>
+<text x="540.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">cargos(first: 10)</text>
+<rect x="670" y="100" width="290" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="815.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">booking source</text>
+<text x="815.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">listCargos, key *</text>
+<text x="815.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">getCargos, 6 keys in one call; GHI345 fails</text>
+<rect x="240" y="220" width="190" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="335.0" y="255.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">200, 6 edges, node null at 5</text>
+<text x="335.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">SERVICE_UNAVAILABLE</text>
+<text x="335.0" y="287.5" font-size="11.5" fill="#555555" text-anchor="middle">extensions.traceId e317abd0...</text>
+<rect x="480" y="220" width="200" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="580.0" y="255.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Tempo :8353</text>
+<text x="580.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">GraphQL Query: ListCargos</text>
+<text x="580.0" y="287.5" font-size="11.5" fill="#555555" text-anchor="middle">source.call spans, same id</text>
+<rect x="730" y="220" width="220" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="840.0" y="255.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Loki :8355</text>
+<text x="840.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">ERROR record for the</text>
+<text x="840.0" y="287.5" font-size="11.5" fill="#555555" text-anchor="middle">booking failure, same trace_id</text>
+<rect x="40" y="395" width="160" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="428.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client</text>
+<text x="120.0" y="445.0" font-size="11.5" fill="#555555" text-anchor="middle">100 KB body</text>
+<rect x="240" y="395" width="170" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="325.0" y="428.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge :8351</text>
+<text x="325.0" y="445.0" font-size="11.5" fill="#555555" text-anchor="middle">client_max_body_size 64k</text>
+<rect x="460" y="395" width="230" height="70" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="575.0" y="428.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">413 Request Entity Too Large</text>
+<text x="575.0" y="445.0" font-size="11.5" fill="#dddddd" text-anchor="middle">upstream=- in the edge log</text>
+<rect x="740" y="395" width="210" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="845.0" y="428.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="845.0" y="445.0" font-size="11.5" fill="#555555" text-anchor="middle">source-call log stays empty</text>
+<path d="M200,140 L240,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M410,140 L460,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="435.0" y="126.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">traceparent</text>
+<text x="435.0" y="126.0" font-size="11" fill="#555" text-anchor="middle">traceparent</text>
+<path d="M620,140 L670,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M325,180 L325,220" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="359.0" y="200.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">response</text>
+<text x="359.0" y="200.0" font-size="11" fill="#555" text-anchor="middle">response</text>
+<path d="M430,265 L480,265" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="455.0" y="251.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">id</text>
+<text x="455.0" y="251.0" font-size="11" fill="#b8650a" text-anchor="middle">id</text>
+<path d="M680,265 L730,265" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="705.0" y="251.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">same id</text>
+<text x="705.0" y="251.0" font-size="11" fill="#b8650a" text-anchor="middle">same id</text>
+<path d="M200,430 L240,430" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M410,430 L460,430" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M690,430 L740,430" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="715.0" y="416.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">not reached</text>
+<text x="715.0" y="416.0" font-size="11" fill="#555" text-anchor="middle">not reached</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">The edge decides first; the trace id follows the request to the backends of the tier</text>
+<text x="500" y="514" font-size="12" fill="#555555" text-anchor="middle">A request that passes the edge keeps its traceparent. A request the edge refuses never creates a span in the backend.</text>
+</svg>

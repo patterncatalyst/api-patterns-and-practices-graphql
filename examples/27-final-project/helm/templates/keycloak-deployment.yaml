@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "keycloak" "component" "identity") | nindent 4 }}
+spec:
+  replicas: 1
+  # One development server holds its users in its own database: replace, never overlap.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "gql.selector" (dict "root" . "name" "keycloak") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "gql.labels" (dict "root" . "name" "keycloak" "component" "identity") | nindent 8 }}
+      annotations:
+        # A new realm file rolls the pod, which imports it at start.
+        checksum/realm: {{ include (print $.Template.BasePath "/keycloak-configmap.yaml") . | sha256sum }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: keycloak
+          image: "{{ .Values.keycloak.image.repository }}:{{ .Values.keycloak.image.tag }}"
+          imagePullPolicy: {{ .Values.keycloak.image.pullPolicy }}
+          args: ["start-dev", "--import-realm"]
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: management
+              containerPort: 9000
+          env:
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-admin
+                  key: username
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-admin
+                  key: password
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+            {{- with .Values.keycloak.proxyHeaders }}
+            # Behind a TLS-terminating proxy: the issuer follows the scheme and
+            # host the client used, read from these headers.
+            - name: KC_PROXY_HEADERS
+              value: {{ . | quote }}
+            {{- end }}
+          # Readiness is on the management port, which no Service exposes.
+          startupProbe:
+            httpGet:
+              path: /health/started
+              port: management
+            periodSeconds: {{ .Values.keycloak.probes.startup.periodSeconds }}
+            failureThreshold: {{ .Values.keycloak.probes.startup.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: management
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: management
+            periodSeconds: 10
+            failureThreshold: 6
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.keycloak.resources | nindent 12 }}
+          securityContext:
+            {{- include "gql.containerSecurityContext" . | nindent 12 }}
+          volumeMounts:
+            # The development server writes its database and the build of its
+            # configuration under data and tmp, and imports realms from data/import.
+            - name: data
+              mountPath: /opt/keycloak/data
+            - name: realm
+              mountPath: /opt/keycloak/data/import
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: realm
+          configMap:
+            name: keycloak-realm
+        - name: tmp
+          emptyDir: {}

@@ -1,0 +1,52 @@
+# Ch0 observability override: adds the Grafana LGTM stack and switches telemetry on.
+#
+#   docker compose -f compose.yaml -f compose.observability.yaml up --build
+#
+# compose.yaml leaves the OpenTelemetry SDKs disabled. This file turns them on,
+# points OTLP at the lgtm service and waits for it to be healthy. Host ports:
+# Grafana 3000, OTLP 4317 and 4318, Prometheus 9090, Loki 3100, Tempo 3200.
+# Run one example's observability stack at a time: these ports are fixed.
+
+services:
+  quarkus:
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=false
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
+    depends_on:
+      lgtm:
+        condition: service_healthy
+
+  python:
+    environment:
+      - OTEL_SDK_DISABLED=false
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
+    depends_on:
+      lgtm:
+        condition: service_healthy
+
+  # The observability backend: OpenTelemetry Collector (OTLP in), Tempo
+  # (traces), Prometheus (metrics), Loki (logs) and Grafana, preconfigured
+  # with all three data sources.
+  lgtm:
+    image: docker.io/grafana/otel-lgtm:0.37.0
+    container_name: ch00-prereq-lgtm
+    ports:
+      - "3000:3000" # Grafana UI
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+      - "9090:9090" # Prometheus query
+      - "3100:3100" # Loki
+      - "3200:3200" # Tempo
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    healthcheck:
+      # curl ships in the image. Ready means Grafana, Tempo and Loki all answer.
+      test:
+        - CMD-SHELL
+        - curl -fsS -o /dev/null http://localhost:3000/api/health && curl -fsS -o /dev/null http://localhost:3200/ready && curl -fsS -o /dev/null http://localhost:3100/ready
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s

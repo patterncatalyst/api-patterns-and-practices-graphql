@@ -1,0 +1,41 @@
+{{- if .Values.lgtm.enabled }}
+---
+# The stacks export telemetry to this name: http://lgtm:4317.
+apiVersion: v1
+kind: Service
+metadata:
+  name: lgtm
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "lgtm" "component" "observability") | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "gql.selector" (dict "root" . "name" "lgtm") | nindent 4 }}
+  ports:
+    - {name: otlp-grpc, port: 4317, targetPort: otlp-grpc}
+    - {name: otlp-http, port: 4318, targetPort: otlp-http}
+---
+# The UIs and query APIs. Each NodePort equals the host port the profile publishes.
+apiVersion: v1
+kind: Service
+metadata:
+  name: lgtm-ui
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "lgtm" "component" "observability") | nindent 4 }}
+spec:
+  type: {{ .Values.lgtm.service.type }}
+  selector:
+    {{- include "gql.selector" (dict "root" . "name" "lgtm") | nindent 4 }}
+  ports:
+    {{- $np := eq .Values.lgtm.service.type "NodePort" }}
+    {{- range $ui, $port := dict "grafana" 3000 "tempo" 3200 "prometheus" 9090 "loki" 3100 }}
+    - name: {{ $ui }}
+      port: {{ $port }}
+      targetPort: {{ $ui }}
+      {{- if $np }}
+      nodePort: {{ get $.Values.lgtm.service.nodePorts $ui }}
+      {{- end }}
+    {{- end }}
+{{- end }}

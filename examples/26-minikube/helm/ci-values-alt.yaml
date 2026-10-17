@@ -1,0 +1,15 @@
+# The alternate render CI validates: plain listeners and ClusterIP Services (the
+# shape a router or mesh in front of the cluster needs), no NetworkPolicy, and
+# a HorizontalPodAutoscaler per stack.
+edge:
+  tls:
+    enabled: false
+  service:
+    type: ClusterIP
+lgtm:
+  service:
+    type: ClusterIP
+networkPolicy:
+  enabled: false
+autoscaling:
+  enabled: true

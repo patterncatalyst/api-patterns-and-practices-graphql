@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 375" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="40" width="230" height="60" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="135.0" y="68.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">cargo { id }</text>
+<text x="135.0" y="85.0" font-size="11.5" fill="#555555" text-anchor="middle">cargo_ABC123</text>
+<rect x="20" y="140" width="230" height="60" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="135.0" y="168.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">leg.loadLocation { id }</text>
+<text x="135.0" y="185.0" font-size="11.5" fill="#555555" text-anchor="middle">loc_USNYC</text>
+<rect x="20" y="240" width="230" height="60" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="135.0" y="268.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handling event { id }</text>
+<text x="135.0" y="285.0" font-size="11.5" fill="#555555" text-anchor="middle">evt_1</text>
+<rect x="350" y="100" width="230" height="140" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="465.0" y="145.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Client cache</text>
+<text x="465.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">keyed by id</text>
+<text x="465.0" y="177.5" font-size="11.5" fill="#555555" text-anchor="middle">cargo_ABC123</text>
+<text x="465.0" y="192.5" font-size="11.5" fill="#555555" text-anchor="middle">loc_USNYC</text>
+<text x="465.0" y="207.5" font-size="11.5" fill="#555555" text-anchor="middle">evt_1</text>
+<rect x="680" y="40" width="250" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="805.0" y="68.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">node(id:) / nodes(ids:)</text>
+<text x="805.0" y="85.0" font-size="11.5" fill="#555555" text-anchor="middle">one id, or a list of ids</text>
+<rect x="680" y="140" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="805.0" y="173.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Prefix dispatch</text>
+<text x="805.0" y="190.0" font-size="11.5" fill="#555555" text-anchor="middle">cargo_  loc_  voy_  evt_</text>
+<rect x="680" y="250" width="250" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="805.0" y="278.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Owning source</text>
+<text x="805.0" y="295.0" font-size="11.5" fill="#555555" text-anchor="middle">booking, location, voyage, handling</text>
+<path d="M250,70 L350,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="296.0" y="93.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">id</text>
+<text x="296.0" y="93.0" font-size="11" fill="#555" text-anchor="middle">id</text>
+<path d="M250,170 L350,170" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="306.0" y="160.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">id</text>
+<text x="306.0" y="160.0" font-size="11" fill="#555" text-anchor="middle">id</text>
+<path d="M250,270 L350,200" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="296.0" y="259.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">id</text>
+<text x="296.0" y="259.0" font-size="11" fill="#555" text-anchor="middle">id</text>
+<path d="M580,130 L680,70" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="620.0" y="78.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">refetch by id</text>
+<text x="620.0" y="78.0" font-size="11" fill="#b8650a" text-anchor="middle">refetch by id</text>
+<path d="M805,100 L805,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="823.0" y="120.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">id</text>
+<text x="823.0" y="120.0" font-size="11" fill="#555" text-anchor="middle">id</text>
+<path d="M805,210 L805,250" fill="none" stroke="#555" stroke-width="2" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="827.0" y="230.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">key</text>
+<text x="827.0" y="230.0" font-size="11" fill="#555" text-anchor="middle">key</text>
+<path d="M680,290 L580,215" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="620.0" y="278.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">the same object</text>
+<text x="620.0" y="278.5" font-size="11" fill="#b8650a" text-anchor="middle">the same object</text>
+<text x="475" y="340" font-size="12" fill="#555555" text-anchor="middle">The id is the contract: a client stores it, compares it and sends it back, and never parses it.</text>
+<text x="475" y="358" font-size="12" fill="#555555" text-anchor="middle">An unknown id resolves to null, and nodes keeps that null at its position in the list.</text>
+</svg>

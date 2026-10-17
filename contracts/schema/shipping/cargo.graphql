@@ -1,0 +1,150 @@
+"""
+A consignment of goods being shipped, tracked end to end by its tracking id.
+"""
+type Cargo implements Node {
+  """The globally unique identifier of this cargo."""
+  id: ID!
+  """The public tracking identifier."""
+  trackingId: TrackingId!
+  """Free-text description of the goods."""
+  description: String!
+  """Where the cargo was booked from."""
+  origin: Location!
+  """Where the cargo is booked to."""
+  destination: Location!
+  """What the customer asked for and the route must satisfy."""
+  routeSpecification: RouteSpecification!
+  """Delivery status derived from handling history."""
+  delivery: Delivery!
+  """The planned route. Null until the routing service has assigned one."""
+  itinerary: Itinerary
+  """Handling events for this cargo, newest first, as a Relay connection."""
+  handlingHistory(
+    """Return the first N events."""
+    first: Int
+    """Return events after this cursor."""
+    after: String
+    """Return the last N events."""
+    last: Int
+    """Return events before this cursor."""
+    before: String
+  ): HandlingEventConnection!
+}
+
+"""
+The customer's routing requirements for a cargo.
+"""
+type RouteSpecification {
+  """Required origin."""
+  origin: Location!
+  """Required destination."""
+  destination: Location!
+  """The date by which the cargo must arrive."""
+  arrivalDeadline: DateTime!
+}
+
+"""
+The planned sequence of legs moving a cargo from origin to destination.
+"""
+type Itinerary {
+  """Ordered legs of the route; never empty for an assigned itinerary."""
+  legs: [Leg!]!
+  """When the final leg arrives."""
+  finalArrivalTime: DateTime!
+  """When the final leg arrives."""
+  finalArrivalDate: DateTime! @deprecated(reason: "Use `finalArrivalTime`.")
+}
+
+"""
+One hop of an itinerary on a single voyage.
+"""
+type Leg {
+  """The voyage that carries this leg. Null when the voyage service is unavailable."""
+  voyage: Voyage
+  """Where the cargo is loaded."""
+  loadLocation: Location!
+  """Where the cargo is unloaded."""
+  unloadLocation: Location!
+  """When the cargo is loaded."""
+  loadTime: DateTime!
+  """When the cargo is unloaded."""
+  unloadTime: DateTime!
+}
+
+"""
+Where a cargo currently is relative to its plan.
+"""
+enum TransportStatus {
+  """Booked but not yet received."""
+  NOT_RECEIVED
+  """Received at origin and awaiting loading."""
+  IN_PORT
+  """Aboard a vessel."""
+  ONBOARD_CARRIER
+  """Handed over at the final destination."""
+  CLAIMED
+  """Whereabouts unknown."""
+  UNKNOWN
+}
+
+"""
+Whether the cargo is following its itinerary.
+"""
+enum RoutingStatus {
+  """No itinerary has been assigned."""
+  NOT_ROUTED
+  """The itinerary satisfies the route specification."""
+  ROUTED
+  """The itinerary no longer satisfies the route specification."""
+  MISROUTED
+}
+
+"""
+The derived delivery state of a cargo.
+"""
+type Delivery {
+  """Current transport status."""
+  transportStatus: TransportStatus!
+  """Whether the cargo follows its itinerary."""
+  routingStatus: RoutingStatus!
+  """True when the last handling event was off-itinerary."""
+  misdirected: Boolean!
+  """Where the cargo was last handled. Null before the first handling event."""
+  lastKnownLocation: Location
+  """The voyage the cargo is on. Null unless aboard a carrier."""
+  currentVoyage: Voyage
+  """Estimated arrival. Null when the estimate is unavailable."""
+  estimatedTimeOfArrival: DateTime
+  """The next expected handling. Null when none is expected."""
+  nextExpectedActivity: HandlingActivity
+}
+
+"""
+An expected future handling of a cargo.
+"""
+type HandlingActivity {
+  """The kind of handling expected."""
+  type: HandlingEventType!
+  """Where it is expected."""
+  location: Location!
+  """On which voyage. Null for handling not tied to a voyage."""
+  voyage: Voyage
+}
+
+"""A Relay connection of cargos."""
+type CargoConnection {
+  """The edges in this page."""
+  edges: [CargoEdge!]!
+  """Pagination metadata."""
+  pageInfo: PageInfo!
+  """Total matching cargos. Null when counting is too expensive."""
+  totalCount: Int
+}
+
+"""A cargo and its cursor."""
+type CargoEdge {
+  """An opaque cursor for this edge."""
+  cursor: String!
+  """The cargo at this edge. Null when the cargo failed to resolve, so one bad item nulls its edge instead of the whole page."""
+  node: Cargo
+}

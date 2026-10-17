@@ -1,0 +1,6 @@
+{{- range $stackName, $stack := .Values.stacks }}
+{{- range $kind, $inst := $stack.instances }}
+---
+{{ include "gql.instanceConfigMap" (dict "root" $ "stack" $stack "inst" $inst "name" (include "gql.instanceName" (dict "stack" $stackName "kind" $kind)) "component" (include "gql.instanceComponent" (dict "kind" $kind))) }}
+{{- end }}
+{{- end }}

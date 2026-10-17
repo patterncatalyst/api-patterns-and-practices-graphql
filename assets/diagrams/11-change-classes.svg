@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 690" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="360" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">Safe (✔): clients keep working</text>
+<rect x="400" y="20" width="360" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="412" y="40" font-size="12" font-weight="700" fill="#1d1d1d">Dangerous (⚠): a client may break</text>
+<rect x="780" y="20" width="360" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="792" y="40" font-size="12" font-weight="700" fill="#1d1d1d">Breaking (✖): a client breaks</text>
+<rect x="20" y="532" width="1120" height="118" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="552" font-size="12" font-weight="700" fill="#1d1d1d">Nullability runs the other way for inputs</text>
+<rect x="40" y="56" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="200.0" y="83.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Add a field</text>
+<text x="200.0" y="100.0" font-size="11.5" fill="#555555" text-anchor="middle">Field timeZone was added to object type Location</text>
+<rect x="40" y="126" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="200.0" y="153.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Add an optional input field</text>
+<text x="200.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">operatorId: String on RegisterHandlingEventInput</text>
+<rect x="40" y="196" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="200.0" y="223.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Tighten an output</text>
+<text x="200.0" y="240.0" font-size="11.5" fill="#555555" text-anchor="middle">Cargo.itinerary: Itinerary to Itinerary!</text>
+<rect x="40" y="266" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="200.0" y="293.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Deprecate a field</text>
+<text x="200.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">Itinerary.finalArrivalDate is deprecated</text>
+<rect x="40" y="336" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="200.0" y="363.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Loosen an input</text>
+<text x="200.0" y="380.0" font-size="11.5" fill="#555555" text-anchor="middle">completionTime: DateTime! to DateTime</text>
+<rect x="420" y="56" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="580.0" y="83.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Add an enum value</text>
+<text x="580.0" y="100.0" font-size="11.5" fill="#555555" text-anchor="middle">TRANSSHIP added to HandlingEventType</text>
+<rect x="420" y="126" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="580.0" y="153.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Add an optional argument</text>
+<text x="580.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">destination: UnLocode added to Query.cargos</text>
+<rect x="420" y="196" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="580.0" y="223.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Add a union member</text>
+<text x="580.0" y="240.0" font-size="11.5" fill="#555555" text-anchor="middle">Voyage added to union SearchResult</text>
+<rect x="420" y="266" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="580.0" y="293.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Implement an interface</text>
+<text x="580.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">Leg object implements Node interface</text>
+<rect x="800" y="56" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="960.0" y="83.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Remove a field</text>
+<text x="960.0" y="100.0" font-size="11.5" fill="#555555" text-anchor="middle">Field unloadTime was removed from object type Leg</text>
+<rect x="800" y="126" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="960.0" y="153.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Loosen an output</text>
+<text x="960.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">Cargo.trackingId: TrackingId! to TrackingId</text>
+<rect x="800" y="196" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="960.0" y="223.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Require an input</text>
+<text x="960.0" y="240.0" font-size="11.5" fill="#555555" text-anchor="middle">operatorId: String! added to the input</text>
+<rect x="800" y="266" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="960.0" y="293.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Remove an enum value</text>
+<text x="960.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">UNKNOWN removed from TransportStatus</text>
+<rect x="800" y="336" width="320" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="960.0" y="363.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Remove a deprecated field</text>
+<text x="960.0" y="380.0" font-size="11.5" fill="#555555" text-anchor="middle">finalArrivalDate (deprecated) was removed</text>
+<rect x="40" y="432" width="320" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="200.0" y="464.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Gate result</text>
+<text x="200.0" y="481.5" font-size="11.5" fill="#555555" text-anchor="middle">default: exit 0</text>
+<text x="200.0" y="496.5" font-size="11.5" fill="#555555" text-anchor="middle">dangerousBreaking: exit 0</text>
+<rect x="420" y="432" width="320" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="580.0" y="464.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Gate result</text>
+<text x="580.0" y="481.5" font-size="11.5" fill="#555555" text-anchor="middle">default: exit 0, ::warning on the pull request</text>
+<text x="580.0" y="496.5" font-size="11.5" fill="#555555" text-anchor="middle">dangerousBreaking: exit 1</text>
+<rect x="800" y="432" width="320" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="960.0" y="457.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Gate result</text>
+<text x="960.0" y="474.0" font-size="11.5" fill="#555555" text-anchor="middle">default: exit 1</text>
+<text x="960.0" y="489.0" font-size="11.5" fill="#555555" text-anchor="middle">suppressRemovalOfDeprecatedField: exit 0 for</text>
+<text x="960.0" y="504.0" font-size="11.5" fill="#555555" text-anchor="middle">the deprecated removal, shown as ⚠</text>
+<rect x="40" y="562" width="262" height="66" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="171.0" y="593.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Output tightened: ✔</text>
+<text x="171.0" y="610.0" font-size="11.5" fill="#555555" text-anchor="middle">Itinerary to Itinerary!</text>
+<rect x="310" y="562" width="262" height="66" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="441.0" y="593.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Output loosened: ✖</text>
+<text x="441.0" y="610.0" font-size="11.5" fill="#555555" text-anchor="middle">TrackingId! to TrackingId</text>
+<rect x="580" y="562" width="262" height="66" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="711.0" y="593.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Input tightened: ✖</text>
+<text x="711.0" y="610.0" font-size="11.5" fill="#555555" text-anchor="middle">voyageNumber: String to String!</text>
+<rect x="850" y="562" width="262" height="66" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="981.0" y="593.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Input loosened: ✔</text>
+<text x="981.0" y="610.0" font-size="11.5" fill="#555555" text-anchor="middle">DateTime! to DateTime</text>
+<text x="20" y="672" font-size="12" fill="#555555" text-anchor="start">Classes are from the point of view of a client of the old schema. The strict mode is BREAKING_RULES=dangerousBreaking.</text>
+</svg>
