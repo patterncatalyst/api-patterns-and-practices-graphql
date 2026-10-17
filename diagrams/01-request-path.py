@@ -18,7 +18,7 @@ nodes=[
  {"x":30,"y":285,"w":150,"h":70,"style":"ink","lines":["One JSON response","data and errors"]},
  {"x":650,"y":190,"w":220,"h":60,"style":"sub","lines":["Cargo service","REST"]},
  {"x":650,"y":270,"w":220,"h":60,"style":"sub","lines":["Routing service","gRPC"]},
- {"x":650,"y":350,"w":220,"h":60,"style":"sub","lines":["Handling event store","history and delivery"]},
+ {"x":650,"y":350,"w":220,"h":60,"style":"sub","lines":["Handling event store","handling history"]},
 ]
 edges=[
  {"x1":170,"y1":90,"x2":205,"y2":90},
