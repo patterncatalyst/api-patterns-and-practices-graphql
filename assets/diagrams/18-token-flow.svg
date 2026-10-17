@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="380" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">From a login to a validated identity</text>
+<rect x="40" y="100" width="190" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="135.0" y="133.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client</text>
+<text x="135.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">ana / ana-fixture-pw</text>
+<rect x="310" y="100" width="230" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="425.0" y="133.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Keycloak token endpoint</text>
+<text x="425.0" y="150.0" font-size="11.5" fill="#555555" text-anchor="middle">realm shipping, tracking-cli, localhost:8282</text>
+<rect x="620" y="90" width="340" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="790.0" y="123.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">the access token (JWT)</text>
+<text x="790.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">iss localhost:8282/realms/shipping, aud tracking-api</text>
+<text x="790.0" y="155.0" font-size="11.5" fill="#555555" text-anchor="middle">realm_access.roles [shipper]</text>
+<text x="790.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">shipper ACME, sub, exp</text>
+<rect x="310" y="250" width="230" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="425.0" y="280.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">GraphQL server</text>
+<text x="425.0" y="297.5" font-size="11.5" fill="#555555" text-anchor="middle">quarkus-oidc  |  PyJWT</text>
+<text x="425.0" y="312.5" font-size="11.5" fill="#555555" text-anchor="middle">signature, iss, aud, exp</text>
+<rect x="40" y="255" width="190" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="135.0" y="288.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Keycloak JWKS</text>
+<text x="135.0" y="305.0" font-size="11.5" fill="#555555" text-anchor="middle">read at keycloak:8080, cached</text>
+<rect x="620" y="255" width="340" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="790.0" y="288.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">identity in the context</text>
+<text x="790.0" y="305.0" font-size="11.5" fill="#555555" text-anchor="middle">roles and shipper; the token is dropped</text>
+<rect x="310" y="355" width="230" height="55" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="425.0" y="380.5" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">HTTP 401</text>
+<text x="425.0" y="397.5" font-size="11.5" fill="#dddddd" text-anchor="middle">WWW-Authenticate: Bearer</text>
+<path d="M230,135 L310,135" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="270.0" y="127.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">password grant</text>
+<text x="270.0" y="127.0" font-size="11" fill="#555" text-anchor="middle">password grant</text>
+<path d="M540,135 L620,135" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="580.0" y="127.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">issues</text>
+<text x="580.0" y="127.0" font-size="11" fill="#b8650a" text-anchor="middle">issues</text>
+<path d="M700,190 L540,270" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="670.0" y="210.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Authorization: Bearer</text>
+<text x="670.0" y="210.0" font-size="11" fill="#555" text-anchor="middle">Authorization: Bearer</text>
+<path d="M310,290 L230,290" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="270.0" y="282.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">keys</text>
+<text x="270.0" y="282.0" font-size="11" fill="#555" text-anchor="middle">keys</text>
+<path d="M540,290 L620,290" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="580.0" y="282.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">valid</text>
+<text x="580.0" y="282.0" font-size="11" fill="#b8650a" text-anchor="middle">valid</text>
+<path d="M425,330 L425,355" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">A token is checked before any GraphQL runs</text>
+<text x="500" y="455" font-size="12" fill="#555555" text-anchor="middle">No header at all is an anonymous caller, not a 401. The password grant is for the lab; production uses the authorization code flow with PKCE.</text>
+<text x="555" y="375" font-size="11" fill="#555555" text-anchor="start">a tampered, wrong-audience or expired token</text>
+</svg>

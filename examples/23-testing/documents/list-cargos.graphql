@@ -1,0 +1,10 @@
+# One of the six cargos fails at the booking service; the others still arrive.
+query ListCargos {
+  cargos(first: 10) {
+    edges {
+      node {
+        trackingId
+      }
+    }
+  }
+}

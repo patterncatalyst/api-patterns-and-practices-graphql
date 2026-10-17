@@ -1,0 +1,19 @@
+query TrackCargo($id: TrackingId!) {
+  cargo(trackingId: $id) {
+    id
+    trackingId
+    description
+    origin {
+      id
+      name
+    }
+    destination {
+      id
+      name
+    }
+    delivery {
+      transportStatus
+      routingStatus
+    }
+  }
+}

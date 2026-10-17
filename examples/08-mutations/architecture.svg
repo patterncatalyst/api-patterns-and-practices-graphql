@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="480" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/08-mutations - compose stack (gql-ch08-mutations)</text>
+<rect x="50" y="210" width="170" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="135.0" y="243.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="135.0" y="260.0" font-size="11.5" fill="#555555" text-anchor="middle">client</text>
+<rect x="300" y="70" width="270" height="140" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="108.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="435.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye GraphQL (code-first)</text>
+<text x="435.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">registerHandlingEvent (@Input record)</text>
+<text x="435.0" y="155.0" font-size="11.5" fill="#555555" text-anchor="middle">5 sources, 250 ms each, each call logged</text>
+<text x="435.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">/debug/source-calls (lab only)</text>
+<text x="435.0" y="185.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8180 /graphql</text>
+<rect x="300" y="290" width="270" height="140" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="328.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="435.0" y="345.0" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry on FastAPI (code-first)</text>
+<text x="435.0" y="360.0" font-size="11.5" fill="#555555" text-anchor="middle">registerHandlingEvent (strawberry.input)</text>
+<text x="435.0" y="375.0" font-size="11.5" fill="#555555" text-anchor="middle">5 sources, 250 ms each, each call logged</text>
+<text x="435.0" y="390.0" font-size="11.5" fill="#555555" text-anchor="middle">/debug/source-calls (lab only)</text>
+<text x="435.0" y="405.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8181 /graphql</text>
+<rect x="700" y="150" width="250" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="190.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="825.0" y="207.5" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql</text>
+<text x="825.0" y="222.5" font-size="11.5" fill="#555555" text-anchor="middle">(canonical SDL, single source)</text>
+<rect x="700" y="350" width="250" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="825.0" y="378.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">otel-lgtm</text>
+<text x="825.0" y="395.0" font-size="11.5" fill="#555555" text-anchor="middle">(compose.observability.yaml)</text>
+<path d="M220,235 L300,150" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="234.0" y="162.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">query, mutation</text>
+<text x="234.0" y="162.5" font-size="11" fill="#555" text-anchor="middle">query, mutation</text>
+<path d="M220,255 L300,350" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="234.0" y="332.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">query, mutation</text>
+<text x="234.0" y="332.5" font-size="11" fill="#555" text-anchor="middle">query, mutation</text>
+<path d="M300,190 L220,245" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M570,120 L700,180" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="649.0" y="126.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="649.0" y="126.0" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<path d="M570,340 L700,235" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="649.0" y="331.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="649.0" y="331.5" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<path d="M570,395 L700,380" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="629.0" y="405.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP (both stacks)</text>
+<text x="629.0" y="405.5" font-size="11" fill="#555" text-anchor="middle">OTLP (both stacks)</text>
+<text x="50" y="478" font-size="12" fill="#555555" text-anchor="start">verify.sh sends mutations, then reads each stack&#x27;s source-call log: writes, order and overlap, never duration.</text>
+</svg>

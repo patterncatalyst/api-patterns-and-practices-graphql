@@ -1,0 +1,37 @@
+# Ch27 The final project - the subscription test client, UBI 10, uv-managed, gql[websockets].
+# Build (the build context is this directory):
+#   docker build -f examples/27-final-project/client/Containerfile \
+#     -t gql-ch27-client:1.0 examples/27-final-project/client
+#
+# The client runs on the compose network (profile `client`) and reaches the edge
+# by service name: wss://edge:8443/graphql (Quarkus) and wss://edge:8444/graphql
+# (Python). SSL_CERT_FILE names the lab CA the edge's certificate chains to.
+#
+# Pin: registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506
+# (the same image as the Python server).
+
+FROM registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506 AS build
+
+USER 0
+WORKDIR /app
+
+RUN pip install --no-cache-dir uv==0.13.1
+
+# --locked fails the build if uv.lock is out of date with pyproject.toml.
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked --no-dev
+
+FROM registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506
+
+WORKDIR /app
+
+COPY --from=build --chown=1001:0 /app/.venv /app/.venv
+COPY --chown=1001:0 subscribe.py ./
+COPY --chown=1001:0 documents ./documents
+
+ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONUNBUFFERED=1
+
+USER 1001
+
+ENTRYPOINT ["python", "/app/subscribe.py"]

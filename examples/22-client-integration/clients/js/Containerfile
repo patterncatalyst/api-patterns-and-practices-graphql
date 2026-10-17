@@ -1,0 +1,43 @@
+# Ch22 Client integration - the Apollo Client, headless, on UBI 10 with Node 24.
+#
+# The canonical schema arrives as the `schema` build context (compose:
+# build.additional_contexts: schema: ../../contracts/schema), so the client
+# image reads contracts/schema/ without a copy in this example:
+#   docker build --build-context schema=contracts/schema \
+#     -f examples/22-client-integration/clients/js/Containerfile \
+#     -t ch22-clients-js examples/22-client-integration/clients/js
+#
+# Pins:
+#   registry.access.redhat.com/ubi10/nodejs-24:10.2-1791943587
+#   registry.access.redhat.com/ubi10/nodejs-24-minimal:10.2-1791916595
+#
+# Stages: deps (npm ci from package-lock.json), build (codegen and type-check; the
+# `codegen-check` compose service runs this stage), prod-deps, runtime.
+
+FROM registry.access.redhat.com/ubi10/nodejs-24:10.2-1791943587 AS deps
+WORKDIR /opt/app-root/src
+COPY package.json package-lock.json ./
+RUN npm ci
+
+FROM deps AS build
+COPY --from=schema / /schema
+COPY --chown=1001:0 tsconfig.json codegen.ts codegen.fail.ts ./
+COPY --chown=1001:0 fixtures ./fixtures
+COPY --chown=1001:0 src ./src
+# Types come from the schema and the documents; a document the schema does not
+# support stops the build here, and tsc then checks main.ts against the generated types.
+RUN npm run codegen && npm run typecheck
+
+FROM registry.access.redhat.com/ubi10/nodejs-24:10.2-1791943587 AS prod-deps
+WORKDIR /opt/app-root/src
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+FROM registry.access.redhat.com/ubi10/nodejs-24-minimal:10.2-1791916595 AS runtime
+WORKDIR /opt/app-root/src
+COPY --from=prod-deps /opt/app-root/src/node_modules ./node_modules
+COPY --from=build /opt/app-root/src/package.json ./package.json
+COPY --from=build /opt/app-root/src/src ./src
+ENV NODE_ENV=production
+# Node 24 runs the TypeScript files directly by stripping the type annotations.
+ENTRYPOINT ["node", "src/main.ts"]

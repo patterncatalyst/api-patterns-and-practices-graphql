@@ -1,0 +1,13 @@
+"""
+A port or terminal, identified by its UN/LOCODE.
+"""
+type Location implements Node {
+  """The globally unique identifier of this location."""
+  id: ID!
+  """The UN/LOCODE, for example `NLRTM`."""
+  unLocode: UnLocode!
+  """The human-readable name, for example `Rotterdam`."""
+  name: String!
+  """The ISO 3166-1 alpha-2 country code, for example `NL`."""
+  country: String!
+}

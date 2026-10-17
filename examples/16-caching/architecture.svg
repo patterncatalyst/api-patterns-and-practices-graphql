@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="480" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/16-caching - compose stack (gql-ch16-caching)</text>
+<rect x="40" y="230" width="150" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="115.0" y="263.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="115.0" y="280.0" font-size="11.5" fill="#555555" text-anchor="middle">client</text>
+<rect x="290" y="70" width="230" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="405.0" y="98.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge/nginx.conf</text>
+<text x="405.0" y="115.0" font-size="11.5" fill="#555555" text-anchor="middle">mounted :ro,z</text>
+<rect x="290" y="175" width="230" height="150" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="405.0" y="233.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge  (nginx, UBI 10)</text>
+<text x="405.0" y="250.0" font-size="11.5" fill="#555555" text-anchor="middle">proxy_cache, runs as uid 1001</text>
+<text x="405.0" y="265.0" font-size="11.5" fill="#555555" text-anchor="middle">:8262 -&gt; quarkus</text>
+<text x="405.0" y="280.0" font-size="11.5" fill="#555555" text-anchor="middle">:8263 -&gt; python</text>
+<rect x="620" y="70" width="330" height="130" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="785.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="785.0" y="127.5" font-size="11.5" fill="#555555" text-anchor="middle">CachePolicy (@AfterExecute)</text>
+<text x="785.0" y="142.5" font-size="11.5" fill="#555555" text-anchor="middle">quarkus-cache: voyages, locations,</text>
+<text x="785.0" y="157.5" font-size="11.5" fill="#555555" text-anchor="middle">handling-events</text>
+<text x="785.0" y="172.5" font-size="11.5" fill="#555555" text-anchor="middle">:8260 /graphql, direct</text>
+<rect x="620" y="250" width="330" height="130" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="785.0" y="298.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="785.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">CachePolicy (SchemaExtension)</text>
+<text x="785.0" y="330.0" font-size="11.5" fill="#555555" text-anchor="middle">cachetools TTLCache x 3</text>
+<text x="785.0" y="345.0" font-size="11.5" fill="#555555" text-anchor="middle">:8261 /graphql, direct</text>
+<rect x="620" y="410" width="330" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="785.0" y="445.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">otel-lgtm (compose.observability.yaml)</text>
+<path d="M190,265 L290,250" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="240.0" y="247.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">GET</text>
+<text x="240.0" y="247.5" font-size="11" fill="#555" text-anchor="middle">GET</text>
+<path d="M405,130 L405,175" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="457.0" y="154.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads at start</text>
+<text x="457.0" y="154.5" font-size="11" fill="#b8650a" text-anchor="middle">reads at start</text>
+<path d="M520,205 L620,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="566.0" y="160.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">miss</text>
+<text x="566.0" y="160.5" font-size="11" fill="#555" text-anchor="middle">miss</text>
+<path d="M520,295 L620,315" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="570.0" y="295.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">miss</text>
+<text x="570.0" y="295.0" font-size="11" fill="#555" text-anchor="middle">miss</text>
+<text x="40" y="488" font-size="12" fill="#555555" text-anchor="start">The direct ports (8260, 8261) carry the source-call log and the server caches; the edge ports (8262, 8263) carry the HTTP cache.</text>
+</svg>

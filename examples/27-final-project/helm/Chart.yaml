@@ -1,0 +1,13 @@
+apiVersion: v2
+name: gql-ch27-final
+description: The complete GraphQL tracking view on Kubernetes - the Quarkus and the Python stack as public and internal instances behind one nginx edge, with Keycloak and an observability backend.
+type: application
+version: 1.0.0
+appVersion: "1.0"
+kubeVersion: ">=1.31.0-0"
+keywords:
+  - graphql
+  - tracking
+  - subscriptions
+  - keycloak
+home: https://github.com/patterncatalyst/api-patterns-and-practices-graphql

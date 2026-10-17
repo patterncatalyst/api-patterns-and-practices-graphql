@@ -1,0 +1,188 @@
+# Ch20 Federation and schema composition - compose topology.
+#
+# Four subgraphs, a composer and two gateways. The tracking view is split by
+# ownership:
+#   cargo      Query.cargo/cargos/location/voyage and the Cargo, Location, Voyage
+#              entities (the booking and routing team)
+#   handling   Mutation.registerHandlingEvent, Cargo.delivery, Cargo.handlingHistory
+#              and the handling events (the handling team)
+# Each subgraph exists on both stacks. The gateways are cross-wired:
+#   gateway-a  cargo on Quarkus + handling on Python   -> host 8300
+#   gateway-b  cargo on Python  + handling on Quarkus  -> host 8301
+#
+# Composition is a build step, not a request-path component. composer-a and
+# composer-b are two one-shot instances of the same service definition: each reads
+# the live `_service { sdl }` of its two subgraphs, composes them and writes one
+# supergraph file to the `supergraph` volume. A composition error stops the stack
+# before a gateway starts. The gateways load the file; they never compose.
+#
+# Every subgraph serves the same slice of the canonical SDL that the earlier
+# chapters serve, without Query.node, Query.nodes and Subscription. Each source
+# call takes TRACKING_SOURCE_LATENCY_MS and is logged;
+# TRACKING_DEBUG_ENDPOINTS=true turns on /debug/source-calls (a lab tool: leave
+# it off anywhere else).
+#
+# Host ports (this chapter): gateway-a 8300, gateway-b 8301, cargo-quarkus 8302,
+# cargo-python 8303, handling-quarkus 8304, handling-python 8305. Chapter NN takes
+# 8100 + 10*NN, so examples never collide with each other.
+#
+# Usage:
+#   docker compose up --build
+
+# A fixed project name, the same one verify.sh passes with -p: a manual
+# `docker compose up` and a verify.sh run share one set of container,
+# network and volume names instead of colliding on the container names below.
+name: gql-ch20-federation
+
+x-quarkus-subgraph: &quarkus-subgraph
+  environment:
+    - TRACKING_SOURCE_LATENCY_MS=100
+    - TRACKING_DEBUG_ENDPOINTS=true
+  healthcheck:
+    # SmallRye Health readiness; curl ships in the UBI runtime image.
+    test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+    interval: 5s
+    timeout: 3s
+    retries: 20
+    start_period: 20s
+
+x-python-subgraph: &python-subgraph
+  environment:
+    - TRACKING_SOURCE_LATENCY_MS=100
+    - TRACKING_DEBUG_ENDPOINTS=true
+  healthcheck:
+    test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+    interval: 5s
+    timeout: 3s
+    retries: 20
+    start_period: 10s
+
+x-composer: &composer
+  image: gql-ch20-federation-gateway:local
+  entrypoint: ["node", "compose-supergraph.mjs"]
+  volumes:
+    - supergraph:/supergraph
+    - ./fixtures:/fixtures:ro,z
+  restart: "no"
+
+x-gateway: &gateway
+  image: gql-ch20-federation-gateway:local
+  # The gateway loads a supergraph file; it composes nothing.
+  healthcheck:
+    test:
+      - CMD
+      - node
+      - -e
+      - "fetch('http://127.0.0.1:4000/readiness').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+    interval: 5s
+    timeout: 3s
+    retries: 20
+    start_period: 5s
+
+services:
+  cargo-quarkus:
+    <<: *quarkus-subgraph
+    build:
+      context: ./quarkus/cargo
+      dockerfile: Containerfile
+    container_name: ch20-federation-cargo-quarkus
+    ports:
+      - "8302:8080"
+
+  cargo-python:
+    <<: *python-subgraph
+    build:
+      context: ./python/cargo
+      dockerfile: Containerfile
+    container_name: ch20-federation-cargo-python
+    ports:
+      - "8303:8080"
+
+  handling-quarkus:
+    <<: *quarkus-subgraph
+    build:
+      context: ./quarkus/handling
+      dockerfile: Containerfile
+    container_name: ch20-federation-handling-quarkus
+    ports:
+      - "8304:8080"
+
+  handling-python:
+    <<: *python-subgraph
+    build:
+      context: ./python/handling
+      dockerfile: Containerfile
+    container_name: ch20-federation-handling-python
+    ports:
+      - "8305:8080"
+
+  # The one build of the gateway image; the other four services reuse it.
+  composer-a:
+    <<: *composer
+    build:
+      context: ./gateway
+      dockerfile: Containerfile
+    container_name: ch20-federation-composer-a
+    command:
+      - --out
+      - /supergraph/supergraph-a.graphql
+      - --subgraph
+      - cargo=http://cargo-quarkus:8080/graphql
+      - --subgraph
+      - handling=http://handling-python:8080/graphql
+    depends_on:
+      cargo-quarkus: {condition: service_healthy}
+      handling-python: {condition: service_healthy}
+
+  composer-b:
+    <<: *composer
+    container_name: ch20-federation-composer-b
+    command:
+      - --out
+      - /supergraph/supergraph-b.graphql
+      - --subgraph
+      - cargo=http://cargo-python:8080/graphql
+      - --subgraph
+      - handling=http://handling-quarkus:8080/graphql
+    depends_on:
+      cargo-python: {condition: service_healthy}
+      handling-quarkus: {condition: service_healthy}
+
+  gateway-a:
+    <<: *gateway
+    container_name: ch20-federation-gateway-a
+    command:
+      - node_modules/.bin/hive-gateway
+      - supergraph
+      - /supergraph/supergraph-a.graphql
+      - --host
+      - 0.0.0.0
+      - --port
+      - "4000"
+    volumes:
+      - supergraph:/supergraph:ro
+    ports:
+      - "8300:4000"
+    depends_on:
+      composer-a: {condition: service_completed_successfully}
+
+  gateway-b:
+    <<: *gateway
+    container_name: ch20-federation-gateway-b
+    command:
+      - node_modules/.bin/hive-gateway
+      - supergraph
+      - /supergraph/supergraph-b.graphql
+      - --host
+      - 0.0.0.0
+      - --port
+      - "4000"
+    volumes:
+      - supergraph:/supergraph:ro
+    ports:
+      - "8301:4000"
+    depends_on:
+      composer-b: {condition: service_completed_successfully}
+
+volumes:
+  supergraph:

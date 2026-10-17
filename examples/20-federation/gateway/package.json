@@ -1,0 +1,12 @@
+{
+  "name": "ch20-federation-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ch20 Federation: the supergraph composer and the Hive Gateway, one image with two roles.",
+  "type": "module",
+  "dependencies": {
+    "@graphql-hive/gateway": "2.15.2",
+    "@theguild/federation-composition": "0.27.0",
+    "graphql": "16.14.2"
+  }
+}

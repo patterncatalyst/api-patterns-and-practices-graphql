@@ -1,0 +1,24 @@
+{
+  "format": "apollo-persisted-query-manifest",
+  "version": 1,
+  "operations": [
+    {
+      "id": "b7c81d0ad568b317b962eb6a0723c400aa50836c6f26687bbb4eb6dc7e7fd6c5",
+      "name": "TrackCargo",
+      "type": "query",
+      "body": "query TrackCargo($id: TrackingId!) { cargo(trackingId: $id) { trackingId delivery { transportStatus } } }"
+    },
+    {
+      "id": "4c1b42f5b0f42a57cf5c45ee23450397cd5c222db65644aa397d950750deb30f",
+      "name": "PortName",
+      "type": "query",
+      "body": "query PortName($code: UnLocode!) { location(unLocode: $code) { name } }"
+    },
+    {
+      "id": "7592bc381edd68f2e1d554ce10607f9bda4e236a38a3e08f345bcf0cac752046",
+      "name": "RegisterHandling",
+      "type": "mutation",
+      "body": "mutation RegisterHandling($i: RegisterHandlingEventInput!) { registerHandlingEvent(input: $i) { handlingEvent { id } cargo { delivery { transportStatus } } userErrors { code } } }"
+    }
+  ]
+}

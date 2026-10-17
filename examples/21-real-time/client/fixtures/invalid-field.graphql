@@ -1,0 +1,1 @@
+subscription Watch($id: TrackingId!) { cargoHandled(trackingId: $id) { id weight } }

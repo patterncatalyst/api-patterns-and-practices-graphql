@@ -1,0 +1,129 @@
+# Ch17 Transport security and introspection control - compose topology.
+#
+# Four services, two images. Each stack's image is built once and deployed twice:
+#   quarkus           public, hardened   host 8270 -> 8443   introspection off (TRACKING_INTROSPECTION_ENABLED=false)
+#   quarkus-internal  internal           host 8272 -> 8443   introspection on
+#   python            public, hardened   host 8271 -> 8443   introspection, suggestions, IDE, GET off
+#   python-internal   internal           host 8273 -> 8443   introspection, suggestions, IDE, GET on
+# Both stacks serve HTTPS only, from framework configuration: the Quarkus TLS registry
+# and uvicorn's --ssl-* options. The certificate and key are not in the repository.
+# Generate them first, then point compose at them:
+#   ./gen-certs.sh certs        # default CERT_DIR is ./certs (git-ignored)
+# They are mounted read-only at /certs. verify.sh generates a fresh set into a
+# scratch directory and exports CERT_DIR, so it never touches ./certs.
+#
+# Every instance serves the Ch13 slice: the canonical tracking-view SDL except
+# Subscription. This example does not repeat Chapter 14's limits (depth and cost);
+# production would. TRACKING_DEBUG_ENDPOINTS=true turns on /debug/source-calls, a lab
+# tool: verify.sh needs it on the public instances to show refused requests made no
+# call; a public deployment never sets it.
+#
+# Host ports (this chapter): 8270 to 8273, each to container port 8443.
+# Chapter NN takes 8100 + 10*NN (Quarkus) and +1 (Python), +2 and up for extras.
+#
+# Telemetry is off by default (QUARKUS_OTEL_SDK_DISABLED and OTEL_SDK_DISABLED).
+# To send traces to the Grafana LGTM stack, add the observability file, which
+# adds the lgtm service and switches the SDKs on:
+#   docker compose -f compose.yaml -f compose.observability.yaml up --build
+#
+# Usage:
+#   ./gen-certs.sh certs
+#   docker compose up --build   # app stack only, telemetry off
+
+# A fixed project name, the same one verify.sh passes with -p.
+name: gql-ch17-transport
+
+x-tls-mount: &certs
+  - ${CERT_DIR:-./certs}:/certs:ro,z
+
+x-tracking-env: &tracking-env
+  - QUARKUS_OTEL_SDK_DISABLED=true
+  - TRACKING_SOURCE_LATENCY_MS=250
+  - TRACKING_DEBUG_ENDPOINTS=true
+
+services:
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    image: gql-ch17-transport-quarkus:local
+    container_name: ch17-transport-quarkus
+    ports:
+      - "8270:8443"
+    volumes: *certs
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      # IntrospectionSwitch calls graphql-java's Introspection.enabledJvmWide(false):
+      # __schema and __type are refused, __typename still works.
+      - TRACKING_INTROSPECTION_ENABLED=false
+    healthcheck:
+      # SmallRye Health readiness over TLS; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "--cacert", "/certs/ca.crt", "-o", "/dev/null", "https://localhost:8443/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  quarkus-internal:
+    # The same image as `quarkus`, with introspection left on (the default).
+    image: gql-ch17-transport-quarkus:local
+    pull_policy: never
+    depends_on:
+      quarkus:
+        condition: service_started
+    container_name: ch17-transport-quarkus-internal
+    ports:
+      - "8272:8443"
+    volumes: *certs
+    environment: *tracking-env
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "--cacert", "/certs/ca.crt", "-o", "/dev/null", "https://localhost:8443/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    image: gql-ch17-transport-python:local
+    container_name: ch17-transport-python
+    ports:
+      - "8271:8443"
+    volumes: *certs
+    environment:
+      - OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_PUBLIC=true
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "--cacert", "/certs/ca.crt", "-o", "/dev/null", "https://localhost:8443/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  python-internal:
+    image: gql-ch17-transport-python:local
+    pull_policy: never
+    depends_on:
+      python:
+        condition: service_started
+    container_name: ch17-transport-python-internal
+    ports:
+      - "8273:8443"
+    volumes: *certs
+    environment:
+      - OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_PUBLIC=false
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "--cacert", "/certs/ca.crt", "-o", "/dev/null", "https://localhost:8443/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s

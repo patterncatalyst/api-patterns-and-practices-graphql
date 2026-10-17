@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 556" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="30" y="66" width="310" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="185.0" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Query.cargo: Cargo</text>
+<text x="185.0" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">nullable, never reached by the null</text>
+<rect x="410" y="66" width="230" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="525.0" y="92.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Value in data</text>
+<text x="525.0" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">cargo: { trackingId: &quot;MNO901&quot;, ... }</text>
+<rect x="30" y="146" width="310" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="185.0" y="172.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4  Cargo.itinerary: Itinerary</text>
+<text x="185.0" y="189.0" font-size="11.5" fill="#555555" text-anchor="middle">nullable: it can hold the null</text>
+<rect x="410" y="146" width="230" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="525.0" y="172.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Value in data</text>
+<text x="525.0" y="189.0" font-size="11.5" fill="#555555" text-anchor="middle">itinerary: null</text>
+<rect x="30" y="226" width="310" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="185.0" y="252.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3  Itinerary.legs: [Leg!]!</text>
+<text x="185.0" y="269.0" font-size="11.5" fill="#555555" text-anchor="middle">non-null: cannot hold a null</text>
+<rect x="410" y="226" width="230" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="525.0" y="252.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Value in data</text>
+<text x="525.0" y="269.0" font-size="11.5" fill="#555555" text-anchor="middle">legs: null</text>
+<rect x="30" y="306" width="310" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="185.0" y="332.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2  legs[0]: Leg!</text>
+<text x="185.0" y="349.0" font-size="11.5" fill="#555555" text-anchor="middle">non-null: cannot hold a null</text>
+<rect x="410" y="306" width="230" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="525.0" y="332.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Value in data</text>
+<text x="525.0" y="349.0" font-size="11.5" fill="#555555" text-anchor="middle">legs[0]: null</text>
+<rect x="30" y="386" width="310" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="185.0" y="412.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1  Leg.loadLocation: Location!</text>
+<text x="185.0" y="429.0" font-size="11.5" fill="#555555" text-anchor="middle">source returned null for XXBAD</text>
+<rect x="410" y="386" width="230" height="56" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="525.0" y="412.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Value in data</text>
+<text x="525.0" y="429.0" font-size="11.5" fill="#555555" text-anchor="middle">loadLocation: null</text>
+<rect x="740" y="386" width="230" height="70" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="855.0" y="411.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">errors[0].path</text>
+<text x="855.0" y="428.5" font-size="11.5" fill="#555555" text-anchor="middle">[&quot;cargo&quot;, &quot;itinerary&quot;,</text>
+<text x="855.0" y="443.5" font-size="11.5" fill="#555555" text-anchor="middle">&quot;legs&quot;, 0, &quot;loadLocation&quot;]</text>
+<rect x="30" y="478" width="940" height="58" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="500.0" y="505.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Response</text>
+<text x="500.0" y="522.0" font-size="11.5" fill="#555555" text-anchor="middle">{&quot;data&quot;:{&quot;cargo&quot;:{&quot;trackingId&quot;:&quot;MNO901&quot;,&quot;itinerary&quot;:null}},&quot;errors&quot;:[{&quot;path&quot;:[...,&quot;loadLocation&quot;]}]}</text>
+<path d="M340,94.0 L410,94.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M340,174.0 L410,174.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M340,254.0 L410,254.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M340,334.0 L410,334.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M340,414.0 L410,414.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M185,386 L185,362" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="247.0" y="378.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">null moves up</text>
+<text x="247.0" y="378.0" font-size="11" fill="#b8650a" text-anchor="middle">null moves up</text>
+<path d="M185,306 L185,282" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M185,226 L185,202" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M740,421 L640,421" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="690.0" y="411.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">points to step 1</text>
+<text x="690.0" y="411.0" font-size="11" fill="#b8650a" text-anchor="middle">points to step 1</text>
+<text x="185" y="44" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Type position</text>
+<text x="525" y="44" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Value after the step</text>
+<text x="855" y="44" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Error</text>
+<text x="855" y="250" font-size="12" fill="#555555" text-anchor="middle">The error records where the failure</text>
+<text x="855" y="268" font-size="12" fill="#555555" text-anchor="middle">happened, not where the null landed.</text>
+</svg>

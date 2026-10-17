@@ -1,0 +1,109 @@
+# Ch22 Client integration - compose topology.
+#
+# Default `docker compose up` brings up the two servers of Chapter 13, unchanged:
+# quarkus (SmallRye GraphQL) and python (Strawberry on FastAPI). Both serve the
+# canonical tracking-view SDL (contracts/schema/shipping/*.graphql) except
+# Subscription, over five asynchronous sources, with the booking fault on GHI345.
+# TRACKING_DEBUG_ENDPOINTS=true turns on the lab-only /debug/source-calls
+# endpoints that verify.sh reads. Telemetry is off here; Chapter 19 turns it on.
+#
+# The clients are one-off containers behind the `client` profile, run against a
+# server's address on the compose network (http://quarkus:8080/graphql or
+# http://python:8080/graphql):
+#   js-client       Apollo Client 4 with GraphQL Code Generator types (Node 24)
+#   python-client   gql 4 with local schema validation
+#   java-client     SmallRye GraphQL typesafe and dynamic clients (Quarkus command mode)
+#   codegen-check   the JS build stage, to show codegen refusing a document
+#                   that selects a field the contract lacks
+# The canonical schema reaches the JS and Python client builds through
+# build.additional_contexts, so no copy of contracts/schema/ lives in this example.
+#
+# Host ports (this chapter): Quarkus 8320, Python 8321, both at /graphql. The
+# clients publish nothing.
+#
+# Usage:
+#   docker compose up -d --build
+#   docker compose --profile client run --rm --build js-client http://quarkus:8080/graphql
+#   docker compose --profile client run --rm --build -e TRACKING_URL=http://python:8080/graphql java-client
+#   docker compose down -v
+
+# A fixed project name, the same one verify.sh passes with -p.
+name: gql-ch22-clients
+
+services:
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    container_name: ch22-clients-quarkus
+    ports:
+      - "8320:8080"
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+    healthcheck:
+      # SmallRye Health readiness; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    container_name: ch22-clients-python
+    ports:
+      - "8321:8080"
+    environment:
+      - OTEL_SDK_DISABLED=true
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # --- Clients (run on demand) ----------------------------------------------
+  js-client:
+    profiles: ["client"]
+    build:
+      context: ./clients/js
+      dockerfile: Containerfile
+      target: runtime
+      additional_contexts:
+        schema: ../../contracts/schema
+    image: ch22-clients-js:1.0.0
+
+  codegen-check:
+    profiles: ["client"]
+    build:
+      context: ./clients/js
+      dockerfile: Containerfile
+      target: build
+      additional_contexts:
+        schema: ../../contracts/schema
+    image: ch22-clients-codegen:1.0.0
+    entrypoint: ["npm", "run", "codegen:check"]
+
+  python-client:
+    profiles: ["client"]
+    build:
+      context: ./clients/python
+      dockerfile: Containerfile
+      additional_contexts:
+        schema: ../../contracts/schema
+    image: ch22-clients-python:1.0.0
+
+  java-client:
+    profiles: ["client"]
+    build:
+      context: ./clients/java
+      dockerfile: Containerfile
+    image: ch22-clients-java:1.0.0
+    environment:
+      - TRACKING_URL=http://quarkus:8080/graphql

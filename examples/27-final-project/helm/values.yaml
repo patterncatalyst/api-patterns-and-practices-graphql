@@ -1,0 +1,243 @@
+# Chapter 27 - the final project as one Helm release.
+#
+# Chapter 26's chart, extended. Each entry of `stacks` describes one stack; each
+# entry of its `instances` becomes a ConfigMap, a Deployment and a Service. The
+# `public` instance is the one the edge routes to; the `internal` instance is the
+# same image with introspection on, published on its own NodePort. Keycloak, the
+# edge and the observability backend are shared. The images are the ones the
+# compose tier builds, loaded into the node with `minikube image load`, so the
+# pull policy is Never.
+
+stacks:
+  quarkus:
+    image:
+      repository: gql-ch27-quarkus
+      tag: "1.0"
+      pullPolicy: Never
+    containerPort: 8080
+    probes:
+      startup:
+        path: /q/health/started
+        periodSeconds: 2
+        failureThreshold: 60
+      readiness:
+        path: /q/health/ready
+        periodSeconds: 5
+        failureThreshold: 3
+      liveness:
+        path: /q/health/live
+        periodSeconds: 10
+        failureThreshold: 3
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: "1"
+        memory: 768Mi
+    # The environment contract of the stack, rendered as each instance's ConfigMap.
+    env:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://lgtm:4317
+      QUARKUS_OTEL_SERVICE_NAME: ch27-final-quarkus
+      TRACKING_SOURCE_LATENCY_MS: "250"
+      TRACKING_DEBUG_ENDPOINTS: "true"
+    # What an instance with introspection off adds (Chapter 17).
+    introspectionOff:
+      TRACKING_INTROSPECTION_ENABLED: "false"
+    # The names this stack reads the `identity` values under (Chapter 18).
+    identityEnv:
+      issuer: QUARKUS_OIDC_TOKEN_ISSUER
+      authServer: QUARKUS_OIDC_AUTH_SERVER_URL
+    instances:
+      public:
+        introspection: false
+        replicas: 1
+      internal:
+        introspection: true
+        replicas: 1
+        env:
+          QUARKUS_OTEL_SERVICE_NAME: ch27-final-quarkus-internal
+        service:
+          type: NodePort
+          nodePort: 30372
+  python:
+    image:
+      repository: gql-ch27-python
+      tag: "1.0"
+      pullPolicy: Never
+    containerPort: 8080
+    probes:
+      startup:
+        path: /health/live
+        periodSeconds: 2
+        failureThreshold: 30
+      readiness:
+        path: /health/ready
+        periodSeconds: 5
+        failureThreshold: 3
+      liveness:
+        path: /health/live
+        periodSeconds: 10
+        failureThreshold: 3
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 384Mi
+    env:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://lgtm:4317
+      OTEL_SERVICE_NAME: ch27-final-python
+      TRACKING_SOURCE_LATENCY_MS: "250"
+      TRACKING_DEBUG_ENDPOINTS: "true"
+    introspectionOff:
+      TRACKING_PUBLIC: "true"
+    identityEnv:
+      issuer: TRACKING_OIDC_ISSUER
+      jwks: TRACKING_OIDC_JWKS_URL
+    instances:
+      public:
+        introspection: false
+        replicas: 1
+      internal:
+        introspection: true
+        replicas: 1
+        env:
+          OTEL_SERVICE_NAME: ch27-final-python-internal
+        service:
+          type: NodePort
+          nodePort: 30373
+
+# Who issues tokens and how the stacks validate them (Chapter 18). The stacks
+# read the signing keys from authServerUrl, over the cluster network, and compare
+# the issuer of a token with `issuer`: the address a client fetches tokens at.
+# Tokens fetched through the published NodePort carry this issuer. Another tier
+# changes these two values and nothing else.
+identity:
+  issuer: http://localhost:30374/realms/shipping
+  authServerUrl: http://keycloak:8080/realms/shipping
+
+keycloak:
+  image:
+    repository: quay.io/keycloak/keycloak
+    tag: 26.8.1
+    pullPolicy: Never
+  # Lab only: the bootstrap administrator of a development server.
+  adminUsername: admin
+  adminPassword: admin-fixture-pw
+  # The headers Keycloak reads the client's scheme and host from when a proxy
+  # in front of it terminates TLS: "forwarded" or "xforwarded". Empty means
+  # clients reach Keycloak directly, as on the published NodePort.
+  proxyHeaders: ""
+  service:
+    type: NodePort
+    nodePort: 30374
+  probes:
+    startup:
+      periodSeconds: 5
+      failureThreshold: 60
+  resources:
+    requests:
+      cpu: 250m
+      memory: 768Mi
+    limits:
+      cpu: "2"
+      memory: 1536Mi
+
+# The kubelet waits this long for a pod to exit after SIGTERM. The applications
+# stop within 10 s; preStopSleepSeconds gives the Service time to drop the pod
+# from its endpoints before the signal arrives.
+terminationGracePeriodSeconds: 30
+preStopSleepSeconds: 5
+
+edge:
+  image:
+    repository: registry.access.redhat.com/ubi10/nginx-126
+    tag: 10.2-1791973310
+    pullPolicy: Never
+  replicas: 1
+  # TLS 1.3 on 8443 (Quarkus) and 8444 (Python). With tls.enabled=false the
+  # listeners are plain, 8080 and 8081, for a router or mesh that terminates TLS.
+  tls:
+    enabled: true
+    validityDays: 365
+    # Names and addresses in the certificate. The published NodePorts are
+    # reached as localhost or 127.0.0.1; the chart adds the edge Service's
+    # namespaced names (edge.<namespace>.svc and so on) for pods in the cluster.
+    sans:
+      - localhost
+      - 127.0.0.1
+      - edge
+  service:
+    type: NodePort
+    nodePorts:
+      quarkus: 30370
+      python: 30371
+  bodyLimit: 64k
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 250m
+      memory: 64Mi
+
+lgtm:
+  enabled: true
+  image:
+    repository: docker.io/grafana/otel-lgtm
+    tag: 0.37.0
+    pullPolicy: Never
+  # The OTLP receivers (4317, 4318) are always a ClusterIP Service named lgtm.
+  # The UIs and query APIs follow service.type.
+  service:
+    type: NodePort
+    nodePorts:
+      grafana: 30375
+      tempo: 30376
+      prometheus: 30377
+      loki: 30378
+  serviceAccountName: ""
+  # Drops every Linux capability from the observability container. The image runs as
+  # root and creates its data directories under a root directory that only root with
+  # CAP_DAC_OVERRIDE can write, so a platform that runs it as root with the default
+  # capability set turns this off.
+  dropAllCapabilities: true
+  # The seccomp profile type of the observability pod and its container. Empty
+  # leaves the profile to the cluster's admission policy.
+  seccompProfile: RuntimeDefault
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+
+# The restricted Pod Security profile. No runAsUser, runAsGroup or fsGroup: the
+# images run as numeric non-root users and accept the one the cluster assigns.
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+networkPolicy:
+  enabled: true
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+
+# The helm test pod runs the edge's image, which carries curl and a numeric user.
+test:
+  enabled: true

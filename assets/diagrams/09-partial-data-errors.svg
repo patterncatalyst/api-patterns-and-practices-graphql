@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 450" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="480" height="350" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">data: three aliases, one response</text>
+<rect x="560" y="50" width="480" height="350" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="572" y="70" font-size="12" font-weight="700" fill="#1d1d1d">errors: two entries</text>
+<rect x="50" y="90" width="420" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="260.0" y="118.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">ok</text>
+<text x="260.0" y="135.0" font-size="11.5" fill="#555555" text-anchor="middle">cargo ABC123: trackingId resolved</text>
+<rect x="50" y="170" width="420" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="260.0" y="198.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">outage</text>
+<text x="260.0" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">cargo JKL567: itinerary.legs[0]</text>
+<rect x="110" y="250" width="360" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="290.0" y="273.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">itinerary.legs[0].voyage: null</text>
+<text x="290.0" y="290.0" font-size="11.5" fill="#555555" text-anchor="middle">the failed field is the hole</text>
+<rect x="50" y="325" width="420" height="56" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="260.0" y="351.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">bug: null</text>
+<text x="260.0" y="368.0" font-size="11.5" fill="#555555" text-anchor="middle">delivery is non-null, so the hole is the cargo</text>
+<rect x="590" y="150" width="420" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="800.0" y="185.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">outage error  code SERVICE_UNAVAILABLE</text>
+<text x="800.0" y="202.5" font-size="11.5" fill="#555555" text-anchor="middle">voyage service unavailable</text>
+<text x="800.0" y="217.5" font-size="11.5" fill="#555555" text-anchor="middle">path [&quot;outage&quot;,&quot;itinerary&quot;,&quot;legs&quot;,0,&quot;voyage&quot;]</text>
+<rect x="590" y="300" width="420" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="800.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">bug error  code null (Quarkus) / none (Python)</text>
+<text x="800.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">Internal server error.</text>
+<text x="800.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">path [&quot;bug&quot;,&quot;delivery&quot;]</text>
+<path d="M590,215 L470,275" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="524.0" y="237.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">path</text>
+<text x="524.0" y="237.0" font-size="11" fill="#b8650a" text-anchor="middle">path</text>
+<path d="M590,340 L470,353" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="536.0" y="338.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">path</text>
+<text x="536.0" y="338.5" font-size="11" fill="#b8650a" text-anchor="middle">path</text>
+<text x="520" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Partial data: the healthy alias survives both failures</text>
+<text x="520" y="424" font-size="12" fill="#555555" text-anchor="middle">A path names where it broke. The null lands at the nearest nullable ancestor.</text>
+</svg>

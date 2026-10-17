@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 510" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="960" height="410" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">From a masked response to the data that caused it</text>
+<rect x="40" y="100" width="215" height="150" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="147.5" y="143.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1  The response</text>
+<text x="147.5" y="160.0" font-size="11.5" fill="#555555" text-anchor="middle">data.cargo: null</text>
+<text x="147.5" y="175.0" font-size="11.5" fill="#555555" text-anchor="middle">path: cargo, delivery</text>
+<text x="147.5" y="190.0" font-size="11.5" fill="#555555" text-anchor="middle">Internal server error.</text>
+<text x="147.5" y="205.0" font-size="11.5" fill="#555555" text-anchor="middle">extensions.traceId</text>
+<text x="147.5" y="220.0" font-size="11.5" fill="#555555" text-anchor="middle">156c5bf9...c876b</text>
+<rect x="290" y="100" width="215" height="150" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="397.5" y="150.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2  The trace in Tempo</text>
+<text x="397.5" y="167.5" font-size="11.5" fill="#555555" text-anchor="middle">GraphQL Query: DeliveryOfJkl</text>
+<text x="397.5" y="182.5" font-size="11.5" fill="#555555" text-anchor="middle">GraphQL Resolving: delivery</text>
+<text x="397.5" y="197.5" font-size="11.5" fill="#555555" text-anchor="middle">status ERROR</text>
+<text x="397.5" y="212.5" font-size="11.5" fill="#555555" text-anchor="middle">exception KeyError</text>
+<rect x="540" y="100" width="215" height="150" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="647.5" y="158.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3  The record in Loki</text>
+<text x="647.5" y="175.0" font-size="11.5" fill="#555555" text-anchor="middle">trace_id = the same id</text>
+<text x="647.5" y="190.0" font-size="11.5" fill="#555555" text-anchor="middle">exception_type KeyError</text>
+<text x="647.5" y="205.0" font-size="11.5" fill="#555555" text-anchor="middle">exception_message XXBAD</text>
+<rect x="790" y="100" width="170" height="150" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="875.0" y="150.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4  The data</text>
+<text x="875.0" y="167.5" font-size="11.5" fill="#555555" text-anchor="middle">evt_10: UNLOAD</text>
+<text x="875.0" y="182.5" font-size="11.5" fill="#555555" text-anchor="middle">at XXBAD</text>
+<text x="875.0" y="197.5" font-size="11.5" fill="#555555" text-anchor="middle">leg 2 ends at XXBAD</text>
+<text x="875.0" y="212.5" font-size="11.5" fill="#555555" text-anchor="middle">location source: no XXBAD</text>
+<rect x="540" y="320" width="215" height="95" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="647.5" y="350.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">5  The fix</text>
+<text x="647.5" y="367.5" font-size="11.5" fill="#555555" text-anchor="middle">the location owner adds XXBAD,</text>
+<text x="647.5" y="382.5" font-size="11.5" fill="#555555" text-anchor="middle">or the derivation treats an</text>
+<text x="647.5" y="397.5" font-size="11.5" fill="#555555" text-anchor="middle">unknown location as null</text>
+<rect x="790" y="320" width="170" height="95" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="875.0" y="358.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">6  A regression test</text>
+<text x="875.0" y="375.0" font-size="11.5" fill="#dddddd" text-anchor="middle">JKL012 delivery answers</text>
+<text x="875.0" y="390.0" font-size="11.5" fill="#dddddd" text-anchor="middle">(Chapter 23)</text>
+<path d="M255,175 L290,175" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="272.5" y="167.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">id</text>
+<text x="272.5" y="167.0" font-size="11" fill="#b8650a" text-anchor="middle">id</text>
+<path d="M505,175 L540,175" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="522.5" y="167.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">same id</text>
+<text x="522.5" y="167.0" font-size="11" fill="#b8650a" text-anchor="middle">same id</text>
+<path d="M755,175 L790,175" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="772.5" y="167.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">XXBAD</text>
+<text x="772.5" y="167.0" font-size="11" fill="#b8650a" text-anchor="middle">XXBAD</text>
+<path d="M875,250 L700,320" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="847.5" y="277.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">names the cause</text>
+<text x="847.5" y="277.0" font-size="11" fill="#555" text-anchor="middle">names the cause</text>
+<path d="M755,367 L790,367" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="772.5" y="359.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">then</text>
+<text x="772.5" y="359.0" font-size="11" fill="#555" text-anchor="middle">then</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">The trace id in the error is the key to the trace, the log record and the data</text>
+<text x="40" y="300" font-size="12" fill="#555555" text-anchor="start">The client sees only step 1.</text>
+<text x="40" y="320" font-size="12" fill="#555555" text-anchor="start">Steps 2 to 4 are server-side and need access</text>
+<text x="40" y="338" font-size="12" fill="#555555" text-anchor="start">to the observability backend.</text>
+<text x="500" y="485" font-size="12" fill="#555555" text-anchor="middle">One run of DeliveryOfJkl on the Python stack. The Quarkus stack gives the same path with NoSuchElementException.</text>
+</svg>

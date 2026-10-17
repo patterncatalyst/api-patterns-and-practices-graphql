@@ -1,0 +1,115 @@
+"""
+The kind of handling a cargo underwent.
+"""
+enum HandlingEventType {
+  """Received from the shipper at origin."""
+  RECEIVE
+  """Loaded onto a vessel."""
+  LOAD
+  """Unloaded from a vessel."""
+  UNLOAD
+  """Cleared by customs."""
+  CUSTOMS
+  """Claimed by the consignee at destination."""
+  CLAIM
+}
+
+"""
+A recorded handling of a cargo at a location, optionally on a voyage.
+"""
+type HandlingEvent implements Node {
+  """The globally unique identifier of this event."""
+  id: ID!
+  """The tracking id of the cargo that was handled."""
+  trackingId: TrackingId!
+  """The cargo that was handled. Null when the cargo service is unavailable."""
+  cargo: Cargo
+  """What kind of handling occurred."""
+  type: HandlingEventType!
+  """Where it occurred."""
+  location: Location!
+  """The voyage involved. Null for RECEIVE, CUSTOMS and CLAIM."""
+  voyage: Voyage
+  """When the handling actually happened."""
+  completionTime: DateTime!
+  """When the event was registered in the system."""
+  registrationTime: DateTime!
+}
+
+"""A Relay connection of handling events."""
+type HandlingEventConnection {
+  """The edges in this page."""
+  edges: [HandlingEventEdge!]!
+  """Pagination metadata."""
+  pageInfo: PageInfo!
+  """Total events for the cargo. Null when counting is too expensive."""
+  totalCount: Int
+}
+
+"""A handling event and its cursor."""
+type HandlingEventEdge {
+  """An opaque cursor for this edge."""
+  cursor: String!
+  """The event at this edge. Null when the event failed to resolve, so one bad item nulls its edge instead of the whole page."""
+  node: HandlingEvent
+}
+
+"""
+Input for `Mutation.registerHandlingEvent`.
+"""
+input RegisterHandlingEventInput {
+  """The cargo that was handled."""
+  trackingId: TrackingId!
+  """What kind of handling occurred."""
+  type: HandlingEventType!
+  """Where it occurred."""
+  location: UnLocode!
+  """The voyage number; required for LOAD and UNLOAD, forbidden otherwise."""
+  voyageNumber: String
+  """When the handling actually happened."""
+  completionTime: DateTime!
+  """Client-supplied key making retries safe: a repeated request with the same key returns the originally recorded event instead of recording a second one."""
+  idempotencyKey: String
+}
+
+"""
+Result of `Mutation.registerHandlingEvent`.
+"""
+type RegisterHandlingEventPayload {
+  """The recorded event. Null when `userErrors` is non-empty."""
+  handlingEvent: HandlingEvent
+  """The cargo with its delivery state recomputed. Null when `userErrors` is non-empty."""
+  cargo: Cargo
+  """Domain validation failures returned as data; empty on success. Distinct from the response's top-level `errors`."""
+  userErrors: [UserError!]!
+}
+
+"""
+A domain validation failure returned as data, not as a top-level error.
+"""
+type UserError {
+  """A stable machine-readable code."""
+  code: UserErrorCode!
+  """A human-readable explanation."""
+  message: String!
+  """Path to the input field the error concerns, for example `["input", "voyageNumber"]`. Null when it concerns the whole input."""
+  field: [String!]
+}
+
+"""
+Machine-readable reasons a mutation input was rejected.
+"""
+enum UserErrorCode {
+  """No cargo exists with the given tracking id."""
+  UNKNOWN_CARGO
+  """No location exists with the given UN/LOCODE."""
+  UNKNOWN_LOCATION
+  """No voyage exists with the given voyage number."""
+  UNKNOWN_VOYAGE
+  """LOAD and UNLOAD events must name a voyage."""
+  VOYAGE_REQUIRED
+  """RECEIVE, CUSTOMS and CLAIM events must not name a voyage."""
+  VOYAGE_NOT_ALLOWED
+  """The completion time is in the future or otherwise invalid."""
+  INVALID_COMPLETION_TIME
+}

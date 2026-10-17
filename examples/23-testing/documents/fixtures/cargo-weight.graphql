@@ -1,0 +1,6 @@
+query CargoWeight($id: TrackingId!) {
+  cargo(trackingId: $id) {
+    trackingId
+    weight
+  }
+}

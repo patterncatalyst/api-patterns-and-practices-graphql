@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="210" y="50" width="200" height="440" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="222" y="70" font-size="12" font-weight="700" fill="#1d1d1d">public</text>
+<rect x="430" y="50" width="340" height="440" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="442" y="70" font-size="12" font-weight="700" fill="#1d1d1d">backend (internal: true)</text>
+<rect x="790" y="50" width="190" height="440" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="802" y="70" font-size="12" font-weight="700" fill="#1d1d1d">ops, host 127.0.0.1</text>
+<rect x="20" y="190" width="170" height="100" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="105.0" y="230.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client</text>
+<text x="105.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">verify.sh, curl</text>
+<text x="105.0" y="262.5" font-size="11.5" fill="#555555" text-anchor="middle">8350 and 8351, TLS 1.3</text>
+<rect x="225" y="110" width="170" height="140" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="310.0" y="155.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3. edge</text>
+<text x="310.0" y="172.5" font-size="11.5" fill="#555555" text-anchor="middle">ubi10/nginx-126</text>
+<text x="310.0" y="187.5" font-size="11.5" fill="#555555" text-anchor="middle">TLS 1.3, body under 64k</text>
+<text x="310.0" y="202.5" font-size="11.5" fill="#555555" text-anchor="middle">only /graphql routed</text>
+<text x="310.0" y="217.5" font-size="11.5" fill="#555555" text-anchor="middle">0.25 cpu, 64m</text>
+<rect x="225" y="300" width="170" height="110" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="310.0" y="338.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">configs and secrets</text>
+<text x="310.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">edge_conf is nginx.conf</text>
+<text x="310.0" y="370.0" font-size="11.5" fill="#555555" text-anchor="middle">edge_tls_crt, edge_tls_key</text>
+<text x="310.0" y="385.0" font-size="11.5" fill="#555555" text-anchor="middle">mounted under /run/secrets</text>
+<rect x="450" y="90" width="300" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="600.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2. quarkus  gql-ch25-quarkus:1.0</text>
+<text x="600.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">healthy at /q/health/ready</text>
+<text x="600.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">1.0 cpu, 768m, no published port</text>
+<rect x="450" y="215" width="300" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="600.0" y="255.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2. python  gql-ch25-python:1.0</text>
+<text x="600.0" y="272.5" font-size="11.5" fill="#555555" text-anchor="middle">healthy at /health/ready</text>
+<text x="600.0" y="287.5" font-size="11.5" fill="#555555" text-anchor="middle">0.5 cpu, 384m, no published port</text>
+<rect x="450" y="345" width="300" height="120" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="600.0" y="388.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1. lgtm  otel-lgtm 0.37.0</text>
+<text x="600.0" y="405.0" font-size="11.5" fill="#555555" text-anchor="middle">collector, Tempo, Prometheus,</text>
+<text x="600.0" y="420.0" font-size="11.5" fill="#555555" text-anchor="middle">Loki, Grafana</text>
+<text x="600.0" y="435.0" font-size="11.5" fill="#555555" text-anchor="middle">healthy when all three answer</text>
+<rect x="805" y="345" width="160" height="120" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="885.0" y="388.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Grafana 8352</text>
+<text x="885.0" y="405.0" font-size="11.5" fill="#555555" text-anchor="middle">Tempo 8353</text>
+<text x="885.0" y="420.0" font-size="11.5" fill="#555555" text-anchor="middle">Prometheus 8354</text>
+<text x="885.0" y="435.0" font-size="11.5" fill="#555555" text-anchor="middle">Loki 8355</text>
+<path d="M190,240 L225,180" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="201.5" y="200.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">TLS</text>
+<text x="201.5" y="200.0" font-size="11" fill="#555" text-anchor="middle">TLS</text>
+<path d="M395,150 L450,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="422.5" y="137.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">8080</text>
+<text x="422.5" y="137.0" font-size="11" fill="#555" text-anchor="middle">8080</text>
+<path d="M395,210 L450,255" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="422.5" y="244.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">8080</text>
+<text x="422.5" y="244.5" font-size="11" fill="#555" text-anchor="middle">8080</text>
+<path d="M600,315 L600,345" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="660.0" y="330.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP from both</text>
+<text x="660.0" y="330.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP from both</text>
+<path d="M750,405 L805,405" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">One project, three networks, three start stages</text>
+<text x="500" y="516" font-size="12" fill="#555555" text-anchor="middle">Only the edge publishes beyond loopback. The backend network has no route to the host, so the stacks are reached through the edge.</text>
+</svg>

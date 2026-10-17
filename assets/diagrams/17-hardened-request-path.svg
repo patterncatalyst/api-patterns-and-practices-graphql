@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 452" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="70" width="128" height="86" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="84.0" y="96.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">TLS</text>
+<text x="84.0" y="113.0" font-size="11.5" fill="#555555" text-anchor="middle">handshake,</text>
+<text x="84.0" y="128.0" font-size="11.5" fill="#555555" text-anchor="middle">certificate</text>
+<text x="84.0" y="143.0" font-size="11.5" fill="#555555" text-anchor="middle">and protocol</text>
+<rect x="162" y="70" width="128" height="86" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="226.0" y="103.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">CORS</text>
+<text x="226.0" y="120.5" font-size="11.5" fill="#555555" text-anchor="middle">origin check,</text>
+<text x="226.0" y="135.5" font-size="11.5" fill="#555555" text-anchor="middle">preflight</text>
+<rect x="304" y="70" width="128" height="86" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="368.0" y="103.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Content-Type</text>
+<text x="368.0" y="120.5" font-size="11.5" fill="#555555" text-anchor="middle">JSON media</text>
+<text x="368.0" y="135.5" font-size="11.5" fill="#555555" text-anchor="middle">type only</text>
+<rect x="446" y="70" width="128" height="86" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="103.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Body size</text>
+<text x="510.0" y="120.5" font-size="11.5" fill="#555555" text-anchor="middle">bytes before</text>
+<text x="510.0" y="135.5" font-size="11.5" fill="#555555" text-anchor="middle">parsing</text>
+<rect x="588" y="70" width="128" height="86" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="652.0" y="103.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Parse</text>
+<text x="652.0" y="120.5" font-size="11.5" fill="#555555" text-anchor="middle">token limit</text>
+<text x="652.0" y="135.5" font-size="11.5" fill="#555555" text-anchor="middle">on the document</text>
+<rect x="730" y="70" width="128" height="86" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="794.0" y="96.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Validate</text>
+<text x="794.0" y="113.0" font-size="11.5" fill="#555555" text-anchor="middle">introspection</text>
+<text x="794.0" y="128.0" font-size="11.5" fill="#555555" text-anchor="middle">rule (Quarkus: at</text>
+<text x="794.0" y="143.0" font-size="11.5" fill="#555555" text-anchor="middle">execution start)</text>
+<rect x="872" y="70" width="128" height="86" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="936.0" y="103.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Execute</text>
+<text x="936.0" y="120.5" font-size="11.5" fill="#555555" text-anchor="middle">resolvers,</text>
+<text x="936.0" y="135.5" font-size="11.5" fill="#555555" text-anchor="middle">masked errors</text>
+<rect x="20" y="250" width="128" height="150" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="84.0" y="300.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">handshake fails</text>
+<text x="84.0" y="317.5" font-size="11.5" fill="#555555" text-anchor="middle">no CA: untrusted</text>
+<text x="84.0" y="332.5" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: TLS 1.3</text>
+<text x="84.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">only</text>
+<text x="84.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">Python: 1.2 and up</text>
+<rect x="162" y="250" width="128" height="150" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="226.0" y="308.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">no Allow-Origin</text>
+<text x="226.0" y="325.0" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: 403</text>
+<text x="226.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">Python: 400</text>
+<text x="226.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">(on the preflight)</text>
+<rect x="304" y="250" width="128" height="150" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="368.0" y="300.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">415 or 400</text>
+<text x="368.0" y="317.5" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: 415</text>
+<text x="368.0" y="332.5" font-size="11.5" fill="#555555" text-anchor="middle">Python: 400</text>
+<text x="368.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">form and text/plain</text>
+<text x="368.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">never run</text>
+<rect x="446" y="250" width="128" height="150" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="510.0" y="300.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">413 or 200</text>
+<text x="510.0" y="317.5" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: 413 at 64K</text>
+<text x="510.0" y="332.5" font-size="11.5" fill="#555555" text-anchor="middle">Python: 200; the</text>
+<text x="510.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">limit is set at</text>
+<text x="510.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">a fronting proxy</text>
+<rect x="588" y="250" width="128" height="150" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="652.0" y="308.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">errors, no data</text>
+<text x="652.0" y="325.0" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: 15000</text>
+<text x="652.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">tokens</text>
+<text x="652.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">Python: 5000</text>
+<rect x="730" y="250" width="128" height="150" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="794.0" y="308.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">errors, no data</text>
+<text x="794.0" y="325.0" font-size="11.5" fill="#555555" text-anchor="middle">__schema, __type</text>
+<text x="794.0" y="340.0" font-size="11.5" fill="#555555" text-anchor="middle">refused on both;</text>
+<text x="794.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">no &quot;Did you mean&quot;</text>
+<rect x="872" y="250" width="128" height="150" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="936.0" y="300.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">message masked</text>
+<text x="936.0" y="317.5" font-size="11.5" fill="#555555" text-anchor="middle">exposed codes pass;</text>
+<text x="936.0" y="332.5" font-size="11.5" fill="#555555" text-anchor="middle">the rest become</text>
+<text x="936.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">Internal server</text>
+<text x="936.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">error.</text>
+<path d="M148,113.0 L162,113.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M290,113.0 L304,113.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M432,113.0 L446,113.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M574,113.0 L588,113.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M716,113.0 L730,113.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M858,113.0 L872,113.0" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M84.0,156 L84.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M226.0,156 L226.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M368.0,156 L368.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M510.0,156 L510.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M652.0,156 L652.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M794.0,156 L794.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M936.0,156 L936.0,250" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="510.0" y="34" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">A request to a public instance passes seven gates; each refusal happens before the next gate runs</text>
+<text x="510.0" y="430" font-size="12" fill="#555555" text-anchor="middle">Responses observed with curl against both public instances. A refused form POST makes zero source calls, so no write happens.</text>
+</svg>

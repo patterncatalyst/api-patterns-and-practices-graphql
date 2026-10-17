@@ -1,0 +1,4 @@
+{{- range $name, $stack := .Values.stacks }}
+---
+{{ include "gql.stackConfigMap" (dict "root" $ "name" $name "stack" $stack) }}
+{{- end }}

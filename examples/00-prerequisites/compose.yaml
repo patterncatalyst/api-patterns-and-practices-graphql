@@ -1,0 +1,58 @@
+# Ch0 prerequisites skeleton - compose topology for Query.cargo(trackingId).
+#
+# Default `docker compose up` brings up: quarkus, python. Both build their
+# schema code-first (SmallRye GraphQL, Strawberry) and serve the same slice of
+# the canonical tracking-view SDL (contracts/schema/shipping/*.graphql) with a
+# canned cargo - no persistence, nothing computed. verify.sh introspects each
+# live schema and diffs it against that canonical SDL.
+#
+# Host ports (this chapter): Quarkus 8080, Python 8081, both at /graphql.
+# Later chapters take 8100 + 10*NN (Quarkus) and +1 (Python), so examples never
+# collide with this skeleton or with each other.
+#
+# Telemetry is off by default (QUARKUS_OTEL_SDK_DISABLED and OTEL_SDK_DISABLED).
+# To send traces to the Grafana LGTM stack, add the observability file, which
+# adds the lgtm service and switches the SDKs on:
+#   docker compose -f compose.yaml -f compose.observability.yaml up --build
+#
+# Usage:
+#   docker compose up --build   # app stack only, telemetry off
+
+# A fixed project name, the same one verify.sh passes with -p: a manual
+# `docker compose up` and a verify.sh run share one set of container,
+# network and volume names instead of colliding on the container names below.
+name: gql-ch00-prereq
+
+services:
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    container_name: ch00-prereq-quarkus
+    ports:
+      - "8080:8080"
+    environment:
+      - QUARKUS_OTEL_SDK_DISABLED=true
+    healthcheck:
+      # SmallRye Health readiness; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    container_name: ch00-prereq-python
+    ports:
+      - "8081:8080"
+    environment:
+      - OTEL_SDK_DISABLED=true
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s

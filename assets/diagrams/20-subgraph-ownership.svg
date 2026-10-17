@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 610" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="340" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">cargo subgraph (booking and routing team)</text>
+<rect x="640" y="50" width="340" height="400" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="652" y="70" font-size="12" font-weight="700" fill="#1d1d1d">handling subgraph (handling team)</text>
+<rect x="20" y="462" width="960" height="100" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="482" font-size="12" font-weight="700" fill="#1d1d1d">defined in both subgraphs, identically</text>
+<rect x="40" y="80" width="300" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="190.0" y="115.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cargo @key(fields: &quot;trackingId&quot;)</text>
+<text x="190.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">id, trackingId, description, origin,</text>
+<text x="190.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">destination, routeSpecification, itinerary</text>
+<rect x="40" y="190" width="300" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="190.0" y="218.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Location @key(fields: &quot;unLocode&quot;)</text>
+<text x="190.0" y="235.0" font-size="11.5" fill="#555555" text-anchor="middle">id, unLocode, name, country</text>
+<rect x="40" y="265" width="300" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="190.0" y="293.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Voyage @key(fields: &quot;number&quot;)</text>
+<text x="190.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">id, number, schedule</text>
+<rect x="40" y="340" width="300" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="190.0" y="375.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Query.cargo, cargos, location, voyage</text>
+<text x="190.0" y="392.5" font-size="11.5" fill="#555555" text-anchor="middle">Itinerary, Leg, RouteSpecification</text>
+<text x="190.0" y="407.5" font-size="11.5" fill="#555555" text-anchor="middle">CargoConnection, CargoEdge, CarrierMovement</text>
+<rect x="40" y="490" width="290" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="185.0" y="518.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">PageInfo @shareable</text>
+<text x="185.0" y="535.0" font-size="11.5" fill="#555555" text-anchor="middle">the same four fields</text>
+<rect x="355" y="490" width="290" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="500.0" y="518.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Node, the scalars</text>
+<text x="500.0" y="535.0" font-size="11.5" fill="#555555" text-anchor="middle">descriptions copied verbatim</text>
+<rect x="670" y="490" width="290" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="815.0" y="518.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">RoutingStatus</text>
+<text x="815.0" y="535.0" font-size="11.5" fill="#555555" text-anchor="middle">an identical enum</text>
+<rect x="660" y="80" width="300" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="810.0" y="115.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cargo @key(fields: &quot;trackingId&quot;)</text>
+<text x="810.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">trackingId, delivery,</text>
+<text x="810.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">handlingHistory</text>
+<rect x="660" y="190" width="300" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="810.0" y="218.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">HandlingEvent @key(fields: &quot;id&quot;)</text>
+<text x="810.0" y="235.0" font-size="11.5" fill="#555555" text-anchor="middle">implements Node, every field</text>
+<rect x="660" y="265" width="300" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="810.0" y="293.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Location @key(unLocode, resolvable: false)</text>
+<text x="810.0" y="310.0" font-size="11.5" fill="#555555" text-anchor="middle">unLocode only</text>
+<rect x="660" y="340" width="300" height="50" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="810.0" y="363.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Voyage @key(number, resolvable: false)</text>
+<text x="810.0" y="380.0" font-size="11.5" fill="#555555" text-anchor="middle">number only</text>
+<rect x="660" y="396" width="300" height="46" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="810.0" y="417.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Mutation.registerHandlingEvent</text>
+<text x="810.0" y="434.0" font-size="11.5" fill="#555555" text-anchor="middle">Delivery, HandlingActivity, UserError</text>
+<path d="M340,125 L660,125" fill="none" stroke="#b8650a" stroke-width="2" marker-start="url(#am)" marker-end="url(#am)"/>
+<text x="500.0" y="115.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">the same entity, the same key</text>
+<text x="500.0" y="115.0" font-size="11" fill="#b8650a" text-anchor="middle">the same entity, the same key</text>
+<path d="M660,295 L340,225" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="540.0" y="250.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reference</text>
+<text x="540.0" y="250.0" font-size="11" fill="#555" text-anchor="middle">reference</text>
+<path d="M660,365 L340,300" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="540.0" y="346.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reference</text>
+<text x="540.0" y="346.5" font-size="11" fill="#555" text-anchor="middle">reference</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Each field has one owner; an entity is shared by its key, a reference names a place and nothing else</text>
+<text x="40" y="585" font-size="12" fill="#555555" text-anchor="start">A reference carries only the key. The handling subgraph can say where an event happened; the name of the place is the cargo subgraph&#x27;s to resolve.</text>
+</svg>

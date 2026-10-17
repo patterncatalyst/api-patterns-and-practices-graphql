@@ -1,0 +1,163 @@
+# Ch24 Debugging - compose topology.
+#
+# `docker compose up` brings up: lgtm, quarkus, python, quarkus-dev, python-dev.
+# Both stacks build their schema code-first (SmallRye GraphQL, Strawberry) and
+# serve the same slice of the canonical tracking-view SDL
+# (contracts/schema/shipping/*.graphql) as Chapter 19: everything except
+# Subscription, with batched sources, the error contract of Chapter 9 and the
+# telemetry of Chapter 19. What this chapter adds is the seeded data fault
+# (cargo JKL012, whose route ends at the location XXBAD), extensions.traceId on
+# every error, an application debug category that switches at run time, and a
+# development instance beside each production instance.
+#
+# Production instances (quarkus, python): the Quarkus fast-jar and the Python
+# image with TRACKING_PROFILE=prod. They serve /graphql and nothing else a
+# developer would use: no GraphQL UI, no Dev UI, no GraphiQL.
+# Development instances (quarkus-dev, python-dev): Quarkus dev mode, built from
+# the `dev` target of the same Containerfile, and the Python image with
+# TRACKING_PROFILE=dev. They serve the GraphQL UI / GraphiQL, and the Quarkus
+# one the Dev UI and payload logging. Errors are masked the same way everywhere.
+#
+# TRACKING_DEBUG_ENDPOINTS=true turns on the lab endpoints: /debug/source-calls
+# on both stacks, and the run-time log level switch (/q/logging-manager on
+# Quarkus, /debug/loggers on Python). They are lab tools: leave them off (the
+# default) anywhere else.
+#
+# Host ports (this chapter): Quarkus 8340, Python 8341 (production), at /graphql.
+# Chapter NN takes 8100 + 10*NN (Quarkus) and +1 (Python), then the extras:
+#   8342  quarkus-dev  (:8080)   dev mode, GraphQL UI at /q/graphql-ui, Dev UI at /q/dev-ui
+#   8343  python-dev   (:8080)   GraphiQL at /graphql
+#   8344  Grafana      (lgtm :3000)
+#   8345  Tempo API    (lgtm :3200)
+#   8346  Prometheus   (lgtm :9090)
+#   8347  Loki         (lgtm :3100)
+# The collector's OTLP ports (4317 gRPC, 4318 HTTP) stay inside the compose
+# network.
+#
+# Usage:
+#   docker compose up --build        # lgtm + four apps
+#   open http://localhost:8344       # Grafana, anonymous Admin (lab only)
+
+# A fixed project name, the same one verify.sh passes with -p: a manual
+# `docker compose up` and a verify.sh run share one set of container,
+# network and volume names instead of colliding on the container names below.
+name: gql-ch24-debugging
+
+services:
+  quarkus:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+    image: gql-ch24-debugging-quarkus:local
+    container_name: ch24-debugging-quarkus
+    ports:
+      - "8340:8080"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+    depends_on:
+      lgtm:
+        condition: service_healthy
+    healthcheck:
+      # SmallRye Health readiness; curl ships in the UBI runtime image.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  python:
+    build:
+      context: ./python
+      dockerfile: Containerfile
+    image: gql-ch24-debugging-python:local
+    container_name: ch24-debugging-python
+    ports:
+      - "8341:8080"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_PROFILE=prod
+    depends_on:
+      lgtm:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # Quarkus dev mode: mvn quarkus:dev from the sources (the `dev` target).
+  quarkus-dev:
+    build:
+      context: ./quarkus
+      dockerfile: Containerfile
+      target: dev
+    image: gql-ch24-debugging-quarkus-dev:local
+    container_name: ch24-debugging-quarkus-dev
+    ports:
+      - "8342:8080"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
+      - QUARKUS_OTEL_SERVICE_NAME=ch24-debugging-quarkus-dev
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+    depends_on:
+      lgtm:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+      start_period: 120s
+
+  # The same image as `python`, started with the development profile.
+  python-dev:
+    image: gql-ch24-debugging-python:local
+    container_name: ch24-debugging-python-dev
+    depends_on:
+      python:
+        condition: service_healthy
+    ports:
+      - "8343:8080"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://lgtm:4317
+      - OTEL_SERVICE_NAME=ch24-debugging-python-dev
+      - TRACKING_SOURCE_LATENCY_MS=250
+      - TRACKING_DEBUG_ENDPOINTS=true
+      - TRACKING_PROFILE=dev
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # The observability backend: OpenTelemetry Collector (OTLP in), Tempo
+  # (traces, with the span-metrics generator), Prometheus (metrics), Loki
+  # (logs) and Grafana, preconfigured with all three data sources.
+  lgtm:
+    image: docker.io/grafana/otel-lgtm:0.37.0
+    container_name: ch24-debugging-lgtm
+    ports:
+      - "8344:3000" # Grafana UI
+      - "8345:3200" # Tempo API
+      - "8346:9090" # Prometheus query API
+      - "8347:3100" # Loki query API
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    healthcheck:
+      # curl ships in the image. Ready means Grafana, Tempo and Loki all answer.
+      test:
+        - CMD-SHELL
+        - curl -fsS -o /dev/null http://localhost:3000/api/health && curl -fsS -o /dev/null http://localhost:3200/ready && curl -fsS -o /dev/null http://localhost:3100/ready
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s

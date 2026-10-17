@@ -1,0 +1,6 @@
+dependencies:
+- name: gql-ch27-final
+  repository: file://../../27-final-project/helm
+  version: 1.0.0
+digest: sha256:75aa2139b3efd743d617295d5f68ec69828f270803f823f826309bd0b667ac02
+generated: "2026-10-17T02:03:33.648617071-04:00"

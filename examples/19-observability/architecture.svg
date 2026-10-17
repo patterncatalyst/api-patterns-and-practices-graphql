@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="480" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/19-observability - compose stack (gql-ch19-observability)</text>
+<rect x="50" y="210" width="170" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="135.0" y="243.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">curl / verify.sh</text>
+<text x="135.0" y="260.0" font-size="11.5" fill="#555555" text-anchor="middle">client + traceparent</text>
+<rect x="300" y="70" width="270" height="140" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="108.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="435.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye GraphQL (code-first)</text>
+<text x="435.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">quarkus-opentelemetry</text>
+<text x="435.0" y="155.0" font-size="11.5" fill="#555555" text-anchor="middle">graphql-java instrumentation</text>
+<text x="435.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">Telemetry.java (GraphQL.Builder event)</text>
+<text x="435.0" y="185.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8290 /graphql</text>
+<rect x="300" y="290" width="270" height="140" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="328.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="435.0" y="345.0" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry on FastAPI (code-first)</text>
+<text x="435.0" y="360.0" font-size="11.5" fill="#555555" text-anchor="middle">opentelemetry-instrument</text>
+<text x="435.0" y="375.0" font-size="11.5" fill="#555555" text-anchor="middle">OpenTelemetryExtension + OperationMetrics</text>
+<text x="435.0" y="390.0" font-size="11.5" fill="#555555" text-anchor="middle">app/telemetry.py</text>
+<text x="435.0" y="405.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8291 /graphql</text>
+<rect x="700" y="70" width="250" height="140" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="115.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm (otel-lgtm 0.37.0)</text>
+<text x="825.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">Collector, Tempo, Prometheus,</text>
+<text x="825.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">Loki, Grafana</text>
+<text x="825.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">Grafana 8292, Tempo 8293,</text>
+<text x="825.0" y="177.5" font-size="11.5" fill="#555555" text-anchor="middle">Prometheus 8294, Loki 8295</text>
+<rect x="700" y="290" width="250" height="100" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="825.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">shipping/*.graphql</text>
+<text x="825.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">(canonical SDL, single source)</text>
+<path d="M220,235 L300,150" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="230.0" y="162.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">FanOut, TrackCargo</text>
+<text x="230.0" y="162.5" font-size="11" fill="#555" text-anchor="middle">FanOut, TrackCargo</text>
+<path d="M220,255 L300,350" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="230.0" y="332.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">FanOut, TrackCargo</text>
+<text x="230.0" y="332.5" font-size="11" fill="#555" text-anchor="middle">FanOut, TrackCargo</text>
+<path d="M570,140 L700,140" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="635.0" y="132.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="635.0" y="132.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M570,360 L700,200" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="629.0" y="310.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="629.0" y="310.0" font-size="11" fill="#b8650a" text-anchor="middle">OTLP</text>
+<path d="M570,390 L700,350" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="627.0" y="388.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="627.0" y="388.0" font-size="11" fill="#555" text-anchor="middle">introspect + diff</text>
+<path d="M700,205 L220,228" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="460.0" y="230.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">reads back by trace id</text>
+<text x="460.0" y="230.5" font-size="11" fill="#555" text-anchor="middle">reads back by trace id</text>
+<text x="50" y="478" font-size="12" fill="#555555" text-anchor="start">verify.sh sends its own trace id, then reads the trace from Tempo, the metrics from Prometheus and the log records from Loki.</text>
+</svg>

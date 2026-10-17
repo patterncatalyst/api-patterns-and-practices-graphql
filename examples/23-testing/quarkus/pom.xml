@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Ch23 Testing GraphQL APIs - Quarkus side.
+
+  Serves the object graph of the tracking view and its one mutation,
+  registerHandlingEvent, with the error contract of the chapter (exposed and
+  masked errors), with every source-backed field resolved
+  asynchronously (Mutiny Uni) and every source call logged. The
+  schema is built code-first by SmallRye GraphQL from the annotated classes
+  under src/main/java; nothing is generated from the canonical SDL. verify.sh
+  introspects the running server and diffs the result against contracts/schema/
+  with GraphQL Inspector.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.patterncatalyst.shipping</groupId>
+  <artifactId>ch23-quarkus-testing</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.release>25</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+    <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+    <!-- Quarkus platform 3.40.1: newest stable LTS stream in registry.quarkus.io
+         (4.0.0.Beta1 is a prerelease and is not used). -->
+    <quarkus.platform.version>3.40.1</quarkus.platform.version>
+    <!-- The BOM does not manage Surefire; 3.6.0 is the newest stable release. -->
+    <surefire-plugin.version>3.6.0</surefire-plugin.version>
+    <!-- Where Surefire writes its XML reports; the test image points it at a
+         mounted directory (see the Containerfile). -->
+    <surefire.reports-dir>${project.build.directory}/surefire-reports</surefire.reports-dir>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Code-first GraphQL: @GraphQLApi classes become the schema; serves
+         POST /graphql with introspection. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-graphql</artifactId>
+    </dependency>
+    <!-- The lab-only /debug/source-calls resource (off unless
+         TRACKING_DEBUG_ENDPOINTS=true); the GraphQL endpoint itself does not
+         need it. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-jackson</artifactId>
+    </dependency>
+    <!-- Liveness/readiness at /q/health. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+    <!-- Traces for the GraphQL operations once an OTLP endpoint is reachable
+         (the opt-in `observability` compose profile). Exports are async, so
+         the app starts and answers without a collector. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-opentelemetry</artifactId>
+    </dependency>
+
+    <!-- Test layers (all test scope, all managed by the Quarkus BOM). -->
+    <!-- @QuarkusTest, @TestHTTPResource, @TestProfile; JUnit Jupiter comes with it. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- @InjectMock replaces a CDI bean with a Mockito mock for one test. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit-mockito</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Fluent HTTP assertions for the operation tests. -->
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- The SmallRye typesafe GraphQL client, as a consumer of the endpoint under test. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-graphql-client</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire-plugin.version}</version>
+        <configuration>
+          <reportsDirectory>${surefire.reports-dir}</reportsDirectory>
+          <systemPropertyVariables>
+            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+            <maven.home>${maven.home}</maven.home>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

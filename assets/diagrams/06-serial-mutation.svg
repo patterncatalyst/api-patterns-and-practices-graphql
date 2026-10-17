@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="860" height="58" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">a: registerHandlingEvent</text>
+<rect x="20" y="130" width="860" height="58" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="150" font-size="12" font-weight="700" fill="#1d1d1d">b: registerHandlingEvent</text>
+<rect x="20" y="224" width="860" height="58" rx="12" fill="#ffffff" stroke="#ddd"/>
+<text x="32" y="244" font-size="12" font-weight="700" fill="#1d1d1d">if a and b were query fields</text>
+<rect x="200" y="62" width="150" height="34" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="275.0" y="84.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">append event</text>
+<rect x="350" y="62" width="150" height="34" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="425.0" y="84.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">payload re-read</text>
+<rect x="500" y="142" width="150" height="34" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="575.0" y="164.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">append event</text>
+<rect x="650" y="142" width="150" height="34" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="725.0" y="164.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">payload re-read</text>
+<rect x="200" y="228" width="300" height="24" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="350.0" y="245.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">a</text>
+<rect x="200" y="254" width="300" height="24" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="350.0" y="271.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">b</text>
+<rect x="500" y="44" width="1" height="150" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="500.5" y="124.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle"></text>
+<path d="M500,110 L500,128" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="450" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Top-level mutation fields run serially: b starts only after a, payload included, is complete</text>
+<text x="522" y="124" font-size="11" fill="#b8650a" text-anchor="start">a is finished</text>
+<text x="450" y="318" font-size="12" fill="#555555" text-anchor="middle">Schematic: each step is one 250 ms source call. Chapter 8 measures this on the running stacks.</text>
+</svg>

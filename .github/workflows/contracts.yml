@@ -1,0 +1,287 @@
+name: contracts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: contracts-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    name: Lint SDL & breaking-change gate (GraphQL Inspector)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # the breaking gate needs origin/main available
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24.22.0"   # Node 24 "Krypton" LTS, exact
+          cache: npm
+          cache-dependency-path: contracts/package-lock.json
+
+      - name: Install tooling (npm ci)
+        working-directory: contracts
+        run: npm ci
+
+      - name: Lint the canonical SDL (graphql-eslint)
+        working-directory: contracts
+        run: npm run lint
+
+      - name: Breaking-change gate (vs main)
+        working-directory: contracts
+        run: |
+          # The evolution gate. On the first introduction main has no baseline
+          # SDL, so scripts/breaking.sh skips; once this lands on main, every
+          # later change is diffed against it (a removed field / changed type fails).
+          git fetch --no-tags origin main || true
+          npm run breaking
+
+  site:
+    name: Validate site & build Jekyll
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Static validation (front matter, diagrams, coverage)
+        run: python -I scripts/validate.py
+
+      - name: Word-count gate (draft/verified chapters)
+        run: GATE=1 bash scripts/wordcount.sh
+
+      - name: Build Jekyll
+        run: bundle exec jekyll build --trace
+
+  k8s-manifests:
+    name: Validate Kubernetes manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install kubeconform (pinned, checksum-verified)
+        env:
+          KUBECONFORM_VERSION: v0.8.0
+          KUBECONFORM_SHA256: 9bc2bffbf71f261128533edaf912153948b7ff238f9a531ae6d34466ec287883
+        run: |
+          curl -fsSL -o /tmp/kubeconform.tar.gz \
+            "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz"
+          echo "${KUBECONFORM_SHA256}  /tmp/kubeconform.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/kubeconform.tar.gz -C /tmp kubeconform
+          sudo install -m 0755 /tmp/kubeconform /usr/local/bin/kubeconform
+          kubeconform -v
+
+      - name: Install helm (pinned)
+        uses: azure/setup-helm@v5
+        with:
+          version: v4.3.1
+
+      - name: Install kubectl (pinned)
+        uses: azure/setup-kubectl@v5
+        with:
+          version: v1.37.1
+
+      - name: Show helm and kubectl versions
+        run: |
+          helm version --short
+          kubectl version --client
+
+      - name: Install ShellCheck (pinned, checksum-verified)
+        env:
+          SHELLCHECK_VERSION: v0.11.0
+          SHELLCHECK_SHA256: b7af85e41cc99489dcc21d66c6d5f3685138f06d34651e6d34b42ec6d54fe6f6
+        run: |
+          curl -fsSL -o /tmp/shellcheck.tar.gz \
+            "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.x86_64.tar.gz"
+          echo "${SHELLCHECK_SHA256}  /tmp/shellcheck.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/shellcheck.tar.gz -C /tmp "shellcheck-${SHELLCHECK_VERSION}/shellcheck"
+          sudo install -m 0755 "/tmp/shellcheck-${SHELLCHECK_VERSION}/shellcheck" /usr/local/bin/shellcheck
+          shellcheck --version
+
+      - name: Validate the Chapter 26 chart (lint, render, kubeconform strict)
+        run: |
+          set -euo pipefail
+          chart=examples/26-minikube/helm
+          if [ -d "$chart" ]; then
+            helm lint --strict "$chart"
+            helm template gql-ch26 "$chart" -n gql-ch26 \
+              | kubeconform -strict -summary -kubernetes-version 1.37.1
+            # The alternate render: the chart's own CI values when it ships them,
+            # otherwise the distribution-neutral overrides set by hand.
+            if [ -f "$chart/ci-values-alt.yaml" ]; then
+              helm template gql-ch26 "$chart" -n gql-ch26 -f "$chart/ci-values-alt.yaml" \
+                | kubeconform -strict -summary -kubernetes-version 1.37.1
+            else
+              helm template gql-ch26 "$chart" -n gql-ch26 \
+                --set edge.tls.enabled=false \
+                --set edge.service.type=ClusterIP \
+                --set lgtm.service.type=ClusterIP \
+                | kubeconform -strict -summary -kubernetes-version 1.37.1
+            fi
+          else
+            echo "$chart not present yet"
+          fi
+
+      - name: Validate the Chapter 27 chart (lint, render, kubeconform strict)
+        run: |
+          set -euo pipefail
+          chart=examples/27-final-project/helm
+          if [ -d "$chart" ]; then
+            helm lint --strict "$chart"
+            helm template gql-ch27 "$chart" -n gql-ch27 \
+              | kubeconform -strict -summary -kubernetes-version 1.37.1
+            # A render with the Appendix A overrides: plain listeners and
+            # ClusterIP services, the settings an OpenShift route in front needs.
+            helm template gql-ch27 "$chart" -n gql-ch27 \
+              -f "$chart/ci-values-appendix-a.yaml" \
+              | kubeconform -strict -summary -kubernetes-version 1.37.1
+            helm template gql-ch27 "$chart" -n gql-ch27 \
+              -f "$chart/ci-values-alt.yaml" \
+              | kubeconform -strict -summary -kubernetes-version 1.37.1
+          else
+            echo "$chart not present yet"
+          fi
+
+      - name: Validate the Appendix A chart (OpenShift schemas, kubeconform strict)
+        env:
+          # datreeio/CRDs-catalog pinned to one commit (MIT); the OpenShift
+          # Route, BuildConfig and ImageStream v1 schemas live under openshift/v4.15-strict.
+          CRDS_CATALOG_URL: "https://raw.githubusercontent.com/datreeio/CRDs-catalog/63669a570e231d4f1f8396d229a1de512bcf0a34/openshift/v4.15-strict/{{ .ResourceKind }}_{{ .Group }}_{{ .ResourceAPIVersion }}.json"
+        run: |
+          set -euo pipefail
+          chart=examples/99-appendix-a-openshift-crc/helm
+          if [ -d "$chart" ]; then
+            helm dependency build "$chart"
+            helm lint --strict "$chart"
+            helm template gql-appendix-a "$chart" -n gql-appendix-a \
+              | kubeconform -strict -summary -kubernetes-version 1.35.6 \
+                  -schema-location default \
+                  -schema-location "$CRDS_CATALOG_URL"
+          else
+            echo "$chart not present yet"
+          fi
+
+      - name: ShellCheck the cluster scripts
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          scripts=(
+            examples/26-minikube/scripts/*.sh
+            examples/27-final-project/scripts/*.sh
+            examples/99-appendix-a-openshift-crc/scripts/*.sh
+          )
+          if [ ${#scripts[@]} -gt 0 ]; then
+            shellcheck -x "${scripts[@]}"
+          else
+            echo "cluster scripts not present yet"
+          fi
+
+  discover-examples:
+    name: Discover examples
+    runs-on: ubuntu-latest
+    outputs:
+      examples: ${{ steps.find.outputs.examples }}
+      any: ${{ steps.find.outputs.any }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: find
+        name: Build the example matrix from examples/*/verify.sh
+        run: |
+          shopt -s nullglob
+          names=()
+          for s in examples/*/verify.sh; do
+            names+=("$(basename "$(dirname "$s")")")
+          done
+          if [ ${#names[@]} -eq 0 ]; then
+            echo "any=false" >> "$GITHUB_OUTPUT"
+            echo "examples=[]" >> "$GITHUB_OUTPUT"
+            echo "No examples/*/verify.sh yet."
+            exit 0
+          fi
+          json=$(printf '%s\n' "${names[@]}" | sort | jq -R . | jq -cs .)
+          echo "any=true" >> "$GITHUB_OUTPUT"
+          echo "examples=$json" >> "$GITHUB_OUTPUT"
+          echo "Matrix: $json"
+
+  examples:
+    name: "verify: ${{ matrix.example }}"
+    needs: discover-examples
+    if: needs.discover-examples.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJSON(needs.discover-examples.outputs.examples) }}
+    steps:
+      - uses: actions/checkout@v7
+      # verify.sh diffs each live schema against contracts/schema/ with the
+      # pinned graphql-inspector (installed by lib.sh via `npm ci`), so the
+      # runner needs the same Node as the contracts job. JDK and Python run
+      # inside the example's containers.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24.22.0"   # same exact Node 24 LTS as the contracts job
+          cache: npm
+          cache-dependency-path: contracts/package-lock.json
+      - name: Verify ${{ matrix.example }} (response semantics vs the SDL, both stacks)
+        # Retry up to 3x: each verify.sh is self-contained (compose up -> assert ->
+        # compose down via lib.sh's EXIT trap), so a retry starts from a clean slate.
+        # This absorbs transient CI flakes — image pulls, JVM cold-start timing,
+        # tool download — without masking real failures (a deterministic bug
+        # fails all three attempts).
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::verify attempt $attempt/3 — ${{ matrix.example }}"
+            if bash "examples/${{ matrix.example }}/verify.sh"; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+            echo "attempt $attempt failed for ${{ matrix.example }}"
+            # Back off 60 s, then 180 s: a dependency mirror that briefly answers
+            # "not found" recovers within minutes, and the attempts then fall outside it.
+            [ "$attempt" -lt 3 ] && { delay=$(( attempt == 1 ? 60 : 180 )); echo "retrying in ${delay}s..."; sleep "$delay"; }
+          done
+          echo "all 3 attempts failed for ${{ matrix.example }}"
+          exit 1
+
+  examples-summary:
+    name: Verify stacks against the contract
+    needs: [discover-examples, examples]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gate on the example matrix result
+        run: |
+          result="${{ needs.examples.result }}"
+          echo "examples matrix result: $result"
+          if [ "${{ needs.discover-examples.outputs.any }}" = "true" ] && [ "$result" != "success" ]; then
+            echo "One or more example verify.sh jobs failed."
+            exit 1
+          fi
+          echo "All example verifications passed (or none to run)."
+
+  ci-ok:
+    name: ci-ok
+    needs: [contracts, site, k8s-manifests, discover-examples, examples, examples-summary]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every needed job succeeded or was skipped
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: jq -e 'to_entries | all(.value.result == "success" or .value.result == "skipped")' <<<"$NEEDS"

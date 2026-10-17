@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 430" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="500" height="330" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Coercion failure: type is TELEPORT</text>
+<rect x="560" y="50" width="500" height="330" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="572" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Domain failure: LOAD without a voyage</text>
+<rect x="50" y="90" width="440" height="62" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="270.0" y="119.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data</text>
+<text x="270.0" y="136.0" font-size="11.5" fill="#555555" text-anchor="middle">absent on Quarkus, null on Strawberry</text>
+<rect x="50" y="172" width="440" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="270.0" y="197.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">errors[0]</text>
+<text x="270.0" y="214.0" font-size="11.5" fill="#555555" text-anchor="middle">message names the bad value</text>
+<text x="270.0" y="229.0" font-size="11.5" fill="#555555" text-anchor="middle">locations point into the document</text>
+<text x="270.0" y="244.0" font-size="11.5" fill="#555555" text-anchor="middle">no path: no field ran</text>
+<rect x="50" y="276" width="440" height="84" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="270.0" y="308.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Raised by the engine</text>
+<text x="270.0" y="325.5" font-size="11.5" fill="#555555" text-anchor="middle">before the resolver runs</text>
+<text x="270.0" y="340.5" font-size="11.5" fill="#555555" text-anchor="middle">HTTP 200 on both stacks</text>
+<rect x="590" y="90" width="440" height="84" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="810.0" y="122.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">data.registerHandlingEvent</text>
+<text x="810.0" y="139.5" font-size="11.5" fill="#555555" text-anchor="middle">handlingEvent: null</text>
+<text x="810.0" y="154.5" font-size="11.5" fill="#555555" text-anchor="middle">cargo: null</text>
+<rect x="590" y="194" width="440" height="62" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="810.0" y="223.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">userErrors[0]</text>
+<text x="810.0" y="240.0" font-size="11.5" fill="#555555" text-anchor="middle">code VOYAGE_REQUIRED, field [&quot;input&quot;, &quot;voyageNumber&quot;]</text>
+<rect x="590" y="276" width="440" height="84" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="810.0" y="308.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Returned by the resolver</text>
+<text x="810.0" y="325.5" font-size="11.5" fill="#555555" text-anchor="middle">as an ordinary value</text>
+<text x="810.0" y="340.5" font-size="11.5" fill="#555555" text-anchor="middle">no errors key at all</text>
+<text x="540" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Two kinds of failure, two places in the response</text>
+<text x="540" y="404" font-size="12" fill="#555555" text-anchor="middle">A client reads errors[] to learn the request was malformed, and userErrors to learn the input was refused.</text>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1130 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="400" height="88" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="77.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">parent</text>
+<text x="220.0" y="94.0" font-size="11.5" fill="#555555" text-anchor="middle">the object this field is selected on</text>
+<text x="220.0" y="109.0" font-size="11.5" fill="#555555" text-anchor="middle">Java: @Source Cargo cargo</text>
+<text x="220.0" y="124.0" font-size="11.5" fill="#555555" text-anchor="middle">Python: self</text>
+<rect x="20" y="168" width="400" height="88" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="195.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">arguments</text>
+<text x="220.0" y="212.0" font-size="11.5" fill="#555555" text-anchor="middle">values written in the document</text>
+<text x="220.0" y="227.0" font-size="11.5" fill="#555555" text-anchor="middle">Java: named parameters</text>
+<text x="220.0" y="242.0" font-size="11.5" fill="#555555" text-anchor="middle">Python: typed parameters</text>
+<rect x="20" y="276" width="400" height="88" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="303.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">context</text>
+<text x="220.0" y="320.0" font-size="11.5" fill="#555555" text-anchor="middle">per request: request id, sources</text>
+<text x="220.0" y="335.0" font-size="11.5" fill="#555555" text-anchor="middle">Java: Context context, built by SmallRye</text>
+<text x="220.0" y="350.0" font-size="11.5" fill="#555555" text-anchor="middle">Python: info.context, built by context_getter</text>
+<rect x="20" y="384" width="400" height="88" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="220.0" y="411.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">info</text>
+<text x="220.0" y="428.0" font-size="11.5" fill="#555555" text-anchor="middle">field name, path, selected fields</text>
+<text x="220.0" y="443.0" font-size="11.5" fill="#555555" text-anchor="middle">Java: the same Context (getPath, getSelectedFields)</text>
+<text x="220.0" y="458.0" font-size="11.5" fill="#555555" text-anchor="middle">Python: info (path, selected_fields)</text>
+<rect x="520" y="190" width="250" height="124" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="645.0" y="235.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cargo.itinerary</text>
+<text x="645.0" y="252.0" font-size="11.5" fill="#555555" text-anchor="middle">reads the tracking id</text>
+<text x="645.0" y="267.0" font-size="11.5" fill="#555555" text-anchor="middle">from the parent</text>
+<text x="645.0" y="282.0" font-size="11.5" fill="#555555" text-anchor="middle">calls routing.getItinerary</text>
+<rect x="900" y="190" width="210" height="124" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="1005.0" y="235.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">return value</text>
+<text x="1005.0" y="252.0" font-size="11.5" fill="#555555" text-anchor="middle">Itinerary or null</text>
+<text x="1005.0" y="267.0" font-size="11.5" fill="#555555" text-anchor="middle">Java: Uni of Itinerary</text>
+<text x="1005.0" y="282.0" font-size="11.5" fill="#555555" text-anchor="middle">Python: coroutine</text>
+<path d="M420,94 L520,235" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="500.0" y="154.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">ABC123</text>
+<text x="500.0" y="154.5" font-size="11" fill="#b8650a" text-anchor="middle">ABC123</text>
+<path d="M420,212 L520,252" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="455.0" y="258.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">none here</text>
+<text x="455.0" y="258.0" font-size="11" fill="#555" text-anchor="middle">none here</text>
+<path d="M420,320 L520,270" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="455.0" y="333.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">request id</text>
+<text x="455.0" y="333.0" font-size="11" fill="#555" text-anchor="middle">request id</text>
+<path d="M420,428 L520,290" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="520.0" y="369.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">seldom needed</text>
+<text x="520.0" y="369.0" font-size="11" fill="#555" text-anchor="middle">seldom needed</text>
+<path d="M770,252 L900,252" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="835.0" y="240.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">engine completes it</text>
+<text x="835.0" y="240.0" font-size="11" fill="#b8650a" text-anchor="middle">engine completes it</text>
+<text x="560" y="36" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Four inputs to one resolver</text>
+<text x="560" y="500" font-size="12" fill="#555555" text-anchor="middle">The amber arrows carry the data this resolver uses. Cargo.itinerary takes no arguments; Query.cargo takes trackingId.</text>
+</svg>

@@ -1,0 +1,32 @@
+{{- range $stackName, $stack := .Values.stacks }}
+{{- range $kind, $inst := $stack.instances }}
+{{- $name := include "gql.instanceName" (dict "stack" $stackName "kind" $kind) }}
+{{- $component := include "gql.instanceComponent" (dict "kind" $kind) }}
+{{- $service := default (dict) $inst.service }}
+{{- $type := default "ClusterIP" $service.type }}
+---
+{{- if eq $kind "public" }}
+# ClusterIP: the edge reaches the public instance by this name; nothing else is published.
+{{- else }}
+# The internal instance (introspection on). A NodePort equals the host port the profile publishes on 127.0.0.1.
+{{- end }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" $ "name" $name "component" $component) | nindent 4 }}
+spec:
+  type: {{ $type }}
+  selector:
+    {{- include "gql.selector" (dict "root" $ "name" $name) | nindent 4 }}
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      {{- if and (eq $type "NodePort") $service.nodePort }}
+      nodePort: {{ $service.nodePort }}
+      {{- end }}
+{{- end }}
+{{- end }}

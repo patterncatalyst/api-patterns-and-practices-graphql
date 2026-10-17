@@ -1,0 +1,59 @@
+# Ch4 Nullability and null propagation - Python, UBI 10, uv-managed, Strawberry on FastAPI.
+# Build (the build context is this directory):
+#   docker build -f examples/04-nullability/python/Containerfile \
+#     -t ch04-null-python examples/04-nullability/python
+#
+# The schema is built code-first from the decorated classes, so unlike the
+# gRPC series no contract file is copied into the image.
+#
+# UBI 10 publishes only the -minimal Python image (no ubi10/python-314).
+# Pin: registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506
+# Re-check with:
+#   skopeo list-tags docker://registry.access.redhat.com/ubi10/python-314-minimal
+# and confirm with `skopeo inspect`. Bump deliberately.
+
+# -- Stage 1: Build ----------------------------------------------------------
+FROM registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506 AS build
+
+# The image runs as UID 1001; the build stage needs root to write /app.
+# Build at the same path the runtime uses: a venv is not relocatable, its
+# console scripts carry the absolute interpreter path.
+USER 0
+WORKDIR /app
+
+RUN pip install --no-cache-dir uv==0.13.1
+
+# --locked fails the build if uv.lock is out of date with pyproject.toml.
+# Dependencies first, in their own layer: a source-only change reuses it.
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked --no-dev --no-install-project
+
+COPY app ./app
+RUN uv sync --locked --no-dev
+
+# -- Stage 2: Runtime --------------------------------------------------------
+FROM registry.access.redhat.com/ubi10/python-314-minimal:10.2-1791928506
+
+WORKDIR /app
+
+COPY --from=build --chown=1001:0 /app/.venv /app/.venv
+COPY --from=build --chown=1001:0 /app/app /app/app
+
+ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH="/app" \
+    PYTHONUNBUFFERED=1 \
+    OTEL_SERVICE_NAME=ch04-nullability-python \
+    OTEL_TRACES_EXPORTER=otlp \
+    OTEL_METRICS_EXPORTER=none \
+    OTEL_LOGS_EXPORTER=none \
+    OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 \
+    OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=false
+
+EXPOSE 8080
+USER 1001
+
+# opentelemetry-instrument is a zero-code wrapper: it auto-instruments the
+# FastAPI app and exports spans to OTEL_EXPORTER_OTLP_ENDPOINT. With no
+# collector listening (the `observability` compose profile is off by default)
+# the exporter only logs failed exports in the background.
+ENTRYPOINT ["opentelemetry-instrument", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]

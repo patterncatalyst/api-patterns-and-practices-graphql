@@ -1,0 +1,92 @@
+{{- $tls := .Values.edge.tls.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edge-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gql.labels" (dict "root" . "name" "edge" "component" "edge") | nindent 4 }}
+data:
+  # The edge of Chapters 25 and 27: /graphql (queries, mutations and the
+  # WebSocket upgrade of a subscription) and /events/ (the server-sent event
+  # feed) are routed, every other path is 404, bodies over the limit are refused
+  # with 413, and Authorization and traceparent pass through unchanged.
+  #
+  # How the edge finds the backends: each proxy_pass names a ClusterIP Service
+  # (quarkus, python), the public instance of that stack. nginx resolves the name
+  # once, when it starts, through the cluster's DNS, and a Service keeps its
+  # ClusterIP for as long as it exists, so a restarted or rescheduled backend pod
+  # is reached at the same address through kube-proxy. The internal instances
+  # have Services of their own and are not routed.
+  nginx.conf: |
+    worker_processes 1;
+    error_log /dev/stderr notice;
+    pid /tmp/nginx.pid;
+
+    events {
+        worker_connections 256;
+    }
+
+    http {
+        log_format edge '$remote_addr "$request" $status $body_bytes_sent '
+                        'upstream=$upstream_addr trace=$http_traceparent';
+        access_log /dev/stdout edge;
+
+        client_body_temp_path /tmp/nginx-client;
+        proxy_temp_path       /tmp/nginx-proxy;
+        fastcgi_temp_path     /tmp/nginx-fastcgi;
+        uwsgi_temp_path       /tmp/nginx-uwsgi;
+        scgi_temp_path        /tmp/nginx-scgi;
+
+        {{- if $tls }}
+        ssl_protocols       TLSv1.3;
+        ssl_certificate     /etc/nginx/tls/tls.crt;
+        ssl_certificate_key /etc/nginx/tls/tls.key;
+        {{- end }}
+
+        client_max_body_size {{ .Values.edge.bodyLimit }};
+
+        # A WebSocket upgrade passes through when the client asks for one.
+        map $http_upgrade $connection_upgrade {
+            default upgrade;
+            ''      close;
+        }
+
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Forwarded-For   $remote_addr;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   Upgrade           $http_upgrade;
+        proxy_set_header   Connection        $connection_upgrade;
+
+        # A subscription and an event feed are connections that stay open and idle between events.
+        proxy_read_timeout 1h;
+        proxy_send_timeout 1h;
+
+        # The kubelet's probe listener. No Service exposes this port.
+        server {
+            listen 8090;
+            access_log off;
+            location = /healthz {
+                return 200 "ok\n";
+            }
+        }
+        {{- range $stack := list "quarkus" "python" }}
+
+        server {
+            listen {{ include "gql.edgePort" (dict "root" $ "stack" $stack) }}{{ if $tls }} ssl{{ end }};
+            server_name localhost;
+
+            location = /graphql {
+                proxy_pass http://{{ $stack }}:8080;
+            }
+            location /events/ {
+                proxy_pass http://{{ $stack }}:8080;
+                proxy_buffering off;
+            }
+            location / {
+                return 404;
+            }
+        }
+        {{- end }}
+    }

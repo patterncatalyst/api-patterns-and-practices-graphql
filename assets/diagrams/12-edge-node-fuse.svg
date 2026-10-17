@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 430" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="50" width="500" height="330" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">data.cargos</text>
+<rect x="560" y="50" width="420" height="330" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="572" y="70" font-size="12" font-weight="700" fill="#1d1d1d">errors</text>
+<rect x="50" y="90" width="440" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="270.0" y="118.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[0]</text>
+<text x="270.0" y="135.0" font-size="11.5" fill="#555555" text-anchor="middle">cursor ...QUJDMTIz, node.trackingId ABC123</text>
+<rect x="50" y="170" width="440" height="60" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="270.0" y="198.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1].cursor</text>
+<text x="270.0" y="215.0" font-size="11.5" fill="#555555" text-anchor="middle">kept: ...R0hJMzQ1</text>
+<rect x="50" y="240" width="440" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="270.0" y="268.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edges[1].node: null</text>
+<text x="270.0" y="285.0" font-size="11.5" fill="#555555" text-anchor="middle">the fuse: only this edge lost its item</text>
+<rect x="50" y="312" width="440" height="56" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="270.0" y="338.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">pageInfo and totalCount</text>
+<text x="270.0" y="355.0" font-size="11.5" fill="#555555" text-anchor="middle">hasNextPage false, hasPreviousPage true; totalCount 6</text>
+<rect x="590" y="150" width="360" height="110" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="770.0" y="188.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">errors[0]</text>
+<text x="770.0" y="205.0" font-size="11.5" fill="#555555" text-anchor="middle">booking service unavailable</text>
+<text x="770.0" y="220.0" font-size="11.5" fill="#555555" text-anchor="middle">code SERVICE_UNAVAILABLE</text>
+<text x="770.0" y="235.0" font-size="11.5" fill="#555555" text-anchor="middle">path [&quot;cargos&quot;,&quot;edges&quot;,1,&quot;node&quot;]</text>
+<path d="M590,230 L490,270" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="540.0" y="240.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">path</text>
+<text x="540.0" y="240.0" font-size="11" fill="#b8650a" text-anchor="middle">path</text>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">One bad node, one null edge: the page, its cursors and pageInfo survive</text>
+<text x="500" y="404" font-size="12" fill="#555555" text-anchor="middle">node is nullable, so the null stops at the edge. A non-null node would climb to the page, then to data.</text>
+</svg>

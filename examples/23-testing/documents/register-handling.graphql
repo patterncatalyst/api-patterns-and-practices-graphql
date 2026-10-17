@@ -1,0 +1,17 @@
+mutation RegisterHandling($input: RegisterHandlingEventInput!) {
+  registerHandlingEvent(input: $input) {
+    handlingEvent {
+      id
+    }
+    cargo {
+      id
+      delivery {
+        transportStatus
+      }
+    }
+    userErrors {
+      code
+      message
+    }
+  }
+}

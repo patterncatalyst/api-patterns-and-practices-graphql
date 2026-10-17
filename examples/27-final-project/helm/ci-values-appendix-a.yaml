@@ -1,0 +1,47 @@
+# The overrides Appendix A applies, as a values file: the same keys and values
+# as the `final:` block of examples/99-appendix-a-openshift-crc/helm/values.yaml.
+# The edge keeps plain listeners (a router terminates TLS), every Service is
+# ClusterIP, every image is pulled when absent, the stack images come from an
+# image registry in the cluster, and the issuer is the URL clients fetch tokens at.
+edge:
+  image:
+    pullPolicy: IfNotPresent
+  tls:
+    enabled: false
+  service:
+    type: ClusterIP
+lgtm:
+  image:
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+  serviceAccountName: gql-lgtm
+  dropAllCapabilities: false
+  seccompProfile: ""
+keycloak:
+  image:
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+  proxyHeaders: xforwarded
+identity:
+  issuer: https://keycloak-gql-appendix-a.apps-crc.testing/realms/shipping
+stacks:
+  quarkus:
+    image:
+      repository: image-registry.openshift-image-registry.svc:5000/gql-appendix-a/gql-ch27-quarkus
+      tag: "1.0"
+      pullPolicy: IfNotPresent
+    instances:
+      internal:
+        service:
+          type: ClusterIP
+  python:
+    image:
+      repository: image-registry.openshift-image-registry.svc:5000/gql-appendix-a/gql-ch27-python
+      tag: "1.0"
+      pullPolicy: IfNotPresent
+    instances:
+      internal:
+        service:
+          type: ClusterIP

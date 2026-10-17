@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 590" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="205" y="50" width="780" height="500" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="217" y="70" font-size="12" font-weight="700" fill="#1d1d1d">node container gql-tracking: containerd, Kubernetes v1.37.1, namespace gql-ch26</text>
+<rect x="20" y="110" width="140" height="90" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="90.0" y="145.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">host</text>
+<text x="90.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">curl --cacert ca.crt</text>
+<text x="90.0" y="177.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1:30360</text>
+<rect x="225" y="110" width="160" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="305.0" y="145.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Service edge</text>
+<text x="305.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">NodePort 8443:30360</text>
+<text x="305.0" y="177.5" font-size="11.5" fill="#555555" text-anchor="middle">published by Docker</text>
+<rect x="417" y="95" width="160" height="120" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="497.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge pod</text>
+<text x="497.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">nginx, TLS 1.3, 64k</text>
+<text x="497.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">Secret gql-ch26-edge-tls</text>
+<text x="497.0" y="177.5" font-size="11.5" fill="#555555" text-anchor="middle">ConfigMap edge-config</text>
+<text x="497.0" y="192.5" font-size="11.5" fill="#555555" text-anchor="middle">only /graphql routed</text>
+<rect x="609" y="110" width="160" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="689.0" y="145.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Service quarkus</text>
+<text x="689.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">ClusterIP :8080</text>
+<text x="689.0" y="177.5" font-size="11.5" fill="#555555" text-anchor="middle">ready pods only</text>
+<rect x="801" y="95" width="160" height="120" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="881.0" y="130.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus pod</text>
+<text x="881.0" y="147.5" font-size="11.5" fill="#555555" text-anchor="middle">quarkus-588766b5bf-dxv9z</text>
+<text x="881.0" y="162.5" font-size="11.5" fill="#555555" text-anchor="middle">startup, ready, live probes</text>
+<text x="881.0" y="177.5" font-size="11.5" fill="#555555" text-anchor="middle">ConfigMap env</text>
+<text x="881.0" y="192.5" font-size="11.5" fill="#555555" text-anchor="middle">downward API: pod name</text>
+<rect x="20" y="310" width="140" height="90" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="90.0" y="345.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">host</text>
+<text x="90.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">GET /api/traces/&lt;id&gt;</text>
+<text x="90.0" y="377.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1:30363</text>
+<rect x="609" y="310" width="160" height="90" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="689.0" y="345.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Service lgtm-ui</text>
+<text x="689.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">NodePort 3200:30363</text>
+<text x="689.0" y="377.5" font-size="11.5" fill="#555555" text-anchor="middle">Tempo, Loki, Grafana</text>
+<rect x="801" y="295" width="160" height="120" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="881.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm pod</text>
+<text x="881.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">otel-lgtm 0.37.0</text>
+<text x="881.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">OTLP :4317 via</text>
+<text x="881.0" y="377.5" font-size="11.5" fill="#555555" text-anchor="middle">Service lgtm</text>
+<text x="881.0" y="392.5" font-size="11.5" fill="#555555" text-anchor="middle">Tempo, Loki, Prometheus</text>
+<rect x="225" y="450" width="736" height="70" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="593.0" y="483.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">trace 14d6ffd026bf23a05da7303b53bac64d in Tempo: 11 spans</text>
+<text x="593.0" y="500.0" font-size="11.5" fill="#dddddd" text-anchor="middle">resource k8s.pod.name = quarkus-588766b5bf-dxv9z, k8s.namespace.name = gql-ch26</text>
+<path d="M160,155 L225,155" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M385,155 L417,155" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M577,155 L609,155" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M769,155 L801,155" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M881,215 L881,295" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="907.0" y="255.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">OTLP</text>
+<text x="907.0" y="255.0" font-size="11" fill="#555" text-anchor="middle">OTLP</text>
+<path d="M160,355 L609,355" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="384.5" y="347.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">Docker-published 30363</text>
+<text x="384.5" y="347.0" font-size="11" fill="#555" text-anchor="middle">Docker-published 30363</text>
+<path d="M769,355 L801,355" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M881,415 L881,450" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">From a host port to a pod, and from the pod&#x27;s trace back to its name</text>
+<text x="225" y="575" font-size="12" fill="#555555" text-anchor="start">Host access is only through NodePorts published when the profile was created; the Service names resolve inside the cluster.</text>
+</svg>

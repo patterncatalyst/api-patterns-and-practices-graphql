@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="390" y="35" width="190" height="340" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="402" y="55" font-size="12" font-weight="700" fill="#1d1d1d">GraphQL server</text>
+<rect x="30" y="55" width="140" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="100.0" y="88.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Client</text>
+<text x="100.0" y="105.0" font-size="11.5" fill="#555555" text-anchor="middle">web or mobile</text>
+<rect x="205" y="55" width="155" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="282.5" y="88.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">POST /graphql</text>
+<text x="282.5" y="105.0" font-size="11.5" fill="#555555" text-anchor="middle">query + variables</text>
+<rect x="410" y="65" width="150" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="485.0" y="88.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">1  Parse</text>
+<text x="485.0" y="105.0" font-size="11.5" fill="#555555" text-anchor="middle">text to syntax tree</text>
+<rect x="410" y="140" width="150" height="50" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="485.0" y="163.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">2  Validate</text>
+<text x="485.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">check against schema</text>
+<rect x="410" y="215" width="150" height="50" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="485.0" y="238.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">3  Execute</text>
+<text x="485.0" y="255.0" font-size="11.5" fill="#555555" text-anchor="middle">walk the selection set</text>
+<rect x="410" y="290" width="150" height="60" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="485.0" y="318.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">4  Resolvers</text>
+<text x="485.0" y="335.0" font-size="11.5" fill="#555555" text-anchor="middle">one function per field</text>
+<rect x="30" y="285" width="150" height="70" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+<text x="105.0" y="318.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">One JSON response</text>
+<text x="105.0" y="335.0" font-size="11.5" fill="#dddddd" text-anchor="middle">data and errors</text>
+<rect x="650" y="190" width="220" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="760.0" y="218.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cargo service</text>
+<text x="760.0" y="235.0" font-size="11.5" fill="#555555" text-anchor="middle">REST</text>
+<rect x="650" y="270" width="220" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="760.0" y="298.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Routing service</text>
+<text x="760.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">gRPC</text>
+<rect x="650" y="350" width="220" height="60" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
+<text x="760.0" y="378.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Handling event store</text>
+<text x="760.0" y="395.0" font-size="11.5" fill="#555555" text-anchor="middle">history and delivery</text>
+<path d="M170,90 L205,90" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M360,90 L410,90" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M485,115 L485,140" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M485,190 L485,215" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M485,265 L485,290" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M560,320 L650,220" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="597.0" y="256.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">calls</text>
+<text x="597.0" y="256.0" font-size="11" fill="#555" text-anchor="middle">calls</text>
+<path d="M560,320 L650,300" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M560,330 L650,380" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<path d="M410,320 L180,320" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="301.0" y="312.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">results</text>
+<text x="301.0" y="312.0" font-size="11" fill="#b8650a" text-anchor="middle">results</text>
+<path d="M105,285 L105,125" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="75.0" y="199.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">HTTP response</text>
+<text x="75.0" y="199.0" font-size="11" fill="#b8650a" text-anchor="middle">HTTP response</text>
+<text x="450" y="20" font-size="12" fill="#1d1d1d" text-anchor="middle" font-weight="700">One endpoint, one request, one response</text>
+</svg>

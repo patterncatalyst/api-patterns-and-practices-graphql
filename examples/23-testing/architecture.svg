@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
+<rect x="20" y="20" width="960" height="500" rx="12" fill="#fafafa" stroke="#ddd"/>
+<text x="32" y="40" font-size="12" font-weight="700" fill="#1d1d1d">examples/23-testing - compose stack (gql-ch23-testing)</text>
+<rect x="40" y="120" width="160" height="70" rx="9" fill="#eef4fb" stroke="#2f6db5" stroke-width="2"/>
+<text x="120.0" y="153.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">verify.sh</text>
+<text x="120.0" y="170.0" font-size="11.5" fill="#555555" text-anchor="middle">curl, docker compose run</text>
+<rect x="300" y="60" width="270" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="93.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus</text>
+<text x="435.0" y="110.0" font-size="11.5" fill="#555555" text-anchor="middle">SmallRye GraphQL (code-first)</text>
+<text x="435.0" y="125.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8330 /graphql</text>
+<text x="435.0" y="140.0" font-size="11.5" fill="#555555" text-anchor="middle">/debug/source-calls (lab only)</text>
+<rect x="300" y="180" width="270" height="100" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
+<text x="435.0" y="213.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python</text>
+<text x="435.0" y="230.0" font-size="11.5" fill="#555555" text-anchor="middle">Strawberry on FastAPI (code-first)</text>
+<text x="435.0" y="245.0" font-size="11.5" fill="#555555" text-anchor="middle">:8080 -&gt; host :8331 /graphql</text>
+<text x="435.0" y="260.0" font-size="11.5" fill="#555555" text-anchor="middle">/debug/source-calls (lab only)</text>
+<rect x="300" y="330" width="270" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="435.0" y="355.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus-test</text>
+<text x="435.0" y="372.5" font-size="11.5" fill="#555555" text-anchor="middle">profile test: mvn verify</text>
+<text x="435.0" y="387.5" font-size="11.5" fill="#555555" text-anchor="middle">reports and schema to /out</text>
+<rect x="300" y="420" width="270" height="70" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="435.0" y="445.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">python-test</text>
+<text x="435.0" y="462.5" font-size="11.5" fill="#555555" text-anchor="middle">profile test: pytest</text>
+<text x="435.0" y="477.5" font-size="11.5" fill="#555555" text-anchor="middle">junit.xml and schema to /out</text>
+<rect x="40" y="340" width="190" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="135.0" y="370.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">load</text>
+<text x="135.0" y="387.5" font-size="11.5" fill="#555555" text-anchor="middle">profile load: k6 2.3.0</text>
+<text x="135.0" y="402.5" font-size="11.5" fill="#555555" text-anchor="middle">UBI 10 minimal</text>
+<rect x="700" y="70" width="250" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="100.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">contracts/schema/</text>
+<text x="825.0" y="117.5" font-size="11.5" fill="#555555" text-anchor="middle">canonical SDL</text>
+<text x="825.0" y="132.5" font-size="11.5" fill="#555555" text-anchor="middle">diffed against both stacks</text>
+<rect x="700" y="360" width="250" height="90" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
+<text x="825.0" y="395.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">documents/</text>
+<text x="825.0" y="412.5" font-size="11.5" fill="#555555" text-anchor="middle">Chapter 22&#x27;s four operations</text>
+<text x="825.0" y="427.5" font-size="11.5" fill="#555555" text-anchor="middle">FanOut, OverBudget, fixture</text>
+<path d="M200,140 L300,110" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="244.0" y="117.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">POST /graphql</text>
+<text x="244.0" y="117.0" font-size="11" fill="#555" text-anchor="middle">POST /graphql</text>
+<path d="M200,170 L300,225" fill="none" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+<text x="242.0" y="213.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">the same documents</text>
+<text x="242.0" y="213.5" font-size="11" fill="#555" text-anchor="middle">the same documents</text>
+<path d="M230,370 L300,265" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="229.0" y="331.5" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">k6, one stack per run</text>
+<text x="229.0" y="331.5" font-size="11" fill="#b8650a" text-anchor="middle">k6, one stack per run</text>
+<path d="M570,100 L700,100" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="635.0" y="92.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">introspect + diff</text>
+<text x="635.0" y="92.0" font-size="11" fill="#b8650a" text-anchor="middle">introspect + diff</text>
+<path d="M570,235 L700,140" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<path d="M700,395 L570,365" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M700,420 L570,455" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M700,410 L230,410" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="525.0" y="402.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">build context</text>
+<text x="525.0" y="402.0" font-size="11" fill="#555" text-anchor="middle">build context</text>
+<path d="M230,345 L300,150" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
+<text x="50" y="508" font-size="12" fill="#555555" text-anchor="start">verify.sh runs 22 Quarkus and 18 Python tests, then 160, 160, 40 and 120 load iterations on each stack.</text>
+</svg>

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: gql-ch26-tracking
+description: The GraphQL tracking view on Kubernetes - the Quarkus and the Python stack behind one nginx edge, with an observability backend.
+type: application
+version: 1.0.0
+appVersion: "1.0"
+kubeVersion: ">=1.31.0-0"
+keywords:
+  - graphql
+  - tracking
+home: https://github.com/patterncatalyst/api-patterns-and-practices-graphql
