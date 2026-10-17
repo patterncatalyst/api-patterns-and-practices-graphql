@@ -41,3 +41,18 @@ and checks each stack's live schema against the contract.
 | [26-minikube](https://github.com/{{ site.github_username }}/{{ site.github_repo }}/tree/main/examples/26-minikube) | One Helm chart for both stacks on minikube: probes, ConfigMaps, generated TLS, NetworkPolicy and `helm test`, behind a NodePort edge (cluster tier, no `verify.sh`) | Both | [Ch26]({{ '/docs/26-kubernetes-on-minikube/' | relative_url }}) |
 | [27-final-project](https://github.com/{{ site.github_username }}/{{ site.github_repo }}/tree/main/examples/27-final-project) | Every defence together: the complete schema with subscriptions, cost limits, Keycloak authorization on every path, internal-only introspection and k6 through the edge, on Compose and on minikube | Both | [Ch27]({{ '/docs/27-the-final-project/' | relative_url }}) |
 | [99-appendix-a-openshift-crc](https://github.com/{{ site.github_username }}/{{ site.github_repo }}/tree/main/examples/99-appendix-a-openshift-crc) | The final project's chart on OpenShift Local through a wrapper chart: Routes, in-cluster builds and ImageStreams (cluster tier, validated statically) | Both | [Appendix A]({{ '/docs/99-appendix-a-openshift-crc/' | relative_url }}) |
+
+## Running an example
+
+Each directory is self-contained — a `README.md`, a `compose.yaml`, and a
+`verify.sh` that calls the running services, asserts response semantics as well
+as status codes, and checks each stack's live schema against the canonical SDL
+under `contracts/schema/`. The cluster-tier examples ship a `helm/` chart
+instead and run on minikube or CRC.
+
+```bash
+cd examples/05-contract-first
+./verify.sh
+```
+
+See [Prerequisites & the Lab]({{ '/docs/00-prerequisites-and-the-lab/' | relative_url }}) for the full toolchain setup.
