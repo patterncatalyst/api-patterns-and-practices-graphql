@@ -6,7 +6,7 @@ title: "r01 Execution Plan — api-patterns-and-practices-graphql"
 
 # PLAN — api-patterns-and-practices-graphql (series site #3)
 
-**Status: APPROVED by user 2026-10-15. Execution in progress on branch `r01`; see RESUME POINTER at the end.**
+**Status: APPROVED by user 2026-10-15. SHIPPED 2026-10-17 as r1.0 (main 9143d56); see RESUME POINTER at the end.**
 
 Third site in the "API Patterns and Practices" series, after REST and gRPC.
 Mirrors `~/Dev/api-patterns-and-practices-grpc` (primary template) structurally,
@@ -219,7 +219,6 @@ proprietary managed GraphQL registries (vendor-neutral + OSS inspector only).
 - **S14 — Release gate + publish** (dep all): full green sweep (validate.py,
   wordcount GATE, SDL lint/inspector, jekyll, example matrix, k8s/helm,
   idiomatic review, voice gate incl. rules 13–14); tag + GitHub release via lgtm-github.
-  Do NOT merge r01 → main until the user clears it (see the note under RESUME POINTER).
   Hub (user request 2026-10-17): the entry is prepared on a LOCAL branch `add-graphql-site` in
   `~/Dev/patterncatalyst-workshops-tutorials-list` (35cf410). It adds the site after gRPC in `_data/sites.yml`, the
   three GraphQL books in `_data/books.yml`, and this site to DDIA's `referenced_by`; gen-books.py is not run. Push
@@ -270,13 +269,13 @@ Step status:
 | S11 Infra tiers & Final Project Ch25–27 + Appendix A | **done** (2026-10-17) — F0 harness + Helm-aware k8s CI job; Ch25–27 + Appendix A Opus-validated with one repair round each; Ch26/Ch27 charts proven live on minikube `gql-tracking` (Kubernetes v1.37.1), Appendix A static only; CI green on all 31 jobs (32f3390, Ch25 re-run after a Maven Central fetch error); all 27 example dirs; 89 figures; Ch0, Ch3–27 and Appendix A `verified`, Ch1–2 `draft`. Findings in `r01-wave-f-plan.md` §9 |
 | S12 Bibliography + voice pass (+ S12b) | **done** (2026-10-17) — bibliography with editions, years and a per-chapter citation map (unconfirmable chapter titles cited book-level); site-wide voice pass in five batches, each Opus-validated with one repair round; site chrome and a root README; fresh Jekyll build clean (no Liquid warnings, no `/plans/` pages, 0 broken internal links); 89 figures; findings in `r01-wave-g-plan.md` §9 |
 | S13 Three decks | **done** (2026-10-17) — `api-patterns-graphql-100` (78 slides, 4.7 MB), `-quarkus` (70, 2.0 MB), `-python` (68, 1.9 MB), 8.9 MB in all; built with pptxgenjs 4.0.1 in pinned UBI Node 24; code read from the repo at build time (`snippet()`); `qa.py` gates notes, fonts, logo, title, planning and content language and code fidelity; each deck Opus-validated, then a cross-deck pass. Appendix A also verified live on OpenShift Local 4.22.14 (cluster returned to its pre-run inventory) |
-| S14 Release gate | next — the user clears the merge of r01 to main (Pages), then the hub PR and branch cleanup |
+| S14 Release gate | **done** (2026-10-17) — CI green on all 31 jobs (f67a289); squash-merged to `main` as 9143d56 (PR #1); Pages live at https://patterncatalyst.github.io/api-patterns-and-practices-graphql/ (all 29 chapter pages 200); About link set; release `r1.0` with the three decks attached; hub entry merged (patterncatalyst-workshops-tutorials-list #13, 7a42c93); `r01` deleted locally and on origin, no stray branches in the hub or lgtm-skills |
 
 
 Notes for a fresh session:
-- Public GitHub repo exists (`main` + `r01`). Templates cloned at `~/Dev/api-patterns-and-practices-grpc`
+- Public GitHub repo (`main`; r01 merged and deleted; follow-ups on `r02`). Templates cloned at `~/Dev/api-patterns-and-practices-grpc`
   (primary) and `~/Dev/api-patterns-and-practices-rest` — read-only references.
-- Draft PR #1 (`r01` → `main`) carries the iteration. `main` ruleset active: PR-only, squash-only,
+- PR #1 (`r01` → `main`) carried r1.0 and is merged. `main` ruleset active: PR-only, squash-only,
   required check `ci-ok` (the always-reporting summary job in contracts.yml). Pages enabled
   (build_type workflow); About website = https://patterncatalyst.github.io/api-patterns-and-practices-graphql/.
 - SDL design decisions (post-validation): edge `node` nullable (Ch4 teaches the strict variant as
@@ -288,14 +287,16 @@ Notes for a fresh session:
   `Itinerary.finalArrivalTime` (`finalArrivalDate` deprecated).
 - Upstream SmallRye GraphQL issues FILED 2026-10-16: smallrye/smallrye-graphql#2733 (`@Id List<String>` fails
   at run time), #2734 (`@Deprecated` never reaches introspection) and #2735 (client `extensions` never reach
-  `ExecutionInput`, so graphql-java APQ cannot be plugged in; narrower than open #2321). When #2735 is fixed,
+  `ExecutionInput`; narrower than open #2321). When #2735 is fixed,
   Ch15's Vert.x persisted-document route can give way to graphql-java's `ApolloPersistedQuerySupport`.
-- Further upstream drafts are kept outside this repo; do not file or re-add them. Do not merge r01 → main
-  (no Pages publication) until the user clears it. Reproducer repo:
+- Further upstream drafts are kept outside this repo; do not file or re-add them. Reproducer repo:
   https://github.com/patterncatalyst/smallrye-graphql-reproducers (one module + failing `@QuarkusTest` each;
   reproduces on 2.18.5, 3.0.0.Beta7, `main`). When fixed upstream: drop the `ContractSchemaDetails` workarounds
   (ID_LIST rewrite in Ch10–13; deprecate bridge in Ch11–13) and the README notes. Bodies: `_plans/upstream/`.
-- Known: `braces` advisory (dev-only, via graphql-eslint) has no upstream patch; re-check at S14.
+- Known: `braces` advisory GHSA-vfj7-8cjw-p6xm (dev-only lint tooling, via graphql-eslint → fast-glob → micromatch;
+  globs are the repo's own, no untrusted input). Re-checked 2026-10-17: no patched `braces` release (3.0.3 is
+  newest); `npm audit --omit=dev` clean. Re-check when `braces` or `micromatch` publishes a fix. `graphql` stays
+  on 16.14.2 (newest 16.x) because graphql-eslint 4.4.2 peers `graphql ^16`; eslint bumped to 10.13.0 on r02.
 - Host Ruby lacks `ruby-devel`; build Jekyll in the `ruby:3.3` container (matches CI):
   `docker run --rm -u $(id -u):$(id -g) -e HOME=/tmp -e BUNDLE_PATH=/bundle -v "$PWD":/site:Z -v <bundle-dir>:/bundle:Z -w /site ruby:3.3 sh -c 'bundle install && bundle exec jekyll build --trace'`
 - Favicon now uses `site.brand_emoji` (the gRPC template hardcodes 🔌 — upstream bug, not fixed there).
