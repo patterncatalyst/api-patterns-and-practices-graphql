@@ -6,6 +6,18 @@ description: "Toolchain pins, the repository layout, and a Docker Compose lab th
 duration: "25 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Install and pin the toolchain (`JDK 25`, `Quarkus` 3.40.1, `Python 3.14`, `uv`, `Node 24`) both GraphQL stacks build from.
+- Navigate the repository layout: `contracts/schema/shipping/` as the canonical SDL, one `examples/NN-*/` directory per chapter, and the shared `examples/_lib/lib.sh` harness.
+- Run `bash examples/00-prerequisites/verify.sh` and read its five checks against the canned `Cargo` `ABC123`.
+- Explain how `assert_sdl_conforms` diffs each stack's live schema against the canonical SDL with `graphql-inspector`.
+- Contrast SmallRye GraphQL's and Strawberry's opposite nullability defaults (`@NonNull` vs. `| None`) on the same `Cargo` type.
+
+## Why this matters
+
 Every hands-on chapter in this book hands you a running GraphQL server in two languages and a script that proves both of them behave the same way. This chapter sets that up. It lists what to install and why each version is pinned, shows where things live in the repository, introduces the shipping domain that every later schema describes, and runs the first example: a minimal tracking view that answers one query from canned data on Quarkus and on Python. Nothing in it is about schema design or resolver logic yet. The point is to make the toolchain the thing you stop thinking about, so that when a later chapter fails a check, the cause is the chapter's topic and not a missing tool.
 
 The code is in `examples/00-prerequisites/`. The `verify.sh` script there builds both images, starts them, checks them and tears them down; its `README.md` lists the ports and the expected values.
@@ -333,3 +345,10 @@ Stop the Compose project first, or the ports will conflict. Both commands answer
 The lab is running, both stacks answer the same query, and a script proves they agree with one canonical contract. Chapter 3 starts the schema work by building up the SDL and its type system on top of this skeleton: scalars, enums, interfaces, unions and input types, written first in code on both stacks and checked against `contracts/schema/` by the same harness. Chapter 4 follows with the nullability decisions that Figure 0.2 hinted at, and Chapter 5 covers what it takes to keep two code-first servers aligned with one contract over time.
 
 The loop to carry forward: change the code, run `verify.sh`, and read the diff against the canonical SDL when it fails.
+
+## For deeper coverage
+
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — schema and resolver fundamentals on top of a running server.
+- [GraphQL — Learn](https://graphql.org/learn/) — the specification's own introduction to the type system and execution.
+- [Quarkus — SmallRye GraphQL](https://quarkus.io/guides/smallrye-graphql) — the extension that builds the Quarkus stack's schema code-first.
+- [Strawberry GraphQL documentation](https://strawberry.rocks/docs) — the decorator-based code-first approach the Python stack uses.

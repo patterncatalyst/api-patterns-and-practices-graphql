@@ -6,6 +6,18 @@ description: "What a GraphQL test suite asserts at each layer: the schema a fram
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Place each assertion at the cheapest layer that can see it: schema, resolver unit, operation integration, contract, client document, or load.
+- Stub a source with `@InjectMock` or a fake `BookingSource` to assert the `path`, `message`, and `extensions.code` a resolver's error carries.
+- Diff an exported `schema.graphql` against the canonical SDL in both directions with `assert_sdl_conforms`.
+- Validate client documents with `graphql-inspector validate` and measure per-field usage with `coverage`.
+- Write k6 `checks` and `thresholds` that assert request counts and per-request call invariants hold under concurrency, without asserting latency.
+
+## Why this matters
+
 Chapter 22 ended with three clients that send the same documents to both stacks and read what comes back. Every chapter before it checked the same thing with `verify.sh`: a script brings the stack up, sends operations and compares the answers. That proves the system once, from outside, with Docker and Node on the machine. A team also needs checks that run on every build in seconds, inside each service's own project, and one check that runs the documents at volume and still holds.
 
 The code is in `examples/23-testing/`. It starts from the Chapter 14 example, so both servers serve the full tracking view with batching and a cost budget of 1,000, and the SDL does not change. What is new is around the servers: a test suite for each stack that runs in its own container image, a directory of client documents shared by every layer, and a k6 image that sends those documents at volume. `verify.sh` runs all of it and asserts the results.
@@ -469,3 +481,11 @@ This chapter tested the tracking view at six layers: the schema each stack build
 Chapter 24 starts where a test did not catch the problem: a request fails in a running service, and the diagnosis runs from the response to the trace, the log record and the data. The test it ends with is the kind this chapter builds, one that fails without the fix.
 
 For the tools, read the Quarkus guide "Testing your application" for `@QuarkusTest`, `@TestHTTPResource`, `@InjectMock` and test profiles, and the Quarkus "SmallRye GraphQL Client" guide for the typesafe client and `ErrorOr`. The REST Assured documentation covers the request and body matchers. Strawberry's "Testing" page covers `schema.execute` and the test client, FastAPI's "Testing" and "Async Tests" pages describe the `ASGITransport` and lifespan pattern, the pytest documentation covers fixtures and `--junitxml`, and AnyIO's "Testing with AnyIO" page covers the plugin. GraphQL Inspector's documentation has the "Validate", "Coverage" and "Diff" commands. The k6 documentation covers "Scenarios", "Shared iterations", "Checks", "Thresholds" and "End-of-test summary", and the GraphQL specification's "Validation" section lists the rules `graphql-inspector validate` applies.
+
+## For deeper coverage
+
+- *Cloud Native Design Patterns*, Appendix O — "API Testing with Newman": a parallel automated API test gate built on Postman/Newman collections, worth comparing against this chapter's layered GraphQL suites.
+- [Quarkus — Testing your application](https://quarkus.io/guides/getting-started-testing) — `@QuarkusTest`, `@TestHTTPResource`, `@InjectMock`, and test profiles.
+- [Strawberry — Testing](https://strawberry.rocks/docs/guides/testing) — `schema.execute` and the test client.
+- [GraphQL Inspector](https://the-guild.dev/graphql/inspector) — the `validate`, `coverage`, and `diff` commands.
+- [Grafana k6 — Using k6](https://k6.io/docs/using-k6/) — scenarios, checks, and thresholds.
