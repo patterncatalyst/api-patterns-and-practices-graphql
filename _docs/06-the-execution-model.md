@@ -6,6 +6,18 @@ description: "What happens between a POST to /graphql and the JSON that comes ba
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Walk a GraphQL request through its four stages: parse, validate, coerce variables, execute.
+- Explain why sibling fields may run concurrently while top-level `Mutation` fields execute serially.
+- Read a source-call log to verify, rather than assume, resolver ordering and overlap.
+- Compare blocking and asynchronous resolver styles (a plain return value vs. `Uni`, a blocking `def` vs. `async def`) and their effect on thread and event-loop occupancy.
+- Map the GraphQL-over-HTTP status-code recommendations to what SmallRye and Strawberry actually return.
+
+## Why this matters
+
 Chapters 3 to 5 described the schema: its types, its wrappers and the contract that keeps two stacks aligned. This chapter follows a request through the engine that serves it. A GraphQL server does not run a query the way a database runs SQL. It parses text, checks it against the schema, converts its inputs, and then calls ordinary functions, one per field, in an order the specification mostly leaves to the engine. Knowing that order tells you which calls a selection costs, which of them wait for each other, and what a failed request leaves behind.
 
 The code is in `examples/06-execution-model/`. It starts from the Chapter 3 slice and changes where the data comes from: five sources (booking, routing, voyage, location, delivery) stand in for the services that own it, each call takes 250 ms, and every call is written to a log that the example serves at `/debug/source-calls`. `verify.sh` reads that log after each query, so each claim below about order and overlap is observed on both stacks. The log is a lab tool and is off unless `TRACKING_DEBUG_ENDPOINTS=true`.
@@ -267,3 +279,10 @@ This chapter followed one request through parse, validate, coerce and execute, s
 Chapter 7 uses them to look inside a resolver: its parent, arguments, context and info, how a computed field such as `Delivery` is derived, how `@include` and `@skip` prune calls before they happen, and what it costs when two aliases fetch the same voyage twice. That repeated fetch is left visible until Chapter 13 batches it. Chapter 8 adds the first mutation and asserts the serial rule from this chapter on both stacks, and Chapter 9 gives execution errors a contract.
 
 For the formal definitions, read "Executing Requests", "Coercing Variable Values", "Executing Selection Sets" with its "Normal and Serial Execution" and "Field Collection" subsections, and "Handling Execution Errors" in the [GraphQL specification](https://spec.graphql.org/), and "Status Codes" in GraphQL over HTTP. Samer Buna's *GraphQL in Action* covers the same ground in "Introduction to GraphQL" and "Implementing schema resolvers"; the book is listed on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — "Implementing schema resolvers" covers the resolver execution model this chapter traces with a source-call log.
+- Cloud Native Design Patterns — [Protocols in Depth](https://patterncatalyst.github.io/cloud-native-design-patterns/docs/14-appendix-a-protocols/) appendix, for the HTTP semantics and status-code conventions behind the GraphQL-over-HTTP comparison.
+- [GraphQL specification — Execution](https://spec.graphql.org/) — "Executing Requests", "Coercing Variable Values" and "Handling Execution Errors", the sections this chapter walks in order.
+- [SmallRye GraphQL](https://quarkus.io/guides/smallrye-graphql) — the Mutiny (`Uni`)-based resolver model this chapter's Quarkus examples use.

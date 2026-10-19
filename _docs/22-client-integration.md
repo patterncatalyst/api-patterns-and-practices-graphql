@@ -6,6 +6,18 @@ description: "What a GraphQL client adds over curl: a normalized cache that answ
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Configure `InMemoryCache` type policies so a normalized cache answers a repeated query from memory and merges a mutation payload into the same entry.
+- Generate typed documents with GraphQL Code Generator's `client` preset, and make a document that no longer matches the schema fail the build.
+- Validate a `gql` document against the schema before it is sent, and build one with `gql.dsl` instead of a string.
+- Call a GraphQL API from Java with the SmallRye typesafe and `DynamicGraphQLClient` clients, including `ErrorOr` for a field that may fail.
+- Identify every client on the wire with `X-Client-Name`, `X-Client-Version`, and a named operation.
+
+## Why this matters
+
 Every chapter so far sent documents with `curl` and read the JSON that came back. That is enough to prove a server right, and it leaves everything a real consumer needs to the reader: writing a document that still matches the schema next month, reading the result as a typed value, keeping what it already knows, deciding what to do when half of an answer failed. A client library takes those jobs on, and the choice of client decides how much of the contract the consumer sees at build time instead of at run time.
 
 The code is in `examples/22-client-integration/`. It starts from the Chapter 13 example and serves the same schema from both stacks, so there is no new server code. What is new is three clients, one per language, each run as a one-off container against Quarkus and then Python: Apollo Client with GraphQL Code Generator in TypeScript, `gql` in Python, and the SmallRye GraphQL typesafe and dynamic clients in Java. `verify.sh` asserts what each prints.
@@ -317,3 +329,11 @@ docker compose down -v
 This chapter put clients on the contract: a normalized cache that answered one query from another's response and took a mutation payload into the same entry, generated types that fail the build for a document the schema no longer supports, local validation in `gql`, the SmallRye typesafe and dynamic clients with `ErrorOr` for the node that may fail, partial results kept by all three, and a client name on every request.
 
 Chapter 23 tests the whole of it: what a GraphQL API suite asserts at each layer, and the load-testing harness that runs the same documents at volume. For the client side, read the Apollo Client documentation on caching ("Caching in Apollo Client" and "Configuring the cache") and on `HttpLink`, the GraphQL Code Generator documentation for the client preset, the `gql` documentation on schema validation, the DSL module and transports, and the Quarkus guide to the SmallRye GraphQL client for the typesafe and dynamic clients and `ErrorOr`. The GraphQL-over-HTTP draft describes what a client sends, the media types and the `GET` and `POST` forms Chapter 15 used. *Full Stack GraphQL Applications* by William Lyon builds a React client on Apollo Client, and *GraphQL in Action* by Samer Buna covers consuming a GraphQL API from a client application.
+
+## For deeper coverage
+
+- William Lyon, *Full Stack GraphQL Applications* (Manning, 2022) — a React client built on Apollo Client, with pagination and authorization.
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — consuming a GraphQL API from a client application.
+- [Apollo Client — Caching in Apollo Client](https://www.apollographql.com/docs/react/caching/overview)
+- [GraphQL Code Generator](https://the-guild.dev/graphql/codegen) — the `client` preset this chapter's TypeScript build runs.
+- [Quarkus — SmallRye GraphQL Client](https://quarkus.io/guides/smallrye-graphql-client) — the typesafe and dynamic clients, and `ErrorOr`.

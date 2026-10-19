@@ -6,6 +6,18 @@ description: "Who is asking and what they may see: Keycloak-issued JWTs validate
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Validate a Keycloak-issued JWT for signature, issuer, audience and expiry on both stacks (`quarkus-oidc` configuration versus PyJWT's `PyJWKClient`), and return `401` for anything that fails.
+- Keep only the identity, never the token, in the request context, and thread it correctly through batch resolvers that resume on another thread.
+- Apply operation-, object- and field-level authorization rules, and explain why a refused object returns `null` while a refused field returns a coded `FORBIDDEN`/`UNAUTHENTICATED` error.
+- Enforce ownership at one choke point (the booking source) so every path to a `Cargo` — `cargo`, `cargos`, `node`, `nodes`, `HandlingEvent.cargo` — obeys the same rule.
+- State why a response that depends on the caller's identity must bypass shared caches or carry the caller in its key.
+
+## Why this matters
+
 Chapter 2 pointed at one query that touches cargo owned by one customer and reference data owned by nobody, and said authorization has to work per field, not per route. Chapter 7 left a place in the context for the caller's identity. This chapter fills both in. The tracking view stops answering everyone the same way: it learns who is asking, and the same document returns different data to different people.
 
 The code is in `examples/18-authn-authz/`. It starts from the Chapter 13 example and serves the same schema, so the SDL does not change. What changes is around it. Keycloak issues the tokens, each stack validates them, and three rules apply to what a valid caller may see: one per operation, one per object and one per field. `verify.sh` asserts each rule on both stacks, as three users and as an anonymous caller.
@@ -323,3 +335,11 @@ docker compose -f examples/18-authn-authz/compose.yaml down -v
 This chapter put a caller in front of every rule: tokens from Keycloak validated for signature, issuer, audience and expiry, an identity and no token in the context, annotations and permission classes for operations and fields, ownership at the booking source for every path to a cargo, and two codes a client can act on.
 
 Chapter 19 makes the server observable per operation, and the identity is a candidate for what to record: a trace attribute for the subject is fine, and a token or an owner list is not. For the specifications, read RFC 6750 on bearer tokens, RFC 7519 on JWTs, RFC 8725 on JWT best practices, RFC 9700 on OAuth 2.0 security, and OpenID Connect Core for the difference between an ID token and an access token. *Full Stack GraphQL Applications* takes the other placement in its chapter "Adding authorization and authentication", where the rules are written in the schema with an `@auth` directive; this chapter keeps them outside the SDL (Chapter 5). The provider side is in the Keycloak Server Administration and Server guides (importing realms, hostname, health). The Quarkus [OIDC bearer token authentication guide](https://quarkus.io/guides/security-oidc-bearer-token-authentication) and the security section of the [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) cover the Java side, and Strawberry's [permissions guide](https://strawberry.rocks/docs/guides/permissions) and the PyJWT documentation for `PyJWKClient` cover Python. The OWASP GraphQL Cheat Sheet has an "Access Control" section.
+
+## For deeper coverage
+
+- William Lyon, *Full Stack GraphQL Applications* (Manning, 2022), chapter "Adding authorization and authentication" — the `@auth`-directive placement this chapter deliberately avoids, and useful as a contrast.
+- Cloud Native Design Patterns, chapter "Security" — the identity-and-access-control patterns this chapter's three authorization layers apply to GraphQL specifically.
+- [OWASP GraphQL Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html), "Access Control" section — the broader guidance behind this chapter's operation, object and field rules.
+- RFC 7519 (JWT), RFC 8725 (JWT Best Current Practices) and RFC 6750 (Bearer Token Usage) — the token format and validation rules this chapter implements on both stacks.
+- [Quarkus OIDC bearer token authentication guide](https://quarkus.io/guides/security-oidc-bearer-token-authentication) and Strawberry's [permissions guide](https://strawberry.rocks/docs/guides/permissions) — the framework mechanisms behind `@Authenticated`/`@RolesAllowed` and `BasePermission`.

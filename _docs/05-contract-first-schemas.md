@@ -6,6 +6,18 @@ description: "How the tracking view keeps two code-first schemas aligned with on
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Contrast SDL-first and code-first schema ownership and name the typical failure mode of each.
+- Export the schema each stack actually builds (`GET /graphql/schema.graphql` on Quarkus, `strawberry export-schema` on Python).
+- Run a two-direction `graphql-inspector diff` (live-to-canonical and canonical-to-live) and explain why checking only one direction misses a tightened field.
+- Filter framework-injected noise (directives, scalars) out of a conformance diff without masking real drift.
+- Lint the canonical SDL with GraphQL ESLint and gate it against `main` with a breaking-change check.
+
+## Why this matters
+
 Chapter 3 gave the tracking view a vocabulary and Chapter 4 explained what its nullability promises. Both chapters leaned on one mechanism without opening it: after every run, `verify.sh` compared the schema each stack built with the canonical SDL in `contracts/schema/`. This chapter opens it. It covers who owns the schema, how each stack exports the schema it builds, what the diff can and cannot see, and how to prove the gate works by breaking the schema and watching it fail.
 
 The code is in `examples/05-contract-first/`. It starts from the Chapter 3 example, serves the same slice from the same seed, and adds the export, the checks around it and five seeded drifts. Its `verify.sh` asserts every value in the "On the wire" section.
@@ -312,3 +324,10 @@ This chapter covered the two ways to own a schema, how each stack exports the sc
 Chapter 6 leaves the schema and follows a request through the engine: parse, validate, coerce variables and execute. Chapter 8 serves the input type and asserts that no input field carries a default, which the diff would report only as dangerous. Chapter 11 takes the breaking-change gate and uses it to evolve a contract that clients already depend on, including the question of what to do with a tightened field. Chapter 23 turns the export checks into the unit tests sketched above.
 
 For the formal definitions, read the Type System and Introspection sections of the [GraphQL specification](https://spec.graphql.org/). The tools are documented at [GraphQL Inspector](https://the-guild.dev/graphql/inspector/docs) and [GraphQL ESLint](https://the-guild.dev/graphql/eslint). Samer Buna's *GraphQL in Action* covers designing a schema in "Designing a GraphQL schema", which is listed on the [Bibliography](../../bibliography/) page, and the gRPC sibling of this site covers the same ground with `buf` in its Contract-first with Buf chapter.
+
+## For deeper coverage
+
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — "Designing a GraphQL schema" covers the schema-ownership tradeoffs this chapter resolves with a gate.
+- Cloud Native Design Patterns — [API Registry](https://patterncatalyst.github.io/cloud-native-design-patterns/docs/09-api-registry/) chapter, for the broader pattern of a canonical contract checked against what services actually serve.
+- [GraphQL Inspector](https://the-guild.dev/graphql/inspector/docs) — the two-direction diff and breaking-change tooling this chapter's gate is built on.
+- [GraphQL ESLint](https://the-guild.dev/graphql/eslint) — the linter that enforces description and naming rules on the canonical SDL.

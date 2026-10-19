@@ -6,6 +6,18 @@ description: "The kinds of type a GraphQL schema is built from (scalars, enums, 
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Identify the GraphQL type kinds (scalars, enums, objects, interfaces, unions, input types) and the wrapper combinations (`T!`, `[T]`, `[T!]!`) that modify them.
+- Implement a custom scalar (`TrackingId`, `UnLocode`, `DateTime`) with its three coercions — serialize, parse value, parse literal — on both SmallRye GraphQL and Strawberry.
+- Use the `Node` interface and `Query.node` for Relay-style global object identification.
+- Explain why the tracking schema reaches for an interface rather than a union when types share an `id`.
+- Map a client selection onto the schema's type graph and classify the request-time validation failures it can trigger.
+
+## Why this matters
+
 Chapter 2 gave the tracking view a role and a boundary. This chapter gives it a vocabulary. Every GraphQL service is described by a schema, the schema is made of a small set of type kinds, and nearly every question a client or a reviewer asks about the API reduces to which kind a type is and how it is wrapped. You will read the canonical SDL for the tracking view kind by kind, run the full cargo graph on Quarkus and on Python, and watch the same selection produce the same bytes on both.
 
 The code is in `examples/03-sdl-type-system/`. It starts from the lab in [Chapter 0](../00-prerequisites-and-the-lab/) and replaces the canned cargo with an in-memory seed of five locations, three voyages and two cargos. Its `verify.sh` asserts every value in the "On the wire" section.
@@ -311,3 +323,10 @@ This chapter covered every type kind the tracking view uses, how each is written
 Chapter 4 takes the wrappers and follows a `null` up the tree: how a non-null field that cannot be filled empties its parent, and which fields the schema makes nullable. Chapter 5 builds the export-and-diff loop that keeps both stacks aligned with the canonical SDL. Chapter 8 serves the input type from this chapter and exercises the `DateTime` input paths, and Chapter 11 returns to enum evolution and the breaking-change gate.
 
 For the formal definitions, read the Type System section of the [GraphQL specification](https://spec.graphql.org/), including Scalars and `@specifiedBy`, and the Relay Global Object Identification specification linked above. Samer Buna's *GraphQL in Action* covers the same ground in "Introduction to GraphQL" and "Designing a GraphQL schema"; both are listed on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — "Designing a GraphQL schema" covers scalars, enums, interfaces and unions in the same depth as this chapter.
+- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024) — schema design choices, including when to prefer an interface over a union.
+- [GraphQL specification — Type System](https://spec.graphql.org/) — the authoritative definitions of scalars, enums, objects, interfaces, unions and input types.
+- [Relay — Global Object Identification](https://relay.dev/graphql/objectidentification.htm) — the `Node` interface contract this chapter's `Query.node` implements.

@@ -6,6 +6,18 @@ description: "Pushing handling events to a client three ways on both stacks: Sub
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Serve `Subscription.cargoHandled` over `graphql-transport-ws` on both stacks and trace the six-frame handshake: `connection_init`, `connection_ack`, `subscribe`, `next`, `next`, `complete`.
+- Contrast a GraphQL subscription, GraphQL-over-SSE and a plain SSE feed on selection, resume and transport cost, and pick the right one from a client's needs.
+- Resume a plain SSE feed correctly from `Last-Event-ID` by joining the broadcast before replaying stored events, so no event is lost or duplicated.
+- Clear per-event state (`DataLoader` caches, `beginSubscribedFieldEvent`) between subscription events so a long-lived stream never serves stale batched data.
+- Bound a subscriber's queue and verify cleanup on `complete` and on a dropped connection, so a slow or disconnected client can't grow the process.
+
+## Why this matters
+
 Every chapter so far answered a request with a response. The tracking view also has a field for clients that want to be told: `Subscription.cargoHandled(trackingId:)` emits each handling event for one cargo as it is registered. Chapter 1 introduced it as an operation that produces a stream of results over a long-lived connection, and Chapter 2 placed it among the axes as a read delivered as a stream. This chapter serves it.
 
 The code is in `examples/21-real-time/`. It starts from the Chapter 13 example and serves the whole canonical SDL, `Subscription` included, so the contract diff that Chapters 5 and 11 describe now compares a complete schema. Both stacks serve the subscription over WebSocket. Strawberry also serves it over server-sent events. Both stacks serve a plain SSE feed that is not GraphQL at all. A small Python client on `gql` runs on the compose network and reads each transport, and `verify.sh` asserts what arrives, in what order, with what reads behind it, and what is cleaned up afterwards.
@@ -356,3 +368,11 @@ docker compose -f examples/21-real-time/compose.yaml down -v
 This chapter completed the canonical schema. `cargoHandled` is served over two GraphQL transports, a plain feed covers what a selection set cannot: resume and plain HTTP. The cost of an open subscription is a queue, a registry entry and one execution per event.
 
 Chapter 22 builds clients: a normalized cache in Apollo Client, generated types, `gql` with local validation and the SmallRye clients. Its subscription support is the client side of this chapter, and it points back here. For the transports, read the `graphql-transport-ws` protocol document in the `graphql-ws` repository (`PROTOCOL.md`), the `graphql-sse` protocol document, the Subscription section of the GraphQL specification, and the WHATWG HTML Standard's section on server-sent events for `Last-Event-ID` and reconnection. RFC 6455 defines the WebSocket protocol, and RFC 8441 bootstraps WebSockets over HTTP/2. The Quarkus [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) covers subscriptions and Mutiny `Multi`, and the [Quarkus REST guide](https://quarkus.io/guides/rest) covers server-sent events. Strawberry's [subscriptions guide](https://strawberry.rocks/docs/general/subscriptions) lists the protocols it serves, and FastAPI's documentation on server-sent events covers `EventSourceResponse`. The forthcoming WebSockets book in this series takes up the raw protocol: framing, acknowledgements, authentication and resume.
+
+## For deeper coverage
+
+- Cloud Native Design Patterns, chapter "Appendix C: WebSockets" — the general WebSocket and bidirectional-streaming patterns this chapter applies to a GraphQL subscription specifically.
+- The `graphql-ws` repository's `PROTOCOL.md` — the `graphql-transport-ws` message sequence this chapter's six-frame handshake follows.
+- The `graphql-sse` protocol document — the distinct-connections mode this chapter's GraphQL-over-SSE transport implements.
+- WHATWG HTML Standard, server-sent events section — `Last-Event-ID`, reconnection and the `EventSource` behavior this chapter's plain feed resumes against.
+- RFC 6455, "The WebSocket Protocol" — the framing underneath both `graphql-transport-ws` and the raw-WebSocket option this chapter stops short of.

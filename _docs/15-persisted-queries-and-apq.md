@@ -6,6 +6,18 @@ description: "Replacing query text with a SHA-256 hash: Apollo's three-step APQ 
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Walk a client through Apollo's three-step `persistedQuery` handshake and explain why the server recomputes `sha256Hash` instead of trusting the client's claim.
+- Serve a persisted query over `GET` with the hash and variables in the URL, while keeping a mutation off `GET` with a `405`/`400` refusal.
+- Contrast APQ's open registration with trusted documents' build-time manifest, and state which one functions as an allowlist.
+- Bound a persisted-document store (Caffeine, `LRUCache`) and reason about what an eviction costs a client versus what it protects the server from.
+- Wire the hash-to-text resolution seam on each stack: a Vert.x route in front of SmallRye, a `SchemaExtension` inside Strawberry.
+
+## Why this matters
+
 Chapter 13 ended with a query that had stopped costing source calls. It still costs something on every request: the client sends the whole text, the server hashes it, finds it in a cache or parses and validates it, and only then executes. Chapter 1 pointed at the other side of the same cost. A `POST` to one URL cannot be cached by anything between the client and the server, and the `GET` form that could be cached needs a URL that carries a document. This chapter replaces the document with its hash.
 
 The code is in `examples/15-persisted-queries/`. It starts from the Chapter 13 example, so the schema, the seed and the error contract are unchanged, and adds the protocol in front of each engine. Four services run: an APQ instance and a trusted instance per stack, from one image each. The chapter does not repeat Chapter 14's limits, and a production service would carry both.
@@ -299,3 +311,11 @@ This chapter turned a document into a hash. It walked APQ's three steps, refused
 Chapter 16 builds on the `GET` URLs this chapter makes: it puts an HTTP cache in front of each stack, sets `Cache-Control` per response, and caches fields inside the server. The hash-only `GET` and its `Accept` header are what that cache keys on.
 
 For the protocol, read Apollo's [Automatic Persisted Queries](https://www.apollographql.com/docs/apollo-server/performance/apq) and the [persisted queries and the manifest format](https://www.apollographql.com/docs/graphos/platform/security/persisted-queries#manifest-format) in GraphOS. For trusted documents, read the "Trusted documents" section of the [Security](https://graphql.org/learn/security/) page on graphql.org. For `GET` and its rules, read the "GET" section of the [GraphQL over HTTP](https://http-spec.graphql.org/draft/) specification. The engine side is in the "Query Caching" section of the graphql-java [execution documentation](https://www.graphql-java.com/documentation/execution), the Strawberry pages on [schema extensions](https://strawberry.rocks/docs/guides/extensions), [ParserCache](https://strawberry.rocks/docs/extensions/parser-cache) and [ValidationCache](https://strawberry.rocks/docs/extensions/validation-cache), and the Quarkus [HTTP reference](https://quarkus.io/guides/http-reference) and [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql).
+
+## For deeper coverage
+
+- William Lyon, *Full Stack GraphQL Applications* (Manning, 2022) — end-to-end clients, pagination and the manifest-style thinking behind a build-time document list.
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — resolvers and data fetching, the execution path a persisted query still runs once resolved.
+- Cloud Native Design Patterns, chapter "Appendix L: Caching" — the general caching-by-key discipline that a hash-keyed `GET` URL plugs into.
+- [Apollo Automatic Persisted Queries](https://www.apollographql.com/docs/apollo-server/performance/apq) and the [GraphOS persisted-queries manifest format](https://www.apollographql.com/docs/graphos/platform/security/persisted-queries#manifest-format) — the protocol and the manifest this chapter implements.
+- graphql.org Security page, "Trusted documents" section — the allowlist model this chapter contrasts with APQ.

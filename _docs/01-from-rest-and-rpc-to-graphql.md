@@ -6,6 +6,18 @@ description: "One client question answered by REST, gRPC and GraphQL, and the pa
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Compare how REST, gRPC and GraphQL each assemble the answer to one client intent.
+- Define the tracking view as a read-oriented aggregation layer in front of services that already exist.
+- Trace a GraphQL request through `parse`, `validate`, `execute` and resolver fan-out to one JSON response.
+- Explain how null propagation turns a failed `Leg.voyage` lookup into a degraded, not failed, response.
+- Weigh GraphQL's strengths (shape matched to the client, fewer round trips) against its costs (HTTP caching, query cost, the N+1 problem).
+
+## Why this matters
+
 A customer opens a tracking page and types a tracking id. The page has one question to answer: where is my cargo, and what happens next? Answering it takes facts that live in three places. The cargo record holds the origin, the destination and the routing requirements. The routing service holds the itinerary, an ordered list of legs on named voyages. The handling history holds what has physically happened so far: received, loaded, unloaded, cleared by customs. A mobile client showing a glanceable status needs a handful of those fields. A web dashboard for the same cargo needs most of them.
 
 Three API paradigms can serve that question, and each makes a different party responsible for assembling the answer. REST makes the client assemble it from several resources. gRPC makes the caller invoke typed methods on each service that owns a piece. GraphQL makes the server assemble it, shaped by a selection the client writes. This book is about the third option, applied to a narrow job, and this chapter sets out what that job is, how a request travels, and where the approach costs more than it returns.
@@ -209,3 +221,10 @@ For deeper background on the language and execution model, Samer Buna's *GraphQL
 This chapter put three paradigms next to one intent, defined the tracking view as the role GraphQL plays in this book, traced a request from a single `POST` through parse, validate and execute to a JSON response, and listed the places where the model gains and loses ground. Chapter 2 formalizes the choice with a decision framework applied to the shipping domain.
 
 From there the book follows the request path in order. Chapters 3 to 5 cover the schema: the SDL and type system, nullability, and the contract-first workflow that keeps both stacks aligned with one schema. Chapters 6 to 8 cover execution, queries and resolvers, and mutations. Chapter 9 covers errors and partial results. Chapters 10 and 11 cover schema design and evolution, Chapters 12 to 16 cover pagination, batching, cost limits, persisted queries and caching, and the remaining chapters address security, observability, federation, real-time delivery, client integration, testing, debugging, running the stack and the final project.
+
+## For deeper coverage
+
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — the schema, resolvers and client side this chapter's tracking view sketches.
+- William Lyon, *Full Stack GraphQL Applications* (Manning, 2022) — the end-to-end application view of the same request path.
+- Cloud Native Design Patterns — [Communications](https://patterncatalyst.github.io/cloud-native-design-patterns/docs/02-communications/) chapter, for the REST and RPC styles GraphQL is contrasted against here.
+- [GraphQL specification](https://spec.graphql.org/) — the authoritative definition of the language, type system and execution algorithm.

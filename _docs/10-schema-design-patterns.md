@@ -6,6 +6,18 @@ description: "How the tracking view's schema is designed from the screens that r
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Design schema fields from client demand (e.g. the tracking screen's three panels) rather than mirroring backing tables.
+- Apply the naming, input, and payload conventions (`...Input`, `...Payload`, `...Connection`) that make a type's role readable from its name.
+- Implement the `Node` interface and global ids so any client can refetch an object with `node(id:)` or batch-refetch with `nodes(ids:)`.
+- Choose between an interface and a union based on whether a client would select shared fields or branch on `__typename`.
+- Check schema conventions mechanically against the canonical SDL and each live `__schema`, instead of relying on review.
+
+## Why this matters
+
 Nine chapters used the schema. This one asks why it looks the way it does. Every type, name and nullability marker the examples served so far came from the canonical SDL in `contracts/schema/`, and each of them is a decision a client will depend on for years. A field name cannot be changed quietly once a dashboard selects it, and an identity rule cannot be added after caches have been keyed on something else. The patterns here are the ones that keep those decisions cheap to live with.
 
 The code is in `examples/10-schema-design/`. It starts from the Chapter 8 example and adds one root field, `Query.nodes(ids: [ID!]!): [Node]!`, which fetches several objects by global id in one request. Its `verify.sh` also reads each live schema once and checks the naming, input, payload and description conventions mechanically, and it runs the GraphQL ESLint rules on the canonical SDL. The slice predates the deprecation that Chapter 11 introduces: it serves `finalArrivalDate` without a deprecation and without `finalArrivalTime`.
@@ -243,3 +255,11 @@ This chapter named the conventions behind the schema and added `Query.nodes`, th
 Chapter 11 starts from this example. Chapter 12 builds the connection that `handlingHistory` has been waiting for and carries `nodes` forward.
 
 For the formal definitions, read "Interfaces", "Unions", "Input Objects" and "OneOf Input Objects" in the [GraphQL specification](https://spec.graphql.org/), and the [Global Object Identification](https://relay.dev/graphql/objectidentification.htm) specification from Relay. The [GraphQL ESLint](https://the-guild.dev/graphql/eslint/docs) documentation lists the rules the contract uses. Samer Buna's *GraphQL in Action* covers schema design in "Designing a GraphQL schema", and Artur Czemiel's *GraphQL Best Practices* covers naming, enums, interfaces and pagination in its guidance on schema design; both are listed on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- [GraphQL specification — Interfaces, Unions, Input Objects, OneOf Input Objects](https://spec.graphql.org/).
+- [Relay — Global Object Identification specification](https://relay.dev/graphql/objectidentification.htm) — the `Node` interface and global-id pattern this chapter implements.
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — "Designing a GraphQL schema."
+- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024) — naming, enums, interfaces, and pagination guidance.
+- *Cloud Native Design Patterns*, "Composition" — designing a schema from client demand rather than from the data each service owns.
