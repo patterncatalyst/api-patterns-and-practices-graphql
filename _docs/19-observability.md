@@ -6,6 +6,18 @@ description: "Telemetry for an API with one endpoint: OpenTelemetry on both stac
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Join a server-side trace to the caller's own trace via the W3C `traceparent` header, with no application code on either stack.
+- Instrument a span per resolver and per source call (`opentelemetry-graphql-java-20.0`, Strawberry's `OpenTelemetryExtension`) and read the result back from Tempo by trace id.
+- Derive RED metrics per GraphQL operation from Tempo's span-metrics generator instead of a per-URL histogram that can't tell `FanOut` apart from `TrackCargo`.
+- Record `graphql.errors` by `error.code` and `graphql.field.deprecated.usage` by `client.name` as engine-level counters that no resolver can forget to call.
+- Decide what belongs in a span attribute or a metric label (operation name, field coordinate, error code) and what must never appear there (variable values, tokens, owner lists).
+
+## Why this matters
+
 Chapter 1 warned that every GraphQL request hits one route, and Chapter 9 showed that a response with errors still answers `200`. Both chapters pointed here. A server that answers every question the same way at the HTTP layer has to be observed at the GraphQL layer: by operation, by field and by error code. This chapter makes the tracking view do that on both stacks, and then reads the result back from the observability backend instead of trusting that it arrived.
 
 The code is in `examples/19-observability/`. It starts from the Chapter 13 example and serves the same schema, so the SDL does not change and every source call is the one Chapter 13 counted. What changes is the telemetry around it. Both stacks export traces, metrics and logs over OTLP to one container, and `verify.sh` asserts what the backend holds. The three signals answer different questions: traces say where the time went, metrics say how often and which errors, and logs hold the detail of one failure.
@@ -240,3 +252,11 @@ This chapter made one endpoint legible: a trace per request with a span per reso
 The other examples in the series keep telemetry off by default and add the collector with a second compose file, `compose.observability.yaml`. A service that runs without a collector switches the SDK off: set `OTEL_SDK_DISABLED=true` for the Python SDK and `QUARKUS_OTEL_SDK_DISABLED=true` (`quarkus.otel.sdk.disabled`) for Quarkus, and add the collector's compose file only when you want the signals. The compose file in this chapter shows the other side of that pattern, where the collector is a default service and the apps wait for it to be healthy.
 
 Chapter 20 puts a gateway in front of two subgraphs. With Hive Gateway's OpenTelemetry integration enabled, a distributed trace crosses the gateway: the gateway propagates `traceparent` to each subgraph, so one trace holds the gateway's plan and every subgraph's operation span, which is this chapter's mechanism applied across services. For the specifications, read the OpenTelemetry specification's "Trace Context" overview and its semantic conventions for GraphQL spans (`graphql.operation.name`, `graphql.operation.type`, `graphql.document`), and the W3C Trace Context recommendation. The Quarkus guides "Using OpenTelemetry", "Using OpenTelemetry Tracing" and "Using OpenTelemetry Metrics" cover the Java side along with the OpenTelemetry Java instrumentation's graphql-java library page, and Strawberry's OpenTelemetry extension page and the OpenTelemetry Python zero-code instrumentation page cover Python. The Grafana Tempo documentation has the span metrics generator under "Metrics-generator".
+
+## For deeper coverage
+
+- Charity Majors, Liz Fong-Jones & George Miranda, *Observability Engineering* (O'Reilly, 2022) — the three-signal model (traces, metrics, logs) this chapter implements for a single-route API.
+- Cloud Native Design Patterns, chapter "Observability" — the broader tracing, metrics and log-correlation patterns this chapter applies specifically to a GraphQL engine.
+- W3C Trace Context recommendation — the `traceparent` header this chapter's trace-joining relies on.
+- OpenTelemetry semantic conventions for GraphQL spans (`graphql.operation.name`, `graphql.operation.type`, `graphql.document`) — the attribute names this chapter's spans follow.
+- Grafana Tempo documentation, "Metrics-generator" — the span-metrics mechanism behind this chapter's RED metrics.

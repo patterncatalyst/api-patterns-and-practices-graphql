@@ -6,6 +6,18 @@ description: "Counting the source calls a four-cargo page costs, batching them o
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Count an N+1 fan-out field by field, from one `listCargos` call to 29 source calls for a four-cargo page.
+- Batch per-field resolvers into one bulk call per owner per level using `@Source List<...>` on Quarkus and a `DataLoader` on Python.
+- Apply the DataLoader contract — keys in, values out in the same order, missing keys as null, failures per key, cache scoped to one request.
+- Explain why SmallRye's per-method loaders cost more calls (8) than Strawberry's per-key loaders (6) for the same query.
+- Scope a loader's cache to a single request so a write like `registerHandlingEvent` is never served stale data by a stale cache.
+
+## Why this matters
+
 Chapter 12 ended on a number. A page of four cargos, each with its itinerary legs, their voyages and locations, and its delivery status, cost 29 source calls. Nothing in that query was unusual. This chapter takes the number apart, shows where each call comes from, and brings it to 8 on Quarkus and 6 on Python without changing a field of the schema.
 
 The code is in `examples/13-dataloaders/`. It starts from the Chapter 12 example, so the seed, the keyset cursors, the exposed and masked errors and the deprecation of Chapter 11 are all there. Every source gains a bulk operation next to its single-key one, SmallRye batches with `@Source List<...>` resolvers, and Strawberry batches with DataLoaders built once per request. The schema is the one Chapter 12 served, and `verify.sh` diffs it against the canonical SDL to prove it.
@@ -311,3 +323,11 @@ This chapter counted 29 source calls for a four-cargo page and brought them to 8
 Chapter 14 treats the page size and the selection depth as inputs to query cost. Batching bounds the number of calls a selection makes, and cost analysis bounds the selection itself.
 
 For the batching rules, read the [graphql-java documentation on batching](https://www.graphql-java.com/documentation/batching/) and the java-dataloader project it builds on, and the Strawberry guide to [DataLoaders](https://strawberry.rocks/docs/guides/dataloaders). The SmallRye side is in the Quarkus [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) and the [SmallRye GraphQL documentation](https://smallrye.io/smallrye-graphql/). Samer Buna's *GraphQL in Action* covers caching and batching with DataLoader in "Optimizing data fetching". Martin Kleppmann and Chris Riccomini's *Designing Data-Intensive Applications*, 2nd edition, covers the cost of fanning one request out to many backend calls. Both books are on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- [graphql-java — documentation on batching](https://www.graphql-java.com/documentation/batching/) and the java-dataloader project it builds on.
+- [Strawberry — DataLoaders guide](https://strawberry.rocks/docs/guides/dataloaders).
+- Martin Kleppmann & Chris Riccomini, *Designing Data-Intensive Applications*, 2nd ed. (O'Reilly, 2026) — tail latency amplification, why a request is as slow as its slowest backend call.
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — caching and batching with DataLoader, in "Optimizing data fetching."
+- *Cloud Native Design Patterns*, "Composition" — batching by owner as the general form of aggregation across sources.

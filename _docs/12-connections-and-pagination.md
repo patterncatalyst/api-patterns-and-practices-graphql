@@ -6,6 +6,18 @@ description: "How a growing list becomes a Relay connection: offset against keys
 duration: "15 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Explain why keyset pagination with opaque cursors stays stable under inserts where offset pagination repeats or skips rows.
+- Build a Relay connection — `edges`, `node`, `cursor`, and `pageInfo` — with a nullable `node` so one failing item nulls only its edge.
+- Encode and validate an opaque, versioned cursor like `cargo|v1|<bookedAt>|<trackingId>`, rejecting anything the server didn't issue.
+- Page forward with `first`/`after` and backward with `last`/`before`, computing `hasNextPage`/`hasPreviousPage` exactly from the slice.
+- Reject invalid arguments such as an out-of-range `first` as an exposed `BAD_USER_INPUT` error rather than silently clamping them.
+
+## Why this matters
+
 Every list in the tracking view so far has been short. A cargo has two legs and a handful of events, so a client reads all of them and nothing breaks. A cargo that has been handled for months has hundreds of events, and the list of cargos itself has no natural end. This chapter turns those two lists into pages a client walks one at a time, and it shows what the walk costs the sources behind it.
 
 The code is in `examples/12-pagination/`. It starts from the Chapter 9 example, so the exposed and masked error machinery is still there, and it carries `Query.nodes` from Chapter 10 and the `finalArrivalTime` deprecation from Chapter 11. The Chapter 9 fault seeds are gone. The seed now holds six cargos, DEF456 has a full seven-event history, and one fault remains: the booking service lists `GHI345` but cannot load it. The example adds `Query.cargos` and `Cargo.handlingHistory`, with the types `CargoConnection`, `CargoEdge`, `HandlingEventConnection`, `HandlingEventEdge` and `PageInfo`. Only `Subscription`, which Chapter 21 builds, is left unserved.
@@ -297,3 +309,11 @@ This chapter turned two growing lists into connections: keyset paging against of
 Chapter 13 starts from this example and batches those calls: SmallRye batch resolvers on one side and Strawberry data loaders on the other, with the call counts compared. Chapter 14 treats the page size and the selection depth as inputs to query cost.
 
 For the formal definitions, read the "Connection Types", "Edge Types", "Arguments", "Pagination algorithm" and "PageInfo" sections of the Relay [GraphQL Cursor Connections](https://relay.dev/graphql/connections.htm) specification, and "List" and "Non-Null" in the [GraphQL specification](https://spec.graphql.org/). Martin Kleppmann and Chris Riccomini's *Designing Data-Intensive Applications*, 2nd edition, covers ordered indexes and range scans. William Lyon's *Full Stack GraphQL Applications* closes with a chapter, "Advanced GraphQL considerations", that treats pagination among its topics. Both books are on the [Bibliography](../../bibliography/) page. The framework behaviour is in the Quarkus [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) and the [Strawberry documentation](https://strawberry.rocks/docs).
+
+## For deeper coverage
+
+- [Relay — GraphQL Cursor Connections specification](https://relay.dev/graphql/connections.htm) — `Connection`, `Edge`, `PageInfo`, and the pagination algorithm.
+- [GraphQL specification — List, Non-Null](https://spec.graphql.org/) — the nullability rule behind `CargoEdge.node`.
+- Martin Kleppmann & Chris Riccomini, *Designing Data-Intensive Applications*, 2nd ed. (O'Reilly, 2026) — ordered indexes and range scans, the reason a keyset seek beats an offset count.
+- William Lyon, *Full Stack GraphQL Applications* (Manning, 2022) — pagination, in its closing chapter "Advanced GraphQL considerations."
+- *Cloud Native Design Patterns*, "Data" — read-model indexes and the cost of serving a page from them.

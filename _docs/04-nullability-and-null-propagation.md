@@ -6,6 +6,18 @@ description: "What a null means in a GraphQL response, how list and non-null wra
 duration: "15 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Read the six list/non-null wrapper combinations (`T`, `T!`, `[T]`, `[T!]`, `[T]!`, `[T!]!`) and what each permits in a response.
+- Trace a `null` bubbling from a failed `Leg.loadLocation` up to the nearest nullable ancestor.
+- Distinguish a request error from an execution error and explain where each leaves `data`.
+- Place nullable "fuses" (`Cargo.itinerary`, `Leg.voyage`, `CargoEdge.node`) at service-ownership boundaries so one failure costs a field, not the page.
+- Contrast SmallRye's and Strawberry's opposite nullability defaults and the mistake each default invites.
+
+## Why this matters
+
 Chapter 3 introduced the list and non-null wrappers and left one question open: a `null` in a non-null position cannot be returned, so what happens instead? This chapter answers it. In most APIs a failure is an exception, a status code and an empty body. In GraphQL a failure is a field that could not be filled, and the schema's nullability decides how much of the response goes with it. You will read the six wrapper combinations, follow one `null` up a response tree, see where the error path points, and then look at which fields of the tracking schema are nullable and why.
 
 The code is in `examples/04-nullability/`. It starts from the Chapter 3 example and turns the fields that cross a service boundary (`Leg.voyage`, `Leg.loadLocation`, `Leg.unloadLocation` and `Cargo.delivery`) into resolvers over sources. Three new cargos make a source fail in three different ways. The `verify.sh` there asserts every value in the "On the wire" section.
@@ -237,3 +249,10 @@ This chapter covered what a `null` can mean, the six wrapper combinations, how a
 Chapter 5 turns the conformance check into a workflow, with each stack exporting its schema and a diff in two directions, and uses a tightened nullability as the example of drift that only one direction catches. Chapter 6 looks at how the engine orders the resolvers whose failures this chapter caused. Chapter 9 returns to errors as data, with `userErrors`, error extensions and what a message should say. Chapter 11 runs nullability changes through the breaking-change gate in both directions: loosening an output or tightening an input breaks clients, while tightening an output passes the gate even though it removes a fuse. Chapter 12 builds the connection whose `node` field is the fourth fuse.
 
 For the formal definitions, read the Type System sections "Non-Null" and "List" and the execution section "Handling Execution Errors" of the [GraphQL specification](https://spec.graphql.org/), and the [GraphQL-over-HTTP specification](https://http-spec.graphql.org/draft/) for status codes. *GraphQL in Action* covers schema design in "Designing a GraphQL schema", which is listed on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — "Designing a GraphQL schema" covers nullability and wrapper design.
+- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024) — error handling and schema-design practices around partial failure.
+- Cloud Native Design Patterns — [Communications](https://patterncatalyst.github.io/cloud-native-design-patterns/docs/02-communications/) chapter, for pushing resilience to a boundary instead of into every caller.
+- [GraphQL specification](https://spec.graphql.org/) — the "Non-Null", "List" and "Handling Execution Errors" sections this chapter is built on.

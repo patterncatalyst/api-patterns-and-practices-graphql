@@ -6,6 +6,18 @@ description: "Bounding what a client can ask for: depth, token and alias limits,
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Price a nested selection bottom-up with the chapter's cost formula and explain why `cargos(first: 50)` multiplies everything beneath it.
+- Distinguish a depth limit from a cost budget, and show why a 16-deep `first: 1` query is refused by depth alone while Chapter 1's nested query needs the cost budget.
+- Configure graphql-java's `MaxQueryComplexityInstrumentation` with a custom `FieldComplexityCalculator`, and Strawberry's `QueryCostLimiter` extension, to enforce the same budget on both stacks.
+- Recognize the five amplification attacks (deep nesting, aliases, a huge page, a token flood, a batch array) and place each limit at the earliest pipeline stage that can refuse it before a source call.
+- Price a fragment once per spread rather than once per definition, including under `@skip` and `@include`.
+
+## Why this matters
+
 Chapter 1 predicted a query of a few hundred bytes that fans out across thousands of backend calls. This chapter builds the defenses. The query is one the reader has already seen, and the server in `examples/14-query-cost/` refuses it, with the same number on both stacks, before it makes a single source call.
 
 The code starts from the Chapter 13 example, so the seed, the keyset cursors and the error contract are unchanged, Chapter 13's batching code is untouched, and the schema is the one `verify.sh` diffs against the canonical SDL. What it adds sits in front of execution: a depth limit, a token limit, an alias limit, and one list-aware cost budget that both stacks compute with the same formula and report in the same words.
@@ -247,3 +259,11 @@ This chapter bounded the request: depth and token limits, an alias limit, a list
 Chapter 15 builds that control with persisted queries and Apollo's automatic protocol, with a trusted-document mode that refuses unknown text, and with persisted queries over `GET`, which Chapter 16 then caches.
 
 For the limits themselves, read the graphql-java documentation on [instrumentation](https://www.graphql-java.com/documentation/instrumentation/) (`MaxQueryComplexityInstrumentation` and `MaxQueryDepthInstrumentation`), the Quarkus [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) for the configuration reference, and the Strawberry guides to [QueryDepthLimiter](https://strawberry.rocks/docs/extensions/query-depth-limiter) and [MaxAliasesLimiter](https://strawberry.rocks/docs/extensions/max-aliases-limiter), whose rules the Python limits follow, [MaxTokensLimiter](https://strawberry.rocks/docs/extensions/max-tokens-limiter) and [custom extensions](https://strawberry.rocks/docs/guides/custom-extensions). The [OWASP GraphQL Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html) lists the denial-of-service defenses this chapter implements. The GraphQL specification's "Validation" and "Executing Requests" sections define the stages the limits sit between. Martin Kleppmann and Chris Riccomini's *Designing Data-Intensive Applications*, 2nd edition, covers load, response-time percentiles and tail latency. Artur Czemiel's *GraphQL Best Practices* treats query limits among its security topics. Both books are on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- Martin Kleppmann & Chris Riccomini, *Designing Data-Intensive Applications*, 2nd edition (O'Reilly) — load, response-time percentiles and the vocabulary behind this chapter's budget.
+- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024) — schema design, query limits and security, the book this chapter's amplification attacks draw on.
+- Cloud Native Design Patterns, chapter "Security" — the broader operational-and-security-cost axis this chapter's limits are one instance of.
+- [graphql-java documentation — Instrumentation](https://www.graphql-java.com/documentation/instrumentation/) — `MaxQueryComplexityInstrumentation` and `MaxQueryDepthInstrumentation`, the classes this chapter configures.
+- [OWASP GraphQL Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html) — the denial-of-service defenses this chapter implements.

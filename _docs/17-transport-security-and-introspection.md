@@ -6,6 +6,18 @@ description: "Serving GraphQL over TLS from framework configuration with generat
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Terminate TLS in-process on both stacks and state each framework's protocol floor: Quarkus's TLS 1.3-only default versus Python's `ssl`-module TLS 1.2 minimum.
+- Turn off introspection (`Introspection.enabledJvmWide(false)`, `DisableIntrospection`) and field suggestions on a public instance while keeping an internal instance for contract checks.
+- Close the CSRF-relevant paths a browser can send without a preflight — `text/plain`, form-encoded and multipart `POST`s, and a mutation over `GET`.
+- Configure CORS for exactly one trusted origin and explain why it is not a substitute for the content-type guard.
+- Bound request body size and token count at the HTTP and parser layers, before any GraphQL rule runs.
+
+## Why this matters
+
 Chapter 13 ended with a server that answers a four-cargo page in six or eight source calls. Every request so far has crossed the wire in clear text, and any caller could ask the server for its whole schema. This chapter closes both. The tracking view moves behind TLS, and the instance the public reaches stops describing itself.
 
 The code is in `examples/17-transport-security/`. It starts from the Chapter 13 example, so the schema, the seed and the masked errors are unchanged. Each stack's image is deployed twice: a public instance with introspection, field suggestions, the IDE and GET queries off, and an internal instance that leaves introspection on. `verify.sh` generates a certificate authority, runs all four instances over HTTPS and asserts what each refuses and allows.
@@ -248,3 +260,11 @@ This chapter moved the tracking view behind TLS, split each stack into a public 
 Chapter 18 puts identity on the encrypted channel: Keycloak issues the tokens, each stack validates them, and authorization works per operation, per object and per field.
 
 For the protocols and the stack settings, read RFC 8446 for TLS 1.3, RFC 6797 for HSTS, and the GraphQL specification's "Introspection" section. The [GraphQL over HTTP draft](https://http-spec.graphql.org/draft/) defines the request and response media types and the status codes. The Fetch standard's "CORS protocol" section defines simple requests and preflight. The [OWASP GraphQL Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html) covers introspection, GraphiQL and field suggestions ("Introspection + GraphiQL", "Don't Return Excessive Errors"), and the [OWASP Cross-Site Request Forgery Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) covers this chapter's check under "Disallowing simple content types". Artur Czemiel's *GraphQL Best Practices* covers attacks on GraphQL servers and schema design for security; the book is listed on the [Bibliography](../../bibliography/) page. Quarkus documents the [TLS registry reference](https://quarkus.io/guides/tls-registry-reference) and the [HTTP reference](https://quarkus.io/guides/http-reference) for CORS, limits and headers, and the [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) for `schema-available`. On the Python side read the Strawberry pages for [DisableIntrospection](https://strawberry.rocks/docs/extensions/disable-introspection) and the [schema configuration](https://strawberry.rocks/docs/types/schema-configurations), the uvicorn [settings](https://uvicorn.dev/settings/) for the SSL options, and the FastAPI guide to [CORS](https://fastapi.tiangolo.com/tutorial/cors/).
+
+## For deeper coverage
+
+- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024) — attacks on GraphQL servers, introspection and schema design for security.
+- Cloud Native Design Patterns, chapter "Security" — the broader transport and access-control patterns this chapter's TLS, CORS and introspection controls sit inside.
+- [OWASP GraphQL Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html) — introspection, GraphiQL and field-suggestion guidance this chapter implements.
+- [OWASP Cross-Site Request Forgery Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) — "Disallowing simple content types", the rule behind this chapter's content-type guard.
+- RFC 8446 (TLS 1.3) and RFC 6797 (HSTS) — the transport guarantees this chapter configures on both stacks.

@@ -6,6 +6,18 @@ description: "How a GraphQL schema changes while clients depend on it: one schem
 duration: "15 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Classify a schema change as safe, dangerous, or breaking using the GraphQL Inspector diff and know what each class costs clients.
+- Apply the opposite nullability rule to outputs and inputs: tightening an output is safe, tightening an input is breaking.
+- Run a field through the full deprecation lifecycle — add `finalArrivalTime`, deprecate `finalArrivalDate` with a reason, then remove it only with a sign-off.
+- Read `isDeprecated` and `deprecationReason` through introspection, and use `includeDeprecated` to see hidden fields.
+- Run `contracts/scripts/breaking.sh` against fixture schemas to see what a given edit costs before it ships.
+
+## Why this matters
+
 Ten chapters built a schema and served it. Every client that selects a field from it makes the same bet, that the field will still be there next year. The tracking view has clients nobody on the team has met: a dashboard, a mobile app, a partner's integration. This chapter is about keeping that bet safe while the schema keeps changing.
 
 The code is in `examples/11-evolution/`. It starts from the Chapter 10 example and applies the one change the earlier chapters kept promising. `Itinerary.finalArrivalTime` joins the schema, and `Itinerary.finalArrivalDate` is deprecated in favour of it. Both stacks serve both fields, and `verify.sh` checks the deprecation through introspection. It then runs the breaking-change gate from Chapter 5, `contracts/scripts/breaking.sh`, against fixture copies of the contract, one edit per case, to show what each kind of change costs.
@@ -280,3 +292,11 @@ This chapter classified changes as safe, dangerous or breaking, followed nullabi
 Chapter 12 starts from the Chapter 9 example and carries `nodes` from Chapter 10 and this chapter's deprecation with it, then builds the connection that `handlingHistory` has been waiting for. Chapter 13 batches the source calls that Chapters 7 and 10 counted.
 
 For the formal definitions, read "Field Deprecation", "@deprecated" and "Schema Introspection" in the [GraphQL specification](https://spec.graphql.org/). The diff rules and their names are in the [GraphQL Inspector](https://the-guild.dev/graphql/inspector/docs) documentation. Martin Kleppmann and Chris Riccomini's *Designing Data-Intensive Applications*, 2nd edition, covers backward and forward compatibility, and it is listed on the [Bibliography](../../bibliography/) page together with Artur Czemiel's *GraphQL Best Practices*, which covers schema design more broadly.
+
+## For deeper coverage
+
+- [GraphQL specification — Field Deprecation, @deprecated, Schema Introspection](https://spec.graphql.org/).
+- [GraphQL Inspector documentation](https://the-guild.dev/graphql/inspector/docs) — the diff rules and change classes (safe/dangerous/breaking) this chapter's gate runs.
+- Martin Kleppmann & Chris Riccomini, *Designing Data-Intensive Applications*, 2nd ed. (O'Reilly, 2026) — backward and forward compatibility.
+- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024) — schema design and evolution more broadly.
+- *Cloud Native Design Patterns*, "Versioning & Evolution" (Appendix B) — the wider evolution patterns this chapter's deprecation lifecycle is one instance of.

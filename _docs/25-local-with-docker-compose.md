@@ -6,6 +6,18 @@ description: "The tracking view as one local tier: an nginx edge that terminates
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Terminate TLS 1.3 and cap request bodies at an nginx edge so a GraphQL backend never sees an oversized or downgraded request.
+- Isolate backend services on an `internal: true` Compose network and reach lab endpoints only through `docker compose exec`.
+- Mount configuration and secrets as files and environment variables kept outside the image, following the Twelve-Factor App's config rule.
+- Order service startup with `depends_on` `condition: service_healthy`, and tell a liveness probe apart from a readiness probe.
+- Follow a request's `traceparent` from the edge through to its trace in Tempo and its record in Loki.
+
+## Why this matters
+
 Chapters 3 to 24 each ran one example. A chapter brought up the two stacks it needed, read a few responses with `curl` and tore everything down. That is the right size for learning one technique and the wrong size for answering a different question: what does the service look like when it runs as a whole? Something has to terminate TLS, something has to refuse a body that is too large, the service has to start after the things it depends on, and an operator has to be able to read what the engine was told to do. None of that is GraphQL, and all of it decides whether the GraphQL service is reachable and diagnosable.
 
 The code is in `examples/25-docker-compose/`. It starts from the production instances of Chapter 24: Chapter 19's telemetry and `extensions.traceId` on every execution error. It leaves out that chapter's seeded fault, its development instances and its run-time level switch, because a tier runs the service as it ships. The schema is the same slice as Chapters 19 and 24, everything except `Subscription`, so the SDL does not change. Around it are four services: an nginx edge, the two stacks and the observability backend. `verify.sh` brings them up and reads the result from the outside.
@@ -337,3 +349,11 @@ docker compose -f examples/25-docker-compose/compose.yaml down -v
 This chapter ran the tracking view as one local tier: an nginx edge with TLS 1.3, a body limit and one route, an internal backend network, a config and two secrets mounted as files, health-ordered start, limits, restart and shutdown settings the engine confirms, and a trace followed from the edge to Tempo and Loki.
 
 Chapter 26 runs the same two images on Kubernetes. The edge, its configuration and its secret become a Deployment, a ConfigMap and a Secret, the health endpoints become probes, and the limits become resource requests and limits. For the specifications and guides, read the Docker Compose documentation's "Compose file reference" sections on `services`, `configs`, `secrets` and `networks`, and Docker's "Restart policies" and "Configure logging drivers" pages. The nginx documentation covers `ngx_http_ssl_module`, `client_max_body_size`, `proxy_pass` and "WebSocket proxying". On the application side read the Quarkus guides "SmallRye Health" and "Configuring your application", Uvicorn's "Settings", FastAPI's "Lifespan Events" and the Twelve-Factor App sections "Config" and "Disposability".
+
+## For deeper coverage
+
+- [The Twelve-Factor App — Config](https://12factor.net/config) and [Disposability](https://12factor.net/disposability) — the rules this tier's configuration and shutdown settings follow.
+- [Docker Compose — Compose file reference](https://docs.docker.com/compose/compose-file/) — `services`, `configs`, `secrets`, and `networks`.
+- [nginx — ngx_http_ssl_module](https://nginx.org/en/docs/http/ngx_http_ssl_module.html) — TLS termination and `client_max_body_size`.
+- *Cloud Native Design Patterns*, "Observability" — the LGTM stack and OTLP wiring this tier's edge-to-trace path reuses.
+- Gerald Bachlmayr, Aiden Ziegelaar, Alan Blockley & Bojan Zivic, *Cloud Native Anti-Patterns* (Packt, 2025) — the coupling and operability failures a hardened edge and health-ordered start exist to avoid.

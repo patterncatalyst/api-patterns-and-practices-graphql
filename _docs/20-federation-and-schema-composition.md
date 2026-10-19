@@ -6,6 +6,18 @@ description: "One graph owned by several teams: the tracking view split into a c
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Split a single schema into subgraphs by ownership, using `@key` to declare `Cargo` as a shared entity and `resolvable: false` references for types another team owns.
+- Batch entity resolution (`@Resolver` with `federation.batch-resolving-enabled`, `resolve_reference` behind a `DataLoader`) so a gateway's `_entities` request doesn't reintroduce the N+1 problem across a network boundary.
+- Gate deployment on composition (`composeServices`) and read `FIELD_TYPE_MISMATCH`/`INVALID_FIELD_SHARING` as the failure modes a broken subgraph produces.
+- Trace a query plan across subgraph fetches from the subgraphs' own source-call logs, rather than trusting the gateway's documentation.
+- Explain why a federated field's nullability choice, such as `Cargo.delivery`, is a decision about team boundaries and not just data shape.
+
+## Why this matters
+
 Chapter 2 named an axis that has stayed quiet since: who owns the schema, and who owns the services behind each field. Every chapter so far gave both answers to one team. This chapter gives them to two. The booking and routing team owns cargo, locations and voyages. The handling team owns handling events and the delivery state derived from them. Each team ships its own service and its own part of the graph, and clients still see one schema.
 
 The code is in `examples/20-federation/`. It starts from the Chapter 13 example, cut into four services: a cargo subgraph and a handling subgraph on each stack. A composer turns a pair of subgraphs into a supergraph file, and two gateways serve the two pairs. The schema a client sees is the canonical one, minus `Query.node`, `Query.nodes` and `Subscription`, and `verify.sh` diffs both gateways against `contracts/schema/`.
@@ -319,3 +331,11 @@ docker compose -f examples/20-federation/compose.yaml down -v
 This chapter split the tracking view by ownership: two subgraphs on each stack, entities shared by key, references that name another team's types, batched entity resolvers, composition as a failing step with two fixtures that show its errors, a query plan counted from the subgraphs' logs, and two cross-wired gateways that serve the canonical contract and null a cargo when the handling team's service is down.
 
 Chapter 21 returns to the one operation that cannot cross a gateway as a plain request and response. `Subscription.cargoHandled` pushes each new event to a client as it is registered, and the chapter compares GraphQL over WebSocket and server-sent events. For the specifications, read the Apollo Federation subgraph specification, in particular the sections on `Query._service`, `Query._entities`, `@key`, `@shareable`, `@external`, `@requires` and `@provides`, and the Hive documentation for the composition library and for Hive Gateway's "Gateway: Supergraph schema" and "Monitoring and Tracing" pages. The Quarkus [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) has a section on federation, and Strawberry's [federation guide](https://strawberry.rocks/docs/guides/federation) covers `strawberry.federation` and `resolve_reference`.
+
+## For deeper coverage
+
+- Vlad Khononov, *Learning Domain-Driven Design* (O'Reilly, 2021) — bounded contexts and team ownership, the organizational question federation turns into a schema split.
+- Cloud Native Design Patterns, chapter "API Management" — governing an API surface across teams and services, the broader concern a gateway and composition gate address.
+- Apollo Federation subgraph specification — `Query._service`, `Query._entities`, `@key`, `@shareable`, `@requires` and `@provides`, the directives this chapter's subgraphs declare.
+- Hive documentation — the composition library (`composeServices`) and Hive Gateway's "Gateway: Supergraph schema" and "Monitoring and Tracing" pages.
+- [SmallRye GraphQL guide, federation section](https://quarkus.io/guides/smallrye-graphql) and Strawberry's [federation guide](https://strawberry.rocks/docs/guides/federation) — the framework APIs behind `@Key`/`@Resolver` and `strawberry.federation`/`resolve_reference`.

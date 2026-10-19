@@ -6,6 +6,17 @@ description: "Seven axes for deciding whether an interaction belongs in GraphQL,
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Apply the seven decision axes (client diversity, aggregation, read/write balance, caching, contract evolution, operational cost, team ownership) to any interaction.
+- Score the four shipping interactions — the customer tracking view, booking a cargo, internal routing and partner bulk feeds — against those axes.
+- Justify why the tracking view lands on GraphQL while booking stays REST and internal routing stays gRPC.
+- Write a `Decision` callout in the shared vocabulary every later chapter reuses.
+
+## Why this matters
+
 The shipping domain has four interactions that look alike from a distance and differ sharply up close. A customer's mobile app shows where a cargo is and what happens next. A booking screen creates a cargo and returns its tracking id. The booking service asks the routing service for candidate itineraries, hundreds of times a minute. A partner terminal operator uploads a nightly batch of forty thousand handling events. All four move cargo data over a network, and a team that picks one paradigm for all of them will serve at least two of them badly.
 
 Chapter 1 described the tracking view, a GraphQL layer that aggregates cargo, route legs and handling events for clients, and listed where GraphQL gains and loses ground. This chapter converts that list into seven axes you can apply to any interaction, then applies them to the four above. The result is a map of the system: the tracking view is GraphQL, booking writes are REST, internal routing is gRPC, and partner bulk feeds are none of the three. Every later chapter ends with a **Decision** callout that applies these axes by name.
@@ -154,3 +165,10 @@ This chapter turned the strengths and weaknesses from Chapter 1 into seven axes,
 Chapter 3 starts building it. It goes through SDL and the type system in depth: object types, interfaces such as `Node`, enums, input types, custom scalars like `TrackingId` and `UnLocode`, and how the canonical schema uses each. Chapter 4 explains nullability and null propagation, the mechanism behind the nullable fields at ownership boundaries. Chapter 5 sets up the contract-first workflow in which both stacks are checked against one schema. Federation returns in Chapter 20, caching in Chapters 15 and 16, and cost controls in Chapter 14.
 
 For the formal definitions behind the terms used here, the [GraphQL specification](https://spec.graphql.org/) covers the type system and execution, and the [GraphQL-over-HTTP specification](https://http-spec.graphql.org/draft/) covers the transport. Samer Buna's *GraphQL in Action* is a good companion for schema and resolver design, and William Lyon's *Full Stack GraphQL Applications* extends the same ideas to clients and authorization; both are on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- Mastering API Architecture — Gough, J., Bryant, D. & Auburn, M. (O'Reilly, 2022) — style selection and tradeoff analysis across REST, RPC and event-driven APIs.
+- Cloud Native Design Patterns — [API Management](https://patterncatalyst.github.io/cloud-native-design-patterns/docs/08-api-management/) chapter, for governing which style an interaction should use at scale.
+- Cloud Native Design Patterns — [Communications](https://patterncatalyst.github.io/cloud-native-design-patterns/docs/02-communications/) chapter, for the same REST/gRPC/GraphQL/async decision made from a platform-wide view.
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — schema and resolver design for the GraphQL side of the decision.

@@ -6,6 +6,18 @@ description: "The two stacks of Chapter 25 as one Helm release on minikube: a va
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Render one Helm chart template over a `stacks` map so two services can't drift apart in structure.
+- Roll only the pods whose configuration changed, using a `checksum/config` annotation on the pod template.
+- Generate a TLS `Secret` with `genCA` and `genSignedCert`, and keep it stable across upgrades with `lookup`.
+- Map startup, readiness, and liveness probes onto the health endpoints each stack already serves.
+- Restrict pod-to-pod traffic with a `NetworkPolicy` per tier, and verify it holds with a labeled test pod.
+
+## Why this matters
+
 Chapter 25 ran the tracking view as one local tier: an nginx edge in front of two stacks, an observability backend beside them, and Compose to start them in order. The images it built are the ones a cluster runs. This chapter moves the same tier onto Kubernetes without touching a line of application code, so every difference between the two tiers lives in configuration, and the chart that describes it is small enough to read in one sitting.
 
 The code is in `examples/26-minikube/`. It carries no application sources: `images.sh` builds Chapter 25's Containerfiles, `helm/` describes the release, and `up.sh`, `smoke.sh` and `down.sh` run it. The example has no `verify.sh`, because a cluster is a different kind of fixture from a compose project. A compose stack is created and removed in minutes inside a script; a cluster is created once, kept, and stopped. The chart is validated without a cluster in CI, and the scripts prove it on a live one.
@@ -245,3 +257,11 @@ examples/26-minikube/scripts/down.sh    # uninstall, delete the namespace, minik
 This chapter put Chapter 25's tier on a cluster: one chart for both stacks, configuration in ConfigMaps with a checksum that rolls pods, a generated TLS Secret that survives upgrades, three probes per stack, a NodePort edge, a downward-API pod name in each trace, a NetworkPolicy and a chart test, all on a profile whose ports were fixed when it was created.
 
 Chapter 27 builds the final project on the same profile. It serves the complete schema, subscriptions included, with Chapter 14's query limits, Chapter 18's authorization and Chapter 17's introspection control together, and its chart extends this one. For the references, read the Kubernetes documentation pages "Deployments", "Service", "ConfigMaps", "Secrets", "Configure Liveness, Readiness and Startup Probes", "Expose Pod Information to Containers Through Environment Variables", "Network Policies", "Resource Management for Pods and Containers" and "Pod Security Standards". The minikube documentation covers `minikube start` flags such as `--ports` and `--kubernetes-version` under "Basic controls" and image loading under "Pushing images". The Helm documentation has "Charts", "Chart Tests", "Values Files", the "Template Function List" for `genCA`, `genSignedCert` and `lookup`, and "Chart Development Tips and Tricks" for rolling deployments automatically. OpenTelemetry's "Resource semantic conventions: Kubernetes" defines the attribute names, and the kubeconform README explains its strict mode.
+
+## For deeper coverage
+
+- *Cloud Native Design Patterns*, Appendix R — "Running Example 05 on minikube": the same Docker-driver/containerd-runtime minikube pattern, applied to a different example.
+- [Kubernetes — Configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+- [Kubernetes — Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+- [Helm — Template Function List](https://helm.sh/docs/chart_template_guide/function_list/) — `genCA`, `genSignedCert`, and `lookup`.
+- [minikube — start command reference](https://minikube.sigs.k8s.io/docs/commands/start/) — `--ports`, `--kubernetes-version`, and image loading.

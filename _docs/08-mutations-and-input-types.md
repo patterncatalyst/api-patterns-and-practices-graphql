@@ -6,6 +6,18 @@ description: "How registerHandlingEvent takes a typed input object, rejects malf
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Declare a typed `RegisterHandlingEventInput` input object and explain why input types can only hold scalars, enums, and other inputs.
+- Distinguish a coercion failure (caught by the engine before any resolver runs) from a domain failure returned as `userErrors` data.
+- Design a mutation payload — `RegisterHandlingEventPayload` — that re-reads derived state like `Cargo.delivery` in the same round trip.
+- Rely on the engine's serial execution of top-level mutation fields to run two aliased `registerHandlingEvent` calls in document order.
+- Make a mutation safe to retry with a client-supplied `idempotencyKey` checked and inserted atomically in one step.
+
+## Why this matters
+
 Seven chapters read data. This one writes it. The tracking view has exactly one mutation, `registerHandlingEvent`, and it carries most of what a write in GraphQL needs: a typed input object, two different ways to say no, a payload that hands the changed cargo back, the engine's rule that mutation fields run in order, and a key that makes a retry safe. You will meet each on the running stacks, and each claim is something `verify.sh` asserts.
 
 The code is in `examples/08-mutations/`. It starts from the Chapter 7 example and keeps its asynchronous sources, the source-call log and the derived `Delivery`. The handling data changes from a fixed list into a store that requests write to, `HandlingEvent` and the mutation types join the schema, and `Query.node` resolves `evt_*` ids. The store is in memory, so every run of `verify.sh` starts from a fresh stack, and `README.md` covers how to drive it.
@@ -315,3 +327,11 @@ This chapter added the write path: an input type with its coercion, domain failu
 Chapter 9 starts from this example and gives execution errors the same attention that `userErrors` received here. Chapter 11 treats adding a required field to an input as a breaking change and adding an optional one as safe, which is why `voyageNumber` and `idempotencyKey` are optional from the start.
 
 For the formal definitions, read "Input Objects", "Input Coercion", "Coercing Variable Values" and "Normal and Serial Execution" in the [GraphQL specification](https://spec.graphql.org/), and "GET" in GraphQL over HTTP. Samer Buna's *GraphQL in Action* covers the same ground in "Implementing mutations"; the book is listed on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — "Implementing mutations."
+- [GraphQL specification — Input Objects, Input Coercion, Normal and Serial Execution](https://spec.graphql.org/) — why input fields can't carry resolvers and why mutation root fields run in order.
+- [GraphQL over HTTP — "GET"](https://http-spec.graphql.org/draft/) — why a mutation must be refused on a safe HTTP method.
+- *Cloud Native Design Patterns*, "Data" — read/write separation and why a write stays with the service that owns it.
+- *Cloud Native Design Patterns*, "Balancing Coupling" (Appendix G) — the idempotency-key and retry-safety concerns behind `registerHandlingEvent`.

@@ -6,6 +6,18 @@ description: "What a resolver receives and returns, how a parent value becomes a
 duration: "17 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Trace how a resolver's four inputs — parent, arguments, context, and info — flow from `Query.cargo` through `Cargo.itinerary` and into a source call.
+- Derive a computed field like `Cargo.delivery` from independent fetches run concurrently with `Uni.combine().all()` / `asyncio.gather`, instead of reading it from a stored source.
+- Use variables, aliases, fragments, and `@include`/`@skip` to change which fields — and therefore which source calls — a document makes.
+- Explain why `Context` holds request-scoped state like the execution id, and why it must never carry data shared across requests.
+- Recognize the repeated-fetch smell where two selections of the same field (e.g. `Leg.voyage`) cost two source calls, as the problem Chapter 13 batches away.
+
+## Why this matters
+
 Chapter 6 followed a request through the engine and stopped at the point where the engine calls a resolver. A resolver is an ordinary function with four inputs and one output, and the whole shape of a GraphQL server's cost comes from how those functions pass values to each other: the parent's data becomes the child's argument, and the argument becomes a key into a source. You will see that chain on the running stacks, replace the stored `Delivery` of earlier chapters with one derived from handling events, and then use variables, aliases, fragments and directives to see which of them change the calls a query makes.
 
 The code is in `examples/07-queries-resolvers/`. It starts from the Chapter 6 example and keeps its asynchronous sources, the source-call log and the per-request id. Two things change. A new `handling` source returns the events recorded for a cargo, and `Cargo.delivery` is computed from those events and the itinerary instead of read from a `delivery` source, which is removed. `verify.sh` asserts every value in the "On the wire" section on both stacks, and `README.md` covers how to drive it.
@@ -298,3 +310,10 @@ This chapter looked inside the resolver: its four inputs, the chain that turns a
 Chapter 8 copies this example and adds the first mutation, `registerHandlingEvent`. Its payload re-reads the cargo and its delivery, so a new handling event changes the derived `Delivery` that this chapter computes: an `UNLOAD` in Hamburg moves `ABC123` from `ONBOARD_CARRIER` to `IN_PORT` with a `LOAD` on `V200E` expected next, and an `UNLOAD` in Rotterdam, the destination, makes the next expected activity `CLAIM`. Chapter 9 gives execution errors a contract, and Chapter 13 batches the voyage lookups.
 
 For the formal definitions, read "Executing Fields", "Field Collection", "Field Alias", "Fragments", "Inline Fragments", "Variables" and the built-in `@skip` and `@include` directives in the [GraphQL specification](https://spec.graphql.org/). Samer Buna's *GraphQL in Action* covers resolvers and operations in "Customizing and organizing GraphQL operations", "Implementing schema resolvers" and "Working with database models and relations"; the book is listed on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — resolvers and operations, in "Customizing and organizing GraphQL operations," "Implementing schema resolvers," and "Working with database models and relations."
+- [GraphQL specification — Executing Fields, Field Collection, Variables](https://spec.graphql.org/) — the formal contract behind a resolver's four inputs and the directive-pruning rules this chapter exercises.
+- *Cloud Native Design Patterns*, "Composition" — aggregation across sources and where it belongs, the pattern `Cargo.delivery` applies at the field level.
+- [Quarkus SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) and [Strawberry documentation](https://strawberry.rocks/docs) — the `Context`/`Info` objects and `@Source`/resolver method shapes used on each stack.

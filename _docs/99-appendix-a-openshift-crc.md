@@ -8,6 +8,18 @@ description: "Chapter 27's chart on OpenShift Local through a wrapper chart: Doc
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Wrap an existing Helm chart in a dependency-only chart that adds `Route`s, `BuildConfig`s, `ImageStream`s, and one `RoleBinding`, without touching the wrapped chart.
+- Build an image inside the cluster with a binary-source, Docker-strategy `BuildConfig`, with no container engine on the host.
+- Run every pod under `restricted-v2`, and grant `anyuid` to exactly one service account for the one image that needs a root user.
+- Terminate TLS at the router with an edge `Route`, and point an identity provider's issuer at that Route's URL.
+- Tear down a CRC project against a saved inventory so a script-driven run leaves no orphaned namespace, `Subscription`, or CRD.
+
+## Why this matters
+
 Chapters 25 to 27 ran the tracking view in three places: a Compose project, a minikube profile, and a Helm chart that carries the final project. The chart is neutral. It names no distribution, sets no user id, and renders nothing that only one platform understands. This appendix tests that claim by running the same chart on a different distribution, OpenShift Local, and it counts what had to be added.
 
 Nothing is added to the application or its images, and Chapter 27's chart gains one value, `lgtm.dropAllCapabilities`, whose default renders the chart as before. The code is in `examples/99-appendix-a-openshift-crc/`, and it is one wrapper chart and four scripts. The wrapper depends on Chapter 27's chart and adds the objects a platform with a router and an image registry wants: Routes, builds, image streams, and one binding for a security context constraint. OpenShift Local is a demonstration target here, as minikube is the main one. A reader who runs a different Kubernetes distribution reads this appendix as a list of the places where a platform differs and the one place per difference where the chart accommodates it.
@@ -343,3 +355,11 @@ PASS - Appendix A Chapter 27 on OpenShift Local: the release is deployed under r
 This appendix ran Chapter 27's chart on OpenShift Local through a wrapper that adds Routes with edge TLS at the router, Docker-strategy builds into image streams, the `restricted-v2` constraint for every workload and `anyuid` for the one image that needs it, with an issuer that is a Route's URL and a teardown that compares the cluster with an inventory.
 
 That completes the book's path from a schema to a system that runs in three places. The bibliography lists the specifications and books behind the whole. For this appendix, read the OpenShift documentation pages "Route configuration" and "Secured routes", "Builds using BuildConfig" for the Docker strategy and binary builds, "Managing image streams" and "Managing security context constraints"; Red Hat OpenShift Local's "Getting started" guide for `crc start` and `crc oc-env`; Helm's "Chart Dependencies"; and the kubeconform README for `-schema-location`. Chapters 26 and 27 hold the chart this appendix wraps.
+
+## For deeper coverage
+
+- *Cloud Native Design Patterns*, Appendix S — "Running Example 05 on OpenShift Local": the same restricted-v2 / pinned-CSV / edge-TLS-Route pattern, applied to a different example.
+- OpenShift documentation — Route configuration and TLS termination.
+- OpenShift documentation — Builds using BuildConfig — the Docker strategy and binary source this appendix's `BuildConfig`s use.
+- OpenShift documentation — Managing security context constraints — `restricted-v2` and `anyuid`.
+- Red Hat OpenShift Local (CRC) documentation — Getting Started — `crc start` and `crc oc-env`.

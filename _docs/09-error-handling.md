@@ -6,6 +6,18 @@ description: "How GraphQL reports failure: request errors against execution erro
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Distinguish a request error (no resolver ran) from an execution error (partial `data` plus a `path` to the failure).
+- Read an error's `message`, `locations`, `path`, and `extensions` and know which parts a client may rely on.
+- Mask an unexpected exception as `Internal server error.` behind an allowlist, while routing an outage like `SERVICE_UNAVAILABLE` to the client via `extensions.code`.
+- Explain why the null in `data` can land at a different point than the error's `path`, depending on nullability.
+- Weigh top-level `errors`, payload `userErrors`, and a result union as three ways to report failure, and justify which one a given failure belongs in.
+
+## Why this matters
+
 Chapter 4 followed a null upward through non-null fields, and Chapter 8 returned refused input as `userErrors` data. Both stopped short of the error itself: what it contains, which parts a client can rely on, and which parts the server must keep to itself. This chapter gives failures a contract. The tracking view fails in three ways, one outage and two unexpected failures, and both stacks answer them with the same shape.
 
 The code is in `examples/09-error-handling/`. It starts from the Chapter 8 example, adds no schema, and restores three fault seeds: `JKL567` sails on a voyage whose service is down, `MNO901` loads at a location code the location service does not know, and `PQR234` makes the handling service fail with an unexpected exception that carries an internal shard name. What is new is the error behaviour. An outage is an exposed error with a code, anything unexpected is masked as `Internal server error.`, and the detail goes to the server log. `verify.sh` asserts every claim below on both stacks.
@@ -272,3 +284,11 @@ This chapter gave failures a contract: the difference between request and execut
 Chapter 10 turns to schema design patterns, including the `Node` interface and its `nodes` field. Chapter 11 treats a new `extensions.code` value or a new union member as an evolution decision, and runs the breaking-change gate. Chapter 12 reuses the exposed and masked machinery from this example: its connection arguments raise `BAD_USER_INPUT` for an invalid cursor and a page size outside `0..50`, and its booking outage for `GHI345` is a `SERVICE_UNAVAILABLE`. Chapter 19 turns the error count into a metric.
 
 For the formal definitions, read "Response" with its "Errors" and "Error Result Format" sections, and "Handling Execution Errors", in the [GraphQL specification](https://spec.graphql.org/), and "Status Codes" with the response media types in the current working draft of the [GraphQL-over-HTTP specification](https://http-spec.graphql.org/draft/). The framework behaviour is in the Quarkus [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql), where the error settings are documented, and in the Strawberry documentation under "Dealing with errors" and the `MaskErrors` extension. Artur Czemiel's *GraphQL Best Practices* covers the same ground in its treatment of error descriptions, and Samer Buna's *GraphQL in Action* gives the user-error context in "Implementing mutations"; both are listed on the [Bibliography](../../bibliography/) page.
+
+## For deeper coverage
+
+- [GraphQL specification — Response, Errors, Error Result Format, Handling Execution Errors](https://spec.graphql.org/) — the anatomy of an error and the partial-data model.
+- [GraphQL-over-HTTP working draft — Status Codes](https://http-spec.graphql.org/draft/) — what a request error and an execution error should answer with, versus what both stacks actually send.
+- *Cloud Native Design Patterns*, "API Error Handling" (Appendix E) — the broader error-contract patterns this chapter's exposed/masked split is one instance of.
+- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024) — error descriptions and message design.
+- Samer Buna, *GraphQL in Action* (Manning, 2021) — the user-error context in "Implementing mutations."

@@ -6,6 +6,18 @@ description: "Four places to keep an answer: the client's normalized cache, an H
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Place an answer in the right one of four cache layers — client normalized cache, HTTP edge, server field caches, source of record — and name what evicts each.
+- Decide `Cache-Control: public, max-age=300` vs. `no-store` per response from the chapter's four-test policy: `GET`, no errors, reference-only data, no `Authorization`.
+- Configure an nginx edge with `proxy_cache_bypass` and `proxy_no_cache` keyed on `$http_authorization` so a cached response never leaks to another caller.
+- Invalidate a field-level cache (`@CacheInvalidate`, `cache.pop`) in the correct order relative to a write, so a mutation payload never reads a stale value.
+- Explain why identity must be in a cache key or the value must never be stored, and why whole-response caching inside the server doesn't pay off here.
+
+## Why this matters
+
 Chapter 15 turned a document into a hash, and a hash fits in a URL. That is the precondition for everything in this chapter. A `POST` to `/graphql` carries its question in a body that no intermediary reads, so nothing between the client and the server can reuse an answer. A `GET` with a hash and variables in the URL can be reused by anything that keys on the URL, and the rest of the stack can reuse answers too.
 
 The code is in `examples/16-caching/`. It starts from the Chapter 15 example in APQ mode only, so the schema, the seed, the error contract and the persisted-query code are unchanged. What is new is an nginx cache in front of each stack, a `Cache-Control` decision for every response, and three field-level caches inside each server. The chapter does not repeat Chapter 14's limits, and a production service would carry both.
@@ -271,3 +283,11 @@ This chapter put answers where they are cheapest to reuse. It named four layers,
 Chapter 17 moves to the transport. It serves the same service over TLS with certificates generated at run time, separates a public endpoint from an internal one, and turns introspection and field suggestions off where a public client could read them. Chapter 18 adds the caller: tokens from Keycloak, ownership checks in the booking source, and the first responses that must never reach a shared cache.
 
 For HTTP caching, read RFC 9111, "HTTP Caching", especially the sections "Storing Responses in Caches" and "Cache-Control", and the section "Safe Methods" of RFC 9110, "HTTP Semantics", for why `GET` is the method a cache may reuse. For the data-systems frame, read *Designing Data-Intensive Applications*, 2nd edition, on systems of record and derived data, and the chapter "Optimizing data fetching" in Samer Buna's *GraphQL in Action*. The implementations are in the nginx [`ngx_http_proxy_module`](https://nginx.org/en/docs/http/ngx_http_proxy_module.html) reference (the `proxy_cache` directives), the Quarkus [Application data caching](https://quarkus.io/guides/cache) guide, and the [cachetools](https://cachetools.readthedocs.io/) documentation. For contrast, Apollo's documentation on caching describes the `@cacheControl` directive this chapter does not adopt, and the [Valkey](https://valkey.io/) project is the shared cache named above.
+
+## For deeper coverage
+
+- Martin Kleppmann & Chris Riccomini, *Designing Data-Intensive Applications*, 2nd edition (O'Reilly) — systems of record versus derived data, the frame this chapter's four layers all answer to.
+- Samer Buna, *GraphQL in Action* (Manning, 2021), chapter "Optimizing data fetching" — the field-level caching this chapter implements under the loaders.
+- Cloud Native Design Patterns, chapter "Appendix L: Caching" — the general cache-layer and invalidation patterns this chapter applies to GraphQL specifically.
+- RFC 9111, "HTTP Caching" — `Cache-Control`, `Storing Responses in Caches`, and the rules the nginx edge enforces.
+- [nginx `ngx_http_proxy_module` reference](https://nginx.org/en/docs/http/ngx_http_proxy_module.html) — the `proxy_cache`, `proxy_cache_bypass` and `proxy_no_cache` directives this chapter's edge configuration uses.

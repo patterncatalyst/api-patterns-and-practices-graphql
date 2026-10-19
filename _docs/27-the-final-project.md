@@ -6,6 +6,18 @@ description: "The whole tracking view as one system: the complete schema with su
 duration: "15 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Order a request's defences so the cheapest refusal (TLS, body size, cost budget) runs before an expensive one, like an authorization lookup.
+- Wire Keycloak bearer tokens through operation, object, and field authorization on queries, subscriptions, and a plain `/events/` feed.
+- Serve one image as a public instance with introspection off and an internal instance with it on, selected by an environment key.
+- Keep a subscription's one-time admission check (`IsAuthenticated`, `CanWatchCargo`) separate from its per-event field check (`registrationTime`).
+- Run the same two images unchanged across a Compose tier, a Helm chart on minikube, and an OpenShift Local wrapper chart, changing only configuration values.
+
+## Why this matters
+
 Chapter 25 put the tracking view behind an edge and gave it a tier to live in. Chapter 26 moved that tier onto a cluster. Neither chapter changed what the service says. This one does the opposite: the infrastructure stays as it was, and the service gets everything the earlier chapters built, all at once. The schema is complete, `Subscription` included. Requests carry tokens, and what a caller may see depends on who it is. A document that costs too much is refused before a source is asked. Introspection answers on the instances that developers use and not on the ones that clients reach.
 
 The code is in `examples/27-final-project/`. It starts from the Chapter 25 example and ports in what Chapters 21, 14, 18 and 17 added, in that order, with `verify.sh` run after each port. The canonical SDL does not change, and the chapter ends with the check that proves it: both stacks serve exactly the schema in `contracts/schema/`. Nothing in this chapter is a new technique. The work is in making the techniques coexist, and in seeing where one of them has to know about another.
@@ -226,3 +238,11 @@ The last line of its output is k6's summary object. For the `cost` run it holds 
 This chapter assembled the earlier chapters into one system: the complete schema with subscriptions over WebSocket and SSE, Chapter 14's limits, Chapter 18's authorization on queries, subscriptions and the event feed, Chapter 17's introspection control, Chapter 19's telemetry, Chapter 25's edge and a two-run k6 load, with `assert_sdl_equals` as the last word on the contract.
 
 Appendix A runs the chart for this chapter on OpenShift Local through a wrapper chart that adds only the objects OpenShift needs. The bibliography lists the specifications and books behind the book as a whole. For this chapter, read the GraphQL specification's "Subscription" and "Validation" sections, the `graphql-transport-ws` protocol document, the GraphQL-over-HTTP draft for status codes, and Keycloak's "Server administration" guide and its page on importing a realm. On the framework side read the Quarkus guides "OpenID Connect (OIDC) Bearer token authentication" and "SmallRye GraphQL", Strawberry's pages "Subscriptions" and "Authentication", and k6's "Thresholds". *Full Stack GraphQL Applications* covers authorization and authentication in "Adding authorization and authentication" and further production concerns in "Advanced GraphQL considerations".
+
+## For deeper coverage
+
+- William Lyon, *Full Stack GraphQL Applications* (Manning, 2022) — "Adding authorization and authentication" and "Advanced GraphQL considerations", which this chapter's token and introspection wiring builds on.
+- *Cloud Native Design Patterns*, "Anti-Patterns" — the coupling-focused review heuristics worth running against a system assembled from six chapters at once.
+- [Keycloak — Server Administration Guide](https://www.keycloak.org/docs/latest/server_admin/)
+- [GraphQL over HTTP](https://graphql.github.io/graphql-over-http/draft/) — the status codes and media types behind every request this chapter defends.
+- [Grafana k6 — Thresholds](https://k6.io/docs/using-k6/thresholds/) — the pass/fail rules the two load runs use.

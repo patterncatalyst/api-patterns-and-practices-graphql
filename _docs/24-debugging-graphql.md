@@ -6,6 +6,18 @@ description: "Diagnosing a GraphQL service from the outside in: reading an error
 duration: "16 min read"
 ---
 
+## Learning objectives
+
+By the end of this chapter you can:
+
+- Read an error's `path` to find the field that failed before reading any resolver code.
+- Follow `extensions.traceId` from a masked response to its span in Tempo and its record in Loki.
+- Switch an application debug category to `DEBUG` at run time, with no restart, and read the key a resolver looked up.
+- Tell a development surface (GraphiQL, the Dev UI, payload logging) apart from what a production instance serves.
+- Count `source.call` spans per level in a trace to confirm a batch did not regress into an N+1.
+
+## Why this matters
+
 A GraphQL problem report arrives as a response that looks fine from the transport's side: status `200`, a `data` object with a hole in it, and an error that says little. Chapter 4 explained how a null travels, Chapter 9 explained why the message of an unexpected error is hidden, and Chapter 19 put every request into a trace. This chapter uses all three to find a fault in the application itself: its data, its resolvers and its own code paths.
 
 The code is in `examples/24-debugging/`. It starts from the Chapter 19 example and serves the same schema, so the SDL does not change. Three things are new. The seed holds a seventh cargo, `JKL012`, whose route ends at a location code the location service does not hold. Every execution error now carries `extensions.traceId`. And each stack runs twice: a production instance beside a development instance, so the surfaces a developer uses can be compared with the ones an operator ships. `verify.sh` follows the fault from the response to its cause on both stacks.
@@ -312,3 +324,11 @@ docker compose -f examples/24-debugging/compose.yaml down -v
 This chapter took one fault from a masked response to the data behind it: a path read for the field and the null, a trace id in every execution error, the trace and the log record found by that id, a debug category switched at run time, development surfaces kept off the production instances, and a trace read for fan-out.
 
 Chapter 25 runs the stack locally with Docker Compose, so the diagnosis path of this chapter has a full environment to work against instead of one example at a time. For the specifications and guides, read the GraphQL specification's sections "Handling Field Errors" and "Errors", the W3C Trace Context recommendation and the OpenTelemetry "Trace Context" overview. The Quarkus guides "Dev UI", "Maven tooling" (dev mode and the debug port), "Configuring logging" and "SmallRye GraphQL" cover the Java side, with the Quarkiverse Logging Manager documentation for the run-time level. Strawberry's "GraphQL IDE" and FastAPI integration pages, the Python `logging` documentation's "Logger Objects" and the Grafana Tempo and Loki documentation cover the rest.
+
+## For deeper coverage
+
+- *Cloud Native Design Patterns*, "Observability" — the OTel-plus-LGTM correlation this chapter's trace-id path builds on.
+- [W3C Trace Context](https://www.w3.org/TR/trace-context/) — the `traceparent` header this chapter reads and quotes back.
+- [Quarkus — Dev UI](https://quarkus.io/guides/dev-ui) — the development surface kept off production instances.
+- [Grafana Tempo documentation](https://grafana.com/docs/tempo/latest/) — finding a trace by id and reading its spans.
+- [Grafana Loki documentation](https://grafana.com/docs/loki/latest/) — querying a log record by `trace_id`.
