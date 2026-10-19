@@ -359,7 +359,7 @@ That completes the book's path from a schema to a system that runs in three plac
 ## For deeper coverage
 
 - *Cloud Native Design Patterns*, Appendix S — "Running Example 05 on OpenShift Local": the same restricted-v2 / pinned-CSV / edge-TLS-Route pattern, applied to a different example.
-- [OpenShift — Route configuration](https://docs.openshift.com/container-platform/latest/networking/routes/route-configuration.html)
-- [OpenShift — Builds using BuildConfig](https://docs.openshift.com/container-platform/latest/cicd/builds/understanding-image-builds.html) — the Docker strategy and binary source this appendix's `BuildConfig`s use.
-- [OpenShift — Managing security context constraints](https://docs.openshift.com/container-platform/latest/authentication/managing-security-context-constraints.html) — `restricted-v2` and `anyuid`.
-- [Red Hat OpenShift Local — Getting Started](https://crc.dev/crc/getting_started/) — `crc start` and `crc oc-env`.
+- OpenShift documentation — Route configuration and TLS termination.
+- OpenShift documentation — Builds using BuildConfig — the Docker strategy and binary source this appendix's `BuildConfig`s use.
+- OpenShift documentation — Managing security context constraints — `restricted-v2` and `anyuid`.
+- Red Hat OpenShift Local (CRC) documentation — Getting Started — `crc start` and `crc oc-env`.

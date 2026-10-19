@@ -486,6 +486,6 @@ For the tools, read the Quarkus guide "Testing your application" for `@QuarkusTe
 
 - *Cloud Native Design Patterns*, Appendix O — "API Testing with Newman": a parallel automated API test gate built on Postman/Newman collections, worth comparing against this chapter's layered GraphQL suites.
 - [Quarkus — Testing your application](https://quarkus.io/guides/getting-started-testing) — `@QuarkusTest`, `@TestHTTPResource`, `@InjectMock`, and test profiles.
-- [Strawberry — Testing](https://strawberry.rocks/docs/guides/testing) — `schema.execute` and the test client.
+- Strawberry — Testing guide — `schema.execute` and the test client.
 - [GraphQL Inspector](https://the-guild.dev/graphql/inspector) — the `validate`, `coverage`, and `diff` commands.
 - [Grafana k6 — Using k6](https://k6.io/docs/using-k6/) — scenarios, checks, and thresholds.
