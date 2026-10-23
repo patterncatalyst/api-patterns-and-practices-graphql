@@ -445,4 +445,32 @@ codeSlide("APPX · REFERENCE", "Object-level rule", LANG, "app_access",
   "The listing is the object-level rule of the access-control section, without its module docstring. The function takes the caller's identity, which is None for an anonymous caller, and the owner of the cargo, which is None for an unknown cargo. An anonymous caller sees nothing. An operator sees every cargo, and a shipper sees a cargo whose owner matches its own organization. Every path to a cargo reads through the booking source, which applies this function, so the query, the connection, the node fields and the edge nodes cannot disagree. The subscription check and the event feed call the same function when a stream starts. A cargo that is not the caller's answers like an unknown one, with null and no error, so the response does not reveal which tracking ids exist. Keep this listing open while reading the permission classes in the access-control section.");
 
 /* ======================= WRITE ======================= */
+
+/* --- Scan to explore (QR codes) --- */
+{
+  const s = S();
+  addContentTitle(s, "SCAN TO EXPLORE", "Take it with you");
+
+  // Left QR: the site
+  s.addImage({ path: `${ASSETS}/qr-graphql-site.png`, x: 2.30, y: 1.78, w: 3.10, h: 3.10 });
+  s.addText("The site", { x: 1.55, y: 4.98, w: 4.60, h: 0.40,
+    fontFace: FONT.title, fontSize: 18, bold: true, color: COLOR.ink, align: "center", valign: "middle" });
+  s.addText("Chapters, the GraphQL schema and contracts, and both-stack runnable examples", { x: 1.45, y: 5.40, w: 4.80, h: 0.72,
+    fontFace: FONT.body, fontSize: 13, italic: true, color: COLOR.caption, align: "center", valign: "top" });
+  s.addText("patterncatalyst.github.io/api-patterns-and-practices-graphql", { x: 1.45, y: 6.12, w: 4.80, h: 0.32,
+    fontFace: FONT.mono, fontSize: 10, color: COLOR.red, align: "center", valign: "middle" });
+
+  // Right QR: the hub
+  s.addImage({ path: `${ASSETS}/qr-hub.png`, x: 7.93, y: 1.78, w: 3.10, h: 3.10 });
+  s.addText("Workshops & Tutorials", { x: 7.18, y: 4.98, w: 4.60, h: 0.40,
+    fontFace: FONT.title, fontSize: 18, bold: true, color: COLOR.ink, align: "center", valign: "middle" });
+  s.addText("The whole series: every workshop, tutorial, and deck in one place", { x: 7.08, y: 5.40, w: 4.80, h: 0.72,
+    fontFace: FONT.body, fontSize: 13, italic: true, color: COLOR.caption, align: "center", valign: "top" });
+  s.addText("patterncatalyst.github.io/patterncatalyst-workshops-tutorials-list", { x: 7.08, y: 6.12, w: 4.80, h: 0.32,
+    fontFace: FONT.mono, fontSize: 9, color: COLOR.red, align: "center", valign: "middle" });
+
+  addNotes(s, "This is the Python/Strawberry implementation deck, so the left code takes you to the runnable Python example and schema, the right to the whole series. On the left, the site: the chapters, the GraphQL schema and contracts, and the runnable both-stack examples, all public. On the right, the Workshops and Tutorials hub: every workshop, tutorial, and deck in the series in one place, including the REST, gRPC, and WebSockets siblings. Scan whichever is useful; both are on the Pattern Catalyst GitHub organization.");
+}
+
+
 writeDeck(pres, OUT);
