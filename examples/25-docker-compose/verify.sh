@@ -96,7 +96,11 @@ print(",".join(sorted("%s=%s" % (r["Service"], r.get("Health") or r["State"]) fo
 
   for svc in quarkus python; do
     raw="$(compose port "$svc" 8080 2>/dev/null || true)"
-    [[ -z "$raw" || "$raw" == ":0" ]] || { echo "FAIL - docker compose port reports a host binding for $svc: $raw" >&2; return 1; }
+    # No published port reads back as "no binding": the output is empty, ":0", or
+    # a port-0 form some engine builds print ("0.0.0.0:0", "invalid IP:0"). A real
+    # binding never ends in ":0"; the PortBindings/Ports checks below are the
+    # authoritative backstop.
+    [[ -z "$raw" || "$raw" == *:0 ]] || { echo "FAIL - docker compose port reports a host binding for $svc: $raw" >&2; return 1; }
     echo "lib.sh: ok — docker compose port reports no host binding for $svc" >&2
     ports="$(compose_inspect "$svc" '{{json .HostConfig.PortBindings}}')"
     [[ "$ports" == "{}" || "$ports" == "null" ]] || { echo "FAIL - $svc declares a published port: $ports" >&2; return 1; }

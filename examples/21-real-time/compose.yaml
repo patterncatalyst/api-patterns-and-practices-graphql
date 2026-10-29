@@ -51,6 +51,15 @@ services:
       - QUARKUS_OTEL_SDK_DISABLED=true
       - TRACKING_SOURCE_LATENCY_MS=250
       - TRACKING_DEBUG_ENDPOINTS=true
+    # Cap the container's memory. run-java.sh sizes the heap from the cgroup
+    # (MaxRAMPercentage), so without a limit each JVM claims a large share of the
+    # host and two of them can exhaust a small CI runner; the kernel then kills
+    # one mid-run and it comes back with a fresh (reseeded) store. A cap keeps the
+    # heap small and the stack within a 2-CPU / 7 GB runner.
+    deploy:
+      resources:
+        limits:
+          memory: 768m
     healthcheck:
       # SmallRye Health readiness; curl ships in the UBI runtime image.
       test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/q/health/ready"]
@@ -70,6 +79,12 @@ services:
       - OTEL_SDK_DISABLED=true
       - TRACKING_SOURCE_LATENCY_MS=250
       - TRACKING_DEBUG_ENDPOINTS=true
+    # See the quarkus service: a memory cap keeps the heap small so both stacks
+    # fit on a small CI runner without the kernel killing one mid-run.
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     healthcheck:
       test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8080/health"]
       interval: 5s
