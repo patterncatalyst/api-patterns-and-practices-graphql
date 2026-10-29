@@ -156,11 +156,18 @@ _lib_exit_trap() {
 }
 
 # _lib_teardown <exit-status> — the EXIT trap: on a failed run, print the
-# tail of every service's log before the stack (and its logs) goes away.
+# per-container exit state (restart count, OOM kill, exit code, applied memory
+# and CPU limits) and the tail of every service's log before the stack (and its
+# logs) goes away. The exit state tells apart a clean failed assertion from a
+# container the runner's kernel killed and compose then revived with fresh state.
 _lib_teardown() {
-  local rc="$1"
+  local rc="$1" cid
   if (( rc != 0 )) && [[ -n "$_LIB_COMPOSE_PROJECT" ]]; then
-    echo "lib.sh: run failed (exit $rc); last 200 log lines per service:" >&2
+    echo "lib.sh: run failed (exit $rc); container exit state:" >&2
+    for cid in $(docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" ps -aq 2>/dev/null); do
+      docker inspect -f '  {{.Name}} status={{.State.Status}} OOMKilled={{.State.OOMKilled}} exit={{.State.ExitCode}} restarts={{.RestartCount}} startedAt={{.State.StartedAt}} finishedAt={{.State.FinishedAt}} memLimit={{.HostConfig.Memory}} nanoCpus={{.HostConfig.NanoCpus}} error={{.State.Error}}' "$cid" >&2 || true
+    done
+    echo "lib.sh: last 200 log lines per service:" >&2
     docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" logs --no-color --tail 200 >&2 || true
   fi
   compose_down "$_LIB_COMPOSE_FILE" "$_LIB_COMPOSE_PROJECT"

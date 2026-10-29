@@ -84,7 +84,7 @@ x-quarkus: &quarkus
     resources:
       limits:
         cpus: "1.0"
-        memory: 768m
+        memory: 896m
   depends_on:
     lgtm:
       condition: service_healthy

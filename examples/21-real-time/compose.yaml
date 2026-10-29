@@ -51,11 +51,14 @@ services:
       - QUARKUS_OTEL_SDK_DISABLED=true
       - TRACKING_SOURCE_LATENCY_MS=250
       - TRACKING_DEBUG_ENDPOINTS=true
-    # Cap the container's memory. run-java.sh sizes the heap from the cgroup
-    # (MaxRAMPercentage), so without a limit each JVM claims a large share of the
-    # host and two of them can exhaust a small CI runner; the kernel then kills
-    # one mid-run and it comes back with a fresh (reseeded) store. A cap keeps the
-    # heap small and the stack within a 2-CPU / 7 GB runner.
+      # Bound the JVM's memory explicitly so heap + off-heap stay well inside the
+      # container cap. The default sizes the heap at 80% of the cgroup and lets
+      # direct (Netty/Vert.x) memory grow alongside it; on a slow 2-CPU runner GC
+      # lags under subscription load and the total crosses the cap, so the kernel
+      # kills the container and compose revives it with a fresh (reseeded) store.
+      # These bounds (heap 256m + direct 96m + metaspace 128m + overhead) fit the
+      # 768m cap with room to spare for this small app. Keep the image's two opts.
+      - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Xms64m -Xmx256m -XX:MaxDirectMemorySize=96m -XX:MaxMetaspaceSize=128m
     deploy:
       resources:
         limits:
