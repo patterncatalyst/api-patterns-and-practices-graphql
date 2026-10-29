@@ -156,11 +156,18 @@ _lib_exit_trap() {
 }
 
 # _lib_teardown <exit-status> — the EXIT trap: on a failed run, print the
-# tail of every service's log before the stack (and its logs) goes away.
+# per-container exit state (restart count, OOM kill, exit code, applied memory
+# and CPU limits) and the tail of every service's log before the stack (and its
+# logs) goes away. The exit state tells apart a clean failed assertion from a
+# container the runner's kernel killed and compose then revived with fresh state.
 _lib_teardown() {
-  local rc="$1"
+  local rc="$1" cid
   if (( rc != 0 )) && [[ -n "$_LIB_COMPOSE_PROJECT" ]]; then
-    echo "lib.sh: run failed (exit $rc); last 200 log lines per service:" >&2
+    echo "lib.sh: run failed (exit $rc); container exit state:" >&2
+    for cid in $(docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" ps -aq 2>/dev/null); do
+      docker inspect -f '  {{.Name}} status={{.State.Status}} OOMKilled={{.State.OOMKilled}} exit={{.State.ExitCode}} restarts={{.RestartCount}} startedAt={{.State.StartedAt}} finishedAt={{.State.FinishedAt}} memLimit={{.HostConfig.Memory}} nanoCpus={{.HostConfig.NanoCpus}} error={{.State.Error}}' "$cid" >&2 || true
+    done
+    echo "lib.sh: last 200 log lines per service:" >&2
     docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" logs --no-color --tail 200 >&2 || true
   fi
   compose_down "$_LIB_COMPOSE_FILE" "$_LIB_COMPOSE_PROJECT"
@@ -177,9 +184,16 @@ compose_logs() {
 }
 
 # compose_run <service> [args...] — run one service of the running stack as a
-# one-off container: docker compose run --rm -T --build <service> args... .
+# one-off container: docker compose run --rm -T --no-deps --build <service> args... .
 # Services behind a compose profile (a client, a composer) run through it, so
 # compose_up stays the same for every example. Fails when no stack was started.
+#
+# --no-deps is load-bearing: without it, `run --build` rebuilds the one-off's
+# depends_on images too (the app stack), and when a rebuild is not byte-identical
+# (a cold build cache on CI) compose then recreates those already-running
+# containers, wiping the in-memory state a stateful test is mid-way through
+# asserting. compose_up has already started the whole stack, so the one-off needs
+# none of its dependencies brought up or rebuilt here.
 compose_run() {
   if [[ -z "$_LIB_COMPOSE_PROJECT" ]]; then
     echo "lib.sh: FAIL — compose_run: no stack is up (call compose_up first)" >&2
@@ -191,7 +205,7 @@ compose_run() {
   fi
   # COMPOSE_PROGRESS=quiet keeps BuildKit progress out of stdout, so the
   # service's own output is all a caller captures.
-  COMPOSE_PROGRESS=quiet docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" run --rm -T --build "$@"
+  COMPOSE_PROGRESS=quiet docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" run --rm -T --no-deps --build "$@"
 }
 
 # compose_down <compose-file> <project-name>
