@@ -184,9 +184,16 @@ compose_logs() {
 }
 
 # compose_run <service> [args...] — run one service of the running stack as a
-# one-off container: docker compose run --rm -T --build <service> args... .
+# one-off container: docker compose run --rm -T --no-deps --build <service> args... .
 # Services behind a compose profile (a client, a composer) run through it, so
 # compose_up stays the same for every example. Fails when no stack was started.
+#
+# --no-deps is load-bearing: without it, `run --build` rebuilds the one-off's
+# depends_on images too (the app stack), and when a rebuild is not byte-identical
+# (a cold build cache on CI) compose then recreates those already-running
+# containers, wiping the in-memory state a stateful test is mid-way through
+# asserting. compose_up has already started the whole stack, so the one-off needs
+# none of its dependencies brought up or rebuilt here.
 compose_run() {
   if [[ -z "$_LIB_COMPOSE_PROJECT" ]]; then
     echo "lib.sh: FAIL — compose_run: no stack is up (call compose_up first)" >&2
@@ -198,7 +205,7 @@ compose_run() {
   fi
   # COMPOSE_PROGRESS=quiet keeps BuildKit progress out of stdout, so the
   # service's own output is all a caller captures.
-  COMPOSE_PROGRESS=quiet docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" run --rm -T --build "$@"
+  COMPOSE_PROGRESS=quiet docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" run --rm -T --no-deps --build "$@"
 }
 
 # compose_down <compose-file> <project-name>
