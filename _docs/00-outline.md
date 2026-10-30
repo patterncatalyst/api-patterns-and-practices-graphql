@@ -13,8 +13,8 @@ for exactly the shape it needs in one round trip. Every hands-on chapter ships t
 example in **both Quarkus (SmallRye GraphQL) and Python (Strawberry)**. Both stacks are
 code-first and export their SDL; CI diff-checks that export against the canonical SDL in
 `contracts/schema/`, so the two stacks never drift, and a graphql-inspector gate fails any
-change to the canonical SDL that would break an existing client. Real-time is a single chapter (Ch21) that compares
-subscriptions, SSE and WebSockets and points to a planned WebSockets book. The full arc is below.
+change to the canonical SDL that would break an existing client. Real-time gets a single chapter
+that compares subscriptions, SSE and WebSockets and points to a planned WebSockets book. The full arc is below.
 
 ## Part 0: Prerequisites & the Lab
 - [Ch0 · Prerequisites and the lab](../00-prerequisites-and-the-lab/)

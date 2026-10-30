@@ -23,7 +23,7 @@ nodes = [
     dict(x=710, y=290, w=270, h=70, style="box", lines=["Gate result", "pass, or FAIL naming the field"]),
     dict(x=380, y=430, w=220, h=60, style="box", lines=["contracts/schema/", "canonical SDL"]),
     dict(x=60, y=430, w=220, h=60, style="box", lines=["npm run lint", "descriptions, naming"]),
-    dict(x=680, y=430, w=270, h=60, style="box", lines=["npm run breaking", "canonical vs origin/main (Ch11)"]),
+    dict(x=680, y=430, w=270, h=60, style="box", lines=["npm run breaking", "canonical vs origin/main"]),
 ]
 edges = [
     dict(x1=210, y1=115, x2=250, y2=115),

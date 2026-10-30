@@ -19,13 +19,13 @@ bands = [
 ]
 nodes = [
     dict(x=40, y=120, w=150, h=90, style="user", lines=["client", "bearer token,", "traceparent"]),
-    dict(x=240, y=100, w=210, h=130, style="accent", lines=["edge (Ch25)", "TLS 1.3, 64k body limit", "/graphql + upgrade, /events/", "host 8370 and 8371"]),
-    dict(x=520, y=80, w=220, h=80, style="box", lines=["quarkus, python (Ch14, 17, 18, 21)", "public, introspection off", "publish nothing"]),
+    dict(x=240, y=100, w=210, h=130, style="accent", lines=["edge", "TLS 1.3, 64k body limit", "/graphql + upgrade, /events/", "host 8370 and 8371"]),
+    dict(x=520, y=80, w=220, h=80, style="box", lines=["quarkus, python", "public, introspection off", "publish nothing"]),
     dict(x=520, y=185, w=220, h=80, style="sub", lines=["internal instances", "same images, introspection on", "127.0.0.1 8372, 8373"]),
-    dict(x=790, y=80, w=170, h=80, style="box", lines=["keycloak 26.8.1 (Ch18)", "realm shipping", "127.0.0.1 8374"]),
-    dict(x=790, y=185, w=170, h=80, style="accent", lines=["lgtm 0.37.0 (Ch19, 25)", "Tempo, Loki, Prometheus", "127.0.0.1 8375 to 8378"]),
-    dict(x=240, y=300, w=210, h=80, style="sub", lines=["client profile (Ch21)", "gql-ch27-client:1.0", "wss through the edge"]),
-    dict(x=520, y=300, w=220, h=80, style="sub", lines=["load profile (Ch23)", "gql-ch27-load:1.0, k6 v2.3.0", "fanout and cost runs"]),
+    dict(x=790, y=80, w=170, h=80, style="box", lines=["keycloak 26.8.1", "realm shipping", "127.0.0.1 8374"]),
+    dict(x=790, y=185, w=170, h=80, style="accent", lines=["lgtm 0.37.0", "Tempo, Loki, Prometheus", "127.0.0.1 8375 to 8378"]),
+    dict(x=240, y=300, w=210, h=80, style="sub", lines=["client profile", "gql-ch27-client:1.0", "wss through the edge"]),
+    dict(x=520, y=300, w=220, h=80, style="sub", lines=["load profile", "gql-ch27-load:1.0, k6 v2.3.0", "fanout and cost runs"]),
     dict(x=790, y=300, w=170, h=80, style="ghost", lines=["contracts/schema/", "assert_sdl_equals on", "the internal instances"]),
     dict(x=40, y=410, w=460, h=80, style="ghost", lines=["Left in their own chapters", "persisted documents (15), caching (16), federation (20),", "clients and test suites (22, 23), dev instances (24)"]),
 ]
