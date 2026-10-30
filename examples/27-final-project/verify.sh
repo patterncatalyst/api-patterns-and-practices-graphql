@@ -237,8 +237,11 @@ print(",".join(sorted("%s=%s" % (r["Service"], r.get("Health") or r["State"]) fo
   # container has no runtime port binding (a container on an internal network gets none).
   for svc in quarkus python; do
     raw="$(compose port "$svc" 8080 2>/dev/null || true)"
+    # No published port reads back as "no binding": empty, ":0", or a port-0 form
+    # some engine builds print ("0.0.0.0:0", "invalid IP:0"). A real binding never
+    # ends in ":0"; the PortBindings/Ports checks below are the authoritative backstop.
     case "$raw" in
-      "" | ":0") echo "lib.sh: ok — docker compose port reports no host binding for $svc" >&2 ;;
+      "" | *:0) echo "lib.sh: ok — docker compose port reports no host binding for $svc" >&2 ;;
       *) echo "FAIL - $svc reports a host binding: $raw" >&2; return 1 ;;
     esac
     bindings="$(compose_inspect "$svc" '{{json .HostConfig.PortBindings}}')"

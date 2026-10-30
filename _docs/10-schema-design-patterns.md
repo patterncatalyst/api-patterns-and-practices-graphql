@@ -18,9 +18,9 @@ By the end of this chapter you can:
 
 ## Why this matters
 
-Nine chapters used the schema. This one asks why it looks the way it does. Every type, name and nullability marker the examples served so far came from the canonical SDL in `contracts/schema/`, and each of them is a decision a client will depend on for years. A field name cannot be changed quietly once a dashboard selects it, and an identity rule cannot be added after caches have been keyed on something else. The patterns here are the ones that keep those decisions cheap to live with.
+Nine chapters used the schema. This one asks why it looks the way it does. Every type, name and nullability marker the examples served so far came from the canonical SDL in `contracts/schema/`, and each of them is a decision a client will depend on for years. A field cannot be renamed once a dashboard selects it without breaking that dashboard, and an identity rule cannot be added after caches have been keyed on something else. The patterns here are the ones that keep those decisions cheap to live with.
 
-The code is in `examples/10-schema-design/`. It starts from the Chapter 8 example and adds one root field, `Query.nodes(ids: [ID!]!): [Node]!`, which fetches several objects by global id in one request. Its `verify.sh` also reads each live schema once and checks the naming, input, payload and description conventions mechanically, and it runs the GraphQL ESLint rules on the canonical SDL. The slice predates the deprecation that Chapter 11 introduces: it serves `finalArrivalDate` without a deprecation and without `finalArrivalTime`.
+The code is in `examples/10-schema-design/`. It starts from the example that added the `registerHandlingEvent` mutation and adds one root field, `Query.nodes(ids: [ID!]!): [Node]!`, which fetches several objects by global id in one request. Its `verify.sh` also reads each live schema once and checks the naming, input, payload and description conventions mechanically, and it runs the GraphQL ESLint rules on the canonical SDL. The slice predates the field's deprecation lifecycle: it serves `finalArrivalDate` without a deprecation and without `finalArrivalTime`.
 
 ## Design from demand
 
@@ -32,13 +32,13 @@ A schema that mirrors the tables behind it describes the producers. A schema des
 | Route | `cargo.itinerary.legs`: `loadLocation`, `voyage`, `unloadLocation` | routing, voyage, location |
 | Timeline | `cargo.handlingHistory`: `type`, `location`, `completionTime` | handling, location |
 
-The panels name the fields, and the fields name their owners. `Cargo.delivery` does not exist in any service: it is derived from the itinerary and the handling events, which is the read-oriented aggregation Chapter 2 gave this layer. The client asks for `delivery { transportStatus }` and never learns that two services answered.
+The panels name the fields, and the fields name their owners. `Cargo.delivery` does not exist in any service: it is derived from the itinerary and the handling events, which is this layer's read-oriented aggregation. The client asks for `delivery { transportStatus }` and never learns that two services answered.
 
-{% include excalidraw.html file="10-demand-oriented-schema" alt="The tracking screen has three panels: Status header, Route and Timeline. Each panel has an arrow labelled selects to a field box in the middle: cargo and cargo.delivery, cargo.itinerary.legs, and cargo.handlingHistory. The Status header also selects cargo(trackingId). Arrows labelled reads lead from the field boxes to five sources on the right: booking, routing, voyage, location and handling. cargo(trackingId) reads booking, cargo.delivery reads routing, cargo.itinerary.legs reads routing, voyage and location, and cargo.handlingHistory reads handling and location. A dashed arrow joins cargo.delivery to handling. A note below says one screen, one query, five owners." caption="Figure 10.1 — One screen, one query, five owners. The panels choose fields; each field is answered by one or more sources." %}
+{% include excalidraw.html file="10-demand-oriented-schema" alt="The tracking screen has three panels: Status header, Route and Timeline. Each panel has an arrow labelled selects to a field box in the middle: cargo and cargo.delivery, cargo.itinerary.legs, and cargo.handlingHistory. The Status header also selects cargo(trackingId). Arrows labelled reads lead from the field boxes to five sources on the right: booking, routing, voyage, location and handling. cargo(trackingId) reads booking, cargo.delivery reads routing, cargo.itinerary.legs reads routing, voyage and location, and cargo.handlingHistory reads handling and location. A dashed arrow joins cargo.delivery to handling. A note below says one screen, one query, five owners." caption="Figure 10.1: One screen, one query, five owners. The panels choose fields; each field is answered by one or more sources." %}
 
-Demand also decides what stays out. Nothing on the screen reads a price, so the graph has no `Money` type, and no panel creates a booking, so booking writes stay a REST call, as Chapter 8 argued. A field earns a place when a client reads it. Adding one later is a safe change, and removing one is not, so the cheap mistake is the field that was left out.
+Demand also decides what stays out. Nothing on the screen reads a price, so the graph has no `Money` type, and no panel creates a booking, so booking writes stay a REST call, keeping writes with the service that owns them. A field earns a place when a client reads it. Adding one later is a safe change, and removing one is not, so the cheap mistake is the field that was left out.
 
-The reverse also holds. A list that a screen shows in full today and a client shows in part tomorrow is a connection from the start, because turning a list into a connection later changes the field's type. Chapter 12 builds that for `handlingHistory`.
+The reverse also holds. A list that a screen shows in full today and a client shows in part tomorrow is a connection from the start, because turning a list into a connection later changes the field's type, which is why `handlingHistory` becomes a Relay connection from the start.
 
 ## Names are the interface
 
@@ -56,7 +56,7 @@ A name is the first thing a client reads and the last thing the server can chang
 
 Two of these carry more weight than they appear to. The suffixes make a type's role readable from its name, so a client author who sees `...Payload` knows it is a mutation result, and a linter can enforce the shape. The time suffix is a promise about the type: a field ending in `Time` holds a `DateTime`, an instant in UTC, and nothing else. A field named `date` that holds an instant makes a client wonder whether it is a calendar day.
 
-The canonical SDL departs from that last rule in one place. `Itinerary.finalArrivalDate` is a `DateTime`, so by the table it should be `finalArrivalTime`. It was named before the convention was written down, and it shows what an inconsistency costs: it cannot be corrected by renaming, because every client that selects it would break. The correction is an addition followed by a deprecation, and Chapter 11 does it in that order. Until then the chapter's checks leave this name alone, because they test the shape of names, not their meaning.
+The canonical SDL departs from that last rule in one place. `Itinerary.finalArrivalDate` is a `DateTime`, so by the table it should be `finalArrivalTime`. It was named before the convention was written down, and it shows what an inconsistency costs: it cannot be corrected by renaming, because every client that selects it would break. The correction is an addition followed by a deprecation, following the deprecation lifecycle in that order. Until then the chapter's checks leave this name alone, because they test the shape of names, not their meaning.
 
 A name that reads well in the schema can still be wrong for the field. Prefer the domain's word to the implementation's: `Leg`, `Voyage` and `HandlingEvent` come from the shipping domain, not from the table or the service that holds them.
 
@@ -90,7 +90,7 @@ The pattern gives one testable rule, the refetch rule: for any object `x` return
 
 Checking `__typename` alone would pass for an object with the right type and the wrong contents, so each refetch also selects a field through an inline fragment and compares it with the seed.
 
-{% include excalidraw.html file="10-node-identity" alt="Each of three client paths on the left, cargo id, leg load location id and handling event id, delivers an id to a client cache in the middle keyed by id. An amber arrow labelled refetch by id leads from the cache to a box for node and nodes on the right. Below it, a box for prefix dispatch lists the prefixes cargo_, loc_, voy_ and evt_, and a box for the owning source sits under that. An amber arrow labelled the same object returns from the source to the cache." caption="Figure 10.2 — Ids reach a client cache along any path. node and nodes turn any of them back into the same object through the prefix dispatch." %}
+{% include excalidraw.html file="10-node-identity" alt="Each of three client paths on the left, cargo id, leg load location id and handling event id, delivers an id to a client cache in the middle keyed by id. An amber arrow labelled refetch by id leads from the cache to a box for node and nodes on the right. Below it, a box for prefix dispatch lists the prefixes cargo_, loc_, voy_ and evt_, and a box for the owning source sits under that. An amber arrow labelled the same object returns from the source to the cache." caption="Figure 10.2: Ids reach a client cache along any path. node and nodes turn any of them back into the same object through the prefix dispatch." %}
 
 ### `nodes(ids:)`
 
@@ -141,13 +141,13 @@ Both stacks route every id through the helper that `node` already used, `resolve
 
 One detail on Quarkus. The `ids` argument is declared `List<@NonNull String>`, and `ContractSchemaDetails`, the schema observer the examples already use, gives it the contract's type `[ID!]!`. The live schema reports `[ID!]!`, and `verify.sh` asserts the full signature of the field.
 
-Each id is one source call, and nothing deduplicates them. `nodes(ids: ["cargo_ABC123", "loc_NLRTM", "nope", "voy_V200E", "cargo_ABC123"])` makes four calls: `booking.getCargo` for `ABC123` twice, `location.getLocation` for `NLRTM` and `voyage.getVoyage` for `V200E`. The unknown `nope` has no recognised prefix and makes none, and neither do a bare prefix such as `cargo` or an empty key such as `cargo_`. This is the N+1 shape that Chapter 7 measured, and Chapter 13 batches it, so the four calls become three.
+Each id is one source call, and nothing deduplicates them. `nodes(ids: ["cargo_ABC123", "loc_NLRTM", "nope", "voy_V200E", "cargo_ABC123"])` makes four calls: `booking.getCargo` for `ABC123` twice, `location.getLocation` for `NLRTM` and `voyage.getVoyage` for `V200E`. The unknown `nope` has no recognised prefix and makes none, and neither do a bare prefix such as `cargo` or an empty key such as `cargo_`. This is the N+1 shape that resolver fan-out measures, and DataLoader batching collapses it, so the four calls become three.
 
 ## Objects, not foreign keys
 
 A relational schema points from one row to another with a key. A graph points with the object. `Leg.voyage` returns a `Voyage`, not a `voyageNumber`, and `Leg.loadLocation` returns a `Location`, not a code. A client that wants the vessel's name selects it in the same query, and the schema never needs a second field for the key of every relation.
 
-The cost moves to the resolvers. Each of those fields is a source call, and a list of legs makes a call per leg. That cost is measured in Chapters 6 and 7, and it is the reason Chapter 13 exists. The design choice is to keep the schema in terms of the domain and fix the cost behind it, because the reverse, a schema full of keys that clients join by hand, cannot be fixed without a breaking change.
+The cost moves to the resolvers. Each of those fields is a source call, and a list of legs makes a call per leg. The execution model's source-call log measures that cost, and it is the reason DataLoader batching exists. The design choice is to keep the schema in terms of the domain and fix the cost behind it, because the reverse, a schema full of keys that clients join by hand, cannot be fixed without a breaking change.
 
 The exception is documented. `HandlingEvent` has both `trackingId` and `cargo`. The tracking id is a scalar copy of the key, kept so that a client can still say which cargo an event belongs to when the booking service is down. In that case `cargo` is null and `trackingId` survives, which is why the canonical description of `cargo` says "Null when the cargo service is unavailable". It is a denormalization chosen for resilience, and it is the only one in the schema.
 
@@ -157,13 +157,13 @@ An interface says that several types share fields and a client can select those 
 
 A union says that a result is exactly one of several types that share nothing a client would select in common. A search result that is a cargo or a location, or a mutation result that is a success or a failure, fits a union. The client branches on `__typename`.
 
-Introspection shows the difference. `__type(name: "Node") { possibleTypes { name } }` lists the implementers, and `verify.sh` asserts it is `Cargo`, `HandlingEvent`, `Location` and `Voyage` on both stacks. `HandlingEvent` joined that list in Chapter 8, when it gained an `id`. Chapter 9 sketches a union for mutation results and explains why this schema keeps payload fields instead.
+Introspection shows the difference. `__type(name: "Node") { possibleTypes { name } }` lists the implementers, and `verify.sh` asserts it is `Cargo`, `HandlingEvent`, `Location` and `Voyage` on both stacks. `HandlingEvent` joined that list when it gained an `id` as part of its mutation payload. A sketch of a union for mutation results, compared against payload fields, explains why this schema keeps payload fields instead.
 
-Adding a member to a union or a new implementer to an interface is a change clients can break on: a client that switches on `__typename` and has no default branch fails on the new type. It is not breaking in the schema's own sense. The gate files a new union member, and an existing type that starts to implement the interface, under dangerous changes; Chapter 11 shows that it passes a brand-new implementing type as safe, and why a reviewer should still treat that one as dangerous.
+Adding a member to a union or a new implementer to an interface is a change clients can break on: a client that switches on `__typename` and has no default branch fails on the new type. It is not breaking in the schema's own sense. The gate files a new union member, and an existing type that starts to implement the interface, under dangerous changes; the breaking-change gate passes a brand-new implementing type as safe, and a reviewer should still treat that one as dangerous.
 
 ## Inputs and payloads
 
-Chapter 8 built the pattern, and its shape is a rule. Every mutation takes exactly one argument, named `input`, whose type is a non-null input object, and returns a non-null payload object. The payload holds what changed and a list of `userErrors`.
+The input-and-payload pattern is a rule: every mutation takes exactly one argument, named `input`, whose type is a non-null input object, and returns a non-null payload object. The payload holds what changed and a list of `userErrors`.
 
 ```graphql
 type Mutation {
@@ -171,7 +171,7 @@ type Mutation {
 }
 ```
 
-One input object means the mutation can gain fields without changing its signature, which is the evolution Chapter 11 relies on: a new optional field on the input, or a new field on the payload, is a safe addition. One payload per mutation means the result is not shared with another mutation that needs to differ. The non-null payload means a client never has to ask whether the mutation ran. It always gets an object, and a refusal is data inside it. `verify.sh` sends a failing mutation, `RECEIVE` with a voyage, and asserts that `registerHandlingEvent` is not null, that `userErrors` has exactly one entry, `VOYAGE_NOT_ALLOWED` at `["input","voyageNumber"]`, and that `errors` is absent.
+One input object means the mutation can gain fields without changing its signature, which is the kind of additive evolution the deprecation lifecycle relies on: a new optional field on the input, or a new field on the payload, is a safe addition. One payload per mutation means the result is not shared with another mutation that needs to differ. The non-null payload means a client never has to ask whether the mutation ran. It always gets an object, and a refusal is data inside it. `verify.sh` sends a failing mutation, `RECEIVE` with a voyage, and asserts that `registerHandlingEvent` is not null, that `userErrors` has exactly one entry, `VOYAGE_NOT_ALLOWED` at `["input","voyageNumber"]`, and that `errors` is absent.
 
 Optional fields on an input stay optional. A new required field is a breaking change for every existing client, while a new optional one is not, which is why `voyageNumber` and `idempotencyKey` were optional from the start.
 
@@ -185,13 +185,13 @@ Three smaller choices carry most of a schema's day-to-day behaviour.
 
 **Custom scalars for values with rules.** `TrackingId`, `UnLocode` and `DateTime` are string-backed scalars. Each one validates on the way in and out, and `UnLocode` and `DateTime` point at their definitions with `@specifiedBy`. `verify.sh` checks that each is a real `SCALAR` and that the two URLs are exact; the SDL diff covers types, fields and arguments, and this check covers the URLs.
 
-**Nullability as a statement about failure.** Chapter 4 gave the rule: non-null is a promise the server must keep, and a broken promise propagates upward. Design applies it field by field. `Leg.loadLocation` is non-null because a leg without a location is not a leg. `Cargo.itinerary` is nullable because routing may not have assigned one. `Leg.voyage` is nullable because the voyage service is a separate service that can fail, and a failed field should not erase the leg. A field fed by a service that can fail on its own is nullable, and a field that is part of what the type means is not.
+**Nullability as a statement about failure.** The nullability rule holds here too: non-null is a promise the server must keep, and a broken promise propagates upward. Design applies it field by field. `Leg.loadLocation` is non-null because a leg without a location is not a leg. `Cargo.itinerary` is nullable because routing may not have assigned one. `Leg.voyage` is nullable because the voyage service is a separate service that can fail, and a failed field should not erase the leg. A field fed by a service that can fail on its own is nullable, and a field that is part of what the type means is not.
 
 ## Lists that grow are connections
 
-A list field that can grow without bound should be a connection from the first release. `Cargo.handlingHistory` returns a `HandlingEventConnection` with edges, a cursor on each edge and a `pageInfo`. Chapter 12 builds it, with opaque cursors that stay stable when events are added.
+A list field that can grow without bound should be a connection from the first release. `Cargo.handlingHistory` returns a `HandlingEventConnection` with edges, a cursor on each edge and a `pageInfo`, built with opaque cursors that stay stable when events are added.
 
-`nodes` is the bounded exception. Its list is as long as the client made it: the caller chose the ids and the answer has the same length. A list the caller sizes is not unbounded in the sense that matters. A server can still cap the length of `ids`, and Chapter 14 covers depth and cost limits.
+`nodes` is the bounded exception. Its list is as long as the client made it: the caller chose the ids and the answer has the same length. A list the caller sizes is not unbounded in the sense that matters. A server can still cap the length of `ids`, which is a job for depth and cost limits.
 
 ## Checking design mechanically
 
@@ -208,7 +208,7 @@ The second is each live schema. The SDL could be perfect and a stack could still
 - every type, field, argument, input field and enum value has a non-empty description;
 - every implementer of `Node` has `id: ID!`.
 
-The checker skips introspection types, the built-in scalars and the framework types that `LGTM_SDL_FRAMEWORK_TYPES` names, and on a failure it prints each offender, one per line. Chapter 5's conformance check compares the live schema to the contract; this one asks whether the schema, whatever it is, follows the rules.
+The checker skips introspection types, the built-in scalars and the framework types that `LGTM_SDL_FRAMEWORK_TYPES` names, and on a failure it prints each offender, one per line. The contract-first conformance check compares the live schema to the contract; this one asks whether the schema, whatever it is, follows the rules.
 
 ## On the wire
 
@@ -246,20 +246,28 @@ The third response lists the four implementers; `verify.sh` sorts them before co
 
 `bash examples/10-schema-design/verify.sh` runs the whole sequence on both stacks and prints `PASS` only when both hold.
 
-<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Schema design is where the <em>contract and evolution style</em> axis of Chapter 2 is decided field by field. Names, suffixes, one <code>input</code> and one payload per mutation, and nullable fields across service boundaries are all choices that keep later changes additive. The <em>read and write balance</em> axis shows in design from demand: the graph holds what the screen reads, and writes stay small and with their owners. The <em>team ownership</em> axis shows in objects over foreign keys and in <code>Node</code> identity: each type points to its owner's data by object and by opaque id, so an owning team can change a key without a client change. The <em>operational and security cost</em> axis shows in what the design defers: every <code>node</code> and <code>nodes</code> id and every object field is a source call until Chapter 13, and lists that grow become connections in Chapter 12. The tracking view uses global ids with an opaque contract, <code>nodes</code> for client caches, objects instead of keys with one documented denormalization, and conventions that a linter and a live-schema check enforce on every run.</p></div>
+<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Schema design is where the <em>contract and evolution style</em> axis of the decision framework is decided field by field. Names, suffixes, one <code>input</code> and one payload per mutation, and nullable fields across service boundaries are all choices that keep later changes additive. The <em>read and write balance</em> axis shows in design from demand: the graph holds what the screen reads, and writes stay small and with their owners. The <em>team ownership</em> axis shows in objects over foreign keys and in <code>Node</code> identity: each type points to its owner's data by object and by opaque id, so an owning team can change a key without a client change. The <em>operational and security cost</em> axis shows in what the design defers: every <code>node</code> and <code>nodes</code> id and every object field is a source call until DataLoader batching collapses them, and lists that grow become Relay connections. The tracking view uses global ids with an opaque contract, <code>nodes</code> for client caches, objects instead of keys with one documented denormalization, and conventions that a linter and a live-schema check enforce on every run.</p></div>
+
+## Review
+
+- Schema fields are designed from client demand, such as the tracking screen's three panels, rather than mirrored from backing tables.
+- Naming, input, and payload conventions (`...Input`, `...Payload`, `...Connection`) make a type's role readable from its name alone.
+- The `Node` interface and global ids let any client refetch an object with `node(id:)` or batch-refetch with `nodes(ids:)`, with a type prefix dispatching to the right source.
+- An interface fits when a client selects shared fields; a union fits when a client branches on `__typename` across types that share nothing selectable.
+- Schema conventions are checked mechanically, against the canonical SDL with GraphQL ESLint and against each live `__schema`, rather than relying on review.
 
 ## Where this goes next
 
-This chapter named the conventions behind the schema and added `Query.nodes`, the one new field of the example. It also left two things open. `finalArrivalDate` is the one field outside the time-suffix rule, and Chapter 11 corrects it the only safe way, by adding `finalArrivalTime`, deprecating the old name and letting the breaking-change gate show what each kind of change costs. The cost of resolving one id at a time is the other: the source-call row in "On the wire" shows `booking.getCargo` for `ABC123` twice, and Chapter 13 removes the duplicate by batching.
+This chapter named the conventions behind the schema and added `Query.nodes`, the one new field of the example. It also left two things open. `finalArrivalDate` is the one field outside the time-suffix rule, and the deprecation lifecycle corrects it the only safe way, by adding `finalArrivalTime`, deprecating the old name and letting the breaking-change gate show what each kind of change costs. The cost of resolving one id at a time is the other: the source-call row in "On the wire" shows `booking.getCargo` for `ABC123` twice, and DataLoader batching removes the duplicate.
 
-Chapter 11 starts from this example. Chapter 12 builds the connection that `handlingHistory` has been waiting for and carries `nodes` forward.
+The deprecation lifecycle continues from this example, and the Relay connection pattern builds the connection that `handlingHistory` has been waiting for, carrying `nodes` forward.
 
 For the formal definitions, read "Interfaces", "Unions", "Input Objects" and "OneOf Input Objects" in the [GraphQL specification](https://spec.graphql.org/), and the [Global Object Identification](https://relay.dev/graphql/objectidentification.htm) specification from Relay. The [GraphQL ESLint](https://the-guild.dev/graphql/eslint/docs) documentation lists the rules the contract uses. Samer Buna's *GraphQL in Action* covers schema design in "Designing a GraphQL schema", and Artur Czemiel's *GraphQL Best Practices* covers naming, enums, interfaces and pagination in its guidance on schema design; both are listed on the [Bibliography](../../bibliography/) page.
 
 ## For deeper coverage
 
-- [GraphQL specification — Interfaces, Unions, Input Objects, OneOf Input Objects](https://spec.graphql.org/).
-- [Relay — Global Object Identification specification](https://relay.dev/graphql/objectidentification.htm) — the `Node` interface and global-id pattern this chapter implements.
-- Samer Buna, *GraphQL in Action* (Manning, 2021) — "Designing a GraphQL schema."
-- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024) — naming, enums, interfaces, and pagination guidance.
-- *Cloud Native Design Patterns*, "Composition" — designing a schema from client demand rather than from the data each service owns.
+- [GraphQL specification: Interfaces, Unions, Input Objects, OneOf Input Objects](https://spec.graphql.org/).
+- [Relay: Global Object Identification specification](https://relay.dev/graphql/objectidentification.htm): the `Node` interface and global-id pattern this chapter implements.
+- Samer Buna, *GraphQL in Action* (Manning, 2021): "Designing a GraphQL schema."
+- Artur Czemiel, *GraphQL Best Practices* (Packt, 2024): naming, enums, interfaces, and pagination guidance.
+- *Cloud Native Design Patterns*, "Composition": designing a schema from client demand rather than from the data each service owns.
