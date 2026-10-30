@@ -18,15 +18,15 @@ By the end of this chapter you can:
 
 ## Why this matters
 
-Chapters 3 to 24 each ran one example. A chapter brought up the two stacks it needed, read a few responses with `curl` and tore everything down. That is the right size for learning one technique and the wrong size for answering a different question: what does the service look like when it runs as a whole? Something has to terminate TLS, something has to refuse a body that is too large, the service has to start after the things it depends on, and an operator has to be able to read what the engine was told to do. None of that is GraphQL, and all of it decides whether the GraphQL service is reachable and diagnosable.
+Each earlier chapter ran one example. A chapter brought up the two stacks it needed, read a few responses with `curl` and tore everything down. That is the right size for learning one technique and the wrong size for answering a different question: what does the service look like when it runs as a whole? Something has to terminate TLS, something has to refuse a body that is too large, the service has to start after the things it depends on, and an operator has to be able to read what the engine was told to do. None of that is GraphQL, and all of it decides whether the GraphQL service is reachable and diagnosable.
 
-The code is in `examples/25-docker-compose/`. It starts from the production instances of Chapter 24: Chapter 19's telemetry and `extensions.traceId` on every execution error. It leaves out that chapter's seeded fault, its development instances and its run-time level switch, because a tier runs the service as it ships. The schema is the same slice as Chapters 19 and 24, everything except `Subscription`, so the SDL does not change. Around it are four services: an nginx edge, the two stacks and the observability backend. `verify.sh` brings them up and reads the result from the outside.
+The code is in `examples/25-docker-compose/`. It starts from the production instances with OpenTelemetry instrumentation and `extensions.traceId` on every execution error. It leaves out the seeded fault, the development instances and the run-time level switch used for debugging, because a tier runs the service as it ships. The schema is the same slice used for telemetry and debugging, everything except `Subscription`, so the SDL does not change. Around it are four services: an nginx edge, the two stacks and the observability backend. `verify.sh` brings them up and reads the result from the outside.
 
 ## From one example to a tier
 
 Figure 25.1 shows the project. Four services run on three networks. The two stacks have no published port. The only way to reach them from the host is the edge, which publishes `8350` for Quarkus and `8351` for Python, both over TLS. The observability backend publishes Grafana, Tempo, Prometheus and Loki on `8352` to `8355`, bound to `127.0.0.1` so they are reachable from the machine and from nowhere else.
 
-{% include excalidraw.html file="25-compose-tier-topology" alt="Three vertical bands. The public band holds the edge, an nginx container with TLS 1.3, a body limit under 64k and only slash graphql routed, numbered 3 for its start order, and below it a box for the compose config and the two secrets mounted under slash run slash secrets. The backend band, marked internal, holds quarkus and python, both numbered 2, each with its health path, its limits and no published port, and the lgtm observability service numbered 1. An arrow from the client on the left enters the edge over TLS, and arrows from the edge reach quarkus and python on port 8080. An amber arrow labelled OTLP from both runs from the stacks to lgtm. The ops band on the right holds Grafana on 8352, Tempo on 8353, Prometheus on 8354 and Loki on 8355, published on 127.0.0.1." caption="Figure 25.1 — The compose project. The backend network is internal, so the stacks are reached only through the edge; the numbers are the start order that health conditions enforce." %}
+{% include excalidraw.html file="25-compose-tier-topology" alt="Three vertical bands. The public band holds the edge, an nginx container with TLS 1.3, a body limit under 64k and only slash graphql routed, numbered 3 for its start order, and below it a box for the compose config and the two secrets mounted under slash run slash secrets. The backend band, marked internal, holds quarkus and python, both numbered 2, each with its health path, its limits and no published port, and the lgtm observability service numbered 1. An arrow from the client on the left enters the edge over TLS, and arrows from the edge reach quarkus and python on port 8080. An amber arrow labelled OTLP from both runs from the stacks to lgtm. The ops band on the right holds Grafana on 8352, Tempo on 8353, Prometheus on 8354 and Loki on 8355, published on 127.0.0.1." caption="Figure 25.1: The compose project. The backend network is internal, so the stacks are reached only through the edge; the numbers are the start order that health conditions enforce." %}
 
 The three networks do different jobs. `public` carries the edge's published listeners. `ops` carries the observability backend's. `backend` is declared `internal: true`, which gives it no route to or from the host: the edge, both stacks and `lgtm` join it, and traffic between them stays on it. The edge joins `public` and `backend`, the stacks join `backend` only, and `lgtm` joins `backend` and `ops`.
 
@@ -56,9 +56,9 @@ Nothing in the tier is specific to this chapter's data. Replace the two images w
 
 ## One image per stack
 
-Each stack is built once and tagged `1.0`: `gql-ch25-quarkus:1.0` and `gql-ch25-python:1.0`. The compose file sets `image:` beside `build:`, so the tag a build produces is the tag of the image the stack runs. A fixed tag is what lets Chapter 26 take the same two images, load them into a cluster and deploy them unchanged. An image that is rebuilt for each environment is not the thing that was tested.
+Each stack is built once and tagged `1.0`: `gql-ch25-quarkus:1.0` and `gql-ch25-python:1.0`. The compose file sets `image:` beside `build:`, so the tag a build produces is the tag of the image the stack runs. A fixed tag is what lets the Kubernetes deployment take the same two images, load them into a cluster and deploy them unchanged. An image that is rebuilt for each environment is not the thing that was tested.
 
-The Containerfiles change in three ways from Chapter 24. The Quarkus file loses its `dev` target, since a tier has no development instance. The Python entrypoint gains `--timeout-graceful-shutdown 10`, which gives uvicorn ten seconds to finish requests in flight after a stop signal. And each image names its service for the collector: `ch25-compose-quarkus` and `ch25-compose-python`. Nothing else about the application depends on where it runs.
+The Containerfiles change in three ways from the production instances used for debugging. The Quarkus file loses its `dev` target, since a tier has no development instance. The Python entrypoint gains `--timeout-graceful-shutdown 10`, which gives uvicorn ten seconds to finish requests in flight after a stop signal. And each image names its service for the collector: `ch25-compose-quarkus` and `ch25-compose-python`. Nothing else about the application depends on where it runs.
 
 ## Configuration outside the image
 
@@ -74,7 +74,7 @@ The contract is small. Each stack has an `env_file` with the values that are par
 | `TRACKING_SOURCE_LATENCY_MS` | both | the lab delay per source call, `250` unless the shell sets it |
 | `TRACKING_DEBUG_ENDPOINTS` | both | the lab source-call log; the edge does not route it |
 
-Quarkus maps an environment name to a configuration property by a fixed rule, so `QUARKUS_OTEL_SERVICE_NAME` sets `quarkus.otel.service.name` without any entry in `application.properties` naming it. The Python side reads the `TRACKING_` names through `pydantic-settings` and the `OTEL_` names through the OpenTelemetry SDK. The same keys will appear in a Kubernetes ConfigMap in Chapter 26, and nothing in the application changes.
+Quarkus maps an environment name to a configuration property by a fixed rule, so `QUARKUS_OTEL_SERVICE_NAME` sets `quarkus.otel.service.name` without any entry in `application.properties` naming it. The Python side reads the `TRACKING_` names through `pydantic-settings` and the `OTEL_` names through the OpenTelemetry SDK. The same keys will appear in a Kubernetes ConfigMap on the cluster, and nothing in the application changes.
 
 `${VAR:-default}` supplies a default that a shell can replace. The file uses it for the latency, `${TRACKING_SOURCE_LATENCY_MS:-250}`, and for the directory that holds the certificate, `${CERT_DIR:-./certs}`.
 
@@ -120,7 +120,7 @@ The claim to check is what is absent. `verify.sh` reads the edge's environment f
 
 ## The edge
 
-The edge is nginx on `ubi10/nginx-126`, pinned to `10.2-1791973310`. It does four jobs, each of them a line or two of configuration. Chapter 17 said a reverse proxy can terminate TLS and that the production answer to a large body is `client_max_body_size` at the proxy. This is that proxy.
+The edge is nginx on `ubi10/nginx-126`, pinned to `10.2-1791973310`. It does four jobs, each of them a line or two of configuration. A reverse proxy can terminate TLS, and the production answer to a large body is `client_max_body_size` at the proxy. This is that proxy.
 
 ```nginx
     ssl_protocols       TLSv1.3;
@@ -130,7 +130,7 @@ The edge is nginx on `ubi10/nginx-126`, pinned to `10.2-1791973310`. It does fou
     client_max_body_size 64k;
 ```
 
-TLS 1.3 is the only protocol the listeners accept. A client that offers 1.2 fails the handshake before any HTTP happens. The body limit is checked against the request's `Content-Length`, so a body over `64k` is answered `413` before nginx reads it and before a backend is involved. Chapter 17 sent a 100 KB comment inside a valid query; the same body is the case here, and the stacks never see it.
+TLS 1.3 is the only protocol the listeners accept. A client that offers 1.2 fails the handshake before any HTTP happens. The body limit is checked against the request's `Content-Length`, so a body over `64k` is answered `413` before nginx reads it and before a backend is involved. A 100 KB comment inside a valid query triggered the same limit earlier; the same body is the case here, and the stacks never see it.
 
 Only one path is routed. Everything else is answered by the edge:
 
@@ -162,7 +162,7 @@ The backend is the upstream: nginx's name for the server a `proxy_pass` points a
             proxy_pass $backend;
 ```
 
-The proxy settings above the `server` blocks forward what a GraphQL service needs. `Host` and `X-Forwarded-For` pass through, `X-Forwarded-Proto` says `https`, and a `map` turns an `Upgrade` header into a `Connection: upgrade`, which a WebSocket handshake needs and Chapter 27 uses. The trace headers need no line at all: nginx passes request headers unchanged, so `traceparent` and `tracestate` reach the backend as the client sent them. The access log records the `traceparent`, so an edge log line and a trace can be matched.
+The proxy settings above the `server` blocks forward what a GraphQL service needs. `Host` and `X-Forwarded-For` pass through, `X-Forwarded-Proto` says `https`, and a `map` turns an `Upgrade` header into a `Connection: upgrade`, which a WebSocket handshake needs and the final project's subscription transport uses. The trace headers need no line at all: nginx passes request headers unchanged, so `traceparent` and `tracestate` reach the backend as the client sent them. The access log records the `traceparent`, so an edge log line and a trace can be matched.
 
 The image runs as UID 1001, which cannot write `/var/log/nginx` or `/run`. The configuration moves the pid file and every temporary path under `/tmp` and writes both logs to the standard streams, which is also where a log driver reads them.
 
@@ -190,7 +190,7 @@ def ready(request: Request, response: Response) -> dict[str, str]:
 
 `live` answers `200` for as long as the process answers at all. `ready` answers `503` until the lifespan has built the handling store and the sources and set `app.state.ready`. On a stop signal uvicorn closes its listening socket first, so new requests, health checks included, are refused while the ones in flight finish. The lifespan is FastAPI's hook for start-up and shutdown work, so the flag changes in the place where the work happens.
 
-The two answers mean different things to an orchestrator. A failed liveness check means the process is stuck and a restart may help. A failed readiness check means the process is working and should receive no traffic yet. Chapter 26 maps `started`, `ready` and `live` to a Kubernetes startup, readiness and liveness probe, and the Python pair to the last two.
+The two answers mean different things to an orchestrator. A failed liveness check means the process is stuck and a restart may help. A failed readiness check means the process is working and should receive no traffic yet. On the cluster, `started`, `ready` and `live` map to a Kubernetes startup, readiness and liveness probe, and the Python pair maps to the last two.
 
 ```yaml
     healthcheck:
@@ -249,13 +249,13 @@ Two cases in `verify.sh` exercise it. In the first, `verify.sh` sends `SIGTERM` 
 
 ## The diagnosis path on the whole stack
 
-Chapter 24 ended with a path from a response to its cause. The tier gives that path a full environment: the service runs behind the edge and exports to `lgtm`, so the path starts where a client would start it.
+Debugging traced a path from a response to its cause. The tier gives that path a full environment: the service runs behind the edge and exports to `lgtm`, so the path starts where a client would start it.
 
 Figure 25.2 follows one request. The client sends `ListCargos`, `cargos(first: 10)`, to the edge with a `traceparent` it chose. The edge terminates TLS, checks the body and the path, and passes the header on. The stack answers with six edges. Five nodes resolve, and the node of `GHI345` is null with an error whose code is `SERVICE_UNAVAILABLE`, because the booking source fails that key. The error carries `extensions.traceId`, and the value is the trace id of the `traceparent` the client sent.
 
-{% include excalidraw.html file="25-request-through-the-edge" alt="Two bands. The upper band, a traced request, shows a client sending a traceparent to the edge on port 8351, which forwards to python running the ListCargos query, which calls the booking source twice, once to list and once to get six keys in a single call, where the booking of GHI345 fails. A second row shows the response with six edges, a null node at index five, the code SERVICE_UNAVAILABLE and extensions.traceId equal to the trace id the client sent. Amber arrows labelled id and same id lead from the response to Tempo, which holds the ListCargos operation span and the source call spans, and then to Loki, which holds the error record with the same trace id. The lower band, a refused request, shows a client sending a 100 KB body to the edge, which answers 413 Request Entity Too Large, with a dashed arrow labelled not reached to python, whose source-call log stays empty." caption="Figure 25.2 — One traced request and one refused request, from a run of the Python stack. The trace id the client chose survives the edge and finds the trace and the log record; the oversized body stops at the edge." %}
+{% include excalidraw.html file="25-request-through-the-edge" alt="Two bands. The upper band, a traced request, shows a client sending a traceparent to the edge on port 8351, which forwards to python running the ListCargos query, which calls the booking source twice, once to list and once to get six keys in a single call, where the booking of GHI345 fails. A second row shows the response with six edges, a null node at index five, the code SERVICE_UNAVAILABLE and extensions.traceId equal to the trace id the client sent. Amber arrows labelled id and same id lead from the response to Tempo, which holds the ListCargos operation span and the source call spans, and then to Loki, which holds the error record with the same trace id. The lower band, a refused request, shows a client sending a 100 KB body to the edge, which answers 413 Request Entity Too Large, with a dashed arrow labelled not reached to python, whose source-call log stays empty." caption="Figure 25.2: One traced request and one refused request, from a run of the Python stack. The trace id the client chose survives the edge and finds the trace and the log record; the oversized body stops at the edge." %}
 
-Two things travel with that id. Tempo holds the trace under it, with the operation span `GraphQL Query: ListCargos` on Python and `query ListCargos` on Quarkus, and below it the `source.call` spans of the two booking calls. Loki holds the exception record the server wrote when the failure passed through the engine, with `trace_id` as structured metadata, so `{service_name="ch25-compose-python"} | trace_id="<id>"` returns it. The two stacks fail differently, as Chapter 13 recorded: Quarkus nulls the whole batch and reports six errors, one per parent, and Python reports one. Both stacks give the same answer at the trace id.
+Two things travel with that id. Tempo holds the trace under it, with the operation span `GraphQL Query: ListCargos` on Python and `query ListCargos` on Quarkus, and below it the `source.call` spans of the two booking calls. Loki holds the exception record the server wrote when the failure passed through the engine, with `trace_id` as structured metadata, so `{service_name="ch25-compose-python"} | trace_id="<id>"` returns it. The two stacks fail differently: Quarkus nulls the whole batch and reports six errors, one per parent, and Python reports one. Both stacks give the same answer at the trace id.
 
 The comparison shows what the edge adds. The path from a response to a cause now crosses a proxy, and the proxy must not break it. Because nginx forwards `traceparent`, the trace begins at the caller and continues in the backend, with no new header to learn and no second id to correlate. `verify.sh` asserts it: the id it sent is the id in the error, the id in Tempo and the id in Loki.
 
@@ -342,18 +342,26 @@ docker compose -f examples/25-docker-compose/compose.yaml down -v
 | `extensions.traceId` | equals the id sent through the edge; the trace is in Tempo and the record in Loki | the same |
 | schema | conforms; `finalArrivalDate` deprecated | the same |
 
-<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Running the whole tier is where the <em>operational and security cost</em> axis of Chapter 2 is paid. The edge terminates TLS 1.3, refuses a body over 64k and routes one path, so those rules live in one place for both stacks and the backends stay off the host. The <em>client diversity and shape variance</em> axis is why the edge forwards <code>traceparent</code> unchanged: any caller can start the trace that an operator reads. The <em>aggregation across sources</em> axis is why the tier ships its own observability backend and a start order that waits for it. The <em>contract and evolution style</em> axis is untouched, since nothing here changes a field. The tracking view therefore runs as an edge, two stacks built once into tagged images and an observability backend, with configuration and the key kept outside the images, health that orders the start, limits and policies the engine confirms, and a trace id that survives from the client to the log record.</p></div>
+<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Running the whole tier is where the <em>operational and security cost</em> axis of the style-selection decision framework is paid. The edge terminates TLS 1.3, refuses a body over 64k and routes one path, so those rules live in one place for both stacks and the backends stay off the host. The <em>client diversity and shape variance</em> axis is why the edge forwards <code>traceparent</code> unchanged: any caller can start the trace that an operator reads. The <em>aggregation across sources</em> axis is why the tier ships its own observability backend and a start order that waits for it. The <em>contract and evolution style</em> axis is untouched, since nothing here changes a field. The tracking view therefore runs as an edge, two stacks built once into tagged images and an observability backend, with configuration and the key kept outside the images, health that orders the start, limits and policies the engine confirms, and a trace id that survives from the client to the log record.</p></div>
+
+## Review
+
+- An nginx edge terminates TLS 1.3 and caps request bodies at `client_max_body_size: 64k`, so an oversized or downgraded request never reaches a GraphQL backend.
+- Backend services sit on an `internal: true` Compose network with no published port, reachable only through the edge or `docker compose exec`.
+- Configuration and secrets are mounted as files and environment variables outside the image, following the Twelve-Factor App's config rule.
+- `depends_on` with `condition: service_healthy` orders service startup, and the Quarkus and Python health endpoints separate a liveness probe from a readiness probe.
+- A request's `traceparent` survives the edge unchanged and is followed through to its trace in Tempo and its record in Loki.
 
 ## Where this goes next
 
 This chapter ran the tracking view as one local tier: an nginx edge with TLS 1.3, a body limit and one route, an internal backend network, a config and two secrets mounted as files, health-ordered start, limits, restart and shutdown settings the engine confirms, and a trace followed from the edge to Tempo and Loki.
 
-Chapter 26 runs the same two images on Kubernetes. The edge, its configuration and its secret become a Deployment, a ConfigMap and a Secret, the health endpoints become probes, and the limits become resource requests and limits. For the specifications and guides, read the Docker Compose documentation's "Compose file reference" sections on `services`, `configs`, `secrets` and `networks`, and Docker's "Restart policies" and "Configure logging drivers" pages. The nginx documentation covers `ngx_http_ssl_module`, `client_max_body_size`, `proxy_pass` and "WebSocket proxying". On the application side read the Quarkus guides "SmallRye Health" and "Configuring your application", Uvicorn's "Settings", FastAPI's "Lifespan Events" and the Twelve-Factor App sections "Config" and "Disposability".
+The next chapter runs the same two images on Kubernetes. The edge, its configuration and its secret become a Deployment, a ConfigMap and a Secret, the health endpoints become probes, and the limits become resource requests and limits. For the specifications and guides, read the Docker Compose documentation's "Compose file reference" sections on `services`, `configs`, `secrets` and `networks`, and Docker's "Restart policies" and "Configure logging drivers" pages. The nginx documentation covers `ngx_http_ssl_module`, `client_max_body_size`, `proxy_pass` and "WebSocket proxying". On the application side read the Quarkus guides "SmallRye Health" and "Configuring your application", Uvicorn's "Settings", FastAPI's "Lifespan Events" and the Twelve-Factor App sections "Config" and "Disposability".
 
 ## For deeper coverage
 
-- [The Twelve-Factor App — Config](https://12factor.net/config) and [Disposability](https://12factor.net/disposability) — the rules this tier's configuration and shutdown settings follow.
-- [Docker Compose — Compose file reference](https://docs.docker.com/compose/compose-file/) — `services`, `configs`, `secrets`, and `networks`.
-- [nginx — ngx_http_ssl_module](https://nginx.org/en/docs/http/ngx_http_ssl_module.html) — TLS termination and `client_max_body_size`.
-- *Cloud Native Design Patterns*, "Observability" — the LGTM stack and OTLP wiring this tier's edge-to-trace path reuses.
-- Gerald Bachlmayr, Aiden Ziegelaar, Alan Blockley & Bojan Zivic, *Cloud Native Anti-Patterns* (Packt, 2025) — the coupling and operability failures a hardened edge and health-ordered start exist to avoid.
+- [The Twelve-Factor App: Config](https://12factor.net/config) and [Disposability](https://12factor.net/disposability): the rules this tier's configuration and shutdown settings follow.
+- [Docker Compose: Compose file reference](https://docs.docker.com/compose/compose-file/): `services`, `configs`, `secrets`, and `networks`.
+- [nginx: ngx_http_ssl_module](https://nginx.org/en/docs/http/ngx_http_ssl_module.html): TLS termination and `client_max_body_size`.
+- *Cloud Native Design Patterns*, "Observability": the LGTM stack and OTLP wiring this tier's edge-to-trace path reuses.
+- Gerald Bachlmayr, Aiden Ziegelaar, Alan Blockley & Bojan Zivic, *Cloud Native Anti-Patterns* (Packt, 2025): the coupling and operability failures a hardened edge and health-ordered start exist to avoid.

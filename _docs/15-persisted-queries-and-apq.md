@@ -18,15 +18,15 @@ By the end of this chapter you can:
 
 ## Why this matters
 
-Chapter 13 ended with a query that had stopped costing source calls. It still costs something on every request: the client sends the whole text, the server hashes it, finds it in a cache or parses and validates it, and only then executes. Chapter 1 pointed at the other side of the same cost. A `POST` to one URL cannot be cached by anything between the client and the server, and the `GET` form that could be cached needs a URL that carries a document. This chapter replaces the document with its hash.
+DataLoader batching leaves a query that no longer costs source calls. It still costs something on every request: the client sends the whole text, the server hashes it, finds it in a cache or parses and validates it, and only then executes. The opening REST-to-GraphQL comparison pointed at the other side of the same cost. A `POST` to one URL cannot be cached by anything between the client and the server, and the `GET` form that could be cached needs a URL that carries a document. This chapter replaces the document with its hash.
 
-The code is in `examples/15-persisted-queries/`. It starts from the Chapter 13 example, so the schema, the seed and the error contract are unchanged, and adds the protocol in front of each engine. Four services run: an APQ instance and a trusted instance per stack, from one image each. The chapter does not repeat Chapter 14's limits, and a production service would carry both.
+The code is in `examples/15-persisted-queries/`. It starts from the DataLoader batching example, so the schema, the seed and the error contract are unchanged, and adds the protocol in front of each engine. Four services run: an APQ instance and a trusted instance per stack, from one image each. The chapter does not repeat the depth and cost limits, and a production service would carry both.
 
 ## Sending the same text every time
 
-Chapter 1 described variables as the reason a query can be a constant: the text stays fixed, the inputs change, and a server can cache the parse. Chapter 6 priced what the server does with that text. Parsing and validating a document needs only the document and the schema, and it costs CPU on every request that arrives with text the server has already seen.
+Variables are the reason a query can be a constant: the text stays fixed, the inputs change, and a server can cache the parse. What the server does with that text has a price. Parsing and validating a document needs only the document and the schema, and it costs CPU on every request that arrives with text the server has already seen.
 
-The bytes matter too. The example's `CargoDetail` operation, a cargo with its itinerary, seven events and three fragments, is 580 characters. Sent with its variables it is a 624-byte request body. The same request by hash is 163 bytes, and the difference grows with the document: clients ship documents of several kilobytes because fragments from many components add up. A small document gains little. Chapter 13's four-cargo page is 191 bytes as plain text and 132 as a hash, because the `extensions` wrapper is most of what remains.
+The bytes matter too. The example's `CargoDetail` operation, a cargo with its itinerary, seven events and three fragments, is 580 characters. Sent with its variables it is a 624-byte request body. The same request by hash is 163 bytes, and the difference grows with the document: clients ship documents of several kilobytes because fragments from many components add up. A small document gains little. The DataLoader-batched four-cargo page is 191 bytes as plain text and 132 as a hash, because the `extensions` wrapper is most of what remains.
 
 A hash buys three things, each with its own price:
 
@@ -42,7 +42,7 @@ The protocol has one extension, `extensions.persistedQuery`, with two fields: `v
 
 Figure 15.1 follows `CargoDetail` through them on the Quarkus instance, with the byte counts curl measured.
 
-{% include excalidraw.html file="15-apq-handshake" alt="Three horizontal lanes show three round trips. In the first, a client POST of 163 bytes carries variables and a sha256Hash; the server looks the hash up and finds nothing, and answers 200 with PersistedQueryNotFound in 99 bytes and no data. In the second, a POST of 756 bytes carries the text, variables and the hash; the server recomputes the hash, finds a match, stores the text and executes, and answers 200 with 2,412 bytes of data. In the third, a GET with a 204-byte URL and no body carries the variables and the hash; the server finds the stored text, executes as if the text had been sent, and answers 200 with the same 2,412 bytes. A note says the plain POST of the same document and variables is 624 bytes." caption="Figure 15.1 — The APQ handshake for one document: a miss, a registration, and a hit by GET. The counts are request-body and response-body bytes measured with curl on the Quarkus instance." %}
+{% include excalidraw.html file="15-apq-handshake" alt="Three horizontal lanes show three round trips. In the first, a client POST of 163 bytes carries variables and a sha256Hash; the server looks the hash up and finds nothing, and answers 200 with PersistedQueryNotFound in 99 bytes and no data. In the second, a POST of 756 bytes carries the text, variables and the hash; the server recomputes the hash, finds a match, stores the text and executes, and answers 200 with 2,412 bytes of data. In the third, a GET with a 204-byte URL and no body carries the variables and the hash; the server finds the stored text, executes as if the text had been sent, and answers 200 with the same 2,412 bytes. A note says the plain POST of the same document and variables is 624 bytes." caption="Figure 15.1: The APQ handshake for one document: a miss, a registration, and a hit by GET. The counts are request-body and response-body bytes measured with curl on the Quarkus instance." %}
 
 1. **The client sends the hash alone.** The server has never seen it, so it answers with an error whose code is `PERSISTED_QUERY_NOT_FOUND` and whose message is `PersistedQueryNotFound`. Both stacks answer `200` with no `data` (Strawberry writes `"data": null`), and no source is called.
 2. **The client repeats the request with the hash and the text.** The server recomputes the hash of the text. If it matches, the server stores the text under the hash and executes the operation.
@@ -74,13 +74,13 @@ The parameter names are GraphQL-over-HTTP's; leaving out `query` is not, because
 
 Three details of the example matter when something else sits in front of it.
 
-**Quarkus turns `GET` on in configuration.** The example sets `quarkus.smallrye-graphql.http.get.enabled=true`, and the next section shows how a mutation stays off `GET`. **Strawberry answers a `GET` by its `Accept` header.** A `GET` with no `query` parameter is treated as a browser asking for GraphiQL when `Accept` includes `text/html` or `*/*`, and Strawberry answers `200 text/html` with the IDE. The hash-only request has no `query` parameter by design, so a client must send `Accept: application/json`. Apollo Client 4 sends `application/graphql-response+json,application/json;q=0.9`, which passes, and `verify.sh` sends `application/json`. Apollo Client 3 sends `*/*`, and a hash-only `GET` from it would get Strawberry's IDE. A bare `curl` sends `*/*` too and receives a page of HTML. Quarkus answers `*/*` with JSON and `Accept: text/html` with `406`. When a cached persisted `GET` returns something other than JSON, the `Accept` header is the first thing to check, and Chapter 16 returns to it.
+**Quarkus turns `GET` on in configuration.** The example sets `quarkus.smallrye-graphql.http.get.enabled=true`. A mutation still cannot run over `GET`. **Strawberry answers a `GET` by its `Accept` header.** A `GET` with no `query` parameter is treated as a browser asking for GraphiQL when `Accept` includes `text/html` or `*/*`, and Strawberry answers `200 text/html` with the IDE. The hash-only request has no `query` parameter by design, so a client must send `Accept: application/json`. Apollo Client 4 sends `application/graphql-response+json,application/json;q=0.9`, which passes, and `verify.sh` sends `application/json`. Apollo Client 3 sends `*/*`, and a hash-only `GET` from it would get Strawberry's IDE. A bare `curl` sends `*/*` too and receives a page of HTML. Quarkus answers `*/*` with JSON and `Accept: text/html` with `406`. When a cached persisted `GET` returns something other than JSON, the `Accept` header is the first thing to check, and HTTP/CDN caching for GraphQL returns to it.
 
 **GET and `operationName`.** An empty `operationName` is treated as absent, and a non-empty one must name an operation in the document, or the Quarkus route answers `400` with `BAD_USER_INPUT`. For a single-operation document the operation is already determined, so the route hands the request on without `operationName`; a GET by hash that carries its name still works.
 
 ### A mutation stays off GET
 
-Chapter 1 and Chapter 8 settled the rule: a mutation received over `GET` must be refused with a 4xx status and must not run. The specification's section "GET" recommends `405 Method Not Allowed` with an `Allow` header. A `GET` can be triggered by a link, an image tag or a prefetching browser, and a write behind it would need no cooperation from the user.
+The rule is settled early: a mutation received over `GET` must be refused with a 4xx status and must not run. The specification's section "GET" recommends `405 Method Not Allowed` with an `Allow` header. A `GET` can be triggered by a link, an image tag or a prefetching browser, and a write behind it would need no cooperation from the user.
 
 `verify.sh` registers `RegisterHandling` by `POST` with input that fails validation, and then sends the same hash by `GET`. Both stacks refuse it and write nothing. Strawberry answers `400` with the plain text `mutations are not allowed when using GET`.
 
@@ -94,7 +94,7 @@ The example bounds the store. Both stacks keep 1,000 documents: Caffeine through
 
 Figure 15.2 sets the two modes side by side.
 
-{% include excalidraw.html file="15-apq-vs-trusted" alt="Two columns compare the modes in four rows. In APQ mode, any client registers a document by sending the hash with the text, the server accepts any text that matches its own hash, an attacker can register any text and fill the bounded store, and caches see short GET URLs once registered. In trusted mode, the build pipeline registers documents from the client's manifest, the server accepts manifest documents by hash or by exact text and answers PERSISTED_QUERY_REQUIRED for other text, an attacker can run nothing new and nothing is stored, and caches see short GET URLs with no registration miss. The attacker row is highlighted in both columns." caption="Figure 15.2 — APQ and trusted documents compare on who registers, what the server accepts, what an attacker can do and what a cache sees." %}
+{% include excalidraw.html file="15-apq-vs-trusted" alt="Two columns compare the modes in four rows. In APQ mode, any client registers a document by sending the hash with the text, the server accepts any text that matches its own hash, an attacker can register any text and fill the bounded store, and caches see short GET URLs once registered. In trusted mode, the build pipeline registers documents from the client's manifest, the server accepts manifest documents by hash or by exact text and answers PERSISTED_QUERY_REQUIRED for other text, an attacker can run nothing new and nothing is stored, and caches see short GET URLs with no registration miss. The attacker row is highlighted in both columns." caption="Figure 15.2: APQ and trusted documents compare on who registers, what the server accepts, what an attacker can do and what a cache sees." %}
 
 ### Trusted documents
 
@@ -110,7 +110,7 @@ What the trusted instances do, as `verify.sh` asserts it on 8252 and 8253:
 - An unknown hash is `PERSISTED_QUERY_NOT_FOUND`, including a hash another instance registered at run time.
 - `{ __schema { queryType { name } } }` is refused like any other text. Introspection is not special here: it is a document the manifest does not hold. The contract checks therefore run against the APQ instances, which allow introspection, and the README says so.
 - A mutation in the manifest runs by hash over `POST`: `RegisterHandling` registers `evt_10`.
-- Text sent another way is held to the same rule. A `query` URL parameter on a `POST` or a `GET` does not replace the document, and on Quarkus an `application/graphql` body is checked like a JSON `query` and any other body type gets `400`. Trusted mode covers every transport the endpoint serves. This example serves HTTP only, so the route refuses any request on `/graphql` that carries an `Upgrade` header with `400` in both modes; Chapter 21 covers WebSockets.
+- Text sent another way is held to the same rule. A `query` URL parameter on a `POST` or a `GET` does not replace the document, and on Quarkus an `application/graphql` body is checked like a JSON `query` and any other body type gets `400`. Trusted mode covers every transport the endpoint serves. This example serves HTTP only, so the route refuses any request on `/graphql` that carries an `Upgrade` header with `400` in both modes; subscriptions over WebSockets are covered separately.
 
 Figure 15.2's last row is the one that favours trusted mode for caching: a client that cannot register has no registration miss, so a cold cache sees the same short URL as a warm one.
 
@@ -124,7 +124,7 @@ On **Quarkus**, the example resolves the hash one step earlier, in the HTTP rout
 
 A Vert.x route registered ahead of SmallRye's reads the hash, resolves the text, and re-enters SmallRye with `rc.reroute(...)`, passing the text as a `query` URL parameter. SmallRye accepts URL parameters when `http.post.queryparameters.enabled` is on, merging them over the body for `POST`, and reads them for `GET` when `http.get.enabled` is on. The route does not touch Vert.x internals. Figure 15.3 puts the two paths side by side.
 
-{% include excalidraw.html file="15-persisted-document-seam" alt="Two lanes show the path of a hash-only request through each stack. In the Quarkus lane, a Vert.x route at order minus ten reads extensions.persistedQuery.sha256Hash, resolves the hash from the manifest and then the quarkus-cache store, checks on a GET that the selected operation is a query, and reroutes to slash graphql with the text as a query parameter. SmallRye's route then sees a query, the extensions having been read before it, and parses, validates and executes, with the parsed document cached by text. In the Python lane, the GraphQLRouter view accepts a null query and passes extensions on, the PersistedQueries extension's on_operation sets execution_context.query from the hash, Strawberry finds the query set, ParserCache and ValidationCache reuse the parse and validation of text seen before, and the operation executes, with the check for GET applied there. The steps that implement Apollo's protocol are highlighted." caption="Figure 15.3 — Where a persisted document is resolved: a Vert.x route in front of SmallRye on Quarkus, an extension inside Strawberry on Python." %}
+{% include excalidraw.html file="15-persisted-document-seam" alt="Two lanes show the path of a hash-only request through each stack. In the Quarkus lane, a Vert.x route at order minus ten reads extensions.persistedQuery.sha256Hash, resolves the hash from the manifest and then the quarkus-cache store, checks on a GET that the selected operation is a query, and reroutes to slash graphql with the text as a query parameter. SmallRye's route then sees a query, the extensions having been read before it, and parses, validates and executes, with the parsed document cached by text. In the Python lane, the GraphQLRouter view accepts a null query and passes extensions on, the PersistedQueries extension's on_operation sets execution_context.query from the hash, Strawberry finds the query set, ParserCache and ValidationCache reuse the parse and validation of text seen before, and the operation executes, with the check for GET applied there. The steps that implement Apollo's protocol are highlighted." caption="Figure 15.3: Where a persisted document is resolved: a Vert.x route in front of SmallRye on Quarkus, an extension inside Strawberry on Python." %}
 
 Both are small, and they are the only pieces of protocol code in the chapter. The Quarkus tab shows the router registration and the branch that resolves a hash alone; the Python tab shows the resolver for every case and the extension that calls it:
 
@@ -233,15 +233,15 @@ Each stack keeps its documents in a bounded store, and each engine also keeps a 
 
 The **store** maps a hash to text. It is the thing APQ fills and trusted mode never writes. On Quarkus it is a `quarkus-cache` named `persisted-documents`, which is Caffeine with the size cap above. On Python it is an `LRUCache` inside `PersistedDocuments`, beside the manifest. When it evicts, the handshake repeats.
 
-The **parse caches** map text to a parsed, validated document, and they exist with or without persisted queries. SmallRye keeps the parsed document in its own `QueryCache`, which graphql-java consults through its `PreparsedDocumentProvider` hook, described in the execution page of the graphql-java documentation under "Query Caching". Strawberry has `ParserCache` and `ValidationCache` extensions, each an LRU of 128 entries by default and each passed as a class so that every request gets its own instance. They matter more with persisted queries, because the hash makes every request for a document identical text. Chapter 6 priced parsing and validation per request; here the second request for a document pays neither.
+The **parse caches** map text to a parsed, validated document, and they exist with or without persisted queries. SmallRye keeps the parsed document in its own `QueryCache`, which graphql-java consults through its `PreparsedDocumentProvider` hook, described in the execution page of the graphql-java documentation under "Query Caching". Strawberry has `ParserCache` and `ValidationCache` extensions, each an LRU of 128 entries by default and each passed as a class so that every request gets its own instance. They matter more with persisted queries, because the hash makes every request for a document identical text. Parsing and validation cost CPU per request; here the second request for a document pays neither.
 
 The two layers also fail differently. Losing a stored text costs a round trip. Losing a parsed document costs CPU on the server and nothing on the wire.
 
 ## Persisted documents and limits
 
-Chapter 14 bounds what one document may do: its depth, its aliases and its cost. A persisted document does not change that analysis, and the two controls cover different attackers.
+Query cost analysis bounds what one document may do: its depth, its aliases and its cost. A persisted document does not change that analysis, and the two controls cover different attackers.
 
-In **trusted mode** the limits become a backstop. Every document that can run was written by your developers and reviewed, so the attacks Chapter 14 rejects cannot arrive as new text. A mistake in one of your own documents can still be expensive, and the limits catch it, but they are no longer the main defence.
+In **trusted mode** the limits become a backstop. Every document that can run was written by your developers and reviewed, so the attacks the depth and cost limits reject cannot arrive as new text. A mistake in one of your own documents can still be expensive, and the limits catch it, but they are no longer the main defence.
 
 In **APQ mode** they are as necessary as before. Anyone can register a document that floods a query with aliases, and the hash does not make it cheaper. The example leaves the limits out so that each chapter shows one concern, and the README says that production carries both.
 
@@ -251,7 +251,7 @@ A manifest is a deployment artefact with its own order of operations.
 
 - **The manifest deploys before the client.** A client that sends a hash the server does not yet hold gets `PersistedQueryNotFound`. In APQ mode it recovers by sending the text. In trusted mode there is no recovery, so the new manifest must be live before the build that uses it.
 - **Never remove a hash a live client sends.** Old mobile and web builds stay in use for months. Retire a document only when the telemetry says no client sends it.
-- **Give every document an operation name.** Each manifest entry has a `name`, and the log or trace of a request by hash would otherwise carry only 64 characters of hex. Chapter 19 builds observability on operation names, and a persisted document is the one place a name is guaranteed to exist.
+- **Give every document an operation name.** Each manifest entry has a `name`, and the log or trace of a request by hash would otherwise carry only 64 characters of hex. Operation names carry into observability, and a persisted document is the one place a name is guaranteed to exist.
 - **Treat the hash as part of the contract.** Any change to the text, even whitespace, changes the hash. Generate the manifest from the source and never edit a body by hand, and `verify.sh`'s manifest check is the same rule enforced.
 
 ## On the wire
@@ -281,7 +281,7 @@ Counts and keys do not vary by stack, except where the table says so.
 | handshake 1, hash only | 200, no `data`; `PersistedQueryNotFound`, `PERSISTED_QUERY_NOT_FOUND`; 0 calls | the same, with `"data": null` |
 | handshake 2, hash and text | `ABC123`, `ONBOARD_CARRIER` | the same |
 | handshake 3, hash only | the same data; the same source-call keys as handshake 2 | the same |
-| list query by hash | the data of Chapter 13's four-cargo page; the same calls as its full text | the same |
+| list query by hash | the data of the DataLoader-batched four-cargo page; the same calls as its full text | the same |
 | size, `CargoDetail` | exactly 624 bytes with text, exactly 163 by hash | the same |
 | mismatch | `BAD_USER_INPUT`, `provided sha does not match query`; 0 calls | the same |
 | GET by hash | 200, the same data | the same |
@@ -302,20 +302,28 @@ Counts and keys do not vary by stack, except where the table says so.
 
 `bash examples/15-persisted-queries/verify.sh` runs the whole sequence on both stacks and prints `PASS` only when both hold.
 
-<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Persisted documents answer two axes of Chapter 2 at once. The <em>caching needs</em> axis gets a short, stable <code>GET</code> URL that intermediaries can key, and the <em>operational and security cost</em> axis gets either less parsing and fewer bytes (APQ) or an allowlist (trusted documents). The <em>contract and evolution style</em> axis is the price: a hash is part of the contract between a client build and a server, so manifests deploy before clients and live hashes are never removed. The tracking view therefore runs trusted documents for its own clients, whose operations are known at build time, runs APQ only where clients cannot be enumerated and pairs it with Chapter 14's limits, keeps mutations on <code>POST</code>, and implements Apollo's protocol in a few lines of code on each stack.</p></div>
+<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Persisted documents answer two axes of the decision framework at once. The <em>caching needs</em> axis gets a short, stable <code>GET</code> URL that intermediaries can key, and the <em>operational and security cost</em> axis gets either less parsing and fewer bytes (APQ) or an allowlist (trusted documents). The <em>contract and evolution style</em> axis is the price: a hash is part of the contract between a client build and a server, so manifests deploy before clients and live hashes are never removed. The tracking view therefore runs trusted documents for its own clients, whose operations are known at build time, runs APQ only where clients cannot be enumerated and pairs it with the depth and cost limits, keeps mutations on <code>POST</code>, and implements Apollo's protocol in a few lines of code on each stack.</p></div>
+
+## Review
+
+- Apollo's `persistedQuery` extension carries a `version` and a `sha256Hash`, and the server recomputes the hash rather than trusting the client's claim.
+- A persisted query served over `GET` puts the hash and variables in the URL, while a mutation stays refused with a 4xx status whether it arrives by hash or by text.
+- APQ lets any client register any text it can hash, so it functions as a bandwidth and caching optimization; a trusted-documents manifest built at compile time functions as an allowlist.
+- A bounded store (Caffeine on Quarkus, an `LRUCache` on Python) evicts the least valuable entries under load, and an eviction costs a client one extra round trip rather than an outage.
+- Quarkus resolves a hash to text in a Vert.x route in front of SmallRye, and Strawberry resolves it inside a `SchemaExtension`, so the protocol touches only a few lines of code on each stack.
 
 ## Where this goes next
 
 This chapter turned a document into a hash. It walked APQ's three steps, refused a hash that does not match its text, served persisted queries over `GET` and kept mutations off it, contrasted APQ with trusted documents, and placed the resolution at the seam where a hash becomes text on each stack.
 
-Chapter 16 builds on the `GET` URLs this chapter makes: it puts an HTTP cache in front of each stack, sets `Cache-Control` per response, and caches fields inside the server. The hash-only `GET` and its `Accept` header are what that cache keys on.
+HTTP/CDN caching for GraphQL builds on the `GET` URLs this chapter makes: it puts an HTTP cache in front of each stack, sets `Cache-Control` per response, and caches fields inside the server. The hash-only `GET` and its `Accept` header are what that cache keys on.
 
 For the protocol, read Apollo's [Automatic Persisted Queries](https://www.apollographql.com/docs/apollo-server/performance/apq) and the [persisted queries and the manifest format](https://www.apollographql.com/docs/graphos/platform/security/persisted-queries#manifest-format) in GraphOS. For trusted documents, read the "Trusted documents" section of the [Security](https://graphql.org/learn/security/) page on graphql.org. For `GET` and its rules, read the "GET" section of the [GraphQL over HTTP](https://http-spec.graphql.org/draft/) specification. The engine side is in the "Query Caching" section of the graphql-java [execution documentation](https://www.graphql-java.com/documentation/execution), the Strawberry pages on [schema extensions](https://strawberry.rocks/docs/guides/extensions), [ParserCache](https://strawberry.rocks/docs/extensions/parser-cache) and [ValidationCache](https://strawberry.rocks/docs/extensions/validation-cache), and the Quarkus [HTTP reference](https://quarkus.io/guides/http-reference) and [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql).
 
 ## For deeper coverage
 
-- William Lyon, *Full Stack GraphQL Applications* (Manning, 2022) — end-to-end clients, pagination and the manifest-style thinking behind a build-time document list.
-- Samer Buna, *GraphQL in Action* (Manning, 2021) — resolvers and data fetching, the execution path a persisted query still runs once resolved.
-- Cloud Native Design Patterns, chapter "Appendix L: Caching" — the general caching-by-key discipline that a hash-keyed `GET` URL plugs into.
-- [Apollo Automatic Persisted Queries](https://www.apollographql.com/docs/apollo-server/performance/apq) and the [GraphOS persisted-queries manifest format](https://www.apollographql.com/docs/graphos/platform/security/persisted-queries#manifest-format) — the protocol and the manifest this chapter implements.
-- graphql.org Security page, "Trusted documents" section — the allowlist model this chapter contrasts with APQ.
+- William Lyon, *Full Stack GraphQL Applications* (Manning, 2022): end-to-end clients, pagination and the manifest-style thinking behind a build-time document list.
+- Samer Buna, *GraphQL in Action* (Manning, 2021): resolvers and data fetching, the execution path a persisted query still runs once resolved.
+- Cloud Native Design Patterns, chapter "Appendix L: Caching": the general caching-by-key discipline that a hash-keyed `GET` URL plugs into.
+- [Apollo Automatic Persisted Queries](https://www.apollographql.com/docs/apollo-server/performance/apq) and the [GraphOS persisted-queries manifest format](https://www.apollographql.com/docs/graphos/platform/security/persisted-queries#manifest-format): the protocol and the manifest this chapter implements.
+- graphql.org Security page, "Trusted documents" section: the allowlist model this chapter contrasts with APQ.

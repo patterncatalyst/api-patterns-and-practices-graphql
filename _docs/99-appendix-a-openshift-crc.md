@@ -1,10 +1,10 @@
 ---
-title: "Appendix A — OpenShift Local (CRC)"
+title: "Appendix A: OpenShift Local (CRC)"
 order: 99
 part: "Running It & the Final Project"
 appendix: true
 appendix_label: "A"
-description: "Chapter 27's chart on OpenShift Local through a wrapper chart: Docker-strategy builds in the cluster, Routes with edge TLS at the router, restricted-v2 for every pod but one, and a teardown that returns the cluster to the state it started in; the image pruner removes the unreferenced build layers."
+description: "The final project's chart on OpenShift Local through a wrapper chart: Docker-strategy builds in the cluster, Routes with edge TLS at the router, restricted-v2 for every pod but one, and a teardown that returns the cluster to the state it started in; the image pruner removes the unreferenced build layers."
 duration: "16 min read"
 ---
 
@@ -20,11 +20,11 @@ By the end of this chapter you can:
 
 ## Why this matters
 
-Chapters 25 to 27 ran the tracking view in three places: a Compose project, a minikube profile, and a Helm chart that carries the final project. The chart is neutral. It names no distribution, sets no user id, and renders nothing that only one platform understands. This appendix tests that claim by running the same chart on a different distribution, OpenShift Local, and it counts what had to be added.
+The tracking view already ran in three places: a Compose project, a minikube profile, and a Helm chart that carries the final project. The chart is neutral. It names no distribution, sets no user id, and renders nothing that only one platform understands. This appendix tests that claim by running the same chart on a different distribution, OpenShift Local, and it counts what had to be added.
 
-Nothing is added to the application or its images, and Chapter 27's chart gains one value, `lgtm.dropAllCapabilities`, whose default renders the chart as before. The code is in `examples/99-appendix-a-openshift-crc/`, and it is one wrapper chart and four scripts. The wrapper depends on Chapter 27's chart and adds the objects a platform with a router and an image registry wants: Routes, builds, image streams, and one binding for a security context constraint. OpenShift Local is a demonstration target here, as minikube is the main one. A reader who runs a different Kubernetes distribution reads this appendix as a list of the places where a platform differs and the one place per difference where the chart accommodates it.
+Nothing is added to the application or its images, and the final project's chart gains one value, `lgtm.dropAllCapabilities`, whose default renders the chart as before. The code is in `examples/99-appendix-a-openshift-crc/`, and it is one wrapper chart and four scripts. The wrapper depends on the final project's chart and adds the objects a platform with a router and an image registry wants: Routes, builds, image streams, and one binding for a security context constraint. OpenShift Local is a demonstration target here, as minikube is the main one. A reader who runs a different Kubernetes distribution reads this appendix as a list of the places where a platform differs and the one place per difference where the chart accommodates it.
 
-The example has no `verify.sh`, like Chapter 26's, because a cluster is something a person starts and keeps. The proof is a recorded run on 2026-10-17 of `up.sh`, `smoke.sh` and `down.sh`, with the output in "On the wire"; the chart and the scripts are also validated without a cluster, offline. Pins: OpenShift Local 2.64.0, which bundles OpenShift 4.22.14 and Kubernetes 1.35.6.
+The example has no `verify.sh`, like the minikube tier's, because a cluster is something a person starts and keeps. The proof is a recorded run on 2026-10-17 of `up.sh`, `smoke.sh` and `down.sh`, with the output in "On the wire"; the chart and the scripts are also validated without a cluster, offline. Pins: OpenShift Local 2.64.0, which bundles OpenShift 4.22.14 and Kubernetes 1.35.6.
 
 ## Same chart, another distribution
 
@@ -40,13 +40,13 @@ dependencies:
       - app
 ```
 
-`helm dependency build` packages the directory of Chapter 27's chart into `charts/` and records its digest in `Chart.lock`. Because the repository is a path in the same repository, the wrapper always renders the chart as it is today. A change to Chapter 27's chart reaches the appendix on the next build, and CI builds on every push, so the two cannot drift apart without a check failing.
+`helm dependency build` packages the directory of the final project's chart into `charts/` and records its digest in `Chart.lock`. Because the repository is a path in the same repository, the wrapper always renders the chart as it is today. A change to the final project's chart reaches the appendix on the next build, and CI builds on every push, so the two cannot drift apart without a check failing.
 
-What the wrapper leaves out matters as much as what it adds. It has no template for a Deployment, a Service or a ConfigMap, so there is nothing to keep in step with the chart when the chart gains a probe or a stack. It holds no copy of the Containerfiles or the sources either: the builds read Chapter 27's directories. A reader who removes the `final:` block and the `openshift:` block has the dependency's defaults, which are the minikube tier again.
+What the wrapper leaves out matters as much as what it adds. It has no template for a Deployment, a Service or a ConfigMap, so there is nothing to keep in step with the chart when the chart gains a probe or a stack. It holds no copy of the Containerfiles or the sources either: the builds read the final project's directories. A reader who removes the `final:` block and the `openshift:` block has the dependency's defaults, which are the minikube tier again.
 
-Figure A.1 shows the three parts. On the left are the values Chapter 27 uses on minikube: NodePort Services, `imagePullPolicy: Never` for images loaded into the node, and an edge that terminates TLS 1.3 with a certificate the chart generates. On the right is the wrapper. In the middle is the chart, which exposes exactly the keys the wrapper needs: whether the edge terminates TLS, the type of each Service, each image's repository and pull policy, the identity issuer, the headers Keycloak reads behind a proxy, and the observability pod's service account and seccomp profile.
+Figure A.1 shows the three parts. On the left are the values the final project uses on minikube: NodePort Services, `imagePullPolicy: Never` for images loaded into the node, and an edge that terminates TLS 1.3 with a certificate the chart generates. On the right is the wrapper. In the middle is the chart, which exposes exactly the keys the wrapper needs: whether the edge terminates TLS, the type of each Service, each image's repository and pull policy, the identity issuer, the headers Keycloak reads behind a proxy, and the observability pod's service account and seccomp profile.
 
-{% include excalidraw.html file="A-same-chart-on-openshift" alt="Three columns. The left column, Chapter 27 values on minikube, holds three boxes: NodePort Services 30370 to 30378 on 127.0.0.1, imagePullPolicy Never with images loaded into the node, and an edge that terminates TLS 1.3 with a chart-generated certificate. The middle column, Chapter 27 chart unchanged, holds an amber box for gql-ch27-final 1.0.0 with edge, quarkus, python, keycloak, lgtm, network policies and the helm test, with no OpenShift kind and no UID, above a box listing the values it exposes. The right column, Appendix A wrapper chart, holds the Chart.yaml dependency with alias final and a file path, the final values for ClusterIP Services, a plain edge and IfNotPresent, and a box for six Routes, two BuildConfigs, two ImageStreams and the anyuid RoleBinding. Amber arrows labelled values, depends on and override point at the middle column. A dashed box below states that application code, Containerfiles and images are the same in every tier." caption="Figure A.1 — One chart, two sets of values. The wrapper depends on Chapter 27's chart and adds only what the platform needs." %}
+{% include excalidraw.html file="A-same-chart-on-openshift" alt="Three columns. The left column, final project values on minikube, holds three boxes: NodePort Services 30370 to 30378 on 127.0.0.1, imagePullPolicy Never with images loaded into the node, and an edge that terminates TLS 1.3 with a chart-generated certificate. The middle column, final project chart unchanged, holds an amber box for gql-ch27-final 1.0.0 with edge, quarkus, python, keycloak, lgtm, network policies and the helm test, with no OpenShift kind and no UID, above a box listing the values it exposes. The right column, Appendix A wrapper chart, holds the Chart.yaml dependency with alias final and a file path, the final values for ClusterIP Services, a plain edge and IfNotPresent, and a box for six Routes, two BuildConfigs, two ImageStreams and the anyuid RoleBinding. Amber arrows labelled values, depends on and override point at the middle column. A dashed box below states that application code, Containerfiles and images are the same in every tier." caption="Figure A.1: One chart, two sets of values. The wrapper depends on the final project's chart and adds only what the platform needs." %}
 
 The overrides are a handful of keys, written as `final:` in the wrapper's `values.yaml`:
 
@@ -56,13 +56,13 @@ The overrides are a handful of keys, written as `final:` in the wrapper's `value
 - `identity.issuer` is the `https` URL of the Keycloak Route, and `keycloak.proxyHeaders: xforwarded` lets Keycloak take that URL from the router's forwarded headers.
 - `lgtm.serviceAccountName: gql-lgtm`, `lgtm.seccompProfile: ""` and `lgtm.dropAllCapabilities: false` prepare the observability pod for its binding, in the next section.
 
-The same keys and values are in `examples/27-final-project/helm/ci-values-appendix-a.yaml`, which Chapter 27's CI step renders on every push. That file proves that the chart accepts the overrides. The wrapper's values prove that the release is complete.
+The same keys and values are in `examples/27-final-project/helm/ci-values-appendix-a.yaml`, which the final project's CI step renders on every push. That file proves that the chart accepts the overrides. The wrapper's values prove that the release is complete.
 
 ## Projects and restricted-v2
 
 An OpenShift project is a namespace with an owner and a default set of rules. One of the rules is the security context constraint that admits a pod. The default, `restricted-v2`, assigns each project a range of user ids and runs each pod as one id from that range, with group 0, with every capability dropped and privilege escalation off. A pod that asks for a particular user id outside the range is not admitted.
 
-Chapter 26 anticipated this. The chart sets `runAsNonRoot`, drops all capabilities, forbids privilege escalation and selects the runtime-default seccomp profile, and it never sets `runAsUser`, `runAsGroup` or `fsGroup`. Its `values.schema.json` rejects those keys. The images hold up their end: the UBI images run as a numeric non-root user and accept whichever id the platform assigns, the writable paths are `emptyDir` volumes (nginx's `/tmp`, Keycloak's data directory), and group 0 owns what the images write. On OpenShift the same release therefore runs each pod as an id from the project's range, without a line changed.
+The minikube deployment already anticipated this. The chart sets `runAsNonRoot`, drops all capabilities, forbids privilege escalation and selects the runtime-default seccomp profile, and it never sets `runAsUser`, `runAsGroup` or `fsGroup`. Its `values.schema.json` rejects those keys. The images hold up their end: the UBI images run as a numeric non-root user and accept whichever id the platform assigns, the writable paths are `emptyDir` volumes (nginx's `/tmp`, Keycloak's data directory), and group 0 owns what the images write. On OpenShift the same release therefore runs each pod as an id from the project's range, without a line changed.
 
 Any pod's constraint is one command away, because the platform records the constraint that admitted a pod in an annotation:
 
@@ -88,7 +88,7 @@ The binding is in `templates/lgtm-anyuid-rolebinding.yaml`, and it grants the `a
 
 ## Building in the cluster
 
-Chapter 26 built the images with `docker build` and loaded them into the node. OpenShift Local has an image registry inside the cluster, and a BuildConfig that builds into it, so the host needs no container engine. The wrapper creates one BuildConfig and one ImageStream for each stack, and it derives both from the values the chart already has. The image stream's name is the last segment of `final.stacks.<stack>.image.repository`, and its tag is `final.stacks.<stack>.image.tag`. A reader who renames an image changes one value.
+The minikube tier built the images with `docker build` and loaded them into the node. OpenShift Local has an image registry inside the cluster, and a BuildConfig that builds into it, so the host needs no container engine. The wrapper creates one BuildConfig and one ImageStream for each stack, and it derives both from the values the chart already has. The image stream's name is the last segment of `final.stacks.<stack>.image.repository`, and its tag is `final.stacks.<stack>.image.tag`. A reader who renames an image changes one value.
 
 The values for each stack show the registry path the Deployment reads:
 
@@ -110,7 +110,7 @@ The values for each stack show the registry path the Deployment reads:
         pullPolicy: IfNotPresent
 ```
 
-The BuildConfig uses the Docker strategy and a binary source: it holds no repository address, and the build input is whatever `oc start-build` uploads. The Containerfile is Chapter 27's, with no change to the pom and no OpenShift profile, and its path inside the uploaded directory is `Containerfile`. Both build stages run as root, so Maven and uv can create their output under the build directory, and both runtime stages run as the image's non-root user; `up.sh` uploads each directory as it is:
+The BuildConfig uses the Docker strategy and a binary source: it holds no repository address, and the build input is whatever `oc start-build` uploads. The Containerfile is the final project's, with no change to the pom and no OpenShift profile, and its path inside the uploaded directory is `Containerfile`. Both build stages run as root, so Maven and uv can create their output under the build directory, and both runtime stages run as the image's non-root user; `up.sh` uploads each directory as it is:
 
 ```bash
 oc --context crc-admin -n gql-appendix-a start-build gql-ch27-quarkus \
@@ -119,7 +119,7 @@ oc --context crc-admin -n gql-appendix-a start-build gql-ch27-quarkus \
 
 Figure A.2 follows one image. The command uploads the directory as an archive, the BuildConfig starts a build pod that runs the Containerfile's two stages, Maven on `ubi10/openjdk-25` and then the runtime image, and the build pushes the result to the stream's `1.0` tag. The Deployment's image reference then names that tag in the internal registry. The build pod resolves Maven and uv dependencies from inside the cluster, so the BuildConfig asks for 1 CPU and 2 GiB, with limits of 4 CPU and 4 GiB.
 
-{% include excalidraw.html file="A-in-cluster-build" alt="A left-to-right flow in two bands. In the Host band, a blue box shows oc start-build gql-ch27-quarkus with from-dir pointing at the quarkus directory of 27-final-project and follow. An amber arrow labelled tar enters the project band at an amber BuildConfig box with a binary source, the Docker strategy and dockerfilePath Containerfile. Arrows continue to a build pod that runs the Containerfile with Maven and then the runtime image on ubi10 openjdk-25, to an ImageStream gql-ch27-quarkus with tag 1.0 pushed to the internal registry, and to a Deployment named quarkus whose image comes from the internal registry under gql-appendix-a. A dashed box below explains that the tag exists before the pods are created and that the pod then starts under restricted-v2 with the UID the project assigns." caption="Figure A.2 — One image, built where it runs. The values come from the rendered manifests; the figure shows no cluster output." %}
+{% include excalidraw.html file="A-in-cluster-build" alt="A left-to-right flow in two bands. In the Host band, a blue box shows oc start-build gql-ch27-quarkus with from-dir pointing at the quarkus directory of 27-final-project and follow. An amber arrow labelled tar enters the project band at an amber BuildConfig box with a binary source, the Docker strategy and dockerfilePath Containerfile. Arrows continue to a build pod that runs the Containerfile with Maven and then the runtime image on ubi10 openjdk-25, to an ImageStream gql-ch27-quarkus with tag 1.0 pushed to the internal registry, and to a Deployment named quarkus whose image comes from the internal registry under gql-appendix-a. A dashed box below explains that the tag exists before the pods are created and that the pod then starts under restricted-v2 with the UID the project assigns." caption="Figure A.2: One image, built where it runs. The values come from the rendered manifests; the figure shows no cluster output." %}
 
 The order matters, and `up.sh` makes it explicit. A Deployment that references a tag that does not exist yet would wait on the pull. The wrapper therefore tags the dependency with `app`, and the first install sets `tags.app=false`: Helm then renders only the wrapper's own objects, the two BuildConfigs, the two ImageStreams and the Routes. The script builds both images, checks that each tag exists, and upgrades the same release with the application on. The first release revision holds the build objects and the second adds everything else.
 
@@ -127,7 +127,7 @@ The order matters, and `up.sh` makes it explicit. A Deployment that references a
 
 A Route is the platform's way in. The router, HAProxy running in the cluster, listens on the wildcard domain of the cluster and sends each host to a Service. The wrapper renders six Routes from a map in its values, and each host is `<route>-<project>.<domain>`: `quarkus-gql-appendix-a.apps-crc.testing`, for example. Figure A.3 shows where each goes.
 
-{% include excalidraw.html file="A-route-to-edge" alt="Inside the band OpenShift Local, project gql-appendix-a, a blue client box labelled curl with the ingress CA and HTTPS, WSS and SSE sends an amber arrow to an amber router box that terminates edge TLS with the ingress certificate, redirects HTTP, and keeps connections open for one hour on the edge Routes. Four arrows leave the router. The first reaches Routes quarkus and python, which send plain HTTP to the edge Service on ports 8080 and 8081, which reaches the nginx edge with its 64k limit and routes for graphql and events, which reaches the public instances on ClusterIP port 8080 with introspection off. The second reaches Routes quarkus-internal and python-internal with edge TLS, which reach the internal instances with introspection on. The third reaches the Route keycloak with edge TLS, which reaches Keycloak 26.8.1 whose issuer is the https URL of the Route. The fourth reaches the Route grafana with edge TLS, which reaches the lgtm pod." caption="Figure A.3 — The Routes of the release. TLS ends at the router, and everything behind it speaks plain HTTP inside the project." %}
+{% include excalidraw.html file="A-route-to-edge" alt="Inside the band OpenShift Local, project gql-appendix-a, a blue client box labelled curl with the ingress CA and HTTPS, WSS and SSE sends an amber arrow to an amber router box that terminates edge TLS with the ingress certificate, redirects HTTP, and keeps connections open for one hour on the edge Routes. Four arrows leave the router. The first reaches Routes quarkus and python, which send plain HTTP to the edge Service on ports 8080 and 8081, which reaches the nginx edge with its 64k limit and routes for graphql and events, which reaches the public instances on ClusterIP port 8080 with introspection off. The second reaches Routes quarkus-internal and python-internal with edge TLS, which reach the internal instances with introspection on. The third reaches the Route keycloak with edge TLS, which reaches Keycloak 26.8.1 whose issuer is the https URL of the Route. The fourth reaches the Route grafana with edge TLS, which reaches the lgtm pod." caption="Figure A.3: The Routes of the release. TLS ends at the router, and everything behind it speaks plain HTTP inside the project." %}
 
 The Routes for the two stacks target the edge Service, not the backends. This keeps what the edge does for the compose tier and the minikube tier: the body limit, the routing of `/graphql` and `/events/` and nothing else, and the upgrade headers that a WebSocket needs. The edge Service names its ports `quarkus` and `python`, and each Route selects one by name, so the Route for Quarkus reaches 8080 and the Route for Python reaches 8081 without a number in the wrapper:
 
@@ -150,24 +150,24 @@ The TLS stanza is the one the platform documents for a secured Route. The router
     insecureEdgeTerminationPolicy: Redirect
 ```
 
-The two Routes of the edge carry one annotation more, `haproxy.router.openshift.io/timeout: 1h`. A subscription and an event feed stay open and idle between events, and Chapter 27's edge sets the same hour for its own proxy timeouts. The WebSocket upgrade and the server-sent events need nothing else from the router.
+The two Routes of the edge carry one annotation more, `haproxy.router.openshift.io/timeout: 1h`. A subscription and an event feed stay open and idle between events, and the final project's edge sets the same hour for its own proxy timeouts. The WebSocket upgrade and the server-sent events need nothing else from the router.
 
 Clients verify the certificate with the cluster's ingress CA, which lives in a ConfigMap in `openshift-config-managed`: `oc get configmap default-ingress-cert` and `-o jsonpath='{.data.ca-bundle\.crt}'` give the PEM file, and `curl --cacert` uses it. No script uses `--insecure`, and the smoke script passes the file to the harness as `LGTM_CACERT`, so every GraphQL helper verifies the same chain.
 
-The edge Routes are the only entry to the public instances, which is the property Chapter 25 built the edge for: a request that reaches a stack has been through the body limit and the routing rules first, and the lab endpoints under `/debug` are not routed, so the smoke script reads the source-call log inside the pod with `oc exec`, as Chapter 27's script does.
+The edge Routes are the only entry to the public instances, which is the property the Compose tier built the edge for: a request that reaches a stack has been through the body limit and the routing rules first, and the lab endpoints under `/debug` are not routed, so the smoke script reads the source-call log inside the pod with `oc exec`, as the final project's script does.
 
 The internal instances and Grafana have Routes of their own, because a developer reaches them from the host as before: the internal instances answer introspection, and the smoke script compares each with the canonical SDL through `assert_sdl_equals`. The public instances have no Route at all. A caller reaches them through the edge.
 
 ## Identity on Routes
 
-Chapter 27 explained the two addresses that Keycloak has: the back channel that the stacks read signing keys from, `keycloak:8080` inside the project, and the issuer, which is the address a client fetched its token from. A token carries the address its client used, and the stacks compare it with a pinned string. In the minikube tier the string is `http://localhost:30374/realms/shipping`. On OpenShift Local clients reach Keycloak through its Route, so the issuer is that Route's URL:
+The final project explained the two addresses that Keycloak has: the back channel that the stacks read signing keys from, `keycloak:8080` inside the project, and the issuer, which is the address a client fetched its token from. A token carries the address its client used, and the stacks compare it with a pinned string. In the minikube tier the string is `http://localhost:30374/realms/shipping`. On OpenShift Local clients reach Keycloak through its Route, so the issuer is that Route's URL:
 
 ```yaml
   identity:
     issuer: https://keycloak-gql-appendix-a.apps-crc.testing/realms/shipping
 ```
 
-The Keycloak Route terminates TLS at the router like the others, and the router passes the client's scheme and host on in `X-Forwarded-Proto` and `X-Forwarded-Host`. The wrapper sets `final.keycloak.proxyHeaders: xforwarded`, which the chart hands to Keycloak as `KC_PROXY_HEADERS`, so Keycloak builds the issuer from those headers and a token fetched at the Route carries exactly this URL. A request on the back channel carries no such headers, so `authServerUrl` is not overridden. The realm of Chapter 18 sets `sslRequired` to `none`, as it does in every tier, because the back channel inside the project is plain HTTP.
+The Keycloak Route terminates TLS at the router like the others, and the router passes the client's scheme and host on in `X-Forwarded-Proto` and `X-Forwarded-Host`. The wrapper sets `final.keycloak.proxyHeaders: xforwarded`, which the chart hands to Keycloak as `KC_PROXY_HEADERS`, so Keycloak builds the issuer from those headers and a token fetched at the Route carries exactly this URL. A request on the back channel carries no such headers, so `authServerUrl` is not overridden. The authentication realm sets `sslRequired` to `none`, as it does in every tier, because the back channel inside the project is plain HTTP.
 
 `up.sh` does not assume the domain. It reads it from the cluster, `oc get ingresses.config.openshift.io cluster`, and passes `openshift.domain` and `final.identity.issuer` to Helm. The values file carries the same strings for `apps-crc.testing`, so a render without a cluster is complete. The chart writes the value into each instance's ConfigMap under the key the stack reads, as the rendered release shows, and no code reads a tier:
 
@@ -348,18 +348,26 @@ PASS - Appendix A Chapter 27 on OpenShift Local: the release is deployed under r
 
 ## Decision
 
-<div class="callout callout--safe"><p class="callout__title">Decision</p><p>The appendix settles Chapter 2's axes by what stays constant. <em>Contract and evolution style</em> is unchanged: the schema is the canonical SDL on every tier, and the smoke script compares the internal instances with it through Routes. <em>Operational and security cost</em> moves to the platform: the router terminates TLS and the project assigns the user id, so the chart carries one binding for the one image that asks for root, and nothing else. <em>Aggregation across sources</em> and <em>client diversity and shape variance</em> cost nothing more, because the edge, the batched sources and the transports are the same objects in the same chart. A team that wants to leave the platform keeps the chart and drops the wrapper, which is a directory of Routes, builds and one binding.</p></div>
+<div class="callout callout--safe"><p class="callout__title">Decision</p><p>The appendix settles the decision framework's axes by what stays constant. <em>Contract and evolution style</em> is unchanged: the schema is the canonical SDL on every tier, and the smoke script compares the internal instances with it through Routes. <em>Operational and security cost</em> moves to the platform: the router terminates TLS and the project assigns the user id, so the chart carries one binding for the one image that asks for root, and nothing else. <em>Aggregation across sources</em> and <em>client diversity and shape variance</em> cost nothing more, because the edge, the batched sources and the transports are the same objects in the same chart. A team that wants to leave the platform keeps the chart and drops the wrapper, which is a directory of Routes, builds and one binding.</p></div>
+
+## Review
+
+- A dependency-only wrapper chart added `Route`s, `BuildConfig`s, `ImageStream`s, and one `RoleBinding` around the final project's chart without changing it.
+- An image built inside the cluster from a binary-source, Docker-strategy `BuildConfig`, with no container engine on the host.
+- Every pod ran under `restricted-v2` except the one service account granted `anyuid` for the image that needs a root user.
+- An edge `Route` terminated TLS at the router, and the identity provider's issuer pointed at that Route's URL.
+- A teardown compared the cluster against a saved inventory and left no orphaned namespace, `Subscription`, or CRD.
 
 ## Where this goes next
 
-This appendix ran Chapter 27's chart on OpenShift Local through a wrapper that adds Routes with edge TLS at the router, Docker-strategy builds into image streams, the `restricted-v2` constraint for every workload and `anyuid` for the one image that needs it, with an issuer that is a Route's URL and a teardown that compares the cluster with an inventory.
+This appendix ran the final project's chart on OpenShift Local through a wrapper that adds Routes with edge TLS at the router, Docker-strategy builds into image streams, the `restricted-v2` constraint for every workload and `anyuid` for the one image that needs it, with an issuer that is a Route's URL and a teardown that compares the cluster with an inventory.
 
-That completes the book's path from a schema to a system that runs in three places. The bibliography lists the specifications and books behind the whole. For this appendix, read the OpenShift documentation pages "Route configuration" and "Secured routes", "Builds using BuildConfig" for the Docker strategy and binary builds, "Managing image streams" and "Managing security context constraints"; Red Hat OpenShift Local's "Getting started" guide for `crc start` and `crc oc-env`; Helm's "Chart Dependencies"; and the kubeconform README for `-schema-location`. Chapters 26 and 27 hold the chart this appendix wraps.
+That completes the book's path from a schema to a system that runs in three places. The bibliography lists the specifications and books behind the whole. For this appendix, read the OpenShift documentation pages "Route configuration" and "Secured routes", "Builds using BuildConfig" for the Docker strategy and binary builds, "Managing image streams" and "Managing security context constraints"; Red Hat OpenShift Local's "Getting started" guide for `crc start` and `crc oc-env`; Helm's "Chart Dependencies"; and the kubeconform README for `-schema-location`. The minikube tier and the final project hold the chart this appendix wraps.
 
 ## For deeper coverage
 
-- *Cloud Native Design Patterns*, Appendix S — "Running Example 05 on OpenShift Local": the same restricted-v2 / pinned-CSV / edge-TLS-Route pattern, applied to a different example.
-- OpenShift documentation — Route configuration and TLS termination.
-- OpenShift documentation — Builds using BuildConfig — the Docker strategy and binary source this appendix's `BuildConfig`s use.
-- OpenShift documentation — Managing security context constraints — `restricted-v2` and `anyuid`.
-- Red Hat OpenShift Local (CRC) documentation — Getting Started — `crc start` and `crc oc-env`.
+- *Cloud Native Design Patterns*, Appendix S, "Running Example 05 on OpenShift Local": the same restricted-v2 / pinned-CSV / edge-TLS-Route pattern, applied to a different example.
+- OpenShift documentation: Route configuration and TLS termination.
+- OpenShift documentation: Builds using BuildConfig (the Docker strategy and binary source this appendix's `BuildConfig`s use).
+- OpenShift documentation: Managing security context constraints (`restricted-v2` and `anyuid`).
+- Red Hat OpenShift Local (CRC) documentation: Getting Started (`crc start` and `crc oc-env`).
