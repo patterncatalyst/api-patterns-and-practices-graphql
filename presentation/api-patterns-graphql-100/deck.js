@@ -526,4 +526,32 @@ codeSlide("APPX · REFERENCE", "The Delivery type", "graphql · SDL",
   addNotes(s, "Thank you. That is the whole 100-level arc: where GraphQL fits next to REST and gRPC and the seven axes for choosing it; the type system, nullability and the contract loop; how a request executes and how a mutation differs; errors, partial results and masking; schema design and evolution without versions; connections and batching; cost limits, persisted documents and caching; transport security and authorization; observability and federation; real-time delivery and clients; testing and debugging; and a final project that runs every control at once. The material here was the pattern and the reasoning. When you want the how, the two companion decks take over: one builds each pattern in Quarkus with SmallRye GraphQL and the other in Python with Strawberry, both against the same canonical schema. I am happy to take questions. And the standard Red Hat close: Red Hat is the world's leading provider of enterprise open source software solutions, trusted for support, training and consulting services.");
 }
 
+
+/* --- Scan to explore (QR codes) --- */
+{
+  const s = S();
+  addContentTitle(s, "SCAN TO EXPLORE", "Take it with you");
+
+  // Left QR: the site
+  s.addImage({ path: `${ASSETS}/qr-graphql-site.png`, x: 2.30, y: 1.78, w: 3.10, h: 3.10 });
+  s.addText("The site", { x: 1.55, y: 4.98, w: 4.60, h: 0.40,
+    fontFace: FONT.title, fontSize: 18, bold: true, color: COLOR.ink, align: "center", valign: "middle" });
+  s.addText("Chapters, the GraphQL schema and contracts, and both-stack runnable examples", { x: 1.45, y: 5.40, w: 4.80, h: 0.72,
+    fontFace: FONT.body, fontSize: 13, italic: true, color: COLOR.caption, align: "center", valign: "top" });
+  s.addText("patterncatalyst.github.io/api-patterns-and-practices-graphql", { x: 1.45, y: 6.12, w: 4.80, h: 0.32,
+    fontFace: FONT.mono, fontSize: 10, color: COLOR.red, align: "center", valign: "middle" });
+
+  // Right QR: the hub
+  s.addImage({ path: `${ASSETS}/qr-hub.png`, x: 7.93, y: 1.78, w: 3.10, h: 3.10 });
+  s.addText("Workshops & Tutorials", { x: 7.18, y: 4.98, w: 4.60, h: 0.40,
+    fontFace: FONT.title, fontSize: 18, bold: true, color: COLOR.ink, align: "center", valign: "middle" });
+  s.addText("The whole series: every workshop, tutorial, and deck in one place", { x: 7.08, y: 5.40, w: 4.80, h: 0.72,
+    fontFace: FONT.body, fontSize: 13, italic: true, color: COLOR.caption, align: "center", valign: "top" });
+  s.addText("patterncatalyst.github.io/patterncatalyst-workshops-tutorials-list", { x: 7.08, y: 6.12, w: 4.80, h: 0.32,
+    fontFace: FONT.mono, fontSize: 9, color: COLOR.red, align: "center", valign: "middle" });
+
+  addNotes(s, "This is the 100-level concepts deck, so the two codes point where the ideas live and where the whole series lives. On the left, the site: the chapters, the GraphQL schema and contracts, and the runnable both-stack examples, all public. On the right, the Workshops and Tutorials hub: every workshop, tutorial, and deck in the series in one place, including the REST, gRPC, and WebSockets siblings. Scan whichever is useful; both are on the Pattern Catalyst GitHub organization.");
+}
+
+
 writeDeck(pres, OUT).catch((e) => { console.error(e); process.exit(1); });
