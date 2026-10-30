@@ -2,7 +2,7 @@
 title: "Kubernetes on minikube"
 order: 26
 part: "Running It & the Final Project"
-description: "The two stacks of Chapter 25 as one Helm release on minikube: a values map for both stacks, ConfigMaps, a chart-generated TLS Secret, startup, readiness and liveness probes, a NodePort edge published at cluster creation, the pod named in each trace, a NetworkPolicy and helm test."
+description: "The two stacks of the Compose tier as one Helm release on minikube: a values map for both stacks, ConfigMaps, a chart-generated TLS Secret, startup, readiness and liveness probes, a NodePort edge published at cluster creation, the pod named in each trace, a NetworkPolicy and helm test."
 duration: "16 min read"
 ---
 
@@ -18,15 +18,15 @@ By the end of this chapter you can:
 
 ## Why this matters
 
-Chapter 25 ran the tracking view as one local tier: an nginx edge in front of two stacks, an observability backend beside them, and Compose to start them in order. The images it built are the ones a cluster runs. This chapter moves the same tier onto Kubernetes without touching a line of application code, so every difference between the two tiers lives in configuration, and the chart that describes it is small enough to read in one sitting.
+The Compose tier ran the tracking view as one local tier: an nginx edge in front of two stacks, an observability backend beside them, and Compose to start them in order. The images it built are the ones a cluster runs. This chapter moves the same tier onto Kubernetes without touching a line of application code, so every difference between the two tiers lives in configuration, and the chart that describes it is small enough to read in one sitting.
 
-The code is in `examples/26-minikube/`. It carries no application sources: `images.sh` builds Chapter 25's Containerfiles, `helm/` describes the release, and `up.sh`, `smoke.sh` and `down.sh` run it. The example has no `verify.sh`, because a cluster is a different kind of fixture from a compose project. A compose stack is created and removed in minutes inside a script; a cluster is created once, kept, and stopped. The chart is validated without a cluster in CI, and the scripts prove it on a live one.
+The code is in `examples/26-minikube/`. It carries no application sources: `images.sh` builds the Compose tier's Containerfiles, `helm/` describes the release, and `up.sh`, `smoke.sh` and `down.sh` run it. The example has no `verify.sh`, because a cluster is a different kind of fixture from a compose project. A compose stack is created and removed in minutes inside a script; a cluster is created once, kept, and stopped. The chart is validated without a cluster in CI, and the scripts prove it on a live one.
 
 ## What changes from Compose to Kubernetes
 
 Every concept in `compose.yaml` has a counterpart in Kubernetes, and the counterparts are not always one-to-one. Figure 26.1 lists them with the file each lives in.
 
-{% include excalidraw.html file="26-compose-to-kubernetes" alt="Two columns of nine rows joined by arrows. The left column, Chapter 25 Compose, lists services, ports, env_file, configs, secrets, healthcheck with depends_on, deploy resources limits, restart with stop_grace_period, and the internal backend network. The right column, Chapter 26 Helm chart on Kubernetes, lists the matching objects: a Deployment and ClusterIP Service per stack, NodePort Services 30360 and 30361, a ConfigMap read with envFrom, a ConfigMap mounted as nginx.conf, a TLS Secret from genCA kept with lookup, three probes, resource requests and limits, the kubelet with a 30 second grace period, and a NetworkPolicy per tier. Each row names the file it lives in." caption="Figure 26.1 — Compose concepts and the chart templates that carry them. The images, the environment contract and the edge configuration are the same in both tiers." %}
+{% include excalidraw.html file="26-compose-to-kubernetes" alt="Two columns of nine rows joined by arrows. The left column, Compose, lists services, ports, env_file, configs, secrets, healthcheck with depends_on, deploy resources limits, restart with stop_grace_period, and the internal backend network. The right column, the Helm chart on Kubernetes, lists the matching objects: a Deployment and ClusterIP Service per stack, NodePort Services 30360 and 30361, a ConfigMap read with envFrom, a ConfigMap mounted as nginx.conf, a TLS Secret from genCA kept with lookup, three probes, resource requests and limits, the kubelet with a 30 second grace period, and a NetworkPolicy per tier. Each row names the file it lives in." caption="Figure 26.1: Compose concepts and the chart templates that carry them. The images, the environment contract and the edge configuration are the same in both tiers." %}
 
 A Compose service becomes two objects. The Deployment keeps the desired number of pods running and rolls a new version out; the Service gives them one stable name and address. `depends_on` with `service_healthy` has no direct counterpart, because Kubernetes starts everything at once and lets readiness decide who receives traffic: the edge starts before a backend is ready, and the Service sends it nothing until the backend says it can. The restart policy moves from the engine to the kubelet, and the internal network moves from a network flag to a NetworkPolicy, which is a rule about who may connect rather than a place a container lives.
 
@@ -45,13 +45,13 @@ minikube start -p gql-tracking \
 
 Four choices in it matter. The driver is `docker` and the runtime is `containerd`, so the node is a container and the pods inside it run under containerd, with no second engine to install. The Kubernetes version is explicit, so a newer default never changes what a reader gets. `--keep-context` leaves the current `kubectl` context alone, and every command in the scripts names its cluster anyway: `minikube -p gql-tracking`, `kubectl --context gql-tracking`, `helm --kube-context gql-tracking`.
 
-The fourth is `--ports`. The only way the host reaches a pod is a NodePort published on the node container at creation, bound to `127.0.0.1` so that nothing on the local network sees it. The NodePort number is also the host port, which keeps the chapter's addresses to one number each: the Quarkus edge answers on `https://127.0.0.1:30360/graphql`, the Python edge on 30361, and Grafana, Tempo, Prometheus and Loki on 30362 to 30365. The list is fixed when the profile is created. Adding a port later means recreating the profile, so `profile.sh` publishes all fifteen ports of this chapter and of Chapter 27 at once. It checks with `ss -ltn` that every host port is free before it creates anything, and with `docker port gql-tracking` that every mapping exists afterward.
+The fourth is `--ports`. The only way the host reaches a pod is a NodePort published on the node container at creation, bound to `127.0.0.1` so that nothing on the local network sees it. The NodePort number is also the host port, which keeps the chapter's addresses to one number each: the Quarkus edge answers on `https://127.0.0.1:30360/graphql`, the Python edge on 30361, and Grafana, Tempo, Prometheus and Loki on 30362 to 30365. The list is fixed when the profile is created. Adding a port later means recreating the profile, so `profile.sh` publishes all fifteen ports of this chapter and of the final project at once. It checks with `ss -ltn` that every host port is free before it creates anything, and with `docker port gql-tracking` that every mapping exists afterward.
 
 `profile.sh` also checks what must not be running. OpenShift Local and a second minikube profile compete for the same memory, so `lib.sh` fails, naming the command that stops each running profile, and never stops one itself. The same script starts a stopped profile; the published ports and the loaded images survive a stop.
 
 ## Images into the node
 
-The chart's Deployments name Chapter 25's images by their bare tags, `gql-ch25-quarkus:1.0` and `gql-ch25-python:1.0`, with `imagePullPolicy: Never`. No registry holds them. `images.sh` builds each Containerfile with `docker build` and copies the result into the node with `minikube -p gql-tracking image load`, together with the nginx and otel-lgtm images. A pod that starts from an image the node does not hold fails with `ErrImageNeverPull` instead of fetching another image, so the cluster runs only what `images.sh` loaded. After a rebuild, `image load` replaces the image in the node, and `kubectl rollout restart deploy/quarkus` starts pods on it.
+The chart's Deployments name the Compose tier's images by their bare tags, `gql-ch25-quarkus:1.0` and `gql-ch25-python:1.0`, with `imagePullPolicy: Never`. No registry holds them. `images.sh` builds each Containerfile with `docker build` and copies the result into the node with `minikube -p gql-tracking image load`, together with the nginx and otel-lgtm images. A pod that starts from an image the node does not hold fails with `ErrImageNeverPull` instead of fetching another image, so the cluster runs only what `images.sh` loaded. After a rebuild, `image load` replaces the image in the node, and `kubectl rollout restart deploy/quarkus` starts pods on it.
 
 ## One chart for both stacks
 
@@ -74,7 +74,7 @@ Every object carries the `app.kubernetes.io` labels: `name`, `instance`, `compon
 
 ## Configuration and secrets
 
-Chapter 25's environment contract is one table of keys per stack. In the chart it is the `env` map of each stack, rendered into a ConfigMap and read with `envFrom`:
+The Compose tier's environment contract is one table of keys per stack. In the chart it is the `env` map of each stack, rendered into a ConfigMap and read with `envFrom`:
 
 ```yaml
     env:
@@ -98,7 +98,7 @@ A pod reads its environment once, at start, so a changed ConfigMap does not reac
 
 A changed value changes the hash, the pod template differs, and the Deployment rolls. Only the stack whose configuration changed rolls; its neighbour keeps its pod.
 
-The edge's TLS material is a Secret the chart generates. Chapter 25 made a throwaway authority with `gen-certs.sh`; the chart does the same with Helm's template functions. `genCA` makes the authority and `genSignedCert` signs a server certificate for `localhost`, `127.0.0.1` and the edge Service's names. A generated value would change on every render, so the template asks the cluster first:
+The edge's TLS material is a Secret the chart generates. The Compose tier made a throwaway authority with `gen-certs.sh`; the chart does the same with Helm's template functions. `genCA` makes the authority and `genSignedCert` signs a server certificate for `localhost`, `127.0.0.1` and the edge Service's names. A generated value would change on every render, so the template asks the cluster first:
 
 {% raw %}
 ```yaml
@@ -111,7 +111,7 @@ When the Secret exists, `lookup` returns it and the template reuses its data, so
 
 ## Probes and lifecycle
 
-Compose had one healthcheck per service. Kubernetes asks three different questions, and each stack answers them with the endpoints Chapter 25 already built:
+Compose had one healthcheck per service. Kubernetes asks three different questions, and each stack answers them with the endpoints the Compose tier already built:
 
 {% include codetabs.html langs="Quarkus|Python" %}
 
@@ -149,7 +149,7 @@ Compose had one healthcheck per service. Kubernetes asks three different questio
 
 The startup probe holds the other two back until the process has come up, so a JVM that needs a minute is not killed for being slow: sixty failures at two seconds each give Quarkus two minutes. Readiness decides whether the Service sends traffic. Liveness decides whether the kubelet restarts the container, which is why it asks the smallest question, whether the process answers at all, and why Python's startup and liveness both use `/health/live` while readiness uses `/health/ready`, which stays unavailable until the lifespan has built the store and the sources.
 
-The lifecycle settings follow from the application's own shutdown. Both stacks drain in-flight requests for up to ten seconds after SIGTERM. The pod's `terminationGracePeriodSeconds` is thirty, three times that, and a `preStop` sleep of five seconds runs first, so the Service has dropped the pod from its endpoints before the signal arrives. The strategy is `RollingUpdate` with `maxUnavailable: 0` and `maxSurge: 1`: a new pod must be ready before an old one leaves. Resources are requests and limits, taken from Chapter 25's Compose limits, and the security contexts are the restricted profile: `runAsNonRoot`, no privilege escalation, every capability dropped, the runtime's default seccomp profile. The stacks, the edge and the test pod run under it. The otel-lgtm image runs as root, so its container keeps the same settings without `runAsNonRoot`; OpenShift admits it through the binding to the `anyuid` constraint that Appendix A creates. No user or group ID is set. The UBI images run as numeric non-root users and accept the one the cluster assigns, so the same chart fits a cluster that assigns its own.
+The lifecycle settings follow from the application's own shutdown. Both stacks drain in-flight requests for up to ten seconds after SIGTERM. The pod's `terminationGracePeriodSeconds` is thirty, three times that, and a `preStop` sleep of five seconds runs first, so the Service has dropped the pod from its endpoints before the signal arrives. The strategy is `RollingUpdate` with `maxUnavailable: 0` and `maxSurge: 1`: a new pod must be ready before an old one leaves. Resources are requests and limits, taken from the Compose tier's resource limits, and the security contexts are the restricted profile: `runAsNonRoot`, no privilege escalation, every capability dropped, the runtime's default seccomp profile. The stacks, the edge and the test pod run under it. The otel-lgtm image runs as root, so its container keeps the same settings without `runAsNonRoot`; OpenShift admits it through the binding to the `anyuid` constraint that Appendix A creates. No user or group ID is set. The UBI images run as numeric non-root users and accept the one the cluster assigns, so the same chart fits a cluster that assigns its own.
 
 ## The way in
 
@@ -157,7 +157,7 @@ The edge is the same nginx on the same `ubi10/nginx-126` image, with the same ru
 
 Figure 26.2 follows one request from the host to a pod.
 
-{% include excalidraw.html file="26-cluster-topology" alt="A host box sends curl with a CA file to 127.0.0.1 port 30360. An arrow leads into a large band for the node container gql-tracking, running containerd and Kubernetes v1.37.1 in namespace gql-ch26. Inside, arrows lead from the Service edge, a NodePort 8443 to 30360 published by Docker, to the edge pod running nginx with TLS 1.3 and a 64k limit, which mounts the Secret gql-ch26-edge-tls and the ConfigMap edge-config. From the edge pod an arrow leads to the ClusterIP Service quarkus and then to the quarkus pod named quarkus-588766b5bf-dxv9z, which has three probes, a ConfigMap and the downward API. An arrow labelled OTLP leads from the quarkus pod down to the lgtm pod. A second host box requests the trace by id on port 30363, through the Service lgtm-ui, to the lgtm pod. A dark box at the bottom shows trace 14d6ffd0 with 11 spans whose resource attribute k8s.pod.name is the quarkus pod." caption="Figure 26.2 — A request from the host to a pod and the trace back to its name. Docker publishes the port, the NodePort Service carries it to the edge, and a ClusterIP Service picks a ready pod." %}
+{% include excalidraw.html file="26-cluster-topology" alt="A host box sends curl with a CA file to 127.0.0.1 port 30360. An arrow leads into a large band for the node container gql-tracking, running containerd and Kubernetes v1.37.1 in namespace gql-ch26. Inside, arrows lead from the Service edge, a NodePort 8443 to 30360 published by Docker, to the edge pod running nginx with TLS 1.3 and a 64k limit, which mounts the Secret gql-ch26-edge-tls and the ConfigMap edge-config. From the edge pod an arrow leads to the ClusterIP Service quarkus and then to the quarkus pod named quarkus-588766b5bf-dxv9z, which has three probes, a ConfigMap and the downward API. An arrow labelled OTLP leads from the quarkus pod down to the lgtm pod. A second host box requests the trace by id on port 30363, through the Service lgtm-ui, to the lgtm pod. A dark box at the bottom shows trace 14d6ffd0 with 11 spans whose resource attribute k8s.pod.name is the quarkus pod." caption="Figure 26.2: A request from the host to a pod and the trace back to its name. Docker publishes the port, the NodePort Service carries it to the edge, and a ClusterIP Service picks a ready pod." %}
 
 The chain has four hops, and each is a different mechanism. Docker publishes `127.0.0.1:30360` on the node container. Inside the node, the NodePort Service `edge` maps that port to the edge pod's TLS listener on 8443. The edge proxies to the ClusterIP Service `quarkus`, and the Service picks one of its ready pods. A pod that fails readiness drops out of that last hop without any change to the first three.
 
@@ -165,7 +165,7 @@ The Service type is a value. `edge.service.type` takes `NodePort` or `ClusterIP`
 
 ## Telemetry by environment
 
-The stacks export OTLP to `http://lgtm:4317`, and `lgtm` is a ClusterIP Service in front of the otel-lgtm pod, which runs the same image as in Chapter 25: collector, Tempo, Prometheus, Loki and Grafana. A second Service, `lgtm-ui`, publishes the four interfaces on the NodePorts 30362 to 30365.
+The stacks export OTLP to `http://lgtm:4317`, and `lgtm` is a ClusterIP Service in front of the otel-lgtm pod, which runs the same image as the Compose tier's observability backend: collector, Tempo, Prometheus, Loki and Grafana. A second Service, `lgtm-ui`, publishes the four interfaces on the NodePorts 30362 to 30365.
 
 What a cluster adds is identity. Telemetry from a pod that might be replaced at any moment is only useful if it says which pod produced it. The downward API passes the pod's own metadata into its environment, and `OTEL_RESOURCE_ATTRIBUTES` turns those values into OpenTelemetry resource attributes, following the Kubernetes resource conventions:
 
@@ -198,7 +198,7 @@ Values are layered. `--reuse-values` keeps what the release already has and appl
 
 ## What the profile costs
 
-The profile is sized for the largest release in the book, which is Chapter 27's: six CPUs, twelve gigabytes of memory and forty gigabytes of disk. This chapter's release needs far less. The Quarkus pod requests 512 MiB with a 768 MiB limit, the Python pod 256 MiB with a 384 MiB limit, the edge 32 MiB, and otel-lgtm one gibibyte, so the whole release asks for about two gibibytes and under one CPU of requests. The profile is a fixed budget, not a per-chapter one, and creating it once is what lets Chapter 27 reuse its ports.
+The profile is sized for the largest release in the book, which is the final project's: six CPUs, twelve gigabytes of memory and forty gigabytes of disk. This chapter's release needs far less. The Quarkus pod requests 512 MiB with a 768 MiB limit, the Python pod 256 MiB with a 384 MiB limit, the edge 32 MiB, and otel-lgtm one gibibyte, so the whole release asks for about two gibibytes and under one CPU of requests. The profile is a fixed budget, not a per-chapter one, and creating it once is what lets the final project reuse its ports.
 
 The disk holds the node's images, about 1.4 GB after the four are loaded, and the Kubernetes components. That is why `down.sh` stops the profile instead of deleting it: a stop returns the memory and the CPU and keeps the disk, and the next start reuses the node and its images where a fresh creation downloads and loads everything again.
 
@@ -214,7 +214,7 @@ helm upgrade --install gql-ch26 examples/26-minikube/helm \
 
 `--wait` returns when the Deployments are available, and `kubectl rollout status` confirms each one. Then `helm test` runs the pod defined in `templates/tests/test-graphql.yaml`. It carries the `test` label, mounts the chart's CA, and posts a `{ __typename }` query and a `TrackCargo` query to each stack through the edge's Service name over TLS 1.3. A release that deploys but cannot answer a GraphQL query fails here, before any script from the host runs.
 
-`smoke.sh` then repeats Chapter 25's checks from the host through the published ports, with `LGTM_CACERT` pointing at the CA the chart generated. It adds the cluster cases: the pod named in a trace, a configuration change that rolls only the pods that read it, and the NetworkPolicy pair. Both scripts stop at the first failure and `smoke.sh` ends with `PASS`.
+`smoke.sh` then repeats the Compose tier's checks from the host through the published ports, with `LGTM_CACERT` pointing at the CA the chart generated. It adds the cluster cases: the pod named in a trace, a configuration change that rolls only the pods that read it, and the NetworkPolicy pair. Both scripts stop at the first failure and `smoke.sh` ends with `PASS`.
 
 The chart is also validated with no cluster. CI runs `helm lint --strict` and renders the chart twice, with the defaults and with an alternate values file that switches TLS off, uses ClusterIP Services, drops the NetworkPolicy and adds a HorizontalPodAutoscaler per stack. Each render goes through `kubeconform -strict` against the Kubernetes 1.37.1 schemas, which fails on an unknown field and on a wrong type. ShellCheck covers the scripts. None of that needs a cluster, which is why it runs on every push.
 
@@ -238,7 +238,7 @@ examples/26-minikube/scripts/down.sh    # uninstall, delete the namespace, minik
 | release | `helm status` is `deployed`; the test pod `Succeeded`; four Deployments rolled out | the same |
 | probe paths | `/q/health/started`, `/ready`, `/live` equal the values | `/health/live`, `/health/ready`, `/health/live` |
 | `TrackCargo` ABC123 | `ONBOARD_CARRIER` | the same |
-| `FanOut` | Chapter 13's data; 8 source calls read inside the pod | the same data; 6 calls |
+| `FanOut` | DataLoader-batched data; 8 source calls read inside the pod | the same data; 6 calls |
 | `ListCargos` | six edges; GHI345 `SERVICE_UNAVAILABLE`, 6 errors | six edges; the same code, 1 error |
 | edge routes | `/debug/source-calls`, `/q/health/ready`, `/health/ready`, `/` answer 404 | the same |
 | TLS | no CA fails, TLS 1.2 refused, TLS 1.3 served | the same |
@@ -250,18 +250,26 @@ examples/26-minikube/scripts/down.sh    # uninstall, delete the namespace, minik
 
 ## Decision
 
-<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Kubernetes is where the <em>operational and security cost</em> axis of Chapter 2 becomes a set of objects instead of a set of habits. The chart states each of them once: probes the stack's own health endpoints answer, a security context a restricted cluster accepts for the stacks and the edge, a NetworkPolicy per tier, a certificate the chart generates and keeps. The <em>aggregation across sources</em> axis is unchanged, because the sources are still inside the stacks and the edge still routes one path. The <em>client diversity and shape variance</em> axis is served by the same edge in every tier, so a client written against Compose runs against the cluster by changing a port and a CA file. The <em>contract and evolution style</em> axis is untouched: the schema is the canonical SDL, and <code>assert_sdl_conforms</code> passes through the NodePorts. The tracking view therefore runs on Kubernetes as one Helm release for both stacks, reached through NodePorts published at cluster creation, with the pod named in every trace.</p></div>
+<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Kubernetes is where the <em>operational and security cost</em> axis becomes a set of objects instead of a set of habits. The chart states each of them once: probes the stack's own health endpoints answer, a security context a restricted cluster accepts for the stacks and the edge, a NetworkPolicy per tier, a certificate the chart generates and keeps. The <em>aggregation across sources</em> axis is unchanged, because the sources are still inside the stacks and the edge still routes one path. The <em>client diversity and shape variance</em> axis is served by the same edge in every tier, so a client written against Compose runs against the cluster by changing a port and a CA file. The <em>contract and evolution style</em> axis is untouched: the schema is the canonical SDL, and <code>assert_sdl_conforms</code> passes through the NodePorts. The tracking view therefore runs on Kubernetes as one Helm release for both stacks, reached through NodePorts published at cluster creation, with the pod named in every trace.</p></div>
+
+## Review
+
+- A single Helm chart renders a `stacks` map over one template, so the Quarkus and Python Deployments, Services and ConfigMaps can't drift apart in structure.
+- A `checksum/config` annotation on each pod template hashes that stack's rendered ConfigMap, so only the stack whose configuration changed gets its pods rolled.
+- `genCA` and `genSignedCert` generate the edge's TLS Secret, and `lookup` reads back an existing Secret on upgrade so the certificate stays stable across releases.
+- Startup, readiness and liveness probes map onto each stack's own health endpoints, giving the kubelet and the Service three separate answers about one process.
+- A NetworkPolicy per tier restricts pod-to-pod traffic to the edge and the test pod, and a labeled test pod proves the policy holds on minikube's network plugin.
 
 ## Where this goes next
 
-This chapter put Chapter 25's tier on a cluster: one chart for both stacks, configuration in ConfigMaps with a checksum that rolls pods, a generated TLS Secret that survives upgrades, three probes per stack, a NodePort edge, a downward-API pod name in each trace, a NetworkPolicy and a chart test, all on a profile whose ports were fixed when it was created.
+This chapter put the Compose tier on a cluster: one chart for both stacks, configuration in ConfigMaps with a checksum that rolls pods, a generated TLS Secret that survives upgrades, three probes per stack, a NodePort edge, a downward-API pod name in each trace, a NetworkPolicy and a chart test, all on a profile whose ports were fixed when it was created.
 
-Chapter 27 builds the final project on the same profile. It serves the complete schema, subscriptions included, with Chapter 14's query limits, Chapter 18's authorization and Chapter 17's introspection control together, and its chart extends this one. For the references, read the Kubernetes documentation pages "Deployments", "Service", "ConfigMaps", "Secrets", "Configure Liveness, Readiness and Startup Probes", "Expose Pod Information to Containers Through Environment Variables", "Network Policies", "Resource Management for Pods and Containers" and "Pod Security Standards". The minikube documentation covers `minikube start` flags such as `--ports` and `--kubernetes-version` under "Basic controls" and image loading under "Pushing images". The Helm documentation has "Charts", "Chart Tests", "Values Files", the "Template Function List" for `genCA`, `genSignedCert` and `lookup`, and "Chart Development Tips and Tricks" for rolling deployments automatically. OpenTelemetry's "Resource semantic conventions: Kubernetes" defines the attribute names, and the kubeconform README explains its strict mode.
+The final project builds on the same profile. It serves the complete schema, subscriptions included, with the depth and cost limits, the AuthN/AuthZ checks and the introspection control together, and its chart extends this one. For the references, read the Kubernetes documentation pages "Deployments", "Service", "ConfigMaps", "Secrets", "Configure Liveness, Readiness and Startup Probes", "Expose Pod Information to Containers Through Environment Variables", "Network Policies", "Resource Management for Pods and Containers" and "Pod Security Standards". The minikube documentation covers `minikube start` flags such as `--ports` and `--kubernetes-version` under "Basic controls" and image loading under "Pushing images". The Helm documentation has "Charts", "Chart Tests", "Values Files", the "Template Function List" for `genCA`, `genSignedCert` and `lookup`, and "Chart Development Tips and Tricks" for rolling deployments automatically. OpenTelemetry's "Resource semantic conventions: Kubernetes" defines the attribute names, and the kubeconform README explains its strict mode.
 
 ## For deeper coverage
 
-- *Cloud Native Design Patterns*, Appendix R — "Running Example 05 on minikube": the same Docker-driver/containerd-runtime minikube pattern, applied to a different example.
-- [Kubernetes — Configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-- [Kubernetes — Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-- [Helm — Template Function List](https://helm.sh/docs/chart_template_guide/function_list/) — `genCA`, `genSignedCert`, and `lookup`.
-- [minikube — start command reference](https://minikube.sigs.k8s.io/docs/commands/start/) — `--ports`, `--kubernetes-version`, and image loading.
+- *Cloud Native Design Patterns*, Appendix R: "Running Example 05 on minikube": the same Docker-driver/containerd-runtime minikube pattern, applied to a different example.
+- [Kubernetes: Configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+- [Kubernetes: Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+- [Helm: Template Function List](https://helm.sh/docs/chart_template_guide/function_list/): `genCA`, `genSignedCert`, and `lookup`.
+- [minikube: start command reference](https://minikube.sigs.k8s.io/docs/commands/start/): `--ports`, `--kubernetes-version`, and image loading.
