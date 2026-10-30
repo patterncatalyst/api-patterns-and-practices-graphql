@@ -7,12 +7,12 @@
 <text x="115.0" y="172.5" font-size="11.5" fill="#555555" text-anchor="middle">bearer token,</text>
 <text x="115.0" y="187.5" font-size="11.5" fill="#555555" text-anchor="middle">traceparent</text>
 <rect x="240" y="100" width="210" height="130" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
-<text x="345.0" y="148.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge (Ch25)</text>
+<text x="345.0" y="148.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">edge</text>
 <text x="345.0" y="165.0" font-size="11.5" fill="#555555" text-anchor="middle">TLS 1.3, 64k body limit</text>
 <text x="345.0" y="180.0" font-size="11.5" fill="#555555" text-anchor="middle">/graphql + upgrade, /events/</text>
 <text x="345.0" y="195.0" font-size="11.5" fill="#555555" text-anchor="middle">host 8370 and 8371</text>
 <rect x="520" y="80" width="220" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
-<text x="630.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus, python (Ch14, 17, 18, 21)</text>
+<text x="630.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">quarkus, python</text>
 <text x="630.0" y="127.5" font-size="11.5" fill="#555555" text-anchor="middle">public, introspection off</text>
 <text x="630.0" y="142.5" font-size="11.5" fill="#555555" text-anchor="middle">publish nothing</text>
 <rect x="520" y="185" width="220" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
@@ -20,19 +20,19 @@
 <text x="630.0" y="232.5" font-size="11.5" fill="#555555" text-anchor="middle">same images, introspection on</text>
 <text x="630.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8372, 8373</text>
 <rect x="790" y="80" width="170" height="80" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
-<text x="875.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">keycloak 26.8.1 (Ch18)</text>
+<text x="875.0" y="110.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">keycloak 26.8.1</text>
 <text x="875.0" y="127.5" font-size="11.5" fill="#555555" text-anchor="middle">realm shipping</text>
 <text x="875.0" y="142.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8374</text>
 <rect x="790" y="185" width="170" height="80" rx="9" fill="#fff3e0" stroke="#e8870c" stroke-width="2"/>
-<text x="875.0" y="215.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm 0.37.0 (Ch19, 25)</text>
+<text x="875.0" y="215.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">lgtm 0.37.0</text>
 <text x="875.0" y="232.5" font-size="11.5" fill="#555555" text-anchor="middle">Tempo, Loki, Prometheus</text>
 <text x="875.0" y="247.5" font-size="11.5" fill="#555555" text-anchor="middle">127.0.0.1 8375 to 8378</text>
 <rect x="240" y="300" width="210" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
-<text x="345.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client profile (Ch21)</text>
+<text x="345.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">client profile</text>
 <text x="345.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch27-client:1.0</text>
 <text x="345.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">wss through the edge</text>
 <rect x="520" y="300" width="220" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
-<text x="630.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">load profile (Ch23)</text>
+<text x="630.0" y="330.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">load profile</text>
 <text x="630.0" y="347.5" font-size="11.5" fill="#555555" text-anchor="middle">gql-ch27-load:1.0, k6 v2.3.0</text>
 <text x="630.0" y="362.5" font-size="11.5" fill="#555555" text-anchor="middle">fanout and cost runs</text>
 <rect x="790" y="300" width="170" height="80" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
