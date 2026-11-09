@@ -1,4 +1,4 @@
-# Contracts — the canonical GraphQL SDL
+# Contracts: the canonical GraphQL SDL
 
 The `.graphql` files under `schema/` are the contract for the tracking view of the
 shipping domain. Both implementations (Quarkus SmallRye GraphQL and Python
@@ -23,16 +23,16 @@ schema/shipping/
 ## Design notes
 
 - GraphQL is the aggregation view: nearly all surface is `Query`. The one mutation
-  (`registerHandlingEvent`) and one subscription (`cargoHandled`) support Ch8 and Ch21.
+  (`registerHandlingEvent`) and one subscription (`cargoHandled`) support Chapter 8 and Chapter 21.
 - Nullability is deliberate. Fields the domain guarantees are non-null
   (`Cargo.trackingId`, `Leg.loadLocation`). Fields resolved from another service or
   that may not exist yet are nullable (`Cargo.itinerary`, `Leg.voyage`,
   `Delivery.estimatedTimeOfArrival`), so a downstream failure nulls one field, not
-  the whole response (Ch4).
+  the whole response (Chapter 4).
 - Lists paginate with Relay cursor connections (`first`/`after`, `last`/`before`).
 - `Node` plus `Query.node(id:)` implements Relay Global Object Identification.
 - Mutations return a payload with a `UserError` list for domain failures; transport
-  and system failures use the top-level `errors` array (Ch9).
+  and system failures use the top-level `errors` array (Chapter 9).
 - Field names are camelCase, types PascalCase, enum values SCREAMING_SNAKE_CASE;
   every type and field has a description.
 

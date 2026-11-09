@@ -38,7 +38,7 @@ bands = [
     dict(x=20, y=100, w=960, h=44, label="cargos"),
     dict(x=20, y=150, w=960, h=88, label="itinerary, delivery"),
     dict(x=20, y=244, w=960, h=88, label="voyage, location"),
-    dict(x=20, y=352, w=960, h=170, label="Chapter 12 cargos", fill="#ffffff"),
+    dict(x=20, y=352, w=960, h=170, label="Per-cargo calls without a loader", fill="#ffffff"),
 ]
 nodes = []
 for t in (0, 250, 500, 750, 1000):
@@ -59,6 +59,6 @@ notes = [dict(x=round(X0 + t * SCALE), y=544, text=f"{t} ms", anchor="middle", s
 notes += [
     dict(x=500, y=28, text="One tick per batch: the loads queue, one dispatch, one bulk call, then the calls that depend on it", anchor="middle", bold=True),
     dict(x=500, y=566, text="Solid bars: source-call log of one Python run of the four-cargo query. Thin ticks: load() calls queued before the dispatch.", anchor="middle", size=12, color="#555555"),
-    dict(x=500, y=584, text="Ghost bars, not measured: the four getCargo calls Chapter 12 made, drawn at the cargo level's interval. Four calls instead of one.", anchor="middle", size=12, color="#555555"),
+    dict(x=500, y=584, text="Ghost bars, not measured: the four getCargo calls made without a loader, drawn at the cargo level's interval. Four calls instead of one.", anchor="middle", size=12, color="#555555"),
 ]
 g.emit("13-dataloader-tick", 1000, 600, bands=bands, nodes=nodes, edges=edges, notes=notes)

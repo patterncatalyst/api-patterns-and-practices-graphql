@@ -66,5 +66,5 @@
 <text x="500.0" y="512.5" font-size="11.5" fill="#555555" text-anchor="middle">Quarkus: 200, Unparseable request</text>
 <text x="500.0" y="527.5" font-size="11.5" fill="#555555" text-anchor="middle">Python: 400, batching not enabled</text>
 <text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Five requests, each small next to the work it asks for</text>
-<text x="500" y="568" font-size="12" fill="#555555" text-anchor="middle">Every refused request makes 0 source calls. Sizes are the text of the query; costs use the formula of this chapter.</text>
+<text x="500" y="568" font-size="12" fill="#555555" text-anchor="middle">Every refused request makes 0 source calls. Sizes are the text of the query; costs use the cost formula.</text>
 </svg>

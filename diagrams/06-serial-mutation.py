@@ -39,6 +39,6 @@ edges = [
 notes = [
     dict(x=450, y=28, text="Top-level mutation fields run serially: b starts only after a, payload included, is complete", anchor="middle", bold=True),
     dict(x=round(X0 + 500 * SCALE) + 22, y=124, text="a is finished", size=11, color="#b8650a"),
-    dict(x=450, y=318, text="Schematic: each step is one 250 ms source call. Chapter 8 measures this on the running stacks.", anchor="middle", size=12, color="#555555"),
+    dict(x=450, y=318, text="Schematic: each step is one 250 ms source call. The running stacks measure it.", anchor="middle", size=12, color="#555555"),
 ]
 g.emit("06-serial-mutation", 900, 340, bands=bands, nodes=nodes, edges=edges, notes=notes)

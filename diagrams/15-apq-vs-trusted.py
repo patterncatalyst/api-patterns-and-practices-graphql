@@ -40,6 +40,6 @@ for (title, y), a, t in zip(rows, apq, trusted):
     nodes.append(dict(x=585, y=y, w=470, h=84, style="box" if title != "What an attacker can do" else "accent", lines=[title, t[0], t[1]]))
 notes = [
     dict(x=550, y=28, text="Two uses of the same hash: a bandwidth tool and an allowlist", anchor="middle", bold=True),
-    dict(x=550, y=494, text="APQ is not a security control. Trusted mode is one, and Chapter 14's limits remain the backstop.", anchor="middle", size=12, color="#555555"),
+    dict(x=550, y=494, text="APQ is not a security control. Trusted mode is one, and depth and cost limits remain the backstop.", anchor="middle", size=12, color="#555555"),
 ]
 g.emit("15-apq-vs-trusted", 1100, 520, bands=bands, nodes=nodes, edges=[], notes=notes)

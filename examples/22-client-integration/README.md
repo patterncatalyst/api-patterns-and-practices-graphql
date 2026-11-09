@@ -1,4 +1,4 @@
-# Ch22 - Client integration
+# Chapter 22: Client integration
 
 Three clients call the tracking view of Chapter 13: Apollo Client with a normalized cache and
 GraphQL Code Generator types (TypeScript on Node 24), `gql` with local schema validation (Python), and

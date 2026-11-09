@@ -1,4 +1,4 @@
-# Ch0 - Prerequisites SKELETON: Query.cargo (canned)
+# Chapter 0: Prerequisites SKELETON: Query.cargo (canned)
 
 The minimal both-stack skeleton that proves the toolchain works, before later
 chapters put real resolvers behind it. The contract is the only thing that

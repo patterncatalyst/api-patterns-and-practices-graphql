@@ -1,4 +1,4 @@
-# Ch11 - Evolution and versioning
+# Chapter 11: Evolution and versioning
 
 The tracking view's schema, changed the way a schema with clients has to change. The example serves
 `Itinerary.finalArrivalTime` beside `Itinerary.finalArrivalDate`, which is deprecated in its favour, on

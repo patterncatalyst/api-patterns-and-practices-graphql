@@ -40,6 +40,6 @@ edges = [
 ]
 notes = [
     dict(x=500, y=28, text="An HTTP dashboard sees one route; the operation name and the code are what tell requests apart", anchor="middle", bold=True),
-    dict(x=500, y=455, text="Counts are the nine named requests verify.sh sends to one stack. HTTP status stays 200 whether a response carries errors or not (Chapter 9).", anchor="middle", size=12, color="#555555"),
+    dict(x=500, y=455, text="Counts are the nine named requests verify.sh sends to one stack. HTTP status stays 200 whether a response carries errors or not.", anchor="middle", size=12, color="#555555"),
 ]
 g.emit("19-one-endpoint-blind-spot", 1000, 480, bands=bands, nodes=nodes, edges=edges, notes=notes)

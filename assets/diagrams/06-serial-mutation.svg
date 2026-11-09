@@ -23,5 +23,5 @@
 <path d="M500,110 L500,128" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
 <text x="450" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">Top-level mutation fields run serially: b starts only after a, payload included, is complete</text>
 <text x="522" y="124" font-size="11" fill="#b8650a" text-anchor="start">a is finished</text>
-<text x="450" y="318" font-size="12" fill="#555555" text-anchor="middle">Schematic: each step is one 250 ms source call. Chapter 8 measures this on the running stacks.</text>
+<text x="450" y="318" font-size="12" fill="#555555" text-anchor="middle">Schematic: each step is one 250 ms source call. The running stacks measure it.</text>
 </svg>

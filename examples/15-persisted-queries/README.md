@@ -1,4 +1,4 @@
-# Ch15 - Persisted queries and APQ
+# Chapter 15: Persisted queries and APQ
 
 Apollo's Automatic Persisted Queries (APQ) and trusted documents on both stacks. A client sends a
 SHA-256 hash in `extensions.persistedQuery` instead of the query text; the server resolves the hash,

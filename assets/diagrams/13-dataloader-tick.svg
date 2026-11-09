@@ -9,7 +9,7 @@
 <rect x="20" y="244" width="960" height="88" rx="12" fill="#fafafa" stroke="#ddd"/>
 <text x="32" y="264" font-size="12" font-weight="700" fill="#1d1d1d">voyage, location</text>
 <rect x="20" y="352" width="960" height="170" rx="12" fill="#ffffff" stroke="#ddd"/>
-<text x="32" y="372" font-size="12" font-weight="700" fill="#1d1d1d">Chapter 12 cargos</text>
+<text x="32" y="372" font-size="12" font-weight="700" fill="#1d1d1d">Per-cargo calls without a loader</text>
 <rect x="200" y="46" width="1" height="480" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
 <text x="200.5" y="291.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle"></text>
 <rect x="390" y="46" width="1" height="480" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5"/>
@@ -103,5 +103,5 @@
 <text x="960" y="544" font-size="11" fill="#555555" text-anchor="middle">1000 ms</text>
 <text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">One tick per batch: the loads queue, one dispatch, one bulk call, then the calls that depend on it</text>
 <text x="500" y="566" font-size="12" fill="#555555" text-anchor="middle">Solid bars: source-call log of one Python run of the four-cargo query. Thin ticks: load() calls queued before the dispatch.</text>
-<text x="500" y="584" font-size="12" fill="#555555" text-anchor="middle">Ghost bars, not measured: the four getCargo calls Chapter 12 made, drawn at the cargo level&#x27;s interval. Four calls instead of one.</text>
+<text x="500" y="584" font-size="12" fill="#555555" text-anchor="middle">Ghost bars, not measured: the four getCargo calls made without a loader, drawn at the cargo level&#x27;s interval. Four calls instead of one.</text>
 </svg>

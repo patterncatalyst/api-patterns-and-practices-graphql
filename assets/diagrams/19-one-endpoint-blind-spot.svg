@@ -44,5 +44,5 @@
 <path d="M750,305 L770,305" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
 <path d="M750,365 L770,365" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
 <text x="500" y="28" font-size="11" fill="#1d1d1d" text-anchor="middle" font-weight="700">An HTTP dashboard sees one route; the operation name and the code are what tell requests apart</text>
-<text x="500" y="455" font-size="12" fill="#555555" text-anchor="middle">Counts are the nine named requests verify.sh sends to one stack. HTTP status stays 200 whether a response carries errors or not (Chapter 9).</text>
+<text x="500" y="455" font-size="12" fill="#555555" text-anchor="middle">Counts are the nine named requests verify.sh sends to one stack. HTTP status stays 200 whether a response carries errors or not.</text>
 </svg>

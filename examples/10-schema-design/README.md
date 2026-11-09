@@ -1,4 +1,4 @@
-# Ch10 - Schema design patterns
+# Chapter 10: Schema design patterns
 
 The tracking view's schema, checked against its own conventions. The example adds one root field,
 `Query.nodes`, and proves each claim of the chapter against both stacks: every `Node` implementer

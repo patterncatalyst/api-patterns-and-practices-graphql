@@ -65,7 +65,7 @@ run_stack_check() {
     "$stack missing-argument error names trackingId"
   if json_field '.data' <<<"$resp" >/dev/null 2>&1 \
      && [[ "$(json_field '.data' <<<"$resp")" != "null" ]]; then
-    echo "lib.sh: FAIL — $stack: validation failure must not return data: $resp" >&2
+    echo "lib.sh: FAIL, $stack: validation failure must not return data: $resp" >&2
     return 1
   fi
 
@@ -74,7 +74,7 @@ run_stack_check() {
   assert_has_errors "$resp" "$stack TrackingId given a number"
   if json_field '.data' <<<"$resp" >/dev/null 2>&1 \
      && [[ "$(json_field '.data' <<<"$resp")" != "null" ]]; then
-    echo "lib.sh: FAIL — $stack: an invalid variable must not return data: $resp" >&2
+    echo "lib.sh: FAIL, $stack: an invalid variable must not return data: $resp" >&2
     return 1
   fi
 

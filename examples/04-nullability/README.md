@@ -1,6 +1,6 @@
-# Ch4 - Nullability and null propagation
+# Chapter 4: Nullability and null propagation
 
-The Ch3 slice of the tracking view, with the fields that cross a service boundary turned
+The Chapter 3 slice of the tracking view, with the fields that cross a service boundary turned
 into resolvers over sources, and three seeded cargos whose sources fail in three ways. The
 chapter explains what a failed or empty field does to the rest of the response, and this
 example proves it on the wire on both stacks.

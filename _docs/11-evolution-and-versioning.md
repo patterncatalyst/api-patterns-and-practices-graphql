@@ -2,8 +2,8 @@
 title: "Evolution and versioning"
 order: 11
 part: "Schema Evolution & the Living Contract"
-description: "How a GraphQL schema changes while clients depend on it: one schema without version numbers, safe, dangerous and breaking changes, nullability in both directions, the deprecation lifecycle on both stacks, and the breaking-change gate run on fixtures."
-duration: "15 min read"
+description: "How a GraphQL schema changes while clients depend on it: one schema without version numbers, safe, dangerous and breaking changes, nullability in both directions, deprecation on both stacks, and a breaking-change gate."
+duration: "10 min read"
 ---
 
 ## Learning objectives
@@ -12,107 +12,100 @@ By the end of this chapter you can:
 
 - Classify a schema change as safe, dangerous, or breaking using the GraphQL Inspector diff and know what each class costs clients.
 - Apply the opposite nullability rule to outputs and inputs: tightening an output is safe, tightening an input is breaking.
-- Run a field through the full deprecation lifecycle: add `finalArrivalTime`, deprecate `finalArrivalDate` with a reason, then remove it only with a sign-off.
+- Run a field through the deprecation lifecycle: add `finalArrivalTime`, deprecate `finalArrivalDate` with a reason, then remove it only with a sign-off.
 - Read `isDeprecated` and `deprecationReason` through introspection, and use `includeDeprecated` to see hidden fields.
-- Run `contracts/scripts/breaking.sh` against fixture schemas to see what a given edit costs before it ships.
+- Run `contracts/scripts/breaking.sh` against fixture schemas to see what an edit costs before it ships.
 
 ## Why this matters
 
-Ten chapters built a schema and served it. Every client that selects a field from it makes the same bet, that the field will still be there next year. The tracking view has clients nobody on the team has met: a dashboard, a mobile app, a partner's integration. Keeping that bet safe while the schema keeps changing is the subject here.
+Every client that selects a field makes the same bet: the field will still be there next year. The tracking view has clients nobody on the team has met, such as a dashboard, a mobile app and a partner's integration. The schema has to keep changing without losing that bet.
 
-The code is in `examples/11-evolution/`. It starts from the schema-design example and applies the one change the earlier chapters kept promising. `Itinerary.finalArrivalTime` joins the schema, and `Itinerary.finalArrivalDate` is deprecated in favour of it. Both stacks serve both fields, and `verify.sh` checks the deprecation through introspection. It then runs the breaking-change gate introduced with the contract-first conformance check, `contracts/scripts/breaking.sh`, against fixture copies of the contract, one edit per case, to show what each kind of change costs.
+The code adds `Itinerary.finalArrivalTime` and deprecates `Itinerary.finalArrivalDate` in favor of it. Both stacks serve both fields. The breaking-change gate then runs against fixture copies of the contract, one edit per case.
 
 ## One schema, many clients, no version numbers
 
-A REST API that must change in a way old clients cannot survive usually grows a second door, `/v2`, and keeps the first one open until the last client leaves. GraphQL has no equivalent need for most changes, because a client states exactly which fields it reads. A field the client never selected can appear, change or vanish without touching it. The server evolves one schema, continuously, and the contract is whatever the clients select.
+A REST API that must change in a way old clients can't survive usually grows a second door, `/v2`, and keeps the first open until the last client leaves. GraphQL rarely needs that, because a client states exactly which fields it reads. A field the client never selected can appear, change or vanish without touching it. The server evolves one schema continuously, and the contract is whatever the clients select.
 
-That turns the question around. The server does not ask "which version is this client on?" It asks "does any client still select this?" Three habits follow:
+The server stops asking "which version is this client on?" and asks "does any client still select this?" Three habits follow:
 
-- Add, do not change. A new field, a new optional argument or a new type costs existing clients nothing.
-- Deprecate before removing. A field marked deprecated keeps working and tells every tool that reads the schema to stop using it.
-- Remove only with evidence. A field leaves when nobody selects it, and the gate makes sure it is a recorded decision.
+- Add, don't change. A new field, a new optional argument or a new type costs existing clients nothing.
+- Deprecate before removing. A deprecated field keeps working and tells every tool that reads the schema to stop using it.
+- Remove only with evidence. A field leaves when nobody selects it, and the check makes that a recorded decision.
 
-Martin Kleppmann and Chris Riccomini's *Designing Data-Intensive Applications*, 2nd edition, names the compatibility directions in its treatment of how formats change over time. Backward compatibility means newer code can read data written by older code. Forward compatibility means older code can read data written by newer code. An API contract has both. A new server must keep answering the queries old clients send, which is backward compatibility, and a client built against a newer schema may reach a server that has not been upgraded yet during a rollout, which is the forward direction. Additive evolution with deprecation keeps both true without a version number.
+Martin Kleppmann and Chris Riccomini's *Designing Data-Intensive Applications*, 2nd edition, names the two compatibility directions. Backward compatibility means newer code reads data written by older code: a new server keeps answering old queries. Forward compatibility means older code reads data written by newer code: a client built against a newer schema may reach a server not yet upgraded during a rollout. Additive evolution with deprecation keeps both true.
 
-The slowest client sets the pace. A web client redeploys with the server, but a mobile app on a phone, or a partner's integration, may run a query written a year ago. Deprecation gives those clients a window, and the schema gives their authors a machine-readable reason to move: the generated types flag the field, and an editor strikes it through. The server keeps its side of the bargain by not deleting the field until the usage says the window can close.
+The slowest client sets the pace. A web client redeploys with the server, but a mobile app or a partner integration may run a query written a year ago. Deprecation gives them a window and a machine-readable reason to move: generated types flag the field and an editor strikes it through.
 
-A new endpoint is still justified in a few cases. The whole aggregation root changes, so that no old query can be answered by the new model. The authentication scheme changes for everyone. The transport changes. These are rewrites of the contract and not edits to it, and they should be rare enough to plan. Everything else in this chapter assumes one endpoint, one schema and a stream of small changes.
+A new endpoint is still justified when the whole aggregation root changes, when the authentication scheme changes for everyone, or when the transport changes. Those rewrite the contract rather than edit it.
 
 ## Safe, dangerous, breaking
 
-GraphQL Inspector sorts every change into one of three classes, from the point of view of a client of the old schema. Figure 11.1 lists one change in each class, with the line the tool prints for it and the result the gate gives.
+GraphQL Inspector sorts every change into one of three classes, from the point of view of a client of the old schema.
 
-{% include excalidraw.html file="11-change-classes" alt="Three columns list schema changes by class. The safe column, marked with a check, lists five changes: adding a field, adding an optional input field, tightening an output, deprecating a field and loosening an input. The dangerous column, marked with a warning sign, lists adding an enum value, adding an optional argument, adding a union member and making an existing type implement an interface. The breaking column, marked with a cross, lists removing a field, loosening an output, requiring an input, removing an enum value and removing a deprecated field. A box under each column gives the gate result: exit 0 for safe changes in both modes, exit 0 with a pull request warning for dangerous changes and exit 1 in strict mode, and exit 1 for breaking changes. A strip at the bottom shows that tightening an output and loosening an input are safe, while loosening an output and tightening an input are breaking." caption="Figure 11.1: Three classes of change. Each example is a fixture that verify.sh runs through the gate; the strip shows how nullability flips between outputs and inputs." %}
+{% include excalidraw.html file="11-change-classes" alt="Three columns list schema changes by class. The safe column, marked with a check, lists five changes: adding a field, adding an optional input field, tightening an output, deprecating a field and loosening an input. The dangerous column, marked with a warning sign, lists adding an enum value, adding an optional argument, adding a union member and making an existing type implement an interface. The breaking column, marked with a cross, lists removing a field, loosening an output, requiring an input, removing an enum value and removing a deprecated field. A box under each column gives the check result: exit 0 for safe changes in both modes, exit 0 with a pull request warning for dangerous changes and exit 1 in strict mode, and exit 1 for breaking changes. A strip at the bottom shows that tightening an output and loosening an input are safe, while loosening an output and tightening an input are breaking." caption="Figure 11.1: Three classes of change, with one example per class and how nullability flips between outputs and inputs." %}
 
-**Safe** changes cannot break any query that was valid before. A new field on `Location`, a new optional field on `RegisterHandlingEventInput`, and a newly deprecated field all print a check mark. The mutation chapter made `voyageNumber` and `idempotencyKey` optional from the start so that the input could grow this way.
+**Safe** changes can't break any query that was valid before. A new field on `Location`, a new optional field on `RegisterHandlingEventInput` and a newly deprecated field all print a check mark. `voyageNumber` and `idempotencyKey` are optional from the start so the input can grow this way.
 
-**Dangerous** changes keep every old query valid and can still break a client at run time. A new value in `HandlingEventType` is the case the type system warned about: a client with an exhaustive `switch` meets a value it has never seen. A new optional argument on `Query.cargos` is flagged for a different reason: old queries stay valid, but the resolver behind them has changed, and the tool cannot tell whether a query that omits the argument still gets the same result. Error handling's sketch of a result union expected the same risk in a new union member, and the tool agrees: adding `Voyage` to a union prints `⚠  Member Voyage was added to Union type SearchResult`. For interfaces the tool classifies by the type that changed. An existing type that starts to implement `Node` prints `⚠  Leg object implements Node interface`. A brand-new type that implements `Node` prints `✔  Type Vessel was added`; `Query.node` can return a `Vessel` from then on, and a client with no default branch meets it as it would a new union member, so reviewers treat a new implementer as a dangerous change.
+**Dangerous** changes keep every old query valid and can still break a client at run time:
 
-**Breaking** changes make some valid old query invalid or change its result type. Removing `Leg.unloadTime`, removing the enum value `UNKNOWN`, adding a required input field and loosening `Cargo.trackingId` from `TrackingId!` to `TrackingId` all print a cross and fail the gate.
+- A new value in `HandlingEventType` hits any client with an exhaustive `switch`.
+- A new optional argument on `Query.cargos` changes the resolver behind old queries, and the tool can't tell whether a query that omits it still gets the same result.
+- A new union member prints `⚠  Member Voyage was added to Union type SearchResult`, and a client with no default branch meets a type it has never seen.
+- An existing type that starts to implement `Node` prints `⚠  Leg object implements Node interface`. A brand-new type that implements `Node` prints only `✔  Type Vessel was added`, but `Query.node` can now return it, so reviewers treat a new implementer as dangerous.
 
-The classes describe risk, not correctness. A dangerous change is often the right one: a handling event type for transshipment is a real requirement. The class tells reviewers where to look, and the next sections show how this chapter's gate treats each class.
+**Breaking** changes make some valid old query invalid or change its result type. Removing `Leg.unloadTime`, removing the enum value `UNKNOWN`, adding a required input field and loosening `Cargo.trackingId` from `TrackingId!` to `TrackingId` all print a cross and fail the check.
+
+The classes describe risk, not correctness. A dangerous change is often the right one: a transshipment event type is a real requirement. The class tells reviewers where to look.
 
 ## Nullability cuts both ways
 
-Nullability propagation made nullability a promise, and promises change in two directions. For an output field, the server promises a value, so tightening is safe and loosening is not. For an input field, the client promises a value, so the rule flips. The fixtures cover all four moves, each with the line the tool printed:
+For an output field the server promises a value, so tightening is safe and loosening is not. For an input field the client promises a value, so the rule flips.
 
-| Move | Fixture edit | Class | Printed |
+| Move | Edit | Class | Printed |
 |---|---|---|---|
 | Output tightened | `itinerary: Itinerary` to `Itinerary!` on `Cargo` | safe | `✔  Field Cargo.itinerary changed type from Itinerary to Itinerary!` |
 | Output loosened | `trackingId: TrackingId!` to `TrackingId` on `Cargo` | breaking | `✖  Field Cargo.trackingId changed type from TrackingId! to TrackingId` |
 | Input tightened | `voyageNumber: String` to `String!` | breaking | `✖  Input field RegisterHandlingEventInput.voyageNumber changed type from String to String!` |
 | Input loosened | `completionTime: DateTime!` to `DateTime` | safe | `✔  Input field RegisterHandlingEventInput.completionTime changed type from DateTime! to DateTime` |
 
-A client written for a nullable output already handles a value, so a non-null promise costs it nothing. A client written for a non-null output has no code for `null`, so loosening it breaks the client. A new required input field breaks every caller that does not send it, and the same holds for tightening an optional one.
+A client written for a nullable output already handles a value, so a non-null promise costs it nothing. A client written for a non-null output has no code for `null`. A new required input field breaks every caller that doesn't send it, and so does tightening an optional one.
 
-The first row has a catch, and the contract-first conformance check set it up. The gate says a tightened output is safe, and for clients it is, but for the server it removes the fuse. With `itinerary: Itinerary!` a routing outage on one cargo no longer costs one field. The `null` travels up to `Query.cargo`, and the client loses the whole cargo. That is the failure nullability propagation designed `Cargo.itinerary` to avoid, and the breaking gate cannot see it, because the tool classifies the change by what clients can write and not by what the server can survive. The contract-first conformance check does see it, because it diffs each stack against the contract in both directions. The two checks answer different questions, and the contract needs both.
+The first row has a catch. Tightening is safe for clients, but for the server it removes the fuse. With `itinerary: Itinerary!`, a routing outage on one cargo no longer costs one field: the `null` travels up to `Query.cargo` and the client loses the whole cargo. The check classifies the change by what clients can write, not by what the server can survive, so it can't see this. A conformance check that diffs each stack against the contract in both directions does. The two checks answer different questions, and the contract needs both.
 
-## The deprecation path, live
+## The deprecation lifecycle
 
-The correction that schema design left open is now in the contract:
-
-```graphql
-"""When the final leg arrives."""
-finalArrivalTime: DateTime!
-"""When the final leg arrives."""
-finalArrivalDate: DateTime! @deprecated(reason: "Use `finalArrivalTime`.")
-```
-
-The change takes three steps in the order the lifecycle demands. First, the replacement is added, so that clients can move before anything is taken away. Second, the old field is marked `@deprecated` with a reason that names the replacement. Third, the old field stays fully functional. Both stacks answer one query with the same instant in both fields, and the response carries no warning about the deprecated one:
+The contract now carries the replacement and the deprecated original:
 
 ```graphql
-{ cargo(trackingId: "ABC123") { itinerary { finalArrivalTime finalArrivalDate } } }
+  """When the final leg arrives."""
+  finalArrivalTime: DateTime!
+  """When the final leg arrives."""
+  finalArrivalDate: DateTime! @deprecated(reason: "Use `finalArrivalTime`.")
 ```
 
-`verify.sh` asserts both values are `2026-10-11T18:00:00Z`, that the response has no `errors` and no mention of deprecation, and that a query selecting only `finalArrivalDate` is served as before. A deprecated field is a signal to tools and humans, and not a behaviour change. `Cargo.delivery` now reads the arrival from `finalArrivalTime`, and `estimatedTimeOfArrival` still returns the same value.
+The order matters: add the replacement so clients can move, mark the old field `@deprecated` with a reason that names the replacement, and keep the old field fully functional. Both fields return the same instant, and the response carries no warning. A deprecated field is a signal to tools and humans, not a behavior change.
 
-The signal travels through introspection. The September 2025 edition of the GraphQL specification defines the `@deprecated` directive, with a `reason` that defaults to "No longer supported", and describes in "Schema Introspection" how `__Field` reports `isDeprecated` and `deprecationReason`. It also defines a hiding rule: the `fields` selection on `__Type` takes `includeDeprecated`, which is false unless a client asks for it. So a code generator or an editor that lists fields shows only the supported ones, and a client that wants the whole history can ask:
+The signal travels through introspection. The GraphQL specification defines `@deprecated` with a `reason` that defaults to "No longer supported", and `__Field` reports `isDeprecated` and `deprecationReason`. The `fields` selection on `__Type` takes `includeDeprecated`, false unless a client asks, so code generators and editors list only supported fields. A client that wants the whole history asks for it:
 
 ```graphql
 { __type(name: "Itinerary") { fields(includeDeprecated: true) { name isDeprecated deprecationReason } } }
 ```
 
-`verify.sh` asserts, on both stacks, that `fields` returns `finalArrivalTime` and `legs` and no `finalArrivalDate`, that `fields(includeDeprecated: false)` returns the same, and that `fields(includeDeprecated: true)` adds it. `assert_deprecated` checks that `isDeprecated` is true and that the reason equals ``Use `finalArrivalTime`.`` exactly. `assert_not_deprecated` checks the replacement. A third assertion walks every type and counts the deprecated elements across fields, arguments, input fields and enum values: the only one in the schema is `Itinerary.finalArrivalDate`.
+The reason string is what a client author reads. Name the replacement and nothing else; "legacy" gives no direction.
 
-The reason string is the part a client author reads, so it should name the replacement and nothing else. A reason like "legacy" gives no direction.
+{% include excalidraw.html file="11-deprecation-lifecycle" alt="A four-step timeline runs left to right across three rows. The change row shows adding the replacement finalArrivalTime, deprecating finalArrivalDate with a reason, observing usage through operation telemetry, and removing the field with a sign-off. The check row shows the check output for each step: a check mark for the added field, a check mark for the deprecated field, no schema change for the observation step, and a cross reporting that the deprecated field was removed, with exit 1 by default and a warning with exit 0 when the sign-off rule is set. The clients row shows existing clients unchanged, both fields executing with the old one hidden from fields by default, clients migrating on their own schedule, and a client that still selects the old field failing validation." caption="Figure 11.2: The deprecation lifecycle. Each step has a gate line, and the last step is a recorded decision, not a side effect." %}
 
-## Removing a field with a sign-off
+The first two steps ship together, and the check reports them as `✔  Field Itinerary.finalArrivalDate is deprecated` and `✔  Field finalArrivalTime was added to object type Itinerary`. Then comes the waiting: operation-level telemetry shows which clients still select `finalArrivalDate`, and until that count is zero the field stays.
 
-Deprecation without removal is a note nobody acts on, and removal without evidence is an outage. Figure 11.2 shows the whole lifecycle with the gate's output at each step.
+Removal fails by default with a message that says what was deleted: `✖  Field finalArrivalDate (deprecated) was removed from object type Itinerary`. Deleting a deprecated field is still breaking for any client that never moved, so the check doesn't relax because the field was marked. A pull request that removes it after the usage evidence is in sets the `suppressRemovalOfDeprecatedField` rule. The same line then prints with a warning sign and the check exits 0. The rule is a sign-off recorded in the pull request, not a default.
 
-{% include excalidraw.html file="11-deprecation-lifecycle" alt="A four-step timeline runs left to right across three rows. The change row shows adding the replacement finalArrivalTime, deprecating finalArrivalDate with a reason, observing usage through operation telemetry, and removing the field with a sign-off. The gate row shows the real output for each step: a check mark for the added field, a check mark for the deprecated field, no schema change for the observation step, and a cross reporting that the deprecated field was removed, with exit 1 by default and a warning with exit 0 when the sign-off rule is set. The clients row shows existing clients unchanged, both fields executing with the old one hidden from fields by default, clients migrating on their own schedule, and a client that still selects the old field failing validation." caption="Figure 11.2: The deprecation lifecycle. Each step has a gate line from a real run, and the last step is a decision and not a side effect." %}
+A client that selects the removed field fails validation: the response is an error that names the field, with no `data`.
 
-The first two steps ship together in this chapter, and the gate reports them as one change: `✔  Field Itinerary.finalArrivalDate is deprecated` and `✔  Field finalArrivalTime was added to object type Itinerary`. Then comes the waiting. Operation-level telemetry, built later, shows which clients still select `finalArrivalDate`. Until that count is zero, the field stays.
+## Running the check
 
-Removal fails by default, with a message that says what was deleted: `✖  Field finalArrivalDate (deprecated) was removed from object type Itinerary`. That failure is intended. Deleting a deprecated field is still a breaking change for any client that never moved, so the gate does not relax because the field was marked. A pull request that removes it after the usage evidence is in can say so by setting the `suppressRemovalOfDeprecatedField` rule. The same line then prints with a warning sign, `⚠  Field finalArrivalDate (deprecated) was removed from object type Itinerary`, and the gate exits 0. The rule is a sign-off recorded in the pull request, not a default.
+`contracts/scripts/breaking.sh`, also available as `npm --prefix contracts run breaking`, compares the working tree's `contracts/schema/**/*.graphql` with the same files on a base ref, `origin/main` by default. It runs `graphql-inspector diff` and exits 0 for a pass, 1 for a breaking change, and 2 when the base ref doesn't resolve, so a missing fetch can't pass by accident. When the base ref holds no `.graphql` files, as on the pull request that first adds the contract, it prints `no baseline schema on origin/main yet - skipping breaking check (first introduction)` and exits 0.
 
-A client that selects the removed field after the removal fails validation, and the request returns no data. `verify.sh` checks that failure shape with a field the schema does not have, `finalArrivalDay`: an error naming it, and no `data`.
-
-## Running the gate
-
-`contracts/scripts/breaking.sh`, available as `npm --prefix contracts run breaking`, compares the working tree's `contracts/schema/**/*.graphql` with the same files on a base ref, `origin/main` by default. It extracts the base with `git archive`, runs `graphql-inspector diff` between the two and exits with the tool's code, 0 for a pass and 1 for a breaking change, or with 2 when the base ref does not resolve.
-
-When the base ref holds no `.graphql` files under `contracts/schema`, as on the pull request that first adds the contract, the script prints `no baseline schema on origin/main yet - skipping breaking check (first introduction)` and exits 0. A base ref that does not resolve exits 2 instead, so a missing fetch cannot pass by accident. To show each kind of change without a commit per case, this chapter runs the gate on fixture directories. Three environment variables make that possible:
+Three environment variables test the check without a commit per case:
 
 | Variable | Effect |
 |---|---|
@@ -120,9 +113,7 @@ When the base ref holds no `.graphql` files under `contracts/schema`, as on the 
 | `NEW_DIR=<dir>` | Use a directory as the new side instead of the working tree |
 | `BREAKING_RULES=<list>` | Pass each comma-separated name to the tool as a `--rule` |
 
-Once a baseline exists on `main`, every later change to the contract is diffed against it with no fixtures involved, and these variables remain the way to test the gate itself.
-
-`verify.sh` builds each fixture the same way. It copies `contracts/schema` into a base directory and a new directory, applies one textual edit to the new side and runs `assert_gate`, which passes only when the exit code and a needle from the tool's output both match. The edit is a replacement that must match exactly once:
+Each fixture copies the contract into a base and a new directory, applies one textual edit to the new side, and passes only when both the exit code and the full change line, including its check, warning or cross mark, match. The edit must match exactly once: an edit that silently did nothing would report "no changes" and pass a case that expected a failure.
 
 ```bash
 edit() {
@@ -134,33 +125,28 @@ text = open(path, encoding="utf-8").read()
 if text.count(old) != 1:
     sys.exit("fixture did not apply: %d occurrences in %s of %r" % (text.count(old), path, old))
 open(path, "w", encoding="utf-8").write(text.replace(old, new))
-' "$@" || { echo "lib.sh: FAIL — fixture did not apply: $1" >&2; return 1; }
+' "$@" || { echo "lib.sh: FAIL, fixture did not apply: $1" >&2; return 1; }
 }
 ```
 
-The guard matters. A fixture whose edit silently did nothing would report "no changes" and pass a case that expected a failure. The needles are full change lines, including the check, warning or cross mark, so the test pins the classification as well as the exit code. The cases run once, after both stack checks, and not per stack, because the contract is the same for both.
+### Should dangerous changes fail?
 
-## Should dangerous changes fail?
+The default gate fails only on breaking changes. An added enum value or optional argument is routine evolution, and a gate that blocks it teaches teams to avoid the evolution GraphQL makes cheap, or to switch the check off. The warning still has to be seen: with `GITHUB_ACTIONS=true` the script echoes each warning line as `::warning title=Dangerous schema change::<line>`, which GitHub shows as an annotation on the pull request without failing the job.
 
-The default gate fails only on breaking changes. A dangerous change exits 0, and the result is a decision for the reviewer, not a red build. An added enum value or an added optional argument is routine evolution. A gate that blocks it teaches teams to avoid the evolution that GraphQL makes cheap, or to switch the gate off.
+A public API with generated clients can run strict mode, `BREAKING_RULES=dangerousBreaking`. The enum-value fixture then prints `✖  Enum value TRANSSHIP was added to enum HandlingEventType` and exits 1. Strict mode changes the verdict, not the schema.
 
-The warning still has to be seen. When the script runs with `GITHUB_ACTIONS=true`, it echoes each warning-marked line as `::warning title=Dangerous schema change::<line>`, which GitHub shows as an annotation on the pull request without failing the job. `verify.sh` runs the enum-value fixture with that variable set and asserts three facts: exit 0, the annotation prefix, and the change line inside the annotation.
+### What the check cannot see
 
-Teams that cannot tolerate that risk, such as a public API with generated clients, can run the strict mode, `BREAKING_RULES=dangerousBreaking`. The same enum-value fixture then prints `✖  Enum value TRANSSHIP was added to enum HandlingEventType` and exits 1. Strict mode changes the verdict and the marker, and it leaves the schema alone.
+A diff sees structure. Four things sit outside it:
 
-## What the gate cannot see
+| Blind spot | Why | Cover it with |
+|---|---|---|
+| Behavior | A field that keeps its name and type but returns a different value, such as local time becoming UTC, produces no diff | A new field through the lifecycle above, and tests that assert values |
+| Default values | The check sees a default only as text, and what an omitted argument means to the resolver is invisible | Tests on how the resolver treats an omitted argument |
+| Error codes | `extensions.code` values live in the response, not the SDL | Documentation and tests; they follow the enum rules, so a client with a default branch survives a new code |
+| Deprecation state | Removing `@deprecated` is a safe change, so a stack that forgot the directive still conforms (the check prints `✔  Field Itinerary.finalArrivalDate is no longer deprecated`) | An explicit assertion on `isDeprecated` per stack |
 
-A diff of two schemas sees structure. Several things that matter during evolution sit outside it.
-
-**Behaviour.** A field that keeps its name and type and starts returning a different value, such as an arrival time that moves from local time to UTC, is invisible. No schema diff catches it. Behavioural changes need a new field, which the lifecycle above already provides, and tests in the example that assert values.
-
-**Default values.** The gate sees a default only as text: adding one is dangerous and passes, as the contract-first conformance check showed. What an omitted argument means to the resolver is invisible, so a server that starts treating a missing `first` differently changes every caller with no line in the diff. Conformance does not catch a stray default either, because `assert_sdl_conforms` looks only at breaking lines and descriptions.
-
-**Error codes.** The `extensions.code` values from error handling live in the response, not in the SDL, so no schema diff sees a new code. They follow the enum rules anyway: a client with a default branch survives a new code, and one without it does not. The contract for codes has to be kept in the documentation and in tests.
-
-**Deprecation state in conformance.** `assert_sdl_conforms` fails on breaking changes and on description changes. Removing `@deprecated` is a safe change, so a stack that forgot the deprecation would still conform. `verify.sh` proves that with a fixture: a copy of the contract without the directive prints `✔  Field Itinerary.finalArrivalDate is no longer deprecated`, and `assert_sdl_conforms` passes against it. That is why the earlier error-handling and schema-design examples can serve `finalArrivalDate` without the directive and still conform, and why this chapter's example calls `assert_deprecated` and `assert_not_deprecated` for each stack. Where a state matters and the structural check ignores it, an explicit assertion covers it.
-
-## Evolving the two stacks
+## How Quarkus and Python model it
 
 Both stacks are code-first, so the deprecation is a line of code in each, and the contract is the yardstick that checks it.
 
@@ -191,30 +177,34 @@ class Itinerary:
     )
 ```
 
-Strawberry takes the reason as a keyword argument, `deprecation_reason`, and introspection reports it with no further work. SmallRye GraphQL offers its own annotation, `io.smallrye.graphql.api.Deprecated` with a `reason`. The reason is written once, on the record component, and `ContractSchemaDetails`, the schema observer the examples already use, applies it to the schema with graphql-java's `deprecate(reason)`. `java.lang.Deprecated` carries no reason, so the example uses the SmallRye annotation:
+Strawberry takes the reason as a keyword argument, `deprecation_reason`, and introspection reports it with no further work. SmallRye GraphQL has its own annotation, `io.smallrye.graphql.api.Deprecated`, with a `reason`; `java.lang.Deprecated` carries no reason. The reason is written once on the record component, and the schema observer `ContractSchemaDetails` applies it with graphql-java's `deprecate(reason)`:
 
 ```java
-String reason = annotatedDeprecationReason(node);
-if (!stripSuffix && reason == null) {
-    return TraversalControl.CONTINUE;
-}
-return changeNode(context, node.transform(field -> {
-    if (stripSuffix) {
-        field.description(description.substring(0, description.length() - ISO_SUFFIX.length()));
-    }
-    if (reason != null) {
-        field.deprecate(reason);
-    }
-}));
+                String reason = annotatedDeprecationReason(node);
+                if (!stripSuffix && reason == null) {
+                    return TraversalControl.CONTINUE;
+                }
+                return changeNode(context, node.transform(field -> {
+                    if (stripSuffix) {
+                        field.description(description.substring(0, description.length() - ISO_SUFFIX.length()));
+                    }
+                    if (reason != null) {
+                        field.deprecate(reason);
+                    }
+                }));
 ```
 
-The annotation stays the one place a developer writes the reason, and the observer reads it from there. The same observer trims the generated ` (ISO-8601)` suffix from date descriptions, which keeps the description of the new `finalArrivalTime` equal to the contract's. The two stacks return `fields` in different orders, so `verify.sh` sorts the names before comparing.
+The same observer trims the generated ` (ISO-8601)` suffix from date descriptions, which keeps the description of `finalArrivalTime` equal to the contract's.
 
-Nothing else in the stacks changed from the schema-design example. `verify.sh` still runs the scalar checks and the conformance diff on both stacks.
+> **🤖 Explore with your agent**
+>
+> "In `examples/11-evolution`, add an optional `timeZone: String` field to `Location` in `contracts/schema/shipping/` and on both stacks, then sketch the removal of `Itinerary.finalArrivalDate`. Classify each edit as safe, dangerous or breaking, say which one the default gate fails and what sign-off lets it through, and keep the deprecation reason naming `finalArrivalTime`."
+>
+> Check: copy `contracts/schema` to a base directory before editing, then run `BASE_DIR=<base>/schema NEW_DIR=contracts/schema bash contracts/scripts/breaking.sh`: it exits 0 with `✔  Field timeZone was added to object type Location`.
 
-## On the wire
+## Build, run, observe
 
-Start the stack and ask Quarkus, on port 8210, for both fields. Use 8211 for Python.
+Start the stack. Quarkus listens on port 8210 and Python on 8211.
 
 ```bash
 docker compose -f examples/11-evolution/compose.yaml up -d --build
@@ -230,7 +220,7 @@ gql '{"query":"{ __type(name: \"Itinerary\") { fields(includeDeprecated: true) {
 {"data":{"__type":{"fields":[{"name":"finalArrivalDate","isDeprecated":true,"deprecationReason":"Use `finalArrivalTime`."},{"name":"legs","isDeprecated":false,"deprecationReason":null},{"name":"finalArrivalTime","isDeprecated":false,"deprecationReason":null}]}}}
 ```
 
-Then run the gate on two copies of the contract, the second without the deprecated field, and again with the sign-off rule:
+Then run the check on two copies of the contract, the second without the deprecated field, and again with the sign-off rule:
 
 ```bash
 mkdir -p /tmp/old /tmp/new && cp -r contracts/schema /tmp/old/ && cp -r contracts/schema /tmp/new/
@@ -246,65 +236,26 @@ BASE_DIR=/tmp/old/schema NEW_DIR=/tmp/new/schema BREAKING_RULES=suppressRemovalO
 [success] No breaking changes detected
 ```
 
-The first command exits 1 and the second exits 0. `bash examples/11-evolution/verify.sh` runs the checks below on both stacks and then the gate cases:
+The first command exits 1 and the second exits 0.
 
-| Check | Expected |
-|---|---|
-| `itinerary { finalArrivalTime finalArrivalDate }` for `ABC123` | both `2026-10-11T18:00:00Z`; no `errors`; no mention of deprecation in the response |
-| `itinerary { finalArrivalDate }` alone; `delivery { estimatedTimeOfArrival }` | `2026-10-11T18:00:00Z` for both |
-| `Itinerary.finalArrivalDate` in introspection | `isDeprecated` true, reason ``Use `finalArrivalTime`.`` |
-| `Itinerary.finalArrivalTime` | `isDeprecated` false |
-| every deprecated element in the schema | exactly `Itinerary.finalArrivalDate` |
-| `fields`, `fields(includeDeprecated: false)` | `finalArrivalTime`, `legs` |
-| `fields(includeDeprecated: true)` | `finalArrivalDate`, `finalArrivalTime`, `legs` |
-| a selection the schema lacks, `finalArrivalDay` | an error naming the field; no `data` |
-| scalars `TrackingId`, `UnLocode`, `DateTime` | `SCALAR`; `specifiedByURL` null, the UNECE page, RFC 3339 |
-| live schema vs `contracts/schema/` | conforms (slice) |
-| `npm --prefix contracts run lint` | exit 0 |
-| no change | exit 0, `No changes detected` |
-| the real change: base without `finalArrivalTime` and `@deprecated` | exit 0, `✔  Field Itinerary.finalArrivalDate is deprecated` and `✔  Field finalArrivalTime was added to object type Itinerary` |
-| safe: `timeZone: String` added to `Location` | exit 0, `✔  Field timeZone was added to object type Location` |
-| the same edit with `dangerousBreaking` | exit 0, `✔  Field timeZone was added to object type Location` |
-| safe: optional `operatorId: String` on the input | exit 0, `✔  Input field operatorId of type String was added to input object type RegisterHandlingEventInput` |
-| safe: `itinerary: Itinerary!` | exit 0, `✔  Field Cargo.itinerary changed type from Itinerary to Itinerary!` |
-| safe: `completionTime: DateTime` on the input | exit 0, `✔  Input field RegisterHandlingEventInput.completionTime changed type from DateTime! to DateTime` |
-| dangerous: `TRANSSHIP` added to `HandlingEventType` | exit 0, `⚠  Enum value TRANSSHIP was added to enum HandlingEventType`; with `GITHUB_ACTIONS=true` also a `::warning` annotation |
-| the same edit with `dangerousBreaking` | exit 1, `✖  Enum value TRANSSHIP was added to enum HandlingEventType` |
-| dangerous: optional `destination: UnLocode` on `Query.cargos` | exit 0, `⚠  Argument destination: UnLocode added to field Query.cargos` |
-| dangerous: `Voyage` added to a union | exit 0, `⚠  Member Voyage was added to Union type SearchResult` |
-| dangerous: `Leg` implements `Node` | exit 0, `⚠  Leg object implements Node interface` |
-| safe: a new type `Vessel` implements `Node` | exit 0, `✔  Type Vessel was added` |
-| breaking: `Leg.unloadTime` removed | exit 1, `✖  Field unloadTime was removed from object type Leg` |
-| breaking: `trackingId: TrackingId` on `Cargo` | exit 1, `✖  Field Cargo.trackingId changed type from TrackingId! to TrackingId` |
-| breaking: `voyageNumber: String!` on the input | exit 1, `✖  Input field RegisterHandlingEventInput.voyageNumber changed type from String to String!` |
-| breaking: required `operatorId: String!` | exit 1, `✖  Input field operatorId of type String! was added to input object type RegisterHandlingEventInput` |
-| breaking: `UNKNOWN` removed from `TransportStatus` | exit 1, `✖  Enum value UNKNOWN was removed from enum TransportStatus` |
-| lifecycle: `finalArrivalDate` removed | exit 1, `✖  Field finalArrivalDate (deprecated) was removed from object type Itinerary` |
-| the same with `suppressRemovalOfDeprecatedField` | exit 0, `⚠  Field finalArrivalDate (deprecated) was removed from object type Itinerary` |
-| a copy of the contract without `@deprecated` | gate exit 0, `✔  Field Itinerary.finalArrivalDate is no longer deprecated`; `assert_sdl_conforms` passes |
+`bash examples/11-evolution/verify.sh` runs the checks on both stacks and then every gate case. It passes when both fields return the same instant with no deprecation warning, introspection reports the one deprecated element in the schema, and each fixture's exit code and change line match its class.
 
-<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Evolution is where the <em>contract and evolution style</em> axis of the decision framework is paid for or collected. One schema with additive changes, deprecation with a reason and a gate on removals replaces version numbers, and the cost moves from clients, who never need to upgrade, to the team, which has to watch usage before it deletes anything. The <em>client diversity and shape variance</em> axis is why: with clients nobody on the team has met, a field cannot be removed on a guess. The <em>team ownership and federation</em> axis shows in who signs off: the gate is a file in the repository that every owning team can read and every pull request runs through. The <em>operational and security cost</em> axis registers a small recurring charge, a pinned diff tool and a policy for dangerous changes. The tracking view uses one endpoint, deprecates <code>finalArrivalDate</code> in favour of <code>finalArrivalTime</code> on both stacks, fails the default gate on breaking changes only, annotates dangerous ones on the pull request and keeps <code>dangerousBreaking</code> for teams that want it.</p></div>
+Experiments:
 
-## Review
+- Remove `finalArrivalDate` from a fixture copy of the contract: the check exits 1 until `suppressRemovalOfDeprecatedField` is set.
+- Change `trackingId: TrackingId!` to `TrackingId` on `Cargo`: breaking, exit 1.
+- Change `voyageNumber: String` to `String!` on the input: breaking, exit 1.
+- Add `TRANSSHIP` to `HandlingEventType`: exit 0 with a warning, and exit 1 under `dangerousBreaking`.
+- Add an optional `destination: UnLocode` argument to `Query.cargos`: dangerous, exit 0.
 
-- The GraphQL Inspector diff classifies a schema change as safe, dangerous, or breaking, and each class costs clients differently.
-- Nullability runs opposite directions for outputs and inputs: tightening an output is safe, while tightening an input is breaking.
-- `Itinerary.finalArrivalTime` ran through the full deprecation lifecycle: added, with `finalArrivalDate` deprecated with a reason, leaving removal for later with a sign-off.
-- Introspection reports `isDeprecated` and `deprecationReason` through `__Field`, and `includeDeprecated` reveals fields hidden by default.
-- `contracts/scripts/breaking.sh` run against fixture schemas shows what a given edit costs before it ships.
-
-## Where this goes next
-
-This chapter classified changes as safe, dangerous or breaking, followed nullability in both directions, deprecated a field live on both stacks and ran the breaking gate on fixtures, from no change to a field removed outright. The usage evidence that step three of the lifecycle depends on comes from operation telemetry, built later.
-
-The next example starts from the error-handling example and carries `nodes` and this chapter's deprecation forward, then builds the Relay connection that `handlingHistory` has been waiting for. DataLoader batching collapses the source calls counted by the resolver and schema-design chapters.
-
-For the formal definitions, read "Field Deprecation", "@deprecated" and "Schema Introspection" in the [GraphQL specification](https://spec.graphql.org/). The diff rules and their names are in the [GraphQL Inspector](https://the-guild.dev/graphql/inspector/docs) documentation. Martin Kleppmann and Chris Riccomini's *Designing Data-Intensive Applications*, 2nd edition, covers backward and forward compatibility, and it is listed on the [Bibliography](../../bibliography/) page together with Artur Czemiel's *GraphQL Best Practices*, which covers schema design more broadly.
+> **Decision**
+>
+> Evolution is where the contract and evolution style axis of the decision framework is paid for. One schema with additive changes, deprecation with a reason and a gate on removals replaces version numbers, and the cost moves from clients, who never need to upgrade, to the team, which has to watch usage before it deletes anything. With clients nobody on the team has met, a field can't be removed on a guess. The check is a file in the repository that every owning team can read and every pull request runs through. The tracking view uses one endpoint, deprecates `finalArrivalDate` in favor of `finalArrivalTime` on both stacks, fails the default gate on breaking changes only, annotates dangerous ones on the pull request and keeps `dangerousBreaking` for teams that want it.
 
 ## For deeper coverage
 
 - [GraphQL specification: Field Deprecation, @deprecated, Schema Introspection](https://spec.graphql.org/).
-- [GraphQL Inspector documentation](https://the-guild.dev/graphql/inspector/docs): the diff rules and change classes (safe/dangerous/breaking) this chapter's gate runs.
-- Martin Kleppmann & Chris Riccomini, *Designing Data-Intensive Applications*, 2nd ed. (O'Reilly, 2026): backward and forward compatibility.
+- [GraphQL Inspector documentation](https://the-guild.dev/graphql/inspector/docs): the diff rules and change classes (safe, dangerous, breaking) the check runs.
+- Martin Kleppmann & Chris Riccomini, *Designing Data-Intensive Applications*, 2nd ed. (O'Reilly, 2026): backward and forward compatibility. Listed on the [Bibliography](../../bibliography/) page.
 - Artur Czemiel, *GraphQL Best Practices* (Packt, 2024): schema design and evolution more broadly.
-- *Cloud Native Design Patterns*, "Versioning & Evolution" (Appendix B): the wider evolution patterns this chapter's deprecation lifecycle is one instance of.
+- *Cloud Native Design Patterns*, "Versioning & Evolution" (Appendix B): the wider evolution patterns this deprecation lifecycle is one instance of.

@@ -93,11 +93,11 @@ run_suite() {
   local service="$1" dir="$SCRATCH/$2" out
   mkdir -m 0777 "$dir"
   if ! out="$(compose_run -v "$dir:/out:z" "$service" 2>&1)"; then
-    echo "lib.sh: FAIL — $service exited non-zero:" >&2
+    echo "lib.sh: FAIL, $service exited non-zero:" >&2
     echo "$out" | tail -60 >&2
     return 1
   fi
-  echo "lib.sh: ok — $service passed" >&2
+  echo "lib.sh: ok, $service passed" >&2
 }
 
 # run_load <stack> <run> — one k6 run against the stack on the compose network;
@@ -106,7 +106,7 @@ run_load() {
   local stack="$1" run="$2" out
   if ! out="$(compose_run -e "TARGET=http://$stack:8080/graphql" -e "RUN=$run" -e "STACK=$stack" \
       load run --quiet /scripts/tracking.js 2>"$SCRATCH/k6.err")"; then
-    echo "lib.sh: FAIL — k6 run '$run' on $stack exited non-zero:" >&2
+    echo "lib.sh: FAIL, k6 run '$run' on $stack exited non-zero:" >&2
     tail -30 "$SCRATCH/k6.err" >&2
     echo "$out" | tail -5 >&2
     return 1
@@ -122,7 +122,7 @@ expect_summary() {
   assert_eq "1" "$(json_field '.checks.rate' <<<"$summary")" "$ctx: every check true"
   assert_eq "0" "$(json_field '.checks.fails' <<<"$summary")" "$ctx: no check failed"
   assert_eq "0" "$(json_field '.http_req_failed' <<<"$summary")" "$ctx: no transport failure"
-  echo "lib.sh: info — $ctx: latency median $(json_field '.latency_ms.med' <<<"$summary") ms, p95 $(json_field '.latency_ms.p95' <<<"$summary") ms (reported, not asserted)" >&2
+  echo "lib.sh: info, $ctx: latency median $(json_field '.latency_ms.med' <<<"$summary") ms, p95 $(json_field '.latency_ms.p95' <<<"$summary") ms (reported, not asserted)" >&2
 }
 
 # request_shapes <calls-json> — "<count> <sorted entries>" per distinct set of
@@ -144,13 +144,13 @@ for shape, n in sorted(shapes.items(), key=lambda kv: (-kv[1], kv[0])):
 echo "=== Step 1: client documents ==="
 ensure_contracts_tools
 
-why="$(same_operations)" || { echo "lib.sh: FAIL — documents/ against Chapter 22: $why" >&2; exit 1; }
-echo "lib.sh: ok — documents/ holds Chapter 22's four operations, text for text" >&2
+why="$(same_operations)" || { echo "lib.sh: FAIL, documents/ against Chapter 22: $why" >&2; exit 1; }
+echo "lib.sh: ok, documents/ holds Chapter 22's four operations, text for text" >&2
 if ! cmp -s "$CH22_FIXTURE" "$DOCS/fixtures/cargo-weight.graphql"; then
-  echo "lib.sh: FAIL — documents/fixtures/cargo-weight.graphql differs from Chapter 22's fixture" >&2
+  echo "lib.sh: FAIL, documents/fixtures/cargo-weight.graphql differs from Chapter 22's fixture" >&2
   exit 1
 fi
-echo "lib.sh: ok — the cargo-weight fixture is Chapter 22's, byte for byte" >&2
+echo "lib.sh: ok, the cargo-weight fixture is Chapter 22's, byte for byte" >&2
 
 rc=0
 out="$(documents_validate "$DOCS/*.graphql")" || rc=$?

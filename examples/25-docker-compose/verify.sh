@@ -85,7 +85,7 @@ check_tier() {
   echo
   echo "=== the tier: start order, networks, published ports ==="
   compose config --quiet || { echo "FAIL - docker compose config" >&2; return 1; }
-  echo "lib.sh: ok — docker compose config is valid" >&2
+  echo "lib.sh: ok, docker compose config is valid" >&2
 
   states="$(compose ps --format json | python3 -I -c '
 import json, sys
@@ -101,17 +101,17 @@ print(",".join(sorted("%s=%s" % (r["Service"], r.get("Health") or r["State"]) fo
     # binding never ends in ":0"; the PortBindings/Ports checks below are the
     # authoritative backstop.
     [[ -z "$raw" || "$raw" == *:0 ]] || { echo "FAIL - docker compose port reports a host binding for $svc: $raw" >&2; return 1; }
-    echo "lib.sh: ok — docker compose port reports no host binding for $svc" >&2
+    echo "lib.sh: ok, docker compose port reports no host binding for $svc" >&2
     ports="$(compose_inspect "$svc" '{{json .HostConfig.PortBindings}}')"
     [[ "$ports" == "{}" || "$ports" == "null" ]] || { echo "FAIL - $svc declares a published port: $ports" >&2; return 1; }
-    echo "lib.sh: ok — $svc declares no published port" >&2
+    echo "lib.sh: ok, $svc declares no published port" >&2
     ports="$(compose_inspect "$svc" '{{json .NetworkSettings.Ports}}')"
     python3 -I -c '
 import json, sys
 ports = json.loads(sys.argv[1])
 assert all(v is None for v in ports.values()), ports
 ' "$ports" || { echo "FAIL - $svc has a host binding: $ports" >&2; return 1; }
-    echo "lib.sh: ok — $svc has no host binding" >&2
+    echo "lib.sh: ok, $svc has no host binding" >&2
     # shellcheck disable=SC2016  # a Go template, not a shell expansion
     assert_eq "backend" "$(compose_inspect "$svc" '{{range $name, $_ := .NetworkSettings.Networks}}{{$name}}{{end}}' | sed "s/^${PROJECT}_//")" "$svc joins only the backend network"
   done
@@ -126,7 +126,7 @@ bindings = json.loads(sys.argv[1])
 hosts = sorted((b["HostIp"], b["HostPort"]) for v in bindings.values() for b in v)
 assert hosts == [("127.0.0.1", p) for p in ("8352", "8353", "8354", "8355")], hosts
 ' "$ports" || { echo "FAIL - lgtm ports: $ports" >&2; return 1; }
-  echo "lib.sh: ok — Grafana, Tempo, Prometheus and Loki publish on 127.0.0.1 only" >&2
+  echo "lib.sh: ok, Grafana, Tempo, Prometheus and Loki publish on 127.0.0.1 only" >&2
   ports="$(compose_inspect edge '{{json .HostConfig.PortBindings}}')"
   python3 -I -c '
 import json, sys
@@ -134,7 +134,7 @@ bindings = json.loads(sys.argv[1])
 hosts = sorted((k, b["HostPort"]) for k, v in bindings.items() for b in v)
 assert hosts == [("8443/tcp", "8350"), ("8444/tcp", "8351")], hosts
 ' "$ports" || { echo "FAIL - edge ports: $ports" >&2; return 1; }
-  echo "lib.sh: ok — the edge publishes 8350 and 8351 and nothing else" >&2
+  echo "lib.sh: ok, the edge publishes 8350 and 8351 and nothing else" >&2
 }
 
 # check_secrets - the key is a file in the edge, in no environment and in no image.
@@ -143,9 +143,9 @@ check_secrets() {
   echo
   echo "=== configs and secrets ==="
   compose exec -T edge test -r /run/secrets/edge_tls_key || { echo "FAIL - the edge cannot read its key" >&2; return 1; }
-  echo "lib.sh: ok — /run/secrets/edge_tls_key is a readable file in the edge" >&2
+  echo "lib.sh: ok, /run/secrets/edge_tls_key is a readable file in the edge" >&2
   compose exec -T edge test -r /etc/nginx/nginx.conf || { echo "FAIL - the edge config is missing" >&2; return 1; }
-  echo "lib.sh: ok — /etc/nginx/nginx.conf is the compose config" >&2
+  echo "lib.sh: ok, /etc/nginx/nginx.conf is the compose config" >&2
 
   body_line="$(sed -n 2p "$CERT_DIR/edge.key")"
   env_json="$(compose_inspect edge '{{json .Config.Env}}')"
@@ -279,7 +279,7 @@ run_stack_check() {
   assert_span "$trace" "$op" 1 1 "$stack ListCargos: Tempo holds the operation span for that id"
   assert_span "$trace" '^source\.call$' 1 "" "$stack ListCargos: and the source.call spans"
   loki_wait "$LOKI" "{service_name=\"$service\"} | trace_id=\"$trace_id\"" 90 1 >/dev/null
-  echo "lib.sh: ok — $stack: Loki holds a record for trace $trace_id" >&2
+  echo "lib.sh: ok, $stack: Loki holds a record for trace $trace_id" >&2
 
   # 7. The contract, as in Chapter 19.
   assert_deprecated "$url" Itinerary finalArrivalDate "Use \`finalArrivalTime\`." "$stack Itinerary.finalArrivalDate"
@@ -317,7 +317,7 @@ check_restart() {
   done
   assert_eq "$((before + 1)) healthy" "$state" "python was restarted by the engine and is healthy again"
   wait_for_graphql "https://localhost:8351/graphql"
-  echo "lib.sh: ok — python answers through the edge after the restart" >&2
+  echo "lib.sh: ok, python answers through the edge after the restart" >&2
 }
 
 # check_graceful_stop - a request in flight when quarkus is stopped completes.
@@ -349,12 +349,12 @@ check_graceful_stop() {
     echo "FAIL - quarkus exited with code $code" >&2
     return 1
   fi
-  echo "lib.sh: ok — quarkus exited with code $code" >&2
+  echo "lib.sh: ok, quarkus exited with code $code" >&2
   if (( finished - started > 15 )); then
     echo "FAIL - the stop took $((finished - started)) s, over the 15 s grace period" >&2
     return 1
   fi
-  echo "lib.sh: ok — the stop took $((finished - started)) s, inside the 15 s grace period" >&2
+  echo "lib.sh: ok, the stop took $((finished - started)) s, inside the 15 s grace period" >&2
   compose up -d --wait quarkus >/dev/null 2>&1
   wait_for_graphql "$url"
 }

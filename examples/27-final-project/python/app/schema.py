@@ -240,7 +240,7 @@ class Mutation:
 class Subscription:
     @strawberry.subscription(
         description="Emits each new handling event for one cargo as it is registered.",
-        # Operation and object authorization (Chapter 18), once, before the first event.
+        # Operation and object authorization, once, before the first event.
         # Field authorization (HandlingEvent.registrationTime) applies to every event.
         permission_classes=[IsAuthenticated, CanWatchCargo],
     )

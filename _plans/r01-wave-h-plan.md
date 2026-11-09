@@ -586,11 +586,11 @@ Plus cover, agenda, series map, closing, and an appendix (divider + 3 full listi
     **Recommend (a).**
 
 ### Critical files for implementation
-- `/home/rsedor/Dev/api-patterns-and-practices-grpc/presentation/_shared/` (`deck-helpers.js`, `render_svgs.py`, `README.md`, `package.json`, `package-lock.json`): templates to port
-- `/home/rsedor/Dev/api-patterns-and-practices-grpc/presentation/api-patterns-grpc-{100,quarkus,python}/deck.js`: structure templates (cover, divider, appendix loop, closing)
-- `/home/rsedor/.claude/skills/lgtm-presentation/SKILL.md`, `references/deck-builder.md`, `references/theme.md`; `/home/rsedor/.claude/skills/lgtm-professional-voice/SKILL.md`, `references/surfaces.md`, `scripts/scan.sh`
-- `/home/rsedor/Dev/api-patterns-and-practices-graphql/_docs/*.md` (figure captions, "On the wire" blocks), `/home/rsedor/Dev/api-patterns-and-practices-graphql/contracts/schema/shipping/*.graphql`, `/home/rsedor/Dev/api-patterns-and-practices-graphql/examples/*/{quarkus,python}/**`
-- `/home/rsedor/Dev/api-patterns-and-practices-graphql/.gitignore`, `/home/rsedor/Dev/api-patterns-and-practices-graphql/README.md`
+- `~/Dev/api-patterns-and-practices-grpc/presentation/_shared/` (`deck-helpers.js`, `render_svgs.py`, `README.md`, `package.json`, `package-lock.json`): templates to port
+- `~/Dev/api-patterns-and-practices-grpc/presentation/api-patterns-grpc-{100,quarkus,python}/deck.js`: structure templates (cover, divider, appendix loop, closing)
+- `~/.claude/skills/lgtm-presentation/SKILL.md`, `references/deck-builder.md`, `references/theme.md`; `~/.claude/skills/lgtm-professional-voice/SKILL.md`, `references/surfaces.md`, `scripts/scan.sh`
+- `<repo>/_docs/*.md` (figure captions, "On the wire" blocks), `<repo>/contracts/schema/shipping/*.graphql`, `<repo>/examples/*/{quarkus,python}/**`
+- `<repo>/.gitignore`, `<repo>/README.md`
 
 ---
 
@@ -618,8 +618,8 @@ Plus cover, agenda, series map, closing, and an appendix (divider + 3 full listi
 ```
 
 ### Critical Files for Implementation
-- /home/rsedor/Dev/api-patterns-and-practices-grpc/presentation/_shared/deck-helpers.js
-- /home/rsedor/Dev/api-patterns-and-practices-grpc/presentation/_shared/render_svgs.py
-- /home/rsedor/Dev/api-patterns-and-practices-grpc/presentation/api-patterns-grpc-100/deck.js
-- /home/rsedor/.claude/skills/lgtm-presentation/references/deck-builder.md
-- /home/rsedor/Dev/api-patterns-and-practices-graphql/_plans/r01-execution-plan.md
+- ~/Dev/api-patterns-and-practices-grpc/presentation/_shared/deck-helpers.js
+- ~/Dev/api-patterns-and-practices-grpc/presentation/_shared/render_svgs.py
+- ~/Dev/api-patterns-and-practices-grpc/presentation/api-patterns-grpc-100/deck.js
+- ~/.claude/skills/lgtm-presentation/references/deck-builder.md
+- <repo>/_plans/r01-execution-plan.md

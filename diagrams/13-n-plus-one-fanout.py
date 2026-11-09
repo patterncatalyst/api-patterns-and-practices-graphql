@@ -43,6 +43,6 @@ edges = [
 notes = [
     dict(x=500, y=28, text="one call per field occurrence, 1 + 4 + 8 + 4 + 4 + 8 = 29", anchor="middle", bold=True),
     dict(x=40, y=418, text="Highlighted: the same key fetched more than once in one request (V300A twice, SGSIN twice, CNSHA twice, DEHAM once per side, and the itinerary of every cargo twice).", size=12, color="#555555"),
-    dict(x=40, y=438, text="Counts are the ones the Chapter 12 example asserted for this query.", size=12, color="#555555"),
+    dict(x=40, y=438, text="Counts are the ones the example asserted for this query.", size=12, color="#555555"),
 ]
 g.emit("13-n-plus-one-fanout", 1000, 470, bands=bands, nodes=nodes, edges=edges, notes=notes)

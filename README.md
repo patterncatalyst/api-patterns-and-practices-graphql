@@ -14,7 +14,7 @@ Read it at <https://patterncatalyst.github.io/api-patterns-and-practices-graphql
 
 ## What's here
 
-- **28 chapters (Ch0–Ch27) and Appendix A**, from the decision lens and the SDL type system
+- **28 chapters (Chapter 0 to Chapter 27) and Appendix A**, from the decision lens and the SDL type system
   through resolvers, errors, schema evolution, pagination and dataloaders, query cost,
   persisted queries and caching, security, observability, federation, subscriptions, client
   integration, testing and debugging, to a final project that ties the system together.

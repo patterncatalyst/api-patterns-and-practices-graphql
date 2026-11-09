@@ -1,4 +1,4 @@
-# Ch26 - Kubernetes on minikube
+# Chapter 26: Kubernetes on minikube
 
 The tracking view of Chapter 25 as one Helm release on a minikube cluster. The release holds both stacks,
 the nginx edge and the observability backend. The example carries no application code: it deploys
@@ -240,7 +240,7 @@ ok quarkus checksum/config is unchanged: '8c0a46f82eea9a1b1cc5b388396e6e501478ab
 ok the quarkus pod was not replaced: 'quarkus-588766b5bf-dxv9z'
 ok the upgrade kept the edge certificate (lookup): '9e624d98a30bb9e60bda85b10d03418e3d952778d59518949627fb9a4ab42b53'
 ok the value is back to 250: '250'
-PASS - Ch26 Kubernetes on minikube: the release is deployed and tested; both stacks answer through the edge NodePorts with Chapter 25's results; the edge refuses a 100 KB body with 413, serves TLS 1.3 only and routes only /graphql; a trace id sent through the edge is found in the error, in Tempo and in Loki, and the trace names the pod; a stranger pod is refused by the NetworkPolicy; a configuration change rolls only the pods that read it.
+PASS: Chapter 26 Kubernetes on minikube: the release is deployed and tested; both stacks answer through the edge NodePorts with Chapter 25's results; the edge refuses a 100 KB body with 413, serves TLS 1.3 only and routes only /graphql; a trace id sent through the edge is found in the error, in Tempo and in Loki, and the trace names the pod; a stranger pod is refused by the NetworkPolicy; a configuration change rolls only the pods that read it.
 smoke.sh: 9.07s user 1.91s system 29% cpu 37.460 total
 ```
 

@@ -95,7 +95,7 @@ echo "=== the release and the ingress CA ==="
 assert_eq "deployed" "$(hc status "$RELEASE" -n "$PROJECT" -o json | json_field .info.status)" "helm status $RELEASE"
 for deployment in lgtm keycloak quarkus python quarkus-internal python-internal edge; do
   ocn rollout status "deploy/$deployment" --timeout=60s >/dev/null
-  echo "lib.sh: ok — deploy/$deployment is rolled out" >&2
+  echo "lib.sh: ok, deploy/$deployment is rolled out" >&2
 done
 # The router terminates TLS with the ingress certificate; its CA is a ConfigMap.
 ocx -n openshift-config-managed get configmap default-ingress-cert -o jsonpath='{.data.ca-bundle\.crt}' >"$SCRATCH/ingress-ca.crt"
@@ -182,7 +182,7 @@ run_stack_check() {
   resp="$(LGTM_BEARER="$OPS" LGTM_TRACEPARENT="$tp" gql "$pub" "$Q_LIST" '{}' ListCargos)"
   assert_error_extension "$resp" '["cargos","edges",5,"node"]' traceId "\"$trace_id\"" "$stack: extensions.traceId equals the id sent through the Route"
   trace_in_tempo "$trace_id" || fail "$stack: Tempo does not hold trace $trace_id"
-  echo "lib.sh: ok — $stack: Tempo holds trace $trace_id ($op)" >&2
+  echo "lib.sh: ok, $stack: Tempo holds trace $trace_id ($op)" >&2
   pods="$(trace_pod_names)"
   assert_contains "$pods" "$(ocn get pods -l "app.kubernetes.io/name=$stack" -o jsonpath='{.items[0].metadata.name}')" "$stack: k8s.pod.name is the public instance's pod"
 }

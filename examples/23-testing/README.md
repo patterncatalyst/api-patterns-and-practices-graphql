@@ -1,4 +1,4 @@
-# Ch23 - Testing GraphQL APIs
+# Chapter 23: Testing GraphQL APIs
 
 Six test layers for the tracking view of Chapter 14: the schema each stack builds, resolvers with a
 stubbed source, operations over the application's own HTTP layer, the exported and live SDL against the

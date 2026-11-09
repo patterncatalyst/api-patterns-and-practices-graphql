@@ -61,9 +61,9 @@ wire" box of each chapter, encoded).
 | `compose_exec_http <service> <method> <path> [curl-args...]` | One request made inside the service's container, to `http://localhost:8080<path>`, for endpoints the edge does not route. Output as `http_any`: the status on line 1, then the body. The image needs `curl`. |
 | `source_calls_in <service>` / `source_calls_reset_in <service>` | The source-call log of a backend read inside its container (`compose_exec_http ... /debug/source-calls`): prints the same JSON as `source_calls`; the reset expects `204`. |
 | `run_load <service> <run> <expected-iterations> [-e K=V ...]` | One load run of a compose service (k6): `compose_run -e RUN=<run>` with the extra `-e` pairs, then the summary JSON on the last line of stdout is read. Passes when `metrics.iterations.values.count` equals the expectation and `metrics.checks.values.rate` is `1`; prints the summary line for further fields. A non-zero exit (a failed threshold) fails with the tail of the output. The service's `handleSummary` writes k6's summary object to stdout as one line. |
-| `LGTM_CACERT` (env) | A PEM file. When set, every `curl` in the harness adds `--cacert "$LGTM_CACERT"` (`wait_for_graphql`, `gql`, `gql_any`, `gql_meta`, `gql_get`, `gql_raw`, `http_*`, `wait_for_http`, `assert_transport_fails`, `oidc_token`, the `__type` helpers and `source_calls*`), and `assert_sdl_*` exports it to graphql-inspector as `NODE_EXTRA_CA_CERTS`. Unset or empty: nothing changes. Set it for an HTTPS stack with a private CA (Ch17, Ch18). |
+| `LGTM_CACERT` (env) | A PEM file. When set, every `curl` in the harness adds `--cacert "$LGTM_CACERT"` (`wait_for_graphql`, `gql`, `gql_any`, `gql_meta`, `gql_get`, `gql_raw`, `http_*`, `wait_for_http`, `assert_transport_fails`, `oidc_token`, the `__type` helpers and `source_calls*`), and `assert_sdl_*` exports it to graphql-inspector as `NODE_EXTRA_CA_CERTS`. Unset or empty: nothing changes. Set it for an HTTPS stack with a private CA (Chapter 17, Chapter 18). |
 | `LGTM_BEARER` (env) | An access token. When set, the same callers add `-H "Authorization: Bearer $LGTM_BEARER"` (not `oidc_token`), and `assert_sdl_*` passes `--header "Authorization: Bearer ..."` to graphql-inspector. Unset or empty: nothing changes. Leave it unset for anonymous runs. |
-| `LGTM_TRACEPARENT` (env) | A W3C traceparent value. When set, the same callers add `-H "traceparent: $LGTM_TRACEPARENT"`, so every GraphQL and HTTP helper joins the trace the script chose (Ch19). Unset or empty: nothing changes. |
+| `LGTM_TRACEPARENT` (env) | A W3C traceparent value. When set, the same callers add `-H "traceparent: $LGTM_TRACEPARENT"`, so every GraphQL and HTTP helper joins the trace the script chose (Chapter 19). Unset or empty: nothing changes. |
 | `LGTM_HEADERS` (env) | Newline-separated `Name: value` lines; each becomes a `-H` on the same callers (for example `X-Client-Name: web`). Blank lines are skipped. Unset or empty: nothing changes. |
 | `_lib_curl_opts [--no-bearer] [--no-trace]` (internal) | Fills `_LIB_CURL_OPTS` from the four variables; every caller above expands `"${_LIB_CURL_OPTS[@]}"`, so the options cannot drift apart. `--no-trace` leaves out `traceparent` and `LGTM_HEADERS`; the Tempo, Prometheus and Loki helpers use it, so a backend query is not part of the trace under test. |
 | `gql_raw <url> <json-body> [accept] [content-type]` | POST the body verbatim (APQ hash-only, arrays, `text/plain`). Output as `gql_any`: the status on line 1, then the body. |
@@ -109,7 +109,7 @@ wire" box of each chapter, encoded).
 - Helpers called inside `$(...)` need `|| return 1` after each assertion, or a failed
   assertion is swallowed by the command substitution.
 
-## Telemetry (Ch19)
+## Telemetry (Chapter 19)
 
 A script picks the trace id, sends it, and reads that trace back by id:
 
@@ -129,12 +129,12 @@ send `LGTM_TRACEPARENT`, `LGTM_HEADERS` or the bearer token.
 
 ## Source-call log
 
-From Ch6 on, each stack can record every call into its sources when started with
+From Chapter 6 on, each stack can record every call into its sources when started with
 `TRACKING_DEBUG_ENDPOINTS=true` (lab-only; default off). `GET /debug/source-calls`
 returns `{"calls":[{"request","source","op","key","startMs","endMs"}, ...]}`
 sorted by `startMs`, `DELETE` clears it (`204`). `startMs` and `endMs` are
-monotonic milliseconds. Only calls to the owners are logged: a cache hit (Ch16) is not a source call. A call key reads `source.op:key`, for example
-`booking.getCargo:ABC123`. Batch operations (Ch13) use plural names (`getCargos`, `getItineraries`, `getVoyages`, `getLocations`, `listEventsFor`) and their key is the sorted distinct keys joined with `+`, for example `booking.getCargos:ABC123+DEF456`; never `,`, which `assert_source_calls_exactly` splits on. Ch12 adds `booking.listCargos` (key: the `routingStatus` filter, or `*` for none) and `handling.pageEvents` (key: the tracking id). The log is not part of the schema. The ordering and
+monotonic milliseconds. Only calls to the owners are logged: a cache hit (Chapter 16) is not a source call. A call key reads `source.op:key`, for example
+`booking.getCargo:ABC123`. Batch operations (Chapter 13) use plural names (`getCargos`, `getItineraries`, `getVoyages`, `getLocations`, `listEventsFor`) and their key is the sorted distinct keys joined with `+`, for example `booking.getCargos:ABC123+DEF456`; never `,`, which `assert_source_calls_exactly` splits on. Chapter 12 adds `booking.listCargos` (key: the `routingStatus` filter, or `*` for none) and `handling.pageEvents` (key: the tracking id). The log is not part of the schema. The ordering and
 overlap assertions compare those windows and never absolute durations.
 
 ## Contract conformance

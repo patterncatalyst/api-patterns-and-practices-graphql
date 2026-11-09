@@ -38,6 +38,6 @@ notes = [
     dict(x=round(X0 + 1500 * SCALE) + 14, y=194, text="store: evt_3 only", size=12, color="#b8650a"),
     dict(x=round(X0 + 1500 * SCALE) + 14, y=290, text="store: evt_3 and evt_4", size=12, color="#555555"),
     dict(x=540, y=346, text="The key turns a second write into a read. Without it, the store cannot tell a retry from a second event.", anchor="middle", size=12, color="#555555"),
-    dict(x=540, y=366, text="Schematic: each source call is 250 ms. Chapter 8's verify.sh asserts the order of the calls, never their duration.", anchor="middle", size=12, color="#555555"),
+    dict(x=540, y=366, text="Schematic: each source call is 250 ms. verify.sh asserts the order of the calls, never their duration.", anchor="middle", size=12, color="#555555"),
 ]
 g.emit("08-idempotent-replay", 1100, 390, bands=bands, nodes=nodes, edges=edges, notes=notes)

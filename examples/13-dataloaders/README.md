@@ -1,4 +1,4 @@
-# Ch13 - The N+1 problem and DataLoaders
+# Chapter 13: The N+1 problem and DataLoaders
 
 The 29 source calls that a four-cargo page cost in Chapter 12 become bulk calls: 8 on Quarkus and 6 on
 Python. Quarkus batches with SmallRye `@Source List<...>` resolvers; Python batches with Strawberry

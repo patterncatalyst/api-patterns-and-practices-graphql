@@ -1,4 +1,4 @@
-# Ch17 - Transport security and introspection control
+# Chapter 17: Transport security and introspection control
 
 Both stacks serve the tracking view over HTTPS only, from framework configuration: the Quarkus TLS
 registry and uvicorn's `--ssl-*` options. Each stack's image is deployed twice. The **public**

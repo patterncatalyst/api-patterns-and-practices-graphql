@@ -33,7 +33,7 @@ nodes = [
         "TLS, HSTS, CORS, JSON-only POST, body limit (Quarkus)"]),
     dict(x=45, y=455, w=200, h=60, style="user", lines=["Browsers, partners", "the public internet"]),
     dict(x=535, y=455, w=200, h=60, style="user", lines=["CI and developers", "assert_sdl_conforms"]),
-    dict(x=765, y=455, w=190, h=60, style="ghost", lines=["SDL export at build", "(Chapter 5), no endpoint"]),
+    dict(x=765, y=455, w=190, h=60, style="ghost", lines=["SDL export at build", "no endpoint"]),
 ]
 edges = [
     dict(x1=400, y1=124, x2=255, y2=215, label="deploy", lx=-40, ly=-6),

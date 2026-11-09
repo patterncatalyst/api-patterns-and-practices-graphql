@@ -90,8 +90,8 @@ sdl_matches() {
   python3 -I -c '
 import re, sys
 sys.exit(0 if re.search(sys.argv[2], sys.argv[1], re.S) else 1)
-' "$1" "$2" || { echo "lib.sh: FAIL — $3: no match for /$2/" >&2; return 1; }
-  echo "lib.sh: ok — $3" >&2
+' "$1" "$2" || { echo "lib.sh: FAIL, $3: no match for /$2/" >&2; return 1; }
+  echo "lib.sh: ok, $3" >&2
 }
 
 sdl_lacks() {
@@ -99,10 +99,10 @@ sdl_lacks() {
 import re, sys
 sys.exit(0 if re.search(sys.argv[2], sys.argv[1], re.S) else 1)
 ' "$1" "$2"; then
-    echo "lib.sh: FAIL — $3: /$2/ is present" >&2
+    echo "lib.sh: FAIL, $3: /$2/ is present" >&2
     return 1
   fi
-  echo "lib.sh: ok — $3" >&2
+  echo "lib.sh: ok, $3" >&2
 }
 
 # reps <typename> <key> <value>... — the JSON variables for _entities: one

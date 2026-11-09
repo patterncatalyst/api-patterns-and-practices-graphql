@@ -2,8 +2,8 @@
 title: "Debugging GraphQL"
 order: 24
 part: "Testing & Debugging"
-description: "Diagnosing a GraphQL service from the outside in: reading an error path and the null it caused, a trace id in every execution error, the way from that id to the trace, the log record and the data, an application debug category switched at run time, development surfaces that production never serves, and a trace read for fan-out."
-duration: "16 min read"
+description: "Diagnosing a GraphQL service from the outside in: the error path, a trace id in every execution error, the trace, the log record and the data behind it, a debug category switched at run time, and the development surfaces production never serves."
+duration: "12 min read"
 ---
 
 ## Learning objectives
@@ -18,13 +18,13 @@ By the end of this chapter you can:
 
 ## Why this matters
 
-A GraphQL problem report arrives as a response that looks fine from the transport's side: status `200`, a `data` object with a hole in it, and an error that says little. Null propagation explains how a null travels, error masking explains why the message of an unexpected error is hidden, and distributed tracing puts every request into a trace. This chapter uses all three to find a fault in the application itself: its data, its resolvers and its own code paths.
+A GraphQL problem report arrives as a response that looks fine from the transport's side: status `200`, a `data` object with a hole in it, and an error that says little. Null propagation explains how a null travels, error masking explains why the message of an unexpected error is hidden, and tracing puts every request into a trace. Together they find a fault in the application's own data, resolvers and code paths.
 
-The code is in `examples/24-debugging/`. It starts from the earlier observability example and serves the same schema, so the SDL does not change. Three things are new. The seed holds a seventh cargo, `JKL012`, whose route ends at a location code the location service does not hold. Every execution error now carries `extensions.traceId`. And each stack runs twice: a production instance beside a development instance, so the surfaces a developer uses can be compared with the ones an operator ships. `verify.sh` follows the fault from the response to its cause on both stacks.
+The code is in `examples/24-debugging/` and serves the same schema as the observability example. The seed holds a seventh cargo, `JKL012`, whose route ends at a location code the location service doesn't hold. Every execution error carries `extensions.traceId`. Each stack runs twice, a production instance beside a development instance, so the surfaces a developer uses can be compared with the ones an operator ships.
 
 ## Start from the response
 
-The seeded fault produces two failures through ordinary queries. Call them F1 and F2. F1 asks for the places the cargo's route unloads:
+The seeded fault produces two failures through ordinary queries. F1 asks for the places the cargo's route unloads:
 
 ```graphql
 query LegsOfJkl($id: TrackingId!) {
@@ -35,13 +35,18 @@ query LegsOfJkl($id: TrackingId!) {
 }
 ```
 
-The response holds `data.cargo.trackingId` as `JKL012`, a null `itinerary` and one error whose path is `["cargo","itinerary","legs",1,"unloadLocation"]`. Everything needed to place the failure is already there. The path names the field that failed: the second leg's `unloadLocation`. The schema says that field is `Location!`, so the null could not stay where it was and moved up to the nearest nullable ancestor, which is `itinerary`. That is null-propagation bubbling, applied to a failure in a running service instead of a diagram. The first leg is gone with the rest of the itinerary even though its own locations resolved.
+The response holds `data.cargo.trackingId` as `JKL012`, a null `itinerary` and one error whose path is `["cargo","itinerary","legs",1,"unloadLocation"]`. The path names the field that failed: the second leg's `unloadLocation`. The schema says that field is `Location!`, so the null couldn't stay there and moved up to the nearest nullable ancestor, `itinerary`. The first leg is gone with the rest of the itinerary even though its own locations resolved.
 
-The path is where the error was raised, not where the null landed. A reader who looks at the null `itinerary` and then at the itinerary resolver is looking in the wrong place; the path points one level lower and two fields deeper. The first habit of debugging GraphQL is to read the path before reading any code.
+The path is where the error was raised, not where the null landed. A reader who looks at the null `itinerary` and then at the itinerary resolver is looking one level too high. Read the path before reading any code.
 
-The path only exists for an execution error, so the first question is which kind of error the response holds. A request error, a document that failed to parse, validate or coerce its variables, has locations and no path, and `data` is absent on Quarkus and null on Python. Nothing executed and no source was called, so the fix is in the document or in the client that built it. An execution error has a path and sits beside whatever `data` the rest of the operation produced. The request-error/execution-error split draws the line; a debugging session starts by drawing it again for this response.
+Only an execution error has a path, so first decide which kind of error the response holds:
 
-The message is the stacks' own to word. Quarkus answers with the engine's explanation that the field "was declared as a non null type" and returned a null, with the path in the text. Python answers `Internal server error.`, because the null is an engine error raised from inside a resolver and error masking hides every execution error that is not an exposed one. Both are correct, and both leave the cause out: the response says which field failed and not why `XXBAD` is unknown. A client can report the path. Only the server side can say more.
+| Error | Has `path` | `data` | What it means |
+|---|---|---|---|
+| Request error (parse, validation, variable coercion) | no, only `locations` | absent on Quarkus, null on Python | Nothing executed and no source was called. The fix is in the document or the client. |
+| Execution error | yes | whatever the rest of the operation produced | A resolver or the engine failed. Continue below. |
+
+The message is each stack's to word. Quarkus answers with the engine's explanation that the field "was declared as a non null type" and returned null, with the path in the text. Python answers `Internal server error.`, because the null is an engine error raised inside a resolver and error masking hides every execution error that isn't an exposed one. Both leave the cause out: the response says which field failed, not why `XXBAD` is unknown.
 
 ## When the response says only "Internal server error."
 
@@ -56,13 +61,11 @@ query DeliveryOfJkl($id: TrackingId!) {
 }
 ```
 
-`Cargo.delivery` is `Delivery!`, so a failure inside it nulls the whole `cargo`. The error has the path `["cargo","delivery"]`, the message `Internal server error.` and nothing else of use, which is error masking doing its job. An unexpected exception has a class name, a message and a stack, and any of those can teach a caller about the internals. The response gives none of them.
+`Cargo.delivery` is `Delivery!`, so a failure inside it nulls the whole `cargo`. The error has the path `["cargo","delivery"]`, the message `Internal server error.` and nothing else of use. That is masking doing its job: an exception's class name, message and stack can teach a caller about the internals.
 
-An operator still has to find the exception, and the client's report has to carry something that leads to it. That something is the trace id. Every execution error in this example carries `extensions.traceId`: the trace id of the request, which is the one the caller sent in `traceparent` when it sent one, and a new one when it did not. A masked error keeps nothing else. On Quarkus its extensions are `code`, which is null for an unclassified failure, and `traceId`. On Python they are `traceId` alone.
+An operator still has to find the exception, and the client's report has to carry something that leads to it. That is the trace id. Every execution error carries `extensions.traceId`: the id the caller sent in `traceparent`, or a new one when it sent none. A masked error keeps nothing else. On Quarkus its extensions are `code` (null for an unclassified failure) and `traceId`; on Python, `traceId` alone. The id isn't a secret. Reading the trace takes access to the observability backend, so quoting the id discloses nothing, and it is what a support ticket should carry.
 
-The id is not a secret. It identifies a trace, and reading the trace takes access to the observability backend, so handing it to the client discloses nothing about the failure. It is what a support ticket should quote.
-
-The two stacks add the key through the seam each one provides for it:
+Each stack adds the key through the seam it provides:
 
 {% include codetabs.html langs="Quarkus|Python" %}
 
@@ -83,6 +86,19 @@ public class TraceIdExtensionProvider implements ErrorExtensionProvider {
 
 ```python
 class TraceIdExtension(SchemaExtension):
+    """Adds ``extensions.traceId`` to every execution error of the response.
+
+    The id is the trace id of the request: the span the FastAPI instrumentation
+    opened, joined to the caller's trace when the request carried a
+    ``traceparent``. ``on_operation`` is the hook that wraps the whole
+    operation, and the schema lists this extension before ``MaskErrors``:
+    extensions leave in reverse order, so this exit runs after the masking has
+    rebuilt the masked errors, and a masked error ends with ``traceId`` as its
+    only extension. The id is not a secret; reading the trace takes access to
+    the observability backend. A request error (parse, validation), which has no
+    path, is left as the engine wrote it.
+    """
+
     def on_operation(self) -> Generator[None]:
         yield
         errors = getattr(self.execution_context.result, "errors", None)
@@ -95,40 +111,40 @@ class TraceIdExtension(SchemaExtension):
                 error.extensions = {**(error.extensions or {}), "traceId": trace_id}
 ```
 
-SmallRye asks each registered `ErrorExtensionProvider` for its value when it serializes an error, and `quarkus.smallrye-graphql.error-extension-fields=code,traceId` names the keys that reach the response. The provider is listed in the `ServiceLoader` file beside the one that writes `code`. A second seam covers the errors the engine raises itself, such as F1's null: a graphql-java instrumentation adds the same key to them on the finished result.
+SmallRye asks each registered `ErrorExtensionProvider` for its value when it serializes an error, and `quarkus.smallrye-graphql.error-extension-fields=code,traceId` names the keys that reach the response. The provider is listed in the `ServiceLoader` file beside the one that writes `code`. A graphql-java instrumentation adds the same key to the errors the engine raises itself, such as F1's null.
 
-Strawberry's `on_operation` hook wraps the whole operation, and extensions leave in reverse order of the list. The schema lists `TraceIdExtension` before `MaskErrors`, so its exit runs after the masking has rebuilt each masked error, and the key survives. Request errors, a parse or validation failure, have no path and are left as the engine wrote them.
+Strawberry's `on_operation` hook wraps the whole operation, and extensions leave in reverse list order. The schema lists `TraceIdExtension` before `MaskErrors`, so its exit runs after masking has rebuilt each masked error, and the key survives. Request errors have no path and are left as the engine wrote them.
 
 ## From the trace id to the cause
 
-Figure 24.1 follows F2 on the Python stack. The response gives an id; the id opens the trace, the log record and finally the data.
+The response gives an id; the id opens the trace, the log record and finally the data. The figure follows F2 on the Python stack.
 
 {% include excalidraw.html file="24-diagnosis-path" alt="Six boxes on a path. Box one, the response, shows data.cargo null, the path cargo and delivery, the message Internal server error and extensions.traceId. An amber arrow labelled id leads to box two, the trace in Tempo, which lists the operation span GraphQL Query DeliveryOfJkl and the resolver span GraphQL Resolving delivery with status ERROR and an exception KeyError. An amber arrow labelled same id leads to box three, the record in Loki, with the same trace_id, exception_type KeyError and exception_message XXBAD. An amber arrow labelled XXBAD leads to box four, the data, which shows event evt_10 unloading at XXBAD, leg two ending at XXBAD and no XXBAD in the location source. Below, an arrow from the data leads to box five, the fix, which is either adding XXBAD to the location owner or treating an unknown location as null in the derivation, and then to a dark box six, a regression test. A note says the client sees only step one." caption="Figure 24.1: One masked error, followed to the data. The trace id in the response is the key to the trace, to the log record and to the event that names the unknown location." %}
 
-Tempo answers a trace by id. The operation span `GraphQL Query: DeliveryOfJkl` (Quarkus names it `query DeliveryOfJkl`) is the root of the request's work, and below it one resolver span ends in status `ERROR`: `delivery`. That span carries an exception event with the exception type and message, so the trace already says which resolver failed and with what. Quarkus marks the operation span `ERROR` as well, and Python leaves it `UNSET`; the resolver span is in `ERROR` on both, so it is the place to look.
+Tempo answers a trace by id. The operation span `GraphQL Query: DeliveryOfJkl` (Quarkus names it `query DeliveryOfJkl`) is the root, and below it one resolver span, `delivery`, ends in status `ERROR` with an exception event carrying the type and message. Quarkus marks the operation span `ERROR` too and Python leaves it `UNSET`; the resolver span is `ERROR` on both, so look there.
 
-The log record gives the detail the span summarizes. Loki holds the record the server wrote when the exception passed through the engine, with the trace id as structured metadata:
+Loki holds the record the server wrote when the exception passed through the engine, with the trace id as structured metadata:
 
 ```text
 {service_name="ch24-debugging-python"} | trace_id="<the id from the response>" | exception_type="KeyError"
 ```
 
-The record's `exception_type` is `KeyError` on Python and `java.util.NoSuchElementException` on Quarkus, and `exception_message` holds `XXBAD` on one and `no location XXBAD` on the other. The derivation looks up the location of the cargo's last handling event, and the lookup failed on a code it was never given. Both exceptions are the same statement in the two languages: this location is not in the reference data.
+`exception_type` is `KeyError` on Python and `java.util.NoSuchElementException` on Quarkus, and `exception_message` holds `XXBAD` on one and `no location XXBAD` on the other. The derivation looks up the location of the cargo's last handling event, and the lookup failed on a code it was never given.
 
-Now the data can be read with a question instead of a guess. The handling event `evt_10` records an `UNLOAD` of `JKL012` at `XXBAD`, and the cargo's second leg ends there. F1 failed for the same reason at a different field: the location source answers `null` for `XXBAD`, and `Leg.unloadLocation` promises a value. One missing reference explains both failures, which a reader of either error alone would not have known.
+Now the data can be read with a question instead of a guess. The handling event `evt_10` records an `UNLOAD` of `JKL012` at `XXBAD`, and the second leg ends there. F1 failed for the same reason at a different field: the location source answers `null` for `XXBAD`, and `Leg.unloadLocation` promises a value. One missing reference explains both failures.
 
-The example stops at the diagnosis. The derivation is the application's own code, and the example leaves it unchanged so the fault stays reproducible. There are two repairs. The location owner adds `XXBAD`, which fixes the data. Or the derivation treats an unknown location as `lastKnownLocation: null`, which the schema already allows because that field is nullable, and which turns a masked failure into a degraded answer. Regression testing supplies the last step: the fix is not finished until a test reproduces `JKL012` and keeps it answered.
+There are two repairs. The location owner adds `XXBAD`, which fixes the data. Or the derivation treats an unknown location as `lastKnownLocation: null`, which the schema already allows because that field is nullable, and which turns a masked failure into a degraded answer. The derivation stays unchanged so the fault stays reproducible. Either way the fix isn't finished until a test reproduces `JKL012` and keeps it answered.
 
 ## The application's debug category
 
-A trace and a log record say what failed. The next question is often what the application looked up on the way. For that the application has a logger of its own, `com.patterncatalyst.shipping.tracking.resolve` on Quarkus and `app.resolve` on Python, off by default at `INFO`. At `DEBUG` each reference resolver writes one line when its bulk read returns:
+A trace and a log record say what failed. The next question is what the application looked up on the way. The application has a logger of its own for that, `com.patterncatalyst.shipping.tracking.resolve` on Quarkus and `app.resolve` on Python, at `INFO` by default. At `DEBUG` each reference resolver writes one line when its bulk read returns:
 
 ```text
 resolve Leg.unloadLocation key=DEHAM outcome=found
 resolve Leg.unloadLocation key=XXBAD outcome=missing
 ```
 
-The line names the field coordinate, the key the resolver asked for and whether the owner had it. It is the missing piece for F1: the response names the field, and the debug line names the key. The line is written after the bulk read returns, by the resolver that maps keys to results, so it reports an outcome and not an intention. Quarkus writes one line per distinct key of a batch, and Python one per resolver call, so a key shared by several legs appears once per leg there. For F1 both stacks write exactly one line for `XXBAD`. The line carries reference keys, a UN/LOCODE or a voyage number, and never a tracking id, a variable value or a token, which is the observability telemetry rule applied to logs.
+The line names the field coordinate, the key the resolver asked for and whether the owner had it. For F1 the response names the field and the debug line names the key. It is written after the bulk read returns, so it reports an outcome and not an intention. Quarkus writes one line per distinct key of a batch and Python one per resolver call, so on Python a key shared by several legs appears once per leg; for F1 both write exactly one line for `XXBAD`. The line carries reference keys, a UN/LOCODE or a voyage number, and never a tracking id, a variable value or a token.
 
 {% include codetabs.html langs="Quarkus|Python" %}
 
@@ -154,76 +170,71 @@ def record(coordinate: str, key: str, value: object | None) -> None:
     _LOG.debug("resolve %s key=%s outcome=%s", coordinate, key, "missing" if value is None else "found")
 ```
 
-A debug category is only useful if it can be turned on without a restart. A restart clears the state a production fault lives in, and the fault may not come back. Both stacks change a level on the running process:
+A debug category is only useful if it can be turned on without a restart, because a restart clears the state a production fault lives in. Both stacks change a level on the running process:
 
 - **Quarkus** uses `quarkus-logging-manager`. `POST /q/logging-manager` with the form fields `loggerName` and `loggerLevel` sets the level, and `GET /q/logging-manager?loggerName=...` reads it back.
-- **Python** uses the standard library's `Logger.setLevel`, behind a lab route with the same fields, `POST /debug/loggers` and `GET /debug/loggers?loggerName=...`.
+- **Python** uses the standard library's `Logger.setLevel` behind a route with the same fields, `POST /debug/loggers` and `GET /debug/loggers?loggerName=...`.
 
-Both answer `201` to a change and `{"name": ..., "effectiveLevel": ...}` to a read. Both are served only when `TRACKING_DEBUG_ENDPOINTS=true`, as the source-call log is: a route that changes log levels is an administrative surface, and an instance that serves the public does not carry it. The example's compose file sets it on all four instances so that `verify.sh` can drive the switch; a deployment leaves it unset, and both routes then answer `404`. On Quarkus the property `quarkus.logging-manager.enable` takes its value from the same setting.
+Both answer `201` to a change and `{"name": ..., "effectiveLevel": ...}` to a read. Both are served only when `TRACKING_DEBUG_ENDPOINTS=true`: a route that changes log levels is an administrative surface, and an instance that serves the public doesn't carry it. The compose file sets it on all four instances so `verify.sh` can drive the switch; with it unset both routes answer `404`. On Quarkus `quarkus.logging-manager.enable` takes its value from the same setting.
 
-The working sequence is a loop. Read the level, raise it, reproduce the failure once, read the lines, lower it again. `verify.sh` runs the loop on both stacks: INFO, then DEBUG with exactly one `key=XXBAD outcome=missing` line for the F1 request, then INFO with no further lines.
-
-The debug lines are log records like the exception record, so they reach Loki with the request's trace id too. A query by the id shows the lines of one request and no other, which is how `verify.sh` isolates them. The Quarkus console format carries the id as well, `traceId=%X{traceId}`, so a line in a terminal can be matched to a response.
+The working loop is: read the level, raise it, reproduce the failure once, read the lines, lower it again. The debug lines are log records like the exception record, so they reach Loki with the request's trace id and a query by id shows the lines of one request and no other. The Quarkus console format carries the id as well (`traceId=%X{traceId}`), so a terminal line can be matched to a response.
 
 ## Development surfaces
 
-A developer needs more than a log. Quarkus dev mode, started with `mvn quarkus:dev`, recompiles on a change and serves two pages: the Dev UI at `/q/dev-ui`, which lists the extensions, configuration and endpoints, and the GraphQL UI at `/q/graphql-ui`, a GraphiQL page wired to the schema. The dev profile also sets `quarkus.smallrye-graphql.log-payload=queryOnly`, which writes each document into the log:
+Quarkus dev mode, started with `mvn quarkus:dev`, recompiles on a change and serves the Dev UI at `/q/dev-ui` (extensions, configuration, endpoints) and the GraphQL UI at `/q/graphql-ui`, a GraphiQL page wired to the schema. The dev profile also sets `quarkus.smallrye-graphql.log-payload=queryOnly`, which writes each document into the log:
 
 ```text
 Payload In [query LegsOfJkl($id: TrackingId!) { cargo(trackingId: $id) { trackingId itinerary { legs { unloadLocation { name } } } } }]
 ```
 
-Strawberry serves GraphiQL on the GraphQL path itself. `GraphQLRouter` takes `graphql_ide`, and the example sets it from a new `TRACKING_PROFILE` setting:
+Strawberry serves GraphiQL on the GraphQL path itself. `GraphQLRouter` takes `graphql_ide`, and it is set from a `TRACKING_PROFILE` setting:
 
 ```python
-GraphQLRouter(
-    schema,
-    context_getter=get_context,
-    graphql_ide="graphiql" if settings.profile == "dev" else None,
+app.include_router(
+    GraphQLRouter(
+        schema,
+        context_getter=get_context,
+        graphql_ide="graphiql" if settings.profile == "dev" else None,
+    ),
+    prefix="/graphql",
 )
 ```
 
-A production build carries none of this. The GraphQL UI and the Dev UI are part of dev and test mode and not of a production build, and the Python production instance sets `graphql_ide=None`, the rule of keeping development surfaces off production instances. Figure 24.2 sets the two profiles side by side.
+A production build carries none of this. The GraphQL UI and the Dev UI belong to dev and test mode, and the Python production instance sets `graphql_ide=None`.
 
 {% include excalidraw.html file="24-dev-vs-prod-surfaces" alt="Two columns of boxes, a development instance on the left with quarkus-dev on port 8342 and python-dev on 8343, and a production instance on the right with quarkus on 8340 and python on 8341. Three rows have amber boxes on the left and dashed boxes on the right: the GraphQL IDE, which is slash q slash graphql-ui on Quarkus and GraphiQL on slash graphql on Python and is 404 in production; the Dev UI, which is slash q slash dev-ui and is 404 in production; and payload logging, which writes each document in the development log and is off in production. Four rows have white boxes on both sides: the lab level switch, masked errors, extensions.traceId on every execution error, and traces and logs exported over OTLP to lgtm." caption="Figure 24.2: The development surfaces live on the development instances. Masking, the trace id and telemetry are the same in both profiles." %}
 
-The two profiles differ in what they offer a developer and not in what they promise a client. Masking is identical, `extensions.traceId` is identical, and both export to the same backend. A development instance must not be easier to read than production in any way a client could depend on, or a fault that reproduces in one will not reproduce in the other.
+The profiles differ in what they offer a developer and not in what they promise a client. Masking and `extensions.traceId` are identical and both export to the same backend, because a development instance that is easier to read than production in any way a client could depend on is a second system to debug. Paste F1 into the GraphQL UI on port 8342 or GraphiQL on port 8343 and the response has the same path and nulls as production; the development log adds the document as received, and dev mode applies a code fix on the next request.
 
-Dev mode in a container takes three settings. Dev mode starts backing containers, called Dev Services, for the extensions that have one, here an LGTM stack for OpenTelemetry. This instance exports to the compose `lgtm` service instead, so the dev profile sets `%dev.quarkus.devservices.enabled=false`. The `dev` target of the Containerfile also passes `-Dquarkus.console.enabled=false`, since the container has no terminal, and `-Ddebug=false`, since no debugger port is published.
+Dev mode in a container needs three settings. Dev Services start backing containers for extensions that have one, here an LGTM stack for OpenTelemetry. This instance exports to the compose `lgtm` service instead, so the dev profile sets `%dev.quarkus.devservices.enabled=false`. The `dev` target of the Containerfile also passes `-Dquarkus.console.enabled=false`, since the container has no terminal, and `-Ddebug=false`, since no debugger port is published.
 
-## Reproducing in a development instance
-
-A fault found in production is reproduced in development with the same document and the same variables. Paste F1 into the GraphQL UI on port 8342 or into GraphiQL on port 8343 and the response has the same error path and the same nulls as the production instance, because the data and the schema are the same. The development instance adds what production withholds: the Quarkus log shows the document as received, and the debug category can stay at `DEBUG`.
-
-That is the reason the two instances share data and code rather than mocks. A development instance that differs in anything but the surfaces is a second system to debug. When the fix is a code change, dev mode applies it on the next request, and the same document answers differently. The example's `verify.sh` runs F1 and F2 against both development instances and asserts the same paths and messages as production.
+A debugger answers why a value was what it was, by stopping at the line. Quarkus dev mode opens a JDWP port (5005 by default) on the machine where it runs, and a Python service runs under `debugpy` or an IDE configuration the same way, on a developer's machine and never on a shared instance. Stopping a request stops its sources and timeouts, and a fault that depends on timing, such as a batch window, can disappear under a debugger. Observe first and use the debugger for the one value observation couldn't explain.
 
 ## Reading a trace for fan-out
 
-Distributed tracing read the fan-out trace for time. Debugging reads it for count. The `FanOut` query pages four cargos with their itineraries and delivery, and on Quarkus its trace holds eight `source.call` spans, two of them `getLocations`; on Python six, one of them `getLocations`. Eight location resolver spans share those calls. The number of `getLocations` spans in the trace equals the number of location calls in the source-call log for the same request, which `verify.sh` asserts, so the trace and the log agree.
+Tracing is read for time elsewhere; debugging reads it for count. The `FanOut` query pages four cargos with itineraries and delivery. On Quarkus its trace holds eight `source.call` spans, two of them `getLocations`; on Python six, one of them `getLocations`. Eight location resolver spans share those calls. The number of `getLocations` spans equals the number of location calls in the source-call log for the same request.
 
-That agreement is a diagnostic. An N+1 is a call per parent where the batch should have made one, and in a trace it is a row of `source.call` spans with the same operation at the same level, one beside every resolver span that triggered it. The N+1 and DataLoader batching analysis counted such calls with the log. In a deployed service there is no log of source calls, and the trace is the only place the count is visible.
-
-Across a gateway the same count reads the query plan. The number of requests each subgraph receives for one operation, which the federation query-plan count tracks, says whether the plan batched a lookup or repeated it. The method is the one used here: pick the trace by id, count the spans of one kind per level.
-
-## Debugging with a debugger
-
-A trace and a log answer what happened. A debugger answers why a particular value was what it was, by stopping at the line. Quarkus dev mode opens a JDWP debug port, 5005 by default, on the machine where dev mode runs, and any IDE attaches to it. The container in this example turns it off, so nothing publishes a debug port. A Python service runs under `debugpy` or an IDE run configuration the same way, on a developer's machine and never on a shared instance.
-
-Breakpoints have a cost that observation does not. Stopping a request stops its sources, its timeouts and its peers' view of it, and a fault that depends on timing, such as a batch window, can disappear under a debugger. Use observation first, and the debugger for the one value that observation could not explain.
+That agreement is a diagnostic. An N+1 is a call per parent where the batch should have made one, and in a trace it is a row of `source.call` spans with the same operation at the same level, one beside every resolver span that triggered it. A deployed service has no source-call log, so the trace is the only place the count is visible. Across a gateway the same method reads the query plan: pick the trace by id and count the requests each subgraph received for one operation.
 
 ## A checklist
 
-1. **The response.** Does the error have a path? Without one, the request was rejected before execution and the fix is in the client. With one, read the error paths.
+1. **The response.** Does the error have a path? Without one the request was rejected before execution and the fix is in the client.
 2. **The path and the code.** Which field failed, which nullable ancestor became null, and is the code one the service declared?
 3. **The trace id.** Take `extensions.traceId`, or the `traceparent` the client sent.
-4. **The trace.** Find the resolver span in `ERROR`, and read the exception type and the source calls under it.
-5. **The log.** Query Loki by the same id. The record holds the exception message and the data in it.
+4. **The trace.** Find the resolver span in `ERROR` and read the exception type and the source calls under it.
+5. **The log.** Query Loki by the same id for the exception message.
 6. **The data or the code.** Turn the debug category on, reproduce once, read the keys, and turn it off.
-7. **The test.** Reproduce the fault in a development instance, fix it, and keep a test that fails without the fix, the way regression testing builds one.
+7. **The test.** Reproduce the fault in a development instance, fix it, and keep a test that fails without the fix.
 
-## On the wire
+> **🤖 Explore with your agent**
+>
+> "In `examples/24-debugging`, the query `DeliveryOfJkl` for `JKL012` returns `Internal server error.` Starting only from `extensions.traceId` in that response, find the `delivery` span in Tempo and the `KeyError` record for `XXBAD` in Loki, then change the derivation so an unknown location gives `lastKnownLocation: null`, and write the regression test that fails without your change."
+>
+> Check: send `DeliveryOfJkl` to `localhost:8341/graphql` again; the reply has `data.cargo.delivery` and no `errors`, and the new test fails when you revert the derivation.
 
-Start the stack. Production Quarkus is on `8340`, production Python on `8341`, their development instances on `8342` and `8343`, and Grafana, Tempo, Prometheus and Loki on `8344` to `8347`.
+## Build, run, observe
+
+Production Quarkus is on `8340`, production Python on `8341`, their development instances on `8342` and `8343`, and Grafana, Tempo, Prometheus and Loki on `8344` to `8347`.
 
 ```bash
 docker compose -f examples/24-debugging/compose.yaml up -d --build
@@ -235,7 +246,7 @@ curl -s localhost:8341/graphql -H 'Content-Type: application/json' \
 {"data":{"cargo":{"trackingId":"JKL012","itinerary":null}},"errors":[{"message":"Internal server error.","locations":[{"line":1,"column":92}],"path":["cargo","itinerary","legs",1,"unloadLocation"],"extensions":{"traceId":"9d22ab8bbd0fb356a9ae5598548455d9"}}]}
 ```
 
-Send F2 under a trace id of your own, and read the response and the trace:
+Send F2 under a trace id of your own, then read the response and the trace:
 
 ```bash
 TID=$(python3 -I -c 'import secrets; print(secrets.token_hex(16))')
@@ -297,12 +308,12 @@ Stop the stack when done:
 docker compose -f examples/24-debugging/compose.yaml down -v
 ```
 
-`bash examples/24-debugging/verify.sh` runs the whole sequence on both stacks and prints `PASS` only when both hold. The values it asserts are in this table.
+`bash examples/24-debugging/verify.sh` runs the sequence on both stacks and prints `PASS` only when both hold. It asserts the values in this table.
 
 | Check | Quarkus | Python |
 |---|---|---|
 | `TrackCargo` for ABC123 | `ONBOARD_CARRIER`, no errors, no `extensions` | the same |
-| `FanOut` | the N+1 example's data, 8 calls, 2 `getLocations` spans | the same data, 6 calls, 1 `getLocations` span |
+| `FanOut` | 8 calls, 2 `getLocations` spans | 6 calls, 1 `getLocations` span |
 | F1 path and nulls | `["cargo","itinerary","legs",1,"unloadLocation"]`, `itinerary` null | the same |
 | F1 message | the engine's "declared as a non null type" text | `Internal server error.` |
 | F1 source calls | `location.getLocations` with key `DEHAM+XXBAD` | the same |
@@ -317,26 +328,19 @@ docker compose -f examples/24-debugging/compose.yaml down -v
 | payload logging | development log holds the document; production holds none | not applicable |
 | schema | conforms; only `Subscription` unserved | the same |
 
-<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Debugging is where the <em>operational and security cost</em> axis of the GraphQL decision framework meets the developer: masking keeps the cause out of the response, so the service has to supply a path back to it, and the trace id is that path. The <em>aggregation across sources</em> axis is why the cause is usually data owned by another service, and why a trace that counts source calls per request is a diagnostic tool. The <em>client diversity and shape variance</em> axis is why the error path, which every client can read, is the first tool, and the trace id, which a client can quote, is the second. The <em>contract and evolution style</em> axis is untouched, since the trace id is a response extension and not part of the schema. The tracking view therefore reads the path first, puts the trace id in every execution error, finds the trace and the log record by that id, switches an application debug category at run time, keeps the IDE and the Dev UI to development instances, and turns each fault into a test.</p></div>
+Experiments:
 
-## Review
+- Set `TRACKING_DEBUG_ENDPOINTS` off on an instance: `/q/logging-manager` and `/debug/loggers` answer `404`.
+- Send F2 without a `traceparent`: `traceId` is a fresh 32-character hex id, and the trace is still found by it.
+- Query the production instance's GraphQL UI path: it answers `404`, where the development instance answers `200`.
 
-- An error's `path` names the field that failed, before any resolver code is read.
-- `extensions.traceId` on a masked response leads to the matching span in Tempo and the matching record in Loki.
-- An application debug category switches to `DEBUG` at run time, with no restart, and logs the key a resolver looked up.
-- A development surface such as GraphiQL, the Dev UI, or payload logging is distinct from what a production instance serves.
-- Counting `source.call` spans per level in a trace confirms whether a batch avoided an N+1.
-
-## Where this goes next
-
-This chapter took one fault from a masked response to the data behind it: a path read for the field and the null, a trace id in every execution error, the trace and the log record found by that id, a debug category switched at run time, development surfaces kept off the production instances, and a trace read for fan-out.
-
-Running the stack locally with Docker Compose gives the diagnosis path a full environment to work against instead of one example at a time. For the specifications and guides, read the GraphQL specification's sections "Handling Field Errors" and "Errors", the W3C Trace Context recommendation and the OpenTelemetry "Trace Context" overview. The Quarkus guides "Dev UI", "Maven tooling" (dev mode and the debug port), "Configuring logging" and "SmallRye GraphQL" cover the Java side, with the Quarkiverse Logging Manager documentation for the run-time level. Strawberry's "GraphQL IDE" and FastAPI integration pages, the Python `logging` documentation's "Logger Objects" and the Grafana Tempo and Loki documentation cover the rest.
+<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Masking keeps the cause out of the response, so the service must supply a path back to it: read the error path first because every client can, put the trace id in every execution error because a client can quote it, find the trace and the log record by that id, and count source calls per request in the trace when the cause is data owned by another service. Switch debug categories at run time, keep the IDE and Dev UI on development instances, and turn each fault into a test.</p></div>
 
 ## For deeper coverage
 
-- *Cloud Native Design Patterns*, "Observability": the OTel-plus-LGTM correlation this chapter's trace-id path builds on.
-- [W3C Trace Context](https://www.w3.org/TR/trace-context/): the `traceparent` header this chapter reads and quotes back.
+- *Cloud Native Design Patterns*, "Observability": the OTel-plus-LGTM correlation the trace-id path builds on.
+- [W3C Trace Context](https://www.w3.org/TR/trace-context/): the `traceparent` header read and quoted back.
 - [Quarkus Dev UI](https://quarkus.io/guides/dev-ui): the development surface kept off production instances.
 - [Grafana Tempo documentation](https://grafana.com/docs/tempo/latest/): finding a trace by id and reading its spans.
 - [Grafana Loki documentation](https://grafana.com/docs/loki/latest/): querying a log record by `trace_id`.
+- The GraphQL specification's "Handling Field Errors" and "Errors" sections, and the Quarkus "SmallRye GraphQL", "Configuring logging" and Logging Manager guides, cover the mechanisms used here.

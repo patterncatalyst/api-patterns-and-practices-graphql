@@ -25,8 +25,8 @@ rows = [
 ]
 
 bands = [
-    dict(x=20, y=50, w=400, h=480, label="Chapter 25: Compose"),
-    dict(x=580, y=50, w=400, h=480, label="Chapter 26: Helm chart on Kubernetes"),
+    dict(x=20, y=50, w=400, h=480, label="Docker Compose"),
+    dict(x=580, y=50, w=400, h=480, label="Helm chart on Kubernetes"),
 ]
 nodes, edges = [], []
 for i, (left, right) in enumerate(rows):

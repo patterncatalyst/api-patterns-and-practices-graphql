@@ -224,7 +224,7 @@ check_tier() {
   echo
   echo "=== the tier: start order, networks, published ports ==="
   compose config --quiet || { echo "FAIL - docker compose config" >&2; return 1; }
-  echo "lib.sh: ok — docker compose config is valid" >&2
+  echo "lib.sh: ok, docker compose config is valid" >&2
 
   states="$(compose ps --format json | python3 -I -c '
 import json, sys
@@ -241,12 +241,12 @@ print(",".join(sorted("%s=%s" % (r["Service"], r.get("Health") or r["State"]) fo
     # some engine builds print ("0.0.0.0:0", "invalid IP:0"). A real binding never
     # ends in ":0"; the PortBindings/Ports checks below are the authoritative backstop.
     case "$raw" in
-      "" | *:0) echo "lib.sh: ok — docker compose port reports no host binding for $svc" >&2 ;;
+      "" | *:0) echo "lib.sh: ok, docker compose port reports no host binding for $svc" >&2 ;;
       *) echo "FAIL - $svc reports a host binding: $raw" >&2; return 1 ;;
     esac
     bindings="$(compose_inspect "$svc" '{{json .HostConfig.PortBindings}}')"
     case "$bindings" in
-      "{}" | "null") echo "lib.sh: ok — $svc has no runtime port binding" >&2 ;;
+      "{}" | "null") echo "lib.sh: ok, $svc has no runtime port binding" >&2 ;;
       *) echo "FAIL - $svc has port bindings: $bindings" >&2; return 1 ;;
     esac
     # shellcheck disable=SC2016  # a Go template, not a shell expansion
@@ -263,7 +263,7 @@ bindings = json.loads(sys.argv[2])
 hosts = [b["HostIp"] for v in bindings.values() for b in v]
 assert hosts and all(h == "127.0.0.1" for h in hosts), (sys.argv[1], hosts)
 ' "$svc" "$bindings" || { echo "FAIL - $svc publishes beyond loopback: $bindings" >&2; return 1; }
-    echo "lib.sh: ok — $svc publishes on 127.0.0.1 only" >&2
+    echo "lib.sh: ok, $svc publishes on 127.0.0.1 only" >&2
   done
   bindings="$(compose_inspect edge '{{json .HostConfig.PortBindings}}')"
   python3 -I -c '
@@ -272,7 +272,7 @@ bindings = json.loads(sys.argv[1])
 hosts = sorted((k, b["HostPort"]) for k, v in bindings.items() for b in v)
 assert hosts == [("8443/tcp", "8370"), ("8444/tcp", "8371")], hosts
 ' "$bindings" || { echo "FAIL - edge ports: $bindings" >&2; return 1; }
-  echo "lib.sh: ok — the edge publishes 8370 and 8371 and nothing else" >&2
+  echo "lib.sh: ok, the edge publishes 8370 and 8371 and nothing else" >&2
 }
 
 # --- per-stack cases ------------------------------------------------------------
@@ -428,7 +428,7 @@ run_stack_check() {
   assert_eq "$(log_count "$calls" location getLocations)" "$(span_count "$trace" '^source\.call$' source.operation getLocations)" "$stack: one source.call span per getLocations call in the log"
   assert_span_attr_absent "$trace" 'authorization|token' "$stack: no span carries a credential"
   loki_wait "$LOKI" "{service_name=\"ch27-final-$stack\"} | trace_id=\"$trace_id\"" 90 1 >/dev/null
-  echo "lib.sh: ok — $stack: Loki holds a record for trace $trace_id" >&2
+  echo "lib.sh: ok, $stack: Loki holds a record for trace $trace_id" >&2
 
   echo "=== $stack: final-project check passed ==="
 }
@@ -592,7 +592,7 @@ check_load() {
 echo "=== Step 0: the load documents are Chapter 23's ==="
 cmp -s "$SCRIPT_DIR/documents/fan-out.graphql" "$DOCS/fan-out.graphql" || { echo "FAIL - fan-out.graphql differs from Chapter 23's" >&2; exit 1; }
 cmp -s "$SCRIPT_DIR/documents/over-budget.graphql" "$DOCS/load/over-budget.graphql" || { echo "FAIL - over-budget.graphql differs from Chapter 23's" >&2; exit 1; }
-echo "lib.sh: ok — fan-out.graphql and over-budget.graphql are byte-equal to Chapter 23's" >&2
+echo "lib.sh: ok, fan-out.graphql and over-budget.graphql are byte-equal to Chapter 23's" >&2
 
 echo "=== Step 1: docker compose up ==="
 compose_up "$COMPOSE_FILE" "$PROJECT"

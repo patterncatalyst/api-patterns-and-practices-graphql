@@ -32,7 +32,7 @@ COMPOSE_FILE="$SCRIPT_DIR/compose.yaml"
 run_client() {
   local out
   if ! out="$(compose_run "$@" 2>&1)"; then
-    echo "lib.sh: FAIL — client '$1' exited non-zero:" >&2
+    echo "lib.sh: FAIL, client '$1' exited non-zero:" >&2
     echo "$out" | tail -40 >&2
     return 1
   fi
@@ -212,7 +212,7 @@ echo "=== Step 2: code generation refuses a document the contract does not suppo
 # selects Cargo.weight. The image build of js-client has already generated types
 # from the documents and type-checked main.ts against them.
 if out="$(compose_run codegen-check 2>&1)"; then
-  echo "lib.sh: FAIL — codegen accepted a document that selects Cargo.weight" >&2
+  echo "lib.sh: FAIL, codegen accepted a document that selects Cargo.weight" >&2
   exit 1
 fi
 assert_contains 'Cannot query field "weight" on type "Cargo"' "$out" "codegen names the field the schema lacks"

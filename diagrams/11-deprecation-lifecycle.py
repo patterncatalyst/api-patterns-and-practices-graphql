@@ -33,9 +33,9 @@ nodes = [
 
     dict(x=X[0], y=366, w=260, h=90, style="box", lines=["Existing clients", "are unchanged", "new clients can adopt the new name"]),
     dict(x=X[1], y=366, w=260, h=90, style="box", lines=["Both fields execute", "and return the same instant;", "fields hides the old one by default"]),
-    dict(x=X[2], y=366, w=260, h=90, style="box", lines=["Clients migrate", "on their own schedule", "(telemetry: Chapter 19)"]),
+    dict(x=X[2], y=366, w=260, h=90, style="box", lines=["Clients migrate", "on their own schedule", "(seen in telemetry)"]),
     dict(x=X[3], y=366, w=260, h=90, style="box", lines=["A client that still selects", "the old field fails validation", "so removal is a decision"]),
 ]
 edges = [dict(x1=X[i] + 260, y1=96, x2=X[i + 1], y2=96, amber=True) for i in range(3)]
-notes = [dict(x=20, y=494, text="Steps 1 and 2 shipped as one change in this chapter's example. The gate reports them together.", size=12, color="#555555")]
+notes = [dict(x=20, y=494, text="Steps 1 and 2 shipped as one change in the example. The gate reports them together.", size=12, color="#555555")]
 g.emit("11-deprecation-lifecycle", 1200, 512, bands=bands, nodes=nodes, edges=edges, notes=notes)

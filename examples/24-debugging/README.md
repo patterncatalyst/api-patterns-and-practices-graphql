@@ -1,4 +1,4 @@
-# Ch24 - Debugging GraphQL
+# Chapter 24: Debugging GraphQL
 
 One seeded data fault, diagnosed from the response to its cause. Cargo `JKL012` is routed to `XXBAD`, a
 location code the location service does not hold, and two ordinary queries show it. `verify.sh` reads
