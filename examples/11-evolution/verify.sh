@@ -168,7 +168,7 @@ text = open(path, encoding="utf-8").read()
 if text.count(old) != 1:
     sys.exit("fixture did not apply: %d occurrences in %s of %r" % (text.count(old), path, old))
 open(path, "w", encoding="utf-8").write(text.replace(old, new))
-' "$@" || { echo "lib.sh: FAIL — fixture did not apply: $1" >&2; return 1; }
+' "$@" || { echo "lib.sh: FAIL, fixture did not apply: $1" >&2; return 1; }
 }
 
 # fixture <name> — make $TMP_DIR/<name>/base and /new, both the canonical schema.

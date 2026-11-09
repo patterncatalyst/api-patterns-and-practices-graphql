@@ -34,5 +34,5 @@
 <text x="954" y="194" font-size="12" fill="#b8650a" text-anchor="start">store: evt_3 only</text>
 <text x="954" y="290" font-size="12" fill="#555555" text-anchor="start">store: evt_3 and evt_4</text>
 <text x="540" y="346" font-size="12" fill="#555555" text-anchor="middle">The key turns a second write into a read. Without it, the store cannot tell a retry from a second event.</text>
-<text x="540" y="366" font-size="12" fill="#555555" text-anchor="middle">Schematic: each source call is 250 ms. Chapter 8&#x27;s verify.sh asserts the order of the calls, never their duration.</text>
+<text x="540" y="366" font-size="12" fill="#555555" text-anchor="middle">Schematic: each source call is 250 ms. verify.sh asserts the order of the calls, never their duration.</text>
 </svg>

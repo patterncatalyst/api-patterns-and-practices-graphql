@@ -1,4 +1,4 @@
-# Ch7 - Queries and resolvers
+# Chapter 7: Queries and resolvers
 
 The tracking view's cargo graph with `Cargo.delivery` derived from handling events and the
 itinerary instead of stored. Every source-backed field is still asynchronous, each source call

@@ -68,7 +68,7 @@ CANONICAL_SDL_GLOB="$CONTRACTS_DIR/schema/**/*.graphql"
 # while verify.sh runs are in flight.
 ensure_contracts_tools() {
   if ! command -v npm >/dev/null 2>&1; then
-    echo "lib.sh: FAIL — npm is required to install graphql-inspector (contracts/package.json)" >&2
+    echo "lib.sh: FAIL, npm is required to install graphql-inspector (contracts/package.json)" >&2
     return 1
   fi
   local lock="${TMPDIR:-/tmp}/gql-contracts-npm.lock"
@@ -131,7 +131,7 @@ compose_up() {
 _LIB_EXIT_HOOKS=()
 on_exit() {
   if (( $# == 0 )); then
-    echo "lib.sh: FAIL — on_exit needs a command" >&2
+    echo "lib.sh: FAIL, on_exit needs a command" >&2
     return 1
   fi
   _LIB_EXIT_HOOKS+=("$*")
@@ -177,7 +177,7 @@ _lib_teardown() {
 # (docker compose logs --no-color). Fails when no stack was started.
 compose_logs() {
   if [[ -z "$_LIB_COMPOSE_PROJECT" ]]; then
-    echo "lib.sh: FAIL — compose_logs: no stack is up (call compose_up first)" >&2
+    echo "lib.sh: FAIL, compose_logs: no stack is up (call compose_up first)" >&2
     return 1
   fi
   docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" logs --no-color "$1"
@@ -196,11 +196,11 @@ compose_logs() {
 # none of its dependencies brought up or rebuilt here.
 compose_run() {
   if [[ -z "$_LIB_COMPOSE_PROJECT" ]]; then
-    echo "lib.sh: FAIL — compose_run: no stack is up (call compose_up first)" >&2
+    echo "lib.sh: FAIL, compose_run: no stack is up (call compose_up first)" >&2
     return 1
   fi
   if (( $# == 0 )); then
-    echo "lib.sh: FAIL — compose_run needs a service name" >&2
+    echo "lib.sh: FAIL, compose_run needs a service name" >&2
     return 1
   fi
   # COMPOSE_PROGRESS=quiet keeps BuildKit progress out of stdout, so the
@@ -235,16 +235,16 @@ session_start() {
 compose_inspect() {
   local service="${1:-}" template="${2:-}" cid
   if [[ -z "$_LIB_COMPOSE_PROJECT" ]]; then
-    echo "lib.sh: FAIL — compose_inspect: no stack is up (call compose_up first)" >&2
+    echo "lib.sh: FAIL, compose_inspect: no stack is up (call compose_up first)" >&2
     return 1
   fi
   if [[ -z "$service" || -z "$template" ]]; then
-    echo "lib.sh: FAIL — compose_inspect needs a service and a Go template" >&2
+    echo "lib.sh: FAIL, compose_inspect needs a service and a Go template" >&2
     return 1
   fi
   cid="$(docker compose -p "$_LIB_COMPOSE_PROJECT" -f "$_LIB_COMPOSE_FILE" ps -q "$service")" || return 1
   if [[ -z "$cid" ]]; then
-    echo "lib.sh: FAIL — compose_inspect: service '$service' has no container" >&2
+    echo "lib.sh: FAIL, compose_inspect: service '$service' has no container" >&2
     return 1
   fi
   docker inspect -f "$template" "$cid"
@@ -257,11 +257,11 @@ compose_inspect() {
 compose_exec_http() {
   local service="${1:-}" method="${2:-}" path="${3:-}" out status body
   if [[ -z "$_LIB_COMPOSE_PROJECT" ]]; then
-    echo "lib.sh: FAIL — compose_exec_http: no stack is up (call compose_up first)" >&2
+    echo "lib.sh: FAIL, compose_exec_http: no stack is up (call compose_up first)" >&2
     return 1
   fi
   if [[ -z "$service" || -z "$method" || -z "$path" ]]; then
-    echo "lib.sh: FAIL — compose_exec_http needs a service, a method and a path" >&2
+    echo "lib.sh: FAIL, compose_exec_http needs a service, a method and a path" >&2
     return 1
   fi
   shift 3
@@ -285,13 +285,13 @@ compose_exec_http() {
 run_load() {
   local service="${1:-}" run="${2:-}" expected="${3:-}" out err summary count rate
   if [[ -z "$service" || -z "$run" || -z "$expected" ]]; then
-    echo "lib.sh: FAIL — run_load needs a service, a run name and the expected iteration count" >&2
+    echo "lib.sh: FAIL, run_load needs a service, a run name and the expected iteration count" >&2
     return 1
   fi
   shift 3
   err="$(mktemp)"
   if ! out="$(compose_run -e "RUN=$run" "$@" "$service" 2>"$err")"; then
-    echo "lib.sh: FAIL — run_load: '$run' on $service exited non-zero:" >&2
+    echo "lib.sh: FAIL, run_load: '$run' on $service exited non-zero:" >&2
     tail -30 "$err" >&2
     printf '%s\n' "$out" | tail -5 >&2
     rm -f "$err"
@@ -300,11 +300,11 @@ run_load() {
   rm -f "$err"
   summary="$(printf '%s\n' "$out" | tail -n 1)"
   count="$(json_field '.metrics.iterations.values.count' <<<"$summary")" || {
-    echo "lib.sh: FAIL — run_load: no k6 summary JSON on the last line of '$run'" >&2
+    echo "lib.sh: FAIL, run_load: no k6 summary JSON on the last line of '$run'" >&2
     return 1
   }
   rate="$(json_field '.metrics.checks.values.rate' <<<"$summary")" || {
-    echo "lib.sh: FAIL — run_load: the summary of '$run' has no checks rate" >&2
+    echo "lib.sh: FAIL, run_load: the summary of '$run' has no checks rate" >&2
     return 1
   }
   assert_eq "$expected" "$count" "run_load $run: iterations" || return 1
@@ -400,7 +400,7 @@ wait_for_graphql() {
     waited=$(( waited + interval ))
   done
 
-  echo "lib.sh: FAIL — GraphQL $url did not come up within ${timeout}s" >&2
+  echo "lib.sh: FAIL, GraphQL $url did not come up within ${timeout}s" >&2
   return 1
 }
 
@@ -424,7 +424,7 @@ gql() {
     -H 'Content-Type: application/json' -H 'Accept: application/json' \
     -d "$body" "$url")" || { rm -f "$tmp"; return 1; }
   if [[ "$status" != "200" ]]; then
-    echo "lib.sh: FAIL — POST $url returned HTTP $status: $(cat "$tmp")" >&2
+    echo "lib.sh: FAIL, POST $url returned HTTP $status: $(cat "$tmp")" >&2
     rm -f "$tmp"
     return 1
   fi
@@ -611,14 +611,14 @@ assert_header() {
   present="$(grep -ciE "^${name}:" <<<"$headers" || true)"
   actual="$(header_value "$headers" "$name")"
   if [[ "$present" == "0" ]]; then
-    echo "lib.sh: FAIL — ${context}: header '$name' is absent (headers: $(tr '\n' ';' <<<"$headers"))" >&2
+    echo "lib.sh: FAIL, ${context}: header '$name' is absent (headers: $(tr '\n' ';' <<<"$headers"))" >&2
     return 1
   fi
   if [[ "$actual" != "$expected" ]]; then
-    echo "lib.sh: FAIL — ${context}: header '$name' is '$actual', expected '$expected'" >&2
+    echo "lib.sh: FAIL, ${context}: header '$name' is '$actual', expected '$expected'" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $name: $actual" >&2
+  echo "lib.sh: ok, ${context}: $name: $actual" >&2
 }
 
 # assert_header_absent <headers> <name> [context] — the header does not occur.
@@ -626,10 +626,10 @@ assert_header_absent() {
   local headers="$1" name="$2"
   local context="${3:-no header $name}"
   if grep -qiE "^${name}:" <<<"$headers"; then
-    echo "lib.sh: FAIL — ${context}: header '$name' is present: '$(header_value "$headers" "$name")'" >&2
+    echo "lib.sh: FAIL, ${context}: header '$name' is present: '$(header_value "$headers" "$name")'" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $name is absent" >&2
+  echo "lib.sh: ok, ${context}: $name is absent" >&2
 }
 
 # assert_transport_fails <context> <curl-args...>
@@ -645,10 +645,10 @@ assert_transport_fails() {
   _lib_curl_opts
   err="$(curl -sS --max-time "${LGTM_HTTP_TIMEOUT:-30}" "${_LIB_CURL_OPTS[@]}" -o /dev/null "$@" 2>&1)" || rc=$?
   if (( rc == 0 )); then
-    echo "lib.sh: FAIL — ${context}: curl succeeded, but the transport was expected to fail" >&2
+    echo "lib.sh: FAIL, ${context}: curl succeeded, but the transport was expected to fail" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: curl failed as expected (exit $rc: ${err##*curl: })" >&2
+  echo "lib.sh: ok, ${context}: curl failed as expected (exit $rc: ${err##*curl: })" >&2
 }
 
 # wait_for_http <url> [timeout_secs] [expected-status]
@@ -676,7 +676,7 @@ wait_for_http() {
     waited=$(( waited + interval ))
   done
 
-  echo "lib.sh: FAIL — $url did not answer HTTP $expected within ${timeout}s (last status: ${status:-none})" >&2
+  echo "lib.sh: FAIL, $url did not answer HTTP $expected within ${timeout}s (last status: ${status:-none})" >&2
   return 1
 }
 
@@ -698,7 +698,7 @@ wait_for_json() {
     if body="$(curl -fsS --max-time 5 "${_LIB_CURL_OPTS[@]}" -H 'Accept: application/json' "$url" 2>/dev/null)"; then
       actual="$(json_field "$path" <<<"$body" 2>/dev/null || true)"
       if [[ "$actual" == "$expected" ]]; then
-        echo "lib.sh: ok — $path is '$actual' at $url after ${waited}s" >&2
+        echo "lib.sh: ok, $path is '$actual' at $url after ${waited}s" >&2
         return 0
       fi
     fi
@@ -706,7 +706,7 @@ wait_for_json() {
     waited=$(( waited + interval ))
   done
 
-  echo "lib.sh: FAIL — $path at $url did not become '$expected' within ${timeout}s (last: '${actual:-none}')" >&2
+  echo "lib.sh: FAIL, $path at $url did not become '$expected' within ${timeout}s (last: '${actual:-none}')" >&2
   return 1
 }
 
@@ -784,12 +784,12 @@ oidc_token() {
     --data-urlencode "password=$password" \
     "$token_url")" || { rm -f "$tmp"; return 1; }
   if [[ "$status" != "200" ]]; then
-    echo "lib.sh: FAIL — oidc_token: $token_url returned HTTP $status: $(cat "$tmp")" >&2
+    echo "lib.sh: FAIL, oidc_token: $token_url returned HTTP $status: $(cat "$tmp")" >&2
     rm -f "$tmp"
     return 1
   fi
   token="$(json_field '.access_token' <"$tmp" 2>/dev/null)" || {
-    echo "lib.sh: FAIL — oidc_token: no access_token in the answer: $(cat "$tmp")" >&2
+    echo "lib.sh: FAIL, oidc_token: no access_token in the answer: $(cat "$tmp")" >&2
     rm -f "$tmp"
     return 1
   }
@@ -846,10 +846,10 @@ assert_eq() {
   local actual="$2"
   local context="${3:-equality}"
   if [[ "$expected" != "$actual" ]]; then
-    echo "lib.sh: FAIL — ${context}: expected '$expected', got '$actual'" >&2
+    echo "lib.sh: FAIL, ${context}: expected '$expected', got '$actual'" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: '$actual'" >&2
+  echo "lib.sh: ok, ${context}: '$actual'" >&2
 }
 
 # assert_contains <needle> <haystack> <context>
@@ -858,10 +858,10 @@ assert_contains() {
   local haystack="$2"
   local context="${3:-contains}"
   if [[ "$haystack" != *"$needle"* ]]; then
-    echo "lib.sh: FAIL — ${context}: '$needle' not found" >&2
+    echo "lib.sh: FAIL, ${context}: '$needle' not found" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: found '$needle'" >&2
+  echo "lib.sh: ok, ${context}: found '$needle'" >&2
 }
 
 # assert_no_errors <json-response> [context]
@@ -873,10 +873,10 @@ assert_no_errors() {
   local context="${2:-response}"
   local errors
   if errors="$(json_field '.errors' <<<"$resp" 2>/dev/null)"; then
-    echo "lib.sh: FAIL — ${context}: top-level errors present: $errors" >&2
+    echo "lib.sh: FAIL, ${context}: top-level errors present: $errors" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: no top-level errors" >&2
+  echo "lib.sh: ok, ${context}: no top-level errors" >&2
 }
 
 # assert_has_errors <json-response> [context]
@@ -893,10 +893,10 @@ errors = json.load(sys.stdin).get("errors")
 print(len(errors) if isinstance(errors, list) else 0)
 ' <<<"$resp")"
   if (( count == 0 )); then
-    echo "lib.sh: FAIL — ${context}: expected a non-empty top-level errors array, got: $resp" >&2
+    echo "lib.sh: FAIL, ${context}: expected a non-empty top-level errors array, got: $resp" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: ${count} top-level error(s)" >&2
+  echo "lib.sh: ok, ${context}: ${count} top-level error(s)" >&2
 }
 
 # assert_status_in <"200 400"> <status> [context] — the HTTP status is one of
@@ -908,11 +908,11 @@ assert_status_in() {
   local s
   for s in $allowed; do
     if [[ "$s" == "$status" ]]; then
-      echo "lib.sh: ok — ${context}: HTTP $status (allowed: $allowed)" >&2
+      echo "lib.sh: ok, ${context}: HTTP $status (allowed: $allowed)" >&2
       return 0
     fi
   done
-  echo "lib.sh: FAIL — ${context}: HTTP $status is not one of: $allowed" >&2
+  echo "lib.sh: FAIL, ${context}: HTTP $status is not one of: $allowed" >&2
   return 1
 }
 
@@ -959,10 +959,10 @@ assert_no_data() {
   local probe
   probe="$(_json_probe "$resp" '.data')"
   if [[ "$probe" == "absent" || "$probe" == "value:null" ]]; then
-    echo "lib.sh: ok — ${context}: no data" >&2
+    echo "lib.sh: ok, ${context}: no data" >&2
     return 0
   fi
-  echo "lib.sh: FAIL — ${context}: expected no data, got: $resp" >&2
+  echo "lib.sh: FAIL, ${context}: expected no data, got: $resp" >&2
   return 1
 }
 
@@ -976,12 +976,12 @@ assert_null_at() {
   probe="$(_json_probe "$resp" "$path")"
   case "$probe" in
     value:null)
-      echo "lib.sh: ok — ${context}: $path is null" >&2 ;;
+      echo "lib.sh: ok, ${context}: $path is null" >&2 ;;
     absent|parent-absent)
-      echo "lib.sh: FAIL — ${context}: $path is absent (expected an explicit null): $resp" >&2
+      echo "lib.sh: FAIL, ${context}: $path is absent (expected an explicit null): $resp" >&2
       return 1 ;;
     *)
-      echo "lib.sh: FAIL — ${context}: $path is not null: ${probe#value:}" >&2
+      echo "lib.sh: FAIL, ${context}: $path is not null: ${probe#value:}" >&2
       return 1 ;;
   esac
 }
@@ -996,12 +996,12 @@ assert_absent() {
   probe="$(_json_probe "$resp" "$path")"
   case "$probe" in
     absent)
-      echo "lib.sh: ok — ${context}: $path is absent" >&2 ;;
+      echo "lib.sh: ok, ${context}: $path is absent" >&2 ;;
     parent-absent)
-      echo "lib.sh: FAIL — ${context}: the parent of $path is absent or null, so the check proves nothing: $resp" >&2
+      echo "lib.sh: FAIL, ${context}: the parent of $path is absent or null, so the check proves nothing: $resp" >&2
       return 1 ;;
     *)
-      echo "lib.sh: FAIL — ${context}: $path is present: ${probe#value:}" >&2
+      echo "lib.sh: FAIL, ${context}: $path is present: ${probe#value:}" >&2
       return 1 ;;
   esac
 }
@@ -1018,10 +1018,10 @@ errors = json.load(sys.stdin).get("errors")
 print(len(errors) if isinstance(errors, list) else 0)
 ' <<<"$resp")"
   if [[ "$count" != "$expected" ]]; then
-    echo "lib.sh: FAIL — ${context}: expected $expected error(s), got $count: $resp" >&2
+    echo "lib.sh: FAIL, ${context}: expected $expected error(s), got $count: $resp" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $count error(s)" >&2
+  echo "lib.sh: ok, ${context}: $count error(s)" >&2
 }
 
 # assert_error_path <json> <path-json-array> [context]
@@ -1051,10 +1051,10 @@ if any(same(p, expected) for p in paths):
 print("paths: " + json.dumps(paths, separators=(",", ":")))
 sys.exit(1)
 ' "$expected" <<<"$resp")"; then
-    echo "lib.sh: ok — ${context}: error path $expected" >&2
+    echo "lib.sh: ok, ${context}: error path $expected" >&2
     return 0
   fi
-  echo "lib.sh: FAIL — ${context}: no error has path $expected; $out" >&2
+  echo "lib.sh: FAIL, ${context}: no error has path $expected; $out" >&2
   return 1
 }
 
@@ -1071,10 +1071,10 @@ for e in json.load(sys.stdin).get("errors") or []:
     print(e.get("message", "") if isinstance(e, dict) else "")
 ' <<<"$resp")"
   if [[ "$messages" != *"$needle"* ]]; then
-    echo "lib.sh: FAIL — ${context}: no error message contains '$needle': $messages" >&2
+    echo "lib.sh: FAIL, ${context}: no error message contains '$needle': $messages" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: an error message contains '$needle'" >&2
+  echo "lib.sh: ok, ${context}: an error message contains '$needle'" >&2
 }
 
 # _err_check <mode> <json> [args...] — one python entry point for the
@@ -1153,10 +1153,10 @@ assert_error_message_at() {
   local context="${4:-error message at $path}"
   local why
   if ! why="$(_err_check message "$resp" "$path" "$expected")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: message at $path is '$expected'" >&2
+  echo "lib.sh: ok, ${context}: message at $path is '$expected'" >&2
 }
 
 # assert_error_extension <json> <path-json-array> <key> <expected-json> [context]
@@ -1166,10 +1166,10 @@ assert_error_extension() {
   local context="${5:-extensions.$key at $path}"
   local why
   if ! why="$(_err_check ext "$resp" "$path" "$key" "$expected")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: extensions.$key is $expected" >&2
+  echo "lib.sh: ok, ${context}: extensions.$key is $expected" >&2
 }
 
 # assert_error_extension_absent <json> <path-json-array> <key> [context] — that
@@ -1179,10 +1179,10 @@ assert_error_extension_absent() {
   local context="${4:-no extensions.$key at $path}"
   local why
   if ! why="$(_err_check ext-absent "$resp" "$path" "$key")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: extensions.$key is absent" >&2
+  echo "lib.sh: ok, ${context}: extensions.$key is absent" >&2
 }
 
 # assert_error_shape <json> <request|execution> [context] — there is at least
@@ -1193,14 +1193,14 @@ assert_error_shape() {
   local context="${3:-$kind error shape}"
   local why
   if [[ "$kind" != "request" && "$kind" != "execution" ]]; then
-    echo "lib.sh: FAIL — ${context}: shape must be 'request' or 'execution', got '$kind'" >&2
+    echo "lib.sh: FAIL, ${context}: shape must be 'request' or 'execution', got '$kind'" >&2
     return 1
   fi
   if ! why="$(_err_check shape "$resp" "$kind")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: every error has the $kind shape" >&2
+  echo "lib.sh: ok, ${context}: every error has the $kind shape" >&2
 }
 
 # assert_body_not_contains <text> <needle> [context] — the needle occurs nowhere
@@ -1211,10 +1211,10 @@ assert_body_not_contains() {
   local context="${3:-body}"
   if [[ -n "$needle" && "$text" == *"$needle"* ]]; then
     local before="${text%%"$needle"*}"
-    echo "lib.sh: FAIL — ${context}: '$needle' found at offset ${#before}: ${text:${#before}:80}" >&2
+    echo "lib.sh: FAIL, ${context}: '$needle' found at offset ${#before}: ${text:${#before}:80}" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: does not contain '$needle'" >&2
+  echo "lib.sh: ok, ${context}: does not contain '$needle'" >&2
 }
 
 # assert_json_eq <expected-json> <actual-json> [context] — parsed equality:
@@ -1239,10 +1239,10 @@ def same(a, b):
 
 sys.exit(0 if same(json.loads(sys.argv[1]), json.loads(sys.argv[2])) else 1)
 ' "$expected" "$actual" 2>/dev/null; then
-    echo "lib.sh: FAIL — ${context}: expected $expected, got $actual" >&2
+    echo "lib.sh: FAIL, ${context}: expected $expected, got $actual" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $actual" >&2
+  echo "lib.sh: ok, ${context}: $actual" >&2
 }
 
 # json_len <dot.path> — JSON on stdin; the length of the list or object there.
@@ -1303,7 +1303,7 @@ source_calls_reset() {
   status="$(curl -sS --max-time "${LGTM_HTTP_TIMEOUT:-30}" "${_LIB_CURL_OPTS[@]}" -o /dev/null -w '%{http_code}' \
     -X DELETE "$base/debug/source-calls")" || return 1
   if [[ "$status" != "204" ]]; then
-    echo "lib.sh: FAIL — DELETE $base/debug/source-calls returned HTTP $status (expected 204)" >&2
+    echo "lib.sh: FAIL, DELETE $base/debug/source-calls returned HTTP $status (expected 204)" >&2
     return 1
   fi
 }
@@ -1323,7 +1323,7 @@ source_calls_reset_in() {
   out="$(compose_exec_http "$1" DELETE /debug/source-calls)" || return 1
   status="$(status_of "$out")"
   if [[ "$status" != "204" ]]; then
-    echo "lib.sh: FAIL — DELETE /debug/source-calls inside $1 returned HTTP $status (expected 204)" >&2
+    echo "lib.sh: FAIL, DELETE /debug/source-calls inside $1 returned HTTP $status (expected 204)" >&2
     return 1
   fi
 }
@@ -1336,7 +1336,7 @@ source_calls_in() {
   out="$(compose_exec_http "$1" GET /debug/source-calls -H 'Accept: application/json')" || return 1
   status="$(status_of "$out")"
   if [[ "$status" != "200" ]]; then
-    echo "lib.sh: FAIL — GET /debug/source-calls inside $1 returned HTTP $status (expected 200)" >&2
+    echo "lib.sh: FAIL, GET /debug/source-calls inside $1 returned HTTP $status (expected 200)" >&2
     return 1
   fi
   body_of "$out"
@@ -1443,10 +1443,10 @@ assert_source_call_count() {
   local context="${5:-$source.$op calls}"
   local why
   if ! why="$(_calls_check count "$calls" "$source" "$op" "$n")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $n call(s) to $source.$op" >&2
+  echo "lib.sh: ok, ${context}: $n call(s) to $source.$op" >&2
 }
 
 # assert_source_call_keys <calls-json> <source> <op> <k1,k2,...> [context] — the
@@ -1457,10 +1457,10 @@ assert_source_call_keys() {
   local context="${5:-$source.$op keys}"
   local why
   if ! why="$(_calls_check keys "$calls" "$source" "$op" "$keys")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $source.$op keys [${keys}]" >&2
+  echo "lib.sh: ok, ${context}: $source.$op keys [${keys}]" >&2
 }
 
 # assert_source_calls_exactly <calls-json> <k1,k2,...> [context] — the multiset
@@ -1471,10 +1471,10 @@ assert_source_calls_exactly() {
   local context="${3:-source calls}"
   local why
   if ! why="$(_calls_check exactly "$calls" "$keys")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: exactly [${keys}]" >&2
+  echo "lib.sh: ok, ${context}: exactly [${keys}]" >&2
 }
 
 # assert_calls_ordered <calls-json> <keyA> <keyB> [context] — each key matches
@@ -1484,10 +1484,10 @@ assert_calls_ordered() {
   local context="${4:-$a before $b}"
   local why
   if ! why="$(_calls_check ordered "$calls" "$a" "$b")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $a finished before $b started" >&2
+  echo "lib.sh: ok, ${context}: $a finished before $b started" >&2
 }
 
 # assert_calls_overlap <calls-json> <keyA> <keyB> [context] — the two calls were
@@ -1497,10 +1497,10 @@ assert_calls_overlap() {
   local context="${4:-$a overlaps $b}"
   local why
   if ! why="$(_calls_check overlap "$calls" "$a" "$b")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $a and $b overlap" >&2
+  echo "lib.sh: ok, ${context}: $a and $b overlap" >&2
 }
 
 # assert_single_request <calls-json> [context] — every entry carries the same
@@ -1510,10 +1510,10 @@ assert_single_request() {
   local context="${2:-single request id}"
   local why
   if ! why="$(_calls_check single "$calls")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: one request id" >&2
+  echo "lib.sh: ok, ${context}: one request id" >&2
 }
 
 # assert_distinct_requests <calls-json> [context] — at least two distinct
@@ -1523,10 +1523,10 @@ assert_distinct_requests() {
   local context="${2:-distinct request ids}"
   local why
   if ! why="$(_calls_check distinct "$calls")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: at least two request ids" >&2
+  echo "lib.sh: ok, ${context}: at least two request ids" >&2
 }
 
 # assert_request_count <calls-json> <n> [context] — the number of distinct
@@ -1536,10 +1536,10 @@ assert_request_count() {
   local context="${3:-request count}"
   local why
   if ! why="$(_calls_check requests "$calls" "$n")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $n distinct request id(s)" >&2
+  echo "lib.sh: ok, ${context}: $n distinct request id(s)" >&2
 }
 
 # assert_calls_per_request <calls-json> <n> [context] — every distinct non-empty
@@ -1550,10 +1550,10 @@ assert_calls_per_request() {
   local context="${3:-calls per request}"
   local why
   if ! why="$(_calls_check per_request "$calls" "$n")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: every request made $n call(s)" >&2
+  echo "lib.sh: ok, ${context}: every request made $n call(s)" >&2
 }
 
 # assert_calls_same_per_request <calls-json> <k1,k2,...> [context] — for every
@@ -1565,10 +1565,10 @@ assert_calls_same_per_request() {
   local context="${3:-same calls per request}"
   local why
   if ! why="$(_calls_check same_per_request "$calls" "$keys")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: every request made exactly [${keys}]" >&2
+  echo "lib.sh: ok, ${context}: every request made exactly [${keys}]" >&2
 }
 
 # ---------------------------------------------------------------------------
@@ -1627,10 +1627,10 @@ if problems:
     print("; ".join(problems) + (" - " + ", ".join(names) if names else ""))
     sys.exit(1)
 ' "$report" "$expected")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $expected test(s), no failures, errors or skips" >&2
+  echo "lib.sh: ok, ${context}: $expected test(s), no failures, errors or skips" >&2
 }
 
 # ---------------------------------------------------------------------------
@@ -1680,7 +1680,7 @@ _sdl_diff() {
   fi
   out="$("$CONTRACTS_DIR/node_modules/.bin/graphql-inspector" diff "${hdr[@]}" "$1" "$2" 2>&1)" || rc=$?
   if ! grep -qE "No changes detected|Detected the following changes" <<<"$out"; then
-    echo "lib.sh: FAIL — graphql-inspector could not compare '$1' with '$2' (exit $rc):" >&2
+    echo "lib.sh: FAIL, graphql-inspector could not compare '$1' with '$2' (exit $rc):" >&2
     echo "$out" >&2
     return 2
   fi
@@ -1725,16 +1725,16 @@ assert_sdl_conforms() {
   bad_rev="$( { grep '✖' <<<"$rev" | grep -vE "$LGTM_SDL_SLICE_REMOVALS|$LGTM_SDL_IGNORE"
                 grep -E '\[log\] +(⚠|✔) .*[Dd]escription' <<<"$rev"; } || true)"
   if [[ -n "$bad_fwd" ]]; then
-    echo "lib.sh: FAIL — ${context}: the live schema exposes what the canonical SDL lacks or loosens it:" >&2
+    echo "lib.sh: FAIL, ${context}: the live schema exposes what the canonical SDL lacks or loosens it:" >&2
     echo "$bad_fwd" >&2
     return 1
   fi
   if [[ -n "$bad_rev" ]]; then
-    echo "lib.sh: FAIL — ${context}: the live schema differs from the canonical SDL in what it serves:" >&2
+    echo "lib.sh: FAIL, ${context}: the live schema differs from the canonical SDL in what it serves:" >&2
     echo "$bad_rev" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: live schema conforms to the canonical SDL (slice)" >&2
+  echo "lib.sh: ok, ${context}: live schema conforms to the canonical SDL (slice)" >&2
 }
 
 # assert_sdl_equals <graphql-url> [context]
@@ -1758,11 +1758,11 @@ assert_sdl_equals() {
   left="$( { grep -E '\[log\] +(✖|⚠|✔)' <<<"$fwd"; grep -E '\[log\] +(✖|⚠|✔)' <<<"$rev"; } \
           | grep -vE "$LGTM_SDL_IGNORE|Directive specifiedBy was (removed from|added to) scalar" || true)"
   if [[ -n "$left" ]]; then
-    echo "lib.sh: FAIL — ${context}: live schema is not identical to the canonical SDL:" >&2
+    echo "lib.sh: FAIL, ${context}: live schema is not identical to the canonical SDL:" >&2
     echo "$left" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: live schema equals the canonical SDL" >&2
+  echo "lib.sh: ok, ${context}: live schema equals the canonical SDL" >&2
 }
 
 # assert_sdl_same <pointerA> <pointerB> [context]
@@ -1784,11 +1784,11 @@ assert_sdl_same() {
   left="$( { grep -E '\[log\] +(✖|⚠|✔)' <<<"$fwd"; grep -E '\[log\] +(✖|⚠|✔)' <<<"$rev"; } \
           | grep -vE "$LGTM_SDL_IGNORE|Directive specifiedBy was (removed from|added to) scalar" || true)"
   if [[ -n "$left" ]]; then
-    echo "lib.sh: FAIL — ${context}: the two schemas differ:" >&2
+    echo "lib.sh: FAIL, ${context}: the two schemas differ:" >&2
     echo "$left" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: the two schemas are identical" >&2
+  echo "lib.sh: ok, ${context}: the two schemas are identical" >&2
 }
 
 # assert_sdl_drift <pointer> <needle> [context]
@@ -1805,20 +1805,20 @@ assert_sdl_drift() {
   # against a caller's context string that happens to contain it.
   out="$(assert_sdl_conforms "$pointer" "sdl-drift" 2>&1)" || rc=$?
   if (( rc == 0 )); then
-    echo "lib.sh: FAIL — ${context}: expected drift containing '$needle', but the schema conforms" >&2
+    echo "lib.sh: FAIL, ${context}: expected drift containing '$needle', but the schema conforms" >&2
     return 1
   fi
   if grep -q "could not compare" <<<"$out"; then
-    echo "lib.sh: FAIL — ${context}: the comparison itself failed, so no drift verdict:" >&2
+    echo "lib.sh: FAIL, ${context}: the comparison itself failed, so no drift verdict:" >&2
     echo "$out" >&2
     return 1
   fi
   if ! grep -v '^lib.sh: ' <<<"$out" | grep -qF -- "$needle"; then
-    echo "lib.sh: FAIL — ${context}: drift was reported but does not mention '$needle':" >&2
+    echo "lib.sh: FAIL, ${context}: drift was reported but does not mention '$needle':" >&2
     echo "$out" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: drift detected as expected ('$needle')" >&2
+  echo "lib.sh: ok, ${context}: drift detected as expected ('$needle')" >&2
 }
 
 # ---------------------------------------------------------------------------
@@ -1852,18 +1852,18 @@ assert_deprecated() {
   local got
   got="$(_field_deprecation "$url" "$type" "$field")" || return 1
   if [[ "$got" == "missing" ]]; then
-    echo "lib.sh: FAIL — ${context}: $type.$field does not exist" >&2
+    echo "lib.sh: FAIL, ${context}: $type.$field does not exist" >&2
     return 1
   fi
   if [[ "${got%%|*}" != "true" ]]; then
-    echo "lib.sh: FAIL — ${context}: $type.$field is not deprecated" >&2
+    echo "lib.sh: FAIL, ${context}: $type.$field is not deprecated" >&2
     return 1
   fi
   if [[ "${got#*|}" != "$reason" ]]; then
-    echo "lib.sh: FAIL — ${context}: $type.$field deprecation reason is '${got#*|}', expected '$reason'" >&2
+    echo "lib.sh: FAIL, ${context}: $type.$field deprecation reason is '${got#*|}', expected '$reason'" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $type.$field is deprecated ('$reason')" >&2
+  echo "lib.sh: ok, ${context}: $type.$field is deprecated ('$reason')" >&2
 }
 
 # assert_not_deprecated <url> <Type> <field> [context] — the field exists and
@@ -1874,14 +1874,14 @@ assert_not_deprecated() {
   local got
   got="$(_field_deprecation "$url" "$type" "$field")" || return 1
   if [[ "$got" == "missing" ]]; then
-    echo "lib.sh: FAIL — ${context}: $type.$field does not exist" >&2
+    echo "lib.sh: FAIL, ${context}: $type.$field does not exist" >&2
     return 1
   fi
   if [[ "${got%%|*}" != "false" ]]; then
-    echo "lib.sh: FAIL — ${context}: $type.$field is deprecated ('${got#*|}')" >&2
+    echo "lib.sh: FAIL, ${context}: $type.$field is deprecated ('${got#*|}')" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $type.$field is not deprecated" >&2
+  echo "lib.sh: ok, ${context}: $type.$field is not deprecated" >&2
 }
 
 # ---------------------------------------------------------------------------
@@ -1913,21 +1913,21 @@ assert_gate() {
   local out rc=0
   out="$(run_gate "$base" "$new" "$rules")" || rc=$?
   if (( rc != expected )) && { (( rc > 1 )) || grep -qE 'could not|Error:' <<<"$out"; }; then
-    echo "lib.sh: FAIL — ${context}: the gate itself failed (exit $rc, expected $expected):" >&2
+    echo "lib.sh: FAIL, ${context}: the gate itself failed (exit $rc, expected $expected):" >&2
     echo "$out" >&2
     return 1
   fi
   if (( rc != expected )); then
-    echo "lib.sh: FAIL — ${context}: gate exit $rc, expected $expected:" >&2
+    echo "lib.sh: FAIL, ${context}: gate exit $rc, expected $expected:" >&2
     echo "$out" >&2
     return 1
   fi
   if ! grep -v '^lib.sh:' <<<"$out" | grep -qF -- "$needle"; then
-    echo "lib.sh: FAIL — ${context}: gate exit $rc as expected but the output lacks '$needle':" >&2
+    echo "lib.sh: FAIL, ${context}: gate exit $rc as expected but the output lacks '$needle':" >&2
     echo "$out" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: gate exit $rc, found '$needle'" >&2
+  echo "lib.sh: ok, ${context}: gate exit $rc, found '$needle'" >&2
 }
 
 # documents_validate <glob> [extra-args...] — validate client documents (queries,
@@ -1964,7 +1964,7 @@ print(secrets.token_hex(16))
 traceparent_for() {
   local trace_id="$1"
   if [[ ! "$trace_id" =~ ^[0-9a-f]{32}$ ]]; then
-    echo "lib.sh: FAIL — traceparent_for: '$trace_id' is not 32 lowercase hex characters" >&2
+    echo "lib.sh: FAIL, traceparent_for: '$trace_id' is not 32 lowercase hex characters" >&2
     return 1
   fi
   python3 -I -c '
@@ -2072,7 +2072,7 @@ tempo_trace() {
   local tmp status path doc count=0
 
   if [[ ! "$trace_id" =~ ^[0-9a-fA-F]{32}$ ]]; then
-    echo "lib.sh: FAIL — tempo_trace: '$trace_id' is not a 32-hex trace id" >&2
+    echo "lib.sh: FAIL, tempo_trace: '$trace_id' is not a 32-hex trace id" >&2
     return 1
   fi
   tmp="$(mktemp)"
@@ -2099,7 +2099,7 @@ tempo_trace() {
   done
 
   rm -f "$tmp"
-  echo "lib.sh: FAIL — trace $trace_id did not reach $min_spans span(s) in Tempo within ${timeout}s (last status: ${status:-none}, spans: $count)" >&2
+  echo "lib.sh: FAIL, trace $trace_id did not reach $min_spans span(s) in Tempo within ${timeout}s (last status: ${status:-none}, spans: $count)" >&2
   return 1
 }
 
@@ -2198,10 +2198,10 @@ assert_span() {
   local context="${5:-span /$rx/}"
   local why
   if ! why="$(_span_check count "$trace" "$rx" "$low" "$high")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: /$rx/ occurs ${low}..${high:-any} time(s)" >&2
+  echo "lib.sh: ok, ${context}: /$rx/ occurs ${low}..${high:-any} time(s)" >&2
 }
 
 # assert_span_attr <trace> <name-regex> <attr> <expected> [context] — some span
@@ -2211,10 +2211,10 @@ assert_span_attr() {
   local context="${5:-span /$rx/ $attr}"
   local why
   if ! why="$(_span_check attr "$trace" "$rx" "$attr" "$expected")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $attr = '$expected'" >&2
+  echo "lib.sh: ok, ${context}: $attr = '$expected'" >&2
 }
 
 # assert_span_attr_absent <trace> <attr-regex> [context] — no span has an
@@ -2224,10 +2224,10 @@ assert_span_attr_absent() {
   local context="${3:-no span attribute /$rx/}"
   local why
   if ! why="$(_span_check attr_absent "$trace" "$rx")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: no attribute key matches /$rx/" >&2
+  echo "lib.sh: ok, ${context}: no attribute key matches /$rx/" >&2
 }
 
 # assert_span_descends <trace> <child-regex> <ancestor-regex> [context] — there
@@ -2238,10 +2238,10 @@ assert_span_descends() {
   local context="${4:-/$child/ under /$ancestor/}"
   local why
   if ! why="$(_span_check descends "$trace" "$child" "$ancestor")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: /$child/ spans descend from /$ancestor/" >&2
+  echo "lib.sh: ok, ${context}: /$child/ spans descend from /$ancestor/" >&2
 }
 
 # assert_span_status <trace> <name-regex> <OK|ERROR|UNSET> [context] — some
@@ -2251,10 +2251,10 @@ assert_span_status() {
   local context="${4:-span /$rx/ status}"
   local why
   if ! why="$(_span_check status "$trace" "$rx" "$want")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: status $want" >&2
+  echo "lib.sh: ok, ${context}: status $want" >&2
 }
 
 # assert_attr_not_contains <trace> <name-regex> <attr> <needle> [context] — at
@@ -2266,10 +2266,10 @@ assert_attr_not_contains() {
   local context="${5:-span /$rx/ $attr}"
   local why
   if ! why="$(_span_check not_contains "$trace" "$rx" "$attr" "$needle")"; then
-    echo "lib.sh: FAIL — ${context}: $why" >&2
+    echo "lib.sh: FAIL, ${context}: $why" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $attr never contains the needle" >&2
+  echo "lib.sh: ok, ${context}: $attr never contains the needle" >&2
 }
 
 # _prom_sample <result-json> — the first sample value of a prom_query result,
@@ -2298,7 +2298,7 @@ prom_query() {
 import json, sys
 doc = json.load(sys.stdin)
 if doc.get("status") != "success":
-    sys.stderr.write("lib.sh: FAIL — prom_query: status %s: %s\n" % (doc.get("status"), doc.get("error", "")))
+    sys.stderr.write("lib.sh: FAIL, prom_query: status %s: %s\n" % (doc.get("status"), doc.get("error", "")))
     sys.exit(1)
 print(json.dumps(doc["data"]["result"], separators=(",", ":")))
 ' <<<"$out"
@@ -2324,7 +2324,7 @@ import sys
 print("yes" if float(sys.argv[1]) >= float(sys.argv[2]) else "no")
 ' "$value" "$min")"
         if [[ "$ok" == "yes" ]]; then
-          echo "lib.sh: ok — $promql = $value (>= $min) after ${waited}s" >&2
+          echo "lib.sh: ok, $promql = $value (>= $min) after ${waited}s" >&2
           return 0
         fi
       fi
@@ -2333,7 +2333,7 @@ print("yes" if float(sys.argv[1]) >= float(sys.argv[2]) else "no")
     waited=$(( waited + interval ))
   done
 
-  echo "lib.sh: FAIL — $promql did not reach $min within ${timeout}s (last: '${value:-no sample}')" >&2
+  echo "lib.sh: FAIL, $promql did not reach $min within ${timeout}s (last: '${value:-no sample}')" >&2
   return 1
 }
 
@@ -2346,7 +2346,7 @@ assert_metric_eq() {
   res="$(prom_query "$base" "$promql")" || return 1
   value="$(_prom_sample "$res")"
   if [[ -z "$value" ]]; then
-    echo "lib.sh: FAIL — ${context}: $promql returned no sample" >&2
+    echo "lib.sh: FAIL, ${context}: $promql returned no sample" >&2
     return 1
   fi
   ok="$(python3 -I -c '
@@ -2354,10 +2354,10 @@ import sys
 print("yes" if float(sys.argv[1]) == float(sys.argv[2]) else "no")
 ' "$value" "$expected")"
   if [[ "$ok" != "yes" ]]; then
-    echo "lib.sh: FAIL — ${context}: $promql is $value, expected $expected" >&2
+    echo "lib.sh: FAIL, ${context}: $promql is $value, expected $expected" >&2
     return 1
   fi
-  echo "lib.sh: ok — ${context}: $promql = $value" >&2
+  echo "lib.sh: ok, ${context}: $promql = $value" >&2
 }
 
 # loki_wait <loki-base> <logql> [timeout_secs] [min-lines]
@@ -2397,7 +2397,7 @@ for _, line in sorted(rows):
     waited=$(( waited + interval ))
   done
 
-  echo "lib.sh: FAIL — Loki returned $count of $min_lines line(s) for $logql within ${timeout}s" >&2
+  echo "lib.sh: FAIL, Loki returned $count of $min_lines line(s) for $logql within ${timeout}s" >&2
   return 1
 }
 
@@ -2455,14 +2455,14 @@ for raw in sys.stdin.buffer:
 ' "$max_events" || py_rc=$?
   curl_rc="$(cat "$rc_file")"
   if (( py_rc != 0 )); then
-    echo "lib.sh: FAIL — sse_collect: could not parse the stream from $url" >&2
+    echo "lib.sh: FAIL, sse_collect: could not parse the stream from $url" >&2
     rm -f "$rc_file" "$err_file"
     return 1
   fi
   case "${curl_rc:-0}" in
     0|23|28|141) rm -f "$rc_file" "$err_file"; return 0 ;;
     *)
-      echo "lib.sh: FAIL — sse_collect: curl exited ${curl_rc} for $url: $(cat "$err_file")" >&2
+      echo "lib.sh: FAIL, sse_collect: curl exited ${curl_rc} for $url: $(cat "$err_file")" >&2
       rm -f "$rc_file" "$err_file"
       return 1
       ;;

@@ -1,4 +1,4 @@
-# Ch12 - Connections and pagination
+# Chapter 12: Connections and pagination
 
 Two growing lists of the tracking view become Relay connections: `Query.cargos` and
 `Cargo.handlingHistory`, both with opaque keyset cursors. The example starts from the Chapter 9

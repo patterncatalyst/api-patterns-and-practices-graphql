@@ -1,4 +1,4 @@
-# Ch6 - The execution model
+# Chapter 6: The execution model
 
 The tracking view's cargo graph with every source-backed field resolved asynchronously, each
 source call delayed by 250 ms and written to a source-call log. The chapter follows one request

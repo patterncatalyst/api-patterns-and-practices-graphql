@@ -34,7 +34,7 @@ edges = [
     dict(x1=890, y1=240, x2=890, y2=320, dashed=True),
 ]
 notes = [
-    dict(x=500, y=28, text="The image is built where it runs: from the directory of Chapter 27, with its Containerfile, into the project's registry", anchor="middle", bold=True),
+    dict(x=500, y=28, text="The image is built where it runs: from the final-project directory, with its Containerfile, into the project's registry", anchor="middle", bold=True),
     dict(x=500, y=428, text="Values from the rendered manifests; no cluster output is shown in this figure.", anchor="middle", size=12, color="#555555"),
 ]
 g.emit("A-in-cluster-build", 1000, 450, bands=bands, nodes=nodes, edges=edges, notes=notes)

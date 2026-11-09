@@ -43,6 +43,6 @@ for i, (title, request, work, caught, style) in enumerate(PANELS):
     nodes.append(dict(x=x + 12, y=y + 170, w=286, h=60, style=style, lines=["Caught by"] + caught))
 notes = [
     dict(x=500, y=28, text="Five requests, each small next to the work it asks for", anchor="middle", bold=True),
-    dict(x=500, y=568, text="Every refused request makes 0 source calls. Sizes are the text of the query; costs use the formula of this chapter.", anchor="middle", size=12, color="#555555"),
+    dict(x=500, y=568, text="Every refused request makes 0 source calls. Sizes are the text of the query; costs use the cost formula.", anchor="middle", size=12, color="#555555"),
 ]
 g.emit("14-amplification-attacks", 1000, 590, bands=bands, nodes=nodes, notes=notes)

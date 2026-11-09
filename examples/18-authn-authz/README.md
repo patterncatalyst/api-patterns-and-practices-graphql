@@ -1,4 +1,4 @@
-# Ch18 - AuthN and AuthZ
+# Chapter 18: AuthN and AuthZ
 
 Keycloak issues the tokens. Each stack validates them (Quarkus with `quarkus-oidc`, Python with PyJWT and
 `PyJWKClient`) and then authorizes three ways: per operation (`cargo`, `cargos` and

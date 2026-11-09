@@ -197,7 +197,7 @@ check_release() {
   assert_eq "Succeeded" "$(kn get pod "$RELEASE-graphql-test" -o jsonpath='{.status.phase}')" "the helm test pod"
   for deployment in lgtm keycloak quarkus python quarkus-internal python-internal edge; do
     kn rollout status "deploy/$deployment" --timeout=60s >/dev/null
-    echo "lib.sh: ok — deploy/$deployment is rolled out" >&2
+    echo "lib.sh: ok, deploy/$deployment is rolled out" >&2
   done
 }
 
@@ -273,7 +273,7 @@ run_stack_check() {
   assert_eq "1" "$(grep -c . <<<"$pods")" "$stack: the trace carries one k8s.pod.name"
   assert_contains "$pods" "$(pod_names "$stack")" "$stack: k8s.pod.name is the public instance's pod"
   loki_wait "$LOKI" "{service_name=\"ch27-final-$stack\"} | trace_id=\"$trace_id\"" 90 1 >/dev/null
-  echo "lib.sh: ok — $stack: Loki holds a record for trace $trace_id" >&2
+  echo "lib.sh: ok, $stack: Loki holds a record for trace $trace_id" >&2
 }
 
 # check_subscription <stack> <edge-url> - ana subscribes

@@ -1,4 +1,4 @@
-# Ch20 - Federation and schema composition
+# Chapter 20: Federation and schema composition
 
 The tracking view split by ownership into a cargo subgraph and a handling subgraph, each on both stacks
 (SmallRye GraphQL on Quarkus, Strawberry on FastAPI). A composer turns a pair of subgraphs into a

@@ -1,4 +1,4 @@
-# Ch14 - Depth limits and query cost analysis
+# Chapter 14: Depth limits and query cost analysis
 
 A client chooses the shape of a query, so the server bounds the shape before it runs. This example
 puts four limits in front of execution on both stacks: depth, tokens, aliases and a

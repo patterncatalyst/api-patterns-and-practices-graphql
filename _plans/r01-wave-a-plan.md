@@ -665,11 +665,11 @@ A0 self-test: run Ch0 `verify.sh` green after the edits. Run `bash -n` and `pyth
 ---
 
 ### Critical files for implementation
-- ~/Dev/api-patterns-and-practices-graphql/examples/_lib/lib.sh
-- ~/Dev/api-patterns-and-practices-graphql/examples/00-prerequisites/verify.sh (and its `quarkus/…/ContractSchemaDetails.java`, `python/app/schema.py`)
-- ~/Dev/api-patterns-and-practices-graphql/contracts/schema/shipping/cargo.graphql and handling.graphql
-- ~/Dev/api-patterns-and-practices-graphql/_plans/coverage-matrix.md
-- ~/Dev/api-patterns-and-practices-graphql/scripts/generate_diagram.py
+- <repo>/examples/_lib/lib.sh
+- <repo>/examples/00-prerequisites/verify.sh (and its `quarkus/…/ContractSchemaDetails.java`, `python/app/schema.py`)
+- <repo>/contracts/schema/shipping/cargo.graphql and handling.graphql
+- <repo>/_plans/coverage-matrix.md
+- <repo>/scripts/generate_diagram.py
 
 ---
 

@@ -1,6 +1,6 @@
-# Ch16 - Caching
+# Chapter 16: Caching
 
-Three places to keep an answer on both stacks, in front of the Chapter 15 persisted-query code:
+Three places to keep an answer on both stacks, in front of the persisted-query code:
 an nginx HTTP cache that stores a persisted `GET` of reference data, a `Cache-Control` decision made
 for every response, and field-level source caches inside the server with a TTL and invalidation on
 `registerHandlingEvent`. Quarkus uses `quarkus-cache` (Caffeine) through its annotations and its

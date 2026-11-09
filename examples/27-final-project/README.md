@@ -1,4 +1,4 @@
-# Ch27 - The final project
+# Chapter 27: The final project
 
 The complete tracking view behind one edge. Both stacks serve the whole canonical schema, `Subscription`
 included, from the images `gql-ch27-quarkus:1.0` and `gql-ch27-python:1.0`. An nginx edge terminates TLS 1.3,
@@ -253,7 +253,7 @@ What the chart adds to Chapter 26's:
 - The NetworkPolicies let the public instances accept the edge and the test pod, the internal instances and
   Keycloak accept any source on 8080, the edge any source on its ports, and the observability backend accept
   OTLP from the release's pods.
-- The Ch26 patterns stay: `values.schema.json` is enforced (the public instance cannot enable introspection, and
+- The Chapter 26 patterns stay: `values.schema.json` is enforced (the public instance cannot enable introspection, and
   `runAsUser`, `runAsGroup` and `fsGroup` are rejected), a `checksum/config` annotation on every instance, a
   chart-generated TLS Secret kept across upgrades with `lookup`, three probes per workload, the downward API
   in `OTEL_RESOURCE_ATTRIBUTES`, restricted security contexts with no UID, and `helm test`.
@@ -356,99 +356,99 @@ Output of `smoke.sh` (the harness lines, with the NodePort checks for 30360 to 3
 
 ```
 === the release: published ports, rollout ===
-ok - helm status gql-ch27: 'deployed'
-ok - the helm test pod: 'Succeeded'
-ok - deploy/lgtm is rolled out
-ok - deploy/keycloak is rolled out
-ok - deploy/quarkus is rolled out
-ok - deploy/python is rolled out
-ok - deploy/quarkus-internal is rolled out
-ok - deploy/python-internal is rolled out
-ok - deploy/edge is rolled out
+ok, helm status gql-ch27: 'deployed'
+ok, the helm test pod: 'Succeeded'
+ok, deploy/lgtm is rolled out
+ok, deploy/keycloak is rolled out
+ok, deploy/quarkus is rolled out
+ok, deploy/python is rolled out
+ok, deploy/quarkus-internal is rolled out
+ok, deploy/python-internal is rolled out
+ok, deploy/edge is rolled out
 === tokens from Keycloak at the NodePort, the issuer the stacks pin ===
 === verifying stack 'quarkus' through the edge at https://127.0.0.1:30370/graphql ===
-ok - quarkus internal schema equals the canonical SDL: live schema equals the canonical SDL
-ok - quarkus Itinerary.finalArrivalDate: Itinerary.finalArrivalDate is deprecated ('Use `finalArrivalTime`.')
-ok - quarkus public __schema is refused, even for an operator: 1 top-level error(s)
-ok - quarkus public __schema returns no data: no data
-ok - quarkus public __schema message: an error message contains 'Introspection has been disabled for this request'
-ok - quarkus: a TLS 1.2 client is refused: curl failed as expected (exit 35: (35) TLS connect error: error:0A00042E:SSL routines::tlsv1 alert protocol version)
-ok - quarkus source-call log reset: '204'
-ok - quarkus: a 100 KB body is refused at the edge: '413'
-ok - quarkus: the refused body never reached the pod: 0 call(s) to *.*
-ok - quarkus: /debug/source-calls is not routed: '404'
-ok - quarkus anonymous cargo: code: extensions.code is "UNAUTHENTICATED"
-ok - quarkus a token for another audience is HTTP 401 through the edge: '401'
-ok - quarkus ana cargos: no top-level errors
-ok - quarkus ana sees her three cargos: ["VWX901", "DEF456", "ABC123"]
-ok - quarkus ana registrationTime: code: extensions.code is "FORBIDDEN"
-ok - quarkus source-call log reset: '204'
-ok - quarkus OverBudget: no data: no data
-ok - quarkus OverBudget: message: 'maximum query complexity exceeded 7651 > 1000'
-ok - quarkus OverBudget: refused before any source call: 0 call(s) to *.*
-ok - quarkus source-call log reset: '204'
-ok - quarkus FanOut as ops: no top-level errors
-ok - quarkus FanOut: 8 source calls, read inside the pod: 8 call(s) to *.*
+ok, quarkus internal schema equals the canonical SDL: live schema equals the canonical SDL
+ok, quarkus Itinerary.finalArrivalDate: Itinerary.finalArrivalDate is deprecated ('Use `finalArrivalTime`.')
+ok, quarkus public __schema is refused, even for an operator: 1 top-level error(s)
+ok, quarkus public __schema returns no data: no data
+ok, quarkus public __schema message: an error message contains 'Introspection has been disabled for this request'
+ok, quarkus: a TLS 1.2 client is refused: curl failed as expected (exit 35: (35) TLS connect error: error:0A00042E:SSL routines::tlsv1 alert protocol version)
+ok, quarkus source-call log reset: '204'
+ok, quarkus: a 100 KB body is refused at the edge: '413'
+ok, quarkus: the refused body never reached the pod: 0 call(s) to *.*
+ok, quarkus: /debug/source-calls is not routed: '404'
+ok, quarkus anonymous cargo: code: extensions.code is "UNAUTHENTICATED"
+ok, quarkus a token for another audience is HTTP 401 through the edge: '401'
+ok, quarkus ana cargos: no top-level errors
+ok, quarkus ana sees her three cargos: ["VWX901", "DEF456", "ABC123"]
+ok, quarkus ana registrationTime: code: extensions.code is "FORBIDDEN"
+ok, quarkus source-call log reset: '204'
+ok, quarkus OverBudget: no data: no data
+ok, quarkus OverBudget: message: 'maximum query complexity exceeded 7651 > 1000'
+ok, quarkus OverBudget: refused before any source call: 0 call(s) to *.*
+ok, quarkus source-call log reset: '204'
+ok, quarkus FanOut as ops: no top-level errors
+ok, quarkus FanOut: 8 source calls, read inside the pod: 8 call(s) to *.*
 --- quarkus: one subscription event, delivered to a client in the cluster
-ok - quarkus REG_F1: no top-level errors
-ok - quarkus REG_F1 is evt_10: 'evt_10'
-ok - quarkus the client printed exactly one event: '1'
-ok - quarkus ana's event is evt_10: 'evt_10'
-ok - quarkus ana's event delivery, read after the unload: 'IN_PORT'
+ok, quarkus REG_F1: no top-level errors
+ok, quarkus REG_F1 is evt_10: 'evt_10'
+ok, quarkus the client printed exactly one event: '1'
+ok, quarkus ana's event is evt_10: 'evt_10'
+ok, quarkus ana's event delivery, read after the unload: 'IN_PORT'
 --- quarkus: one k6 run through the edge
-ok - quarkus source-call log reset: '204'
-ok - quarkus k6 fanout: iterations: '80'
-ok - quarkus k6 fanout: every check true: '1'
-ok - quarkus k6 fanout: no transport failure: '0'
-ok - quarkus k6 fanout: one request id per request: 80 distinct request id(s)
-ok - quarkus k6 fanout: 8 calls per request: every request made 8 call(s)
-ok - quarkus: extensions.traceId equals the id sent through the edge: extensions.traceId is "6f66e61e431121dcab5a379fa2a7946f"
-ok - quarkus: Tempo holds the operation span for that id: /^query ListCargos$/ occurs 1..1 time(s)
-ok - quarkus: the trace carries one k8s.pod.name: '1'
-ok - quarkus: k8s.pod.name is the public instance's pod: found 'quarkus-6d987589cd-p8kzp'
-ok - quarkus: Loki holds a record for trace 6f66e61e431121dcab5a379fa2a7946f
+ok, quarkus source-call log reset: '204'
+ok, quarkus k6 fanout: iterations: '80'
+ok, quarkus k6 fanout: every check true: '1'
+ok, quarkus k6 fanout: no transport failure: '0'
+ok, quarkus k6 fanout: one request id per request: 80 distinct request id(s)
+ok, quarkus k6 fanout: 8 calls per request: every request made 8 call(s)
+ok, quarkus: extensions.traceId equals the id sent through the edge: extensions.traceId is "6f66e61e431121dcab5a379fa2a7946f"
+ok, quarkus: Tempo holds the operation span for that id: /^query ListCargos$/ occurs 1..1 time(s)
+ok, quarkus: the trace carries one k8s.pod.name: '1'
+ok, quarkus: k8s.pod.name is the public instance's pod: found 'quarkus-6d987589cd-p8kzp'
+ok, quarkus: Loki holds a record for trace 6f66e61e431121dcab5a379fa2a7946f
 === verifying stack 'python' through the edge at https://127.0.0.1:30371/graphql ===
-ok - python internal schema equals the canonical SDL: live schema equals the canonical SDL
-ok - python Itinerary.finalArrivalDate: Itinerary.finalArrivalDate is deprecated ('Use `finalArrivalTime`.')
-ok - python public __schema is refused, even for an operator: 2 top-level error(s)
-ok - python public __schema returns no data: no data
-ok - python public __schema message: an error message contains 'introspection has been disabled'
-ok - python: a TLS 1.2 client is refused: curl failed as expected (exit 35: (35) TLS connect error: error:0A00042E:SSL routines::tlsv1 alert protocol version)
-ok - python source-call log reset: '204'
-ok - python: a 100 KB body is refused at the edge: '413'
-ok - python: the refused body never reached the pod: 0 call(s) to *.*
-ok - python: /debug/source-calls is not routed: '404'
-ok - python anonymous cargo: code: extensions.code is "UNAUTHENTICATED"
-ok - python a token for another audience is HTTP 401 through the edge: '401'
-ok - python ana cargos: no top-level errors
-ok - python ana sees her three cargos: ["VWX901", "DEF456", "ABC123"]
-ok - python ana registrationTime: code: extensions.code is "FORBIDDEN"
-ok - python source-call log reset: '204'
-ok - python OverBudget: no data: no data
-ok - python OverBudget: message: 'maximum query complexity exceeded 7651 > 1000'
-ok - python OverBudget: refused before any source call: 0 call(s) to *.*
-ok - python source-call log reset: '204'
-ok - python FanOut as ops: no top-level errors
-ok - python FanOut: 6 source calls, read inside the pod: 6 call(s) to *.*
+ok, python internal schema equals the canonical SDL: live schema equals the canonical SDL
+ok, python Itinerary.finalArrivalDate: Itinerary.finalArrivalDate is deprecated ('Use `finalArrivalTime`.')
+ok, python public __schema is refused, even for an operator: 2 top-level error(s)
+ok, python public __schema returns no data: no data
+ok, python public __schema message: an error message contains 'introspection has been disabled'
+ok, python: a TLS 1.2 client is refused: curl failed as expected (exit 35: (35) TLS connect error: error:0A00042E:SSL routines::tlsv1 alert protocol version)
+ok, python source-call log reset: '204'
+ok, python: a 100 KB body is refused at the edge: '413'
+ok, python: the refused body never reached the pod: 0 call(s) to *.*
+ok, python: /debug/source-calls is not routed: '404'
+ok, python anonymous cargo: code: extensions.code is "UNAUTHENTICATED"
+ok, python a token for another audience is HTTP 401 through the edge: '401'
+ok, python ana cargos: no top-level errors
+ok, python ana sees her three cargos: ["VWX901", "DEF456", "ABC123"]
+ok, python ana registrationTime: code: extensions.code is "FORBIDDEN"
+ok, python source-call log reset: '204'
+ok, python OverBudget: no data: no data
+ok, python OverBudget: message: 'maximum query complexity exceeded 7651 > 1000'
+ok, python OverBudget: refused before any source call: 0 call(s) to *.*
+ok, python source-call log reset: '204'
+ok, python FanOut as ops: no top-level errors
+ok, python FanOut: 6 source calls, read inside the pod: 6 call(s) to *.*
 --- python: one subscription event, delivered to a client in the cluster
-ok - python REG_F1: no top-level errors
-ok - python REG_F1 is evt_10: 'evt_10'
-ok - python the client printed exactly one event: '1'
-ok - python ana's event is evt_10: 'evt_10'
-ok - python ana's event delivery, read after the unload: 'IN_PORT'
+ok, python REG_F1: no top-level errors
+ok, python REG_F1 is evt_10: 'evt_10'
+ok, python the client printed exactly one event: '1'
+ok, python ana's event is evt_10: 'evt_10'
+ok, python ana's event delivery, read after the unload: 'IN_PORT'
 --- python: one k6 run through the edge
-ok - python source-call log reset: '204'
-ok - python k6 fanout: iterations: '80'
-ok - python k6 fanout: every check true: '1'
-ok - python k6 fanout: no transport failure: '0'
-ok - python k6 fanout: one request id per request: 80 distinct request id(s)
-ok - python k6 fanout: 6 calls per request: every request made 6 call(s)
-ok - python: extensions.traceId equals the id sent through the edge: extensions.traceId is "1ffd358b72217e53c21cd8d91cff60b6"
-ok - python: Tempo holds the operation span for that id: /^GraphQL Query: ListCargos$/ occurs 1..1 time(s)
-ok - python: the trace carries one k8s.pod.name: '1'
-ok - python: k8s.pod.name is the public instance's pod: found 'python-5f559cb7df-gd8sv'
-ok - python: Loki holds a record for trace 1ffd358b72217e53c21cd8d91cff60b6
-PASS - Ch27 The final project on Kubernetes: ...
+ok, python source-call log reset: '204'
+ok, python k6 fanout: iterations: '80'
+ok, python k6 fanout: every check true: '1'
+ok, python k6 fanout: no transport failure: '0'
+ok, python k6 fanout: one request id per request: 80 distinct request id(s)
+ok, python k6 fanout: 6 calls per request: every request made 6 call(s)
+ok, python: extensions.traceId equals the id sent through the edge: extensions.traceId is "1ffd358b72217e53c21cd8d91cff60b6"
+ok, python: Tempo holds the operation span for that id: /^GraphQL Query: ListCargos$/ occurs 1..1 time(s)
+ok, python: the trace carries one k8s.pod.name: '1'
+ok, python: k8s.pod.name is the public instance's pod: found 'python-5f559cb7df-gd8sv'
+ok, python: Loki holds a record for trace 1ffd358b72217e53c21cd8d91cff60b6
+PASS: Chapter 27 The final project on Kubernetes: ...
 ```
 
 ## Diagram

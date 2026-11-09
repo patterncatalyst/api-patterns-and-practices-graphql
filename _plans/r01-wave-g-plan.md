@@ -570,10 +570,10 @@ How to run it:
 11. **`_plans/` in the voice pass.** **Recommend: excluded.** The plans are internal and unrendered. The orchestrator only confirms that they hold no vulnerability detail (C2 step 4).
 
 ### Critical files for implementation
-- `~/Dev/api-patterns-and-practices-graphql/bibliography.md`
-- `~/Dev/api-patterns-and-practices-graphql/_docs/` (the citing chapters in §0, and every chapter for V1–V5)
-- `~/Dev/api-patterns-and-practices-graphql/_example_pages/index.md`, `~/Dev/api-patterns-and-practices-graphql/index.html`, `~/Dev/api-patterns-and-practices-graphql/_includes/footer.html`, `~/Dev/api-patterns-and-practices-graphql/_layouts/part_index.html`
-- `~/Dev/api-patterns-and-practices-graphql/examples/_lib/lib.sh` (comments at 1697 and 1742) and `examples/1[4-8]-*/quarkus/.../ContractSchemaDetails.java`, `examples/23-testing/quarkus/.../ContractSchemaDetails.java`
+- `<repo>/bibliography.md`
+- `<repo>/_docs/` (the citing chapters in §0, and every chapter for V1–V5)
+- `<repo>/_example_pages/index.md`, `<repo>/index.html`, `<repo>/_includes/footer.html`, `<repo>/_layouts/part_index.html`
+- `<repo>/examples/_lib/lib.sh` (comments at 1697 and 1742) and `examples/1[4-8]-*/quarkus/.../ContractSchemaDetails.java`, `examples/23-testing/quarkus/.../ContractSchemaDetails.java`
 - `~/.claude/skills/lgtm-professional-voice/SKILL.md`, `references/surfaces.md`, `scripts/scan.sh`, `scripts/patterns.tsv`
 - Templates (read-only): `~/Dev/api-patterns-and-practices-grpc/README.md`, `~/Dev/api-patterns-and-practices-rest/bibliography.md`, gRPC commit `4b33d5f`
 

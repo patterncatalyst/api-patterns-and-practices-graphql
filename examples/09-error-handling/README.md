@@ -1,4 +1,4 @@
-# Ch9 - Error handling
+# Chapter 9: Error handling
 
 What a failure looks like on the wire, and what a client is allowed to see of it. The example adds
 three fault seeds to the tracking view and gives both stacks the same error contract: an outage is

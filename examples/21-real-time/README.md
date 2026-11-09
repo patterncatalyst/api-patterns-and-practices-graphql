@@ -1,4 +1,4 @@
-# Ch21 - Real-time: subscriptions vs SSE vs WebSockets
+# Real-time: subscriptions vs SSE vs WebSockets (Chapter 21)
 
 `Subscription.cargoHandled` completes the canonical SDL. Both stacks serve it over WebSocket with
 `graphql-transport-ws` (and the older `graphql-ws`), Strawberry also serves it over GraphQL-over-SSE

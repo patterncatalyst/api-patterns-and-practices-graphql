@@ -215,11 +215,11 @@ print(json.dumps(next(f for f in json.load(sys.stdin)["data"]["__type"]["fields"
   assert_no_errors "$resp" "$stack __schema"
   printf '%s\n' "$resp" >"$TMP_DIR/$stack-schema.json"
   if ! offenders="$(conventions <"$TMP_DIR/$stack-schema.json")"; then
-    echo "lib.sh: FAIL — $stack schema conventions:" >&2
+    echo "lib.sh: FAIL, $stack schema conventions:" >&2
     echo "$offenders" >&2
     return 1
   fi
-  echo "lib.sh: ok — $stack schema conventions: names, input and payload shapes, descriptions, Node ids" >&2
+  echo "lib.sh: ok, $stack schema conventions: names, input and payload shapes, descriptions, Node ids" >&2
 
   # 7. A mutation that fails a domain rule still returns its payload: the
   #    field is non-null, the failure is data, and there is no top-level error.

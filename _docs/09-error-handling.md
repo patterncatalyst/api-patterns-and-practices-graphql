@@ -3,7 +3,7 @@ title: "Error handling"
 order: 9
 part: "Reliability: Errors & Partial Results"
 description: "How GraphQL reports failure: request errors against execution errors, the anatomy of an error, partial data, a stable extensions.code vocabulary, masking unexpected failures on both stacks, status codes and media types, and the choice between errors[], payload userErrors and result unions."
-duration: "16 min read"
+duration: "13 min read"
 ---
 
 ## Learning objectives
@@ -18,34 +18,30 @@ By the end of this chapter you can:
 
 ## Why this matters
 
-Nullability propagation followed a null upward through non-null fields, and the mutation chapter returned refused input as `userErrors` data. Both stopped short of the error itself: what it contains, which parts a client can rely on, and which parts the server must keep to itself. This chapter gives failures a contract. The tracking view fails in three ways, one outage and two unexpected failures, and both stacks answer them with the same shape.
-
-The code is in `examples/09-error-handling/`. It starts from the mutation example, adds no schema, and restores three fault seeds: `JKL567` sails on a voyage whose service is down, `MNO901` loads at a location code the location service does not know, and `PQR234` makes the handling service fail with an unexpected exception that carries an internal shard name. What is new is the error behaviour. An outage is an exposed error with a code, anything unexpected is masked as `Internal server error.`, and the detail goes to the server log. `verify.sh` asserts every claim below on both stacks.
+A failure needs a contract: what an error contains, which parts a client can rely on, and which parts the server keeps to itself. The tracking view fails in three ways, and both stacks answer them with the same shape. `JKL567` sails on a voyage whose service is down, `MNO901` loads at a location code the location service doesn't know, and `PQR234` makes the handling service fail with an unexpected exception that carries an internal shard name. An outage is an exposed error with a code, anything unexpected is masked as `Internal server error.`, and the detail goes to the server log.
 
 ## Two kinds of failure, one array
 
-The GraphQL specification separates failures by when they happen. A **request error** occurs before execution begins: the document does not parse, it fails validation, a variable does not coerce, or the operation cannot be selected. No resolver runs, so there is no `data` entry at all (Python sends `"data":null`). An **execution error** occurs while a resolver is running. Execution continues, so the response carries `data` with a null where the field failed, and the error carries a `path` to that field. Older editions of the specification call these field errors. The current term is execution error, and this book uses it.
+The specification separates failures by when they happen. A **request error** occurs before execution begins: the document doesn't parse, fails validation, a variable doesn't coerce, or the operation can't be selected. No resolver runs, so there is no `data` entry (Python sends `"data":null`). An **execution error** occurs while a resolver runs. Execution continues, so the response carries `data` with a null where the field failed, and the error carries a `path` to that field.
 
-Both kinds arrive in the same top-level `errors` array, which is why the array alone does not tell a client what happened. The shape does. Errors with no `data` mean the request was rejected and nothing was fetched. Errors beside `data` mean the server did what it could and part of the answer is missing. A third outcome has no `errors` at all: a mutation's `userErrors` are ordinary data in a successful response.
+Both arrive in the same top-level `errors` array, so the array alone doesn't tell a client what happened. The shape does. Errors with no `data` mean the request was rejected and nothing was fetched. Errors beside `data` mean the server did what it could and part of the answer is missing. A third outcome has no `errors` at all: a mutation's `userErrors` are ordinary data in a successful response.
 
-{% include excalidraw.html file="09-error-taxonomy" alt="Three horizontal lanes. The first lane, a request error, runs through parse, validate, coerce variables and select operation, and exits to a box saying errors with locations and no path, no data (Python sends data null), and no resolver ran. The second lane, an execution error, shows a resolver that either raises an exposed error or an unexpected one that is masked, and both exit to a box saying data plus errors with a path, where the null lands at the nearest nullable ancestor. The third lane, a domain failure, shows a mutation validating its input and exiting to a box saying data with userErrors and no errors key. The first exit box notes the GraphQL-over-HTTP draft asks for a 4xx and both stacks answer 200, and the other two note the response is 200 on both stacks." caption="Figure 9.1: Three kinds of failure and the response each produces. Only the first happens before a resolver runs." %}
+{% include excalidraw.html file="09-error-taxonomy" alt="Three horizontal lanes. A request error runs through parse, validate, coerce variables and select operation, and exits to errors with locations and no path, no data (Python sends data null), and no resolver ran. An execution error shows a resolver that raises either an exposed error or an unexpected one that is masked, and both exit to data plus errors with a path, where the null lands at the nearest nullable ancestor. A domain failure shows a mutation validating its input and exiting to data with userErrors and no errors key. All three answer 200 on both stacks." caption="Figure 9.1: Three kinds of failure and the response each produces. Only the first happens before a resolver runs." %}
 
-The origin matters for what a client does next. A request error is a defect in the client: retrying the same document fails the same way, and the fix is in the code that built it. An execution error may be transient, as an outage often is, so a retry can succeed. A domain failure is neither: the input was understood and refused, and the user can correct it.
+The origin decides what a client does next. A request error is a defect in the client: retrying the same document fails the same way. An execution error may be transient, as an outage often is, so a retry can succeed. A domain failure is neither: the input was understood and refused, and the user can correct it.
 
 ## Anatomy of an error
 
-The specification's "Response" section defines the error format, under "Errors" and "Error Result Format". Each entry is a map with these keys:
+Each entry in `errors` is a map with these keys:
 
 - `message` is a string for a developer. Its wording belongs to the engine or the resolver, and clients must not parse it.
-- `locations` is a list of line and column pairs that point into the request document. Request errors and most execution errors have it.
-- `path` is the response path of the field that failed. It exists only for execution errors, because a request error has no field. Each step is a response key (the alias when the selection has one) or a list index, and an index is a JSON number: `0`, not `"0"`.
-- `extensions` is a map the server may fill with anything. It is the only place for custom keys, and the specification advises against adding other keys to the error map, since a future edition may claim them.
+- `locations` is a list of line and column pairs into the request document. Request errors and most execution errors have it. graphql-java's own null-in-a-non-null-field error arrives with a `path` and no `locations`, so a client treats the key as optional.
+- `path` is the response path of the field that failed. It exists only for execution errors. Each step is a response key (the alias when the selection has one) or a list index, and an index is a JSON number: `0`, not `"0"`. `bug: cargo(...)` that fails at `delivery` reports `["bug","delivery"]`.
+- `extensions` is a map the server may fill with anything. It is the only place for custom keys, because a future edition of the specification may claim any other key.
 
-A request error is the engine speaking, and its entries come from the validation rules of the specification's "Validation" section or from coercion. An unknown field gives `Cannot query field 'weight' on type 'Cargo'.` on Strawberry and `Validation error (FieldUndefined@[cargo/weight]) : Field 'weight' in type 'Cargo' is undefined` on Quarkus. Same failure, same shape, two sentences. That is why the example asserts structure and codes and not request-error wording.
+Request errors come from the engine's validation rules or coercion, in its own words. An unknown field gives `Cannot query field 'weight' on type 'Cargo'.` on Strawberry and `Validation error (FieldUndefined@[cargo/weight]) : Field 'weight' in type 'Cargo' is undefined` on Quarkus. Assert structure and codes, never request-error wording.
 
-The order of the entries in `errors` carries no meaning, so a client looks up an error by its `path` and does not read it by position. The harness does the same: every assertion in `verify.sh` finds an error by its path when a response carries more than one.
-
-Two details deserve a check on a live server. Aliases show in paths, so `bug: cargo(...)` that fails at `delivery` reports `["bug","delivery"]`. And `locations` is optional in the specification. Strawberry and SmallRye both send it for resolver failures, while graphql-java's own null-in-a-non-null-field error arrives with a `path` and no `locations`. A client treats the key as optional.
+The order of entries in `errors` carries no meaning, so a client finds an error by its `path` and not by position.
 
 ## Partial data: errors beside data
 
@@ -61,36 +57,39 @@ The strongest argument for the execution-error model is a query that is half rig
 
 The response has all three keys, in selection order. `ok` is intact. `outage` is a cargo whose itinerary has one leg and whose `voyage` is null, because the voyage service is down for `V404X`. `bug` is null, because the handling service failed under `delivery`. Two errors explain the two holes.
 
-{% include excalidraw.html file="09-partial-data-errors" alt="Two panels. The left panel shows the data tree with three branches. The ok branch is a solid box with the tracking id resolved. The outage branch shows a solid box for cargo JKL567 and a dashed box for itinerary legs zero voyage, null. The bug branch is a dashed box, null at the cargo. The right panel shows two error boxes. The outage error has the code SERVICE_UNAVAILABLE, the message voyage service unavailable and the path outage, itinerary, legs, zero, voyage. The bug error has the code null on Quarkus and no extensions on Python, the message Internal server error. and the path bug, delivery. An amber arrow runs from each path to its hole." caption="Figure 9.2: The response to the three-alias query. A path names where it broke, and the null lands at the nearest nullable ancestor." %}
+{% include excalidraw.html file="09-partial-data-errors" alt="Two panels. Left, the data tree with three branches: ok is a solid box with the tracking id resolved, outage shows a solid cargo box and a dashed null voyage, and bug is a dashed null cargo. Right, two error boxes. The outage error has code SERVICE_UNAVAILABLE, message voyage service unavailable and path outage, itinerary, legs, zero, voyage. The bug error has code null on Quarkus and no extensions on Python, message Internal server error. and path bug, delivery. An arrow runs from each path to its hole." caption="Figure 9.2: The response to the three-alias query. A path names where it broke, and the null lands at the nearest nullable ancestor." %}
 
-A client with one request per screen section can render what arrived and mark the missing parts. A client that treated any entry in `errors` as a failed request would throw away two usable answers here. That is the payoff of nullability propagation's fuses: each alias sits under its own nullable root field, so one failure cannot take another alias with it.
+A client with one request per screen section renders what arrived and marks the missing parts. A client that treated any entry in `errors` as a failed request would throw away two usable answers. Each alias sits under its own nullable root field, so one failure can't take another alias with it.
 
 ## Where the null lands
 
-The error's `path` and the null in `data` are not always at the same place. The path names the field that failed. The null goes where the type system allows it. `Leg.voyage` is nullable, so the failure and the hole coincide: `["cargo","itinerary","legs",0,"voyage"]`. `Cargo.delivery` is non-null, so a null cannot be placed there, and the engine nulls the nearest nullable ancestor instead, which is `cargo`. The error still says `["bug","delivery"]`, and a client that looks for a null at that path finds the parent null instead.
+The error's `path` names the field that failed. The null goes where the type system allows it. `Leg.voyage` is nullable, so the failure and the hole coincide at `["cargo","itinerary","legs",0,"voyage"]`. `Cargo.delivery` is non-null, so the engine nulls the nearest nullable ancestor instead, which is `cargo`. The error still says `["bug","delivery"]`, and a client that looks for a null at that path finds the parent null.
 
-`MNO901` combines both rules. The location source answers null for `XXBAD`, `Leg.loadLocation` is non-null, `legs` is a non-null list of non-null legs, and `Itinerary.legs` itself is non-null. The null climbs from `loadLocation` through the leg, the list and the itinerary object to `Cargo.itinerary`, the first nullable position on the way up. One error, one hole, `itinerary` null, and `trackingId` still `MNO901`. The error count is one however far the null travels: it is recorded where the failure happened, and the propagation adds nothing.
+`MNO901` combines both rules. The location source answers null for `XXBAD`, `Leg.loadLocation` is non-null, `legs` is a non-null list of non-null legs, and `Itinerary.legs` is non-null. The null climbs to `Cargo.itinerary`, the first nullable position on the way up. One error, one hole, and `trackingId` is still `MNO901`. The error count is one however far the null travels.
 
 ## A code vocabulary in extensions
 
-A message is for a person, and a client that switches on it breaks whenever someone rewords it. A client that needs to act on a failure, say by retrying, needs something stable. That is `extensions.code`, a short string from a vocabulary the service owns and documents.
+A client that switches on a message breaks whenever someone rewords it. A client that needs to act on a failure, say by retrying, needs `extensions.code`, a short string from a vocabulary the service owns and documents.
 
 | `extensions.code` | Raised for | Message | Exposed |
 |---|---|---|---|
 | `SERVICE_UNAVAILABLE` | a source outage (`V404X`) | `voyage service unavailable` | yes |
 | none | anything unexpected | `Internal server error.` | masked |
 
-The codes are contract and the messages are not, so the codes follow the same evolution rules as enum values: adding one is safe for a client that has a default branch and breaks one that does not. The breaking-change gate returns to that. Pagination adds `BAD_USER_INPUT` to the vocabulary for cursors that pass coercion and are still invalid.
+Codes are contract and messages are not. Adding a code follows the evolution rules for enum values: safe for a client with a default branch, breaking for one without. Cursor pagination adds `BAD_USER_INPUT` for cursors that pass coercion and are still invalid.
 
-A client that reads an error can follow a short order. First, is `data` absent? Then the request was rejected, nothing was fetched, and the fix is in the client. Otherwise, walk the `errors` entries, find the hole by `path`, and decide per entry: a `SERVICE_UNAVAILABLE` is worth a bounded retry or a degraded rendering, a masked error with no code is worth showing a generic apology while the server log keeps the exception, its stack and the time, and an unknown code falls to the same generic branch. That last rule is what makes it safe for the service to add a code later.
+A client reads an error in this order:
 
-Request errors have no code. SmallRye and graphql-core generate them before any resolver runs, in their own words, and the example does not rewrite them. A client branches on their structure: errors present and no `data`.
+1. Is `data` absent? The request was rejected and nothing was fetched. The fix is in the client.
+2. Otherwise find the hole by `path` and decide per entry. `SERVICE_UNAVAILABLE` earns a bounded retry or a degraded rendering. A masked error with no code gets a generic apology while the server log keeps the exception, stack and time. An unknown code falls to the same generic branch, which is what makes it safe for the service to add a code later.
+
+Request errors carry no code. The engines write them before any resolver runs, in their own words, and a client branches on their structure: errors present and no `data`.
 
 ## Masking what clients must not see
 
-An unexpected exception carries whatever its author put in the message: a table name, a shard, a host, a stack. In `PQR234` it is `handling projection corrupted on shard handling-primary-3`. Showing that to a client exposes the topology and invites probing, and it does not help the client, which cannot fix a corrupted shard. The rule has two halves: the client gets a generic message, and the operator gets everything in the server log.
+An unexpected exception carries whatever its author put in the message: a table name, a shard, a host, a stack. For `PQR234` it is `handling projection corrupted on shard handling-primary-3`. Showing that exposes topology and invites probing, and the client can't fix a corrupted shard. The client gets a generic message and the operator gets everything in the server log.
 
-Both frameworks implement this as an allowlist. Nothing is shown unless the service listed it, so a new exception class added next year is masked by default.
+Both frameworks implement this as an allowlist. Nothing is shown unless the service listed it, so an exception class added next year is masked by default.
 
 {% include codetabs.html langs="Quarkus|Python" %}
 
@@ -112,31 +111,40 @@ class ExposedError(Exception):
 
     def __init__(self, message: str) -> None:
         super().__init__(message)
+        # graphql-core copies a dict ``extensions`` from the original error
+        # onto the GraphQLError it builds.
         self.extensions = {"code": self.code}
 
 
 class SourceUnavailable(ExposedError):
+    """A source cannot answer (the outage seeds: voyage V404X)."""
+
     code = "SERVICE_UNAVAILABLE"
 ```
 
-SmallRye hides the message of every unchecked exception by default. `show-runtime-exception-message` lists the classes whose messages are shown, which makes it the allowlist, and `default-error-message` sets the replacement. The `@ErrorCode` annotation sets `extensions.code`. The section below supplies the code for every other exception.
+SmallRye hides the message of every unchecked exception by default. `show-runtime-exception-message` lists the classes whose messages are shown, which makes it the allowlist, and `default-error-message` sets the replacement. `@ErrorCode` sets `extensions.code`.
 
 ```properties
 quarkus.smallrye-graphql.show-runtime-exception-message=com.patterncatalyst.shipping.tracking.SourceUnavailableException
 quarkus.smallrye-graphql.default-error-message=Internal server error.
 quarkus.smallrye-graphql.error-extension-fields=code
-quarkus.smallrye-graphql.print-data-fetcher-exception=true
 ```
 
-The same file lists `ExceptionNameErrorExtensionProvider`, so the `exception` field is gone too; `DeclaredErrorCodeProvider` is the only provider left.
-
-Strawberry ships a schema extension, `MaskErrors`, that replaces the message of the errors a predicate selects. The predicate here inverts the usual reading: it masks every error whose original exception is not an `ExposedError`, so the allowlist is the class hierarchy.
+Strawberry ships a `MaskErrors` schema extension that replaces the message of the errors a predicate selects. The predicate masks every error whose original exception isn't an `ExposedError`, so the class hierarchy is the allowlist.
 
 ```python
 def should_mask(error: GraphQLError) -> bool:
+    """Mask an error unless a resolver raised an ``ExposedError``.
+
+    An error with no ``original_error`` came from the engine itself (a request
+    error: parse, validation, coercion) and keeps its message. An error whose
+    ``original_error`` is anything but an ``ExposedError`` is an unexpected failure, or
+    a null in a non-null field (a ``TypeError``), and is masked.
+    """
     return error.original_error is not None and not isinstance(error.original_error, ExposedError)
+```
 
-
+```python
 schema = strawberry.Schema(
     query=Query,
     mutation=Mutation,
@@ -145,13 +153,13 @@ schema = strawberry.Schema(
 )
 ```
 
-An error with no original exception came from the engine itself, a request error, and keeps its message. `MaskErrors` rebuilds a masked error without its `extensions`, so a masked error carries no code either. The predicate also decides what a resolver may raise: a `GraphQLError` raised directly is masked, because it is not an `ExposedError`, so a resolver raises a subclass of `ExposedError` for anything a client should read.
+`MaskErrors` rebuilds a masked error without its `extensions`, so a masked error carries no code. A `GraphQLError` raised directly is masked too, because it isn't an `ExposedError`: a resolver raises a subclass of `ExposedError` for anything a client should read.
 
-{% include excalidraw.html file="09-error-masking" alt="A left to right flow. A source throws an exception, the resolver does not catch it, and the engine builds an error holding the path, the message and the original exception. The error passes an amber allowlist box that names the SmallRye show-runtime-exception-message setting and the Strawberry should_mask predicate. An arrow labelled on the list leads to an exposed box where the client gets the message and the code SERVICE_UNAVAILABLE. An arrow labelled anything else leads to a masked box where the client gets Internal server error, with no detail and no class name. A dashed arrow from the engine error, labelled always, leads down to a server log box that keeps the full message, the stack, the time and the shard name." caption="Figure 9.3: Masking is an allowlist. The client sees only what the service listed; the log always sees everything." %}
+{% include excalidraw.html file="09-error-masking" alt="A left to right flow. A source throws an exception, the resolver doesn't catch it, and the engine builds an error holding the path, the message and the original exception. The error passes an allowlist box that names the SmallRye show-runtime-exception-message setting and the Strawberry should_mask predicate. On the list leads to an exposed box where the client gets the message and the code SERVICE_UNAVAILABLE. Anything else leads to a masked box where the client gets Internal server error, with no detail and no class name. A dashed arrow from the engine error leads down to a server log box that keeps the full message, the stack, the time and the shard name." caption="Figure 9.3: Masking is an allowlist. The client sees only what the service listed; the log always sees everything." %}
 
-The log half needs the same attention as the response half. Strawberry logs the original exception, with its traceback, through the `strawberry.execution` logger before `MaskErrors` builds the replacement. SmallRye logs the exception when `print-data-fetcher-exception` is on. `verify.sh` reads each service's log after the masked request and requires `handling-primary-3` in it, and it requires the same string, the exception class names and the package name to be absent from the response.
+The log half needs the same attention. Strawberry logs the original exception, with its traceback, through the `strawberry.execution` logger before `MaskErrors` builds the replacement. SmallRye logs it when `print-data-fetcher-exception` is on. The shard name must be in the service log after a masked request and absent from the response.
 
-The code is the one field the service decides for itself, and the example supplies it only for exceptions that declare one. `DeclaredErrorCodeProvider` expresses that rule. It is registered through SmallRye's `ErrorExtensionProvider` SPI, found by ServiceLoader, and supplies `extensions.code` only for exceptions annotated `@ErrorCode`. The built-in provider file is removed with Quarkus `quarkus.class-loading.removed-resources`, so an unexpected failure carries `"code": null`:
+SmallRye's built-in providers would add an `exception` field and a code for every exception, so the service replaces them with one that supplies `extensions.code` only for exceptions annotated `@ErrorCode`. It is registered through SmallRye's `ErrorExtensionProvider` SPI, listed in `META-INF/services/io.smallrye.graphql.api.ErrorExtensionProvider`, and the built-in provider file is removed with `quarkus.class-loading.removed-resources`.
 
 ```java
 public class DeclaredErrorCodeProvider implements ErrorExtensionProvider {
@@ -168,25 +176,30 @@ public class DeclaredErrorCodeProvider implements ErrorExtensionProvider {
 }
 ```
 
+The provider file removal sits next to `print-data-fetcher-exception`, the setting that sends the original exception to the log:
+
 ```properties
+# Remove SmallRye's built-in providers;
+# DeclaredErrorCodeProvider is the only source of extensions.code.
 quarkus.class-loading.removed-resources."io.smallrye\:smallrye-graphql"=META-INF/services/io.smallrye.graphql.api.ErrorExtensionProvider
+quarkus.smallrye-graphql.print-data-fetcher-exception=true
 ```
 
-The class is listed in `META-INF/services/io.smallrye.graphql.api.ErrorExtensionProvider`. Quarkus now sends `"code": null` for a masked error, where Python sends no `extensions`, and a client reads both as no code. `verify.sh` asserts both values, which keeps the registration checked across upgrades, since the removal names a file inside the SmallRye jar.
+A masked error on Quarkus carries `"code": null` and on Python no `extensions`; a client reads both as no code. The removal names a file inside the SmallRye jar, so check it after a SmallRye upgrade.
 
-The null in a non-null field splits the stacks the same way. On Python the `TypeError` behind a null `loadLocation` is an unexpected exception, so the client reads `Internal server error.`. On Quarkus the error is graphql-java's own and is not a fetch exception, so it is shown: the message names the field and the path, and the extension is `classification`. Both stacks null the same `itinerary`.
+A null in a non-null field splits the stacks the same way. On Python the `TypeError` behind a null `loadLocation` is an unexpected exception, so the client reads `Internal server error.`. On Quarkus the error is graphql-java's own, not a fetch exception, so it is shown: the message names the field and the path, and the extension is `classification`. Both stacks null the same `itinerary`.
 
 ## Status codes and media types
 
-The execution model measured the request-error half of this against the GraphQL-over-HTTP working draft, which has one "Status Codes" section: a result with no `data` entry gets a `4xx` or `5xx` (`400` for a parse failure, `422` for validation and coercion), and legacy `application/json` clients are handled the same way, with `Content-Type: application/json` on a `2xx`. Both stacks answer `200` for a request error under either `Accept` header; the draft recommends a `4xx` or `5xx` for this case. Quarkus labels the response with the media type asked for; Strawberry always answers `application/json`, the media type the draft assigns to a legacy client. This chapter adds the execution error. When `data` is present beside `errors`, the draft says the status must be `2xx` and recommends `294` and only alongside `application/graphql-response+json`, a custom "Partial Success" code outside the IANA registry that clients unaware of it treat as `200`. The draft's own example elsewhere shows `200` for an execution error, and both stacks send plain `200`.
+The GraphQL-over-HTTP working draft asks for a `4xx` or `5xx` on a result with no `data` (`400` for a parse failure, `422` for validation and coercion). When `data` is present beside `errors`, the status must be `2xx`. The draft recommends `294` for that case, only alongside `application/graphql-response+json`: a custom "Partial Success" code outside the IANA registry that clients unaware of it treat as `200`.
 
-The example sends both `Accept` headers for a request error and an execution error, and every case answers `200`. The media type differs: Quarkus echoes `application/graphql-response+json` when asked for it, and Strawberry answers `application/json` whatever the header says. A client must include `application/graphql-response+json` in `Accept`, and `application/graphql-response+json, application/json;q=0.9` is the safe form when unsure.
+Both stacks answer plain `200` for a request error and an execution error, under either `Accept` header. They differ in the media type. Quarkus echoes `application/graphql-response+json` when asked for it, and Strawberry always answers `application/json`. A client includes `application/graphql-response+json` in `Accept`, and `application/graphql-response+json, application/json;q=0.9` is the safe form when unsure.
 
-The consequence for operations is the one the REST-to-GraphQL comparison flagged. A request error and an execution error both answer `200` on both stacks, so a latency-and-status dashboard sees neither, and no stack here sends `294` to separate the partial answer from a clean one. A monitor has to count entries in `errors`, ideally split by `extensions.code` and by operation, and that count is what later becomes a metric.
+Operations feel the consequence. A latency-and-status dashboard sees neither failure, and nothing separates a partial answer from a clean one. A monitor has to count entries in `errors`, split by `extensions.code` and by operation.
 
-## Errors as data
+## Three envelopes for failure
 
-The mutation chapter returned a domain failure as `userErrors`: an unknown voyage comes back as `[{"code":"UNKNOWN_VOYAGE","field":["input","voyageNumber"]}]` with no `errors` key, a null `handlingEvent`, and no write. A third envelope exists. A mutation can return a union of its outcomes, and the failure is a type:
+A mutation returns a domain failure as `userErrors`: an unknown voyage comes back as `[{"code":"UNKNOWN_VOYAGE","field":["input","voyageNumber"]}]` with no `errors` key, a null `handlingEvent` and no write. A third envelope is a union of the mutation's outcomes, where the failure is a type:
 
 ```graphql
 union RegisterHandlingEventResult = RegisterHandlingEventSuccess | ValidationFailed
@@ -198,23 +211,34 @@ type ValidationFailed {
 }
 ```
 
-This is a sketch and the example does not serve it. The canonical contract keeps the payload shape, and a second write surface would only confuse it.
+This is a sketch, not part of the served schema.
 
-{% include excalidraw.html file="09-failure-shapes" alt="Three columns show one failure, an unknown voyage, in three envelopes. The first column, top-level errors, shows an errors entry with a message and extensions code and a null data, because the payload is non-null and the failure nulls the whole data field, a note that the client branches on errors being present and then on the code, and a note that monitors count it as a failure. The second column, payload userErrors, which the example serves, shows data with a null handlingEvent and a userErrors entry with code UNKNOWN_VOYAGE and a field path, a note that the client branches on userErrors being non-empty, and a note that no errors key appears. The third column, a result union, shows a ValidationFailed member selected by typename, a note that the client branches on typename with an inline fragment per member, and a note that adding a member is a dangerous change." caption="Figure 9.4: One failure in three envelopes. The book serves the middle shape and sketches the union." %}
+{% include excalidraw.html file="09-failure-shapes" alt="Three columns show one failure, an unknown voyage, in three envelopes. Top-level errors: an errors entry with a message and extensions code and a null data, because the non-null payload nulls the whole data field; the client branches on errors being present and then on the code, and monitors count it as a failure. Payload userErrors, which the tracking view serves: data with a null handlingEvent and a userErrors entry with code UNKNOWN_VOYAGE and a field path; the client branches on userErrors being non-empty and no errors key appears. Result union: a ValidationFailed member selected by typename; the client branches on typename with an inline fragment per member, and adding a member is a dangerous change." caption="Figure 9.4: One failure in three envelopes. The tracking view serves the middle shape and sketches the union." %}
 
-The trade-offs are concrete. A union is exhaustive: a client that selects `... on` for every member sees a compile-time error from its code generator when the server adds one, which is useful. It is also the cost, because adding a member is a dangerous change, which the breaking-change gate measures, and a client with no default branch breaks. A union also makes every outcome a `__typename` branch, where a payload keeps the common path flat: `handlingEvent` is there on success, `userErrors` is an empty list, and a client that ignores the list still renders. The payload shape also keeps a single place for a list of failures. A union member holds one failure unless the type wraps a list.
+| | Top-level `errors` | Payload `userErrors` | Result union |
+|---|---|---|---|
+| Fits | what a user can't fix: outages, bugs | expected, user-correctable failures | expected failures with distinct shapes |
+| Client branches on | `errors` present, then `extensions.code` | `userErrors` non-empty | `__typename`, one inline fragment per member |
+| Adding a case | a new code (review like an enum value) | a new `UserErrorCode` value | a new member: a dangerous change |
+| Monitors count it | yes | no | no |
 
-The book keeps payload `userErrors` for expected, user-correctable failures, the top-level `errors` for everything a user cannot fix, and a code vocabulary for the second kind. The choice follows the decision framework's axes, not taste. On the *contract and evolution style* axis, a payload that can grow is cheaper to evolve than a union that cannot gain a member safely. On the *operational and security cost* axis, keeping user mistakes out of `errors` keeps the failure count meaningful.
+A union is exhaustive: a client that selects `... on` for every member gets a compile-time error from its code generator when the server adds one. That's also the cost, because a client with no default branch breaks. A union makes every outcome a `__typename` branch, where a payload keeps the common path flat: `handlingEvent` is there on success, `userErrors` is an empty list, and a client that ignores the list still renders. A payload also keeps one place for a list of failures, where a union member holds one unless the type wraps a list.
+
+The tracking view keeps payload `userErrors` for expected, user-correctable failures, top-level `errors` for everything a user can't fix, and a code vocabulary for the second kind. A payload that can grow is cheaper to evolve than a union that can't gain a member safely, and keeping user mistakes out of `errors` keeps the failure count meaningful.
 
 ## What a message should say
 
-A message is read by a developer with a request in front of them and sometimes, carelessly, by an end user. It should say what happened to this request in terms of the domain: `voyage service unavailable`, `No voyage has number V999X.`. It should not carry internals: no host names, class names, SQL, shard names or stack. It should not instruct the client to parse it, and it should not change meaning between releases, because someone will match on it anyway. Everything a machine needs is in `code`, `path` and, for user errors, `field`.
+A message is read by a developer with a request in front of them and sometimes, carelessly, by an end user. It says what happened to this request in domain terms: `voyage service unavailable`, `No voyage has number V999X.`. It carries no host names, class names, SQL, shard names or stack, and it doesn't change meaning between releases, because someone will match on it anyway. Everything a machine needs is in `code`, `path` and, for user errors, `field`. Test the message only for errors the service wrote.
 
-The rewording rule has a corollary for tests. Assert the message only for errors the service wrote, as `verify.sh` does for `voyage service unavailable`, which is identical on both stacks because both are constructed in the example. Never assert the text of a request error: the two engines word them differently, as the earlier lab and nullability-propagation runs showed, and the example asserts their shape.
+> **🤖 Explore with your agent**
+>
+> "In `examples/09-error-handling/`, add a `RATE_LIMITED` code: a new `RateLimited` subclass of `ExposedError` in `python/app/errors.py` and a `@ErrorCode("RATE_LIMITED")` exception listed in `show-runtime-exception-message` for Quarkus. Make the location source raise it for `XXBAD`. Keep every other exception masked as `Internal server error.`, and tell me which of `errors`, `userErrors` or a union each of `RATE_LIMITED`, an unknown voyage and a corrupted projection belongs in."
+>
+> Check: query `cargo(trackingId: "MNO901")` on both stacks and confirm the new error has `extensions.code` `RATE_LIMITED` with its own message while `PQR234` still returns `Internal server error.`.
 
-## On the wire
+## Build, run, observe
 
-Start the stack. Quarkus is on `8190` and Python on `8191`.
+Quarkus is on `8190` and Python on `8191`.
 
 ```bash
 docker compose -f examples/09-error-handling/compose.yaml up -d --build
@@ -242,7 +266,7 @@ docker compose -f examples/09-error-handling/compose.yaml logs quarkus | grep ha
 {"errors":[{"message":"Internal server error.","locations":[{"line":1,"column":44}],"path":["cargo","delivery"],"extensions":{"code":null}}],"data":{"cargo":null}}
 ```
 
-Python answers `{"data":{"cargo":null},"errors":[{"message":"Internal server error.","locations":[{"line":1,"column":44}],"path":["cargo","delivery"]}]}`: the same message and path, and no `extensions` key. The `grep` finds the exception in the Quarkus log; use the service name `python` for the other stack, where the line comes from the `strawberry.execution` logger. The partial-data query is the one above, and the request error and the status codes follow:
+Python answers `{"data":{"cargo":null},"errors":[{"message":"Internal server error.","locations":[{"line":1,"column":44}],"path":["cargo","delivery"]}]}`: the same message and path, and no `extensions` key. The `grep` finds the exception in the Quarkus log; use the service name `python` for the other stack. Then a request error and the status codes:
 
 ```bash
 Q '{ cargo(trackingId: "ABC123") { weight } }' 8191
@@ -258,45 +282,25 @@ done
 200 application/graphql-response+json
 ```
 
-Port `8191` answers `200 application/json` for both headers. Messages, timestamps and log lines differ on every run. The paths, codes, counts and statuses do not.
+Port `8191` answers `200 application/json` for both headers.
 
-| Check | Expected |
-|---|---|
-| `JKL567` itinerary legs with `loadLocation` and `voyage` | 1 error, path `["cargo","itinerary","legs",0,"voyage"]`, message `voyage service unavailable`, `extensions.code` `"SERVICE_UNAVAILABLE"`, with `message`, `locations` and `path`; `voyage` null, `loadLocation` `USNYC` |
-| `PQR234` `cargo { trackingId delivery { transportStatus } }` | `data.cargo` null; 1 error, path `["cargo","delivery"]`, message `Internal server error.`; no `handling-primary-3`, `IllegalStateException`, `RuntimeError` or `com.patterncatalyst` in the response; `handling-primary-3` in the service log |
-| the same, `extensions.code` | Quarkus JSON `null`; Python has no `extensions` key |
-| three aliases `ok`, `outage`, `bug` | 2 errors with paths `["outage","itinerary","legs",0,"voyage"]` and `["bug","delivery"]`; `ok.trackingId` `ABC123`; `bug` null; `data` keys `ok,outage,bug` |
-| `MNO901` itinerary legs `loadLocation` | `itinerary` null; 1 error, path `["cargo","itinerary","legs",0,"loadLocation"]`; message contains `loadLocation` on Quarkus, equals `Internal server error.` on Python |
-| `{ cargo(trackingId:"ABC123"){ weight } }` | errors with `message` and `locations` and no `path`; no `data` (Python sends `"data":null`); no source call |
-| status and media type, request error and execution error (the draft asks for a 4xx and for 294) | `200 application/json` for `Accept: application/json`; for `Accept: application/graphql-response+json`, Quarkus `200 application/graphql-response+json`, Python `200 application/json` |
-| `registerHandlingEvent` LOAD at `DEHAM` on `V999X` | no `errors`; `userErrors` `[{"code":"UNKNOWN_VOYAGE","field":["input","voyageNumber"]}]`; `handlingEvent` null; no `appendEvent` call |
-| `a: voyage("V404X")`, `b: voyage("V100S")` | 1 error, path `["a"]`, code `SERVICE_UNAVAILABLE`; `a` null; `b.number` `V100S` |
-| scalars and live schema | `SCALAR` and the `specifiedByURL` values from the canonical SDL; conforms to `contracts/schema/` |
+`bash examples/09-error-handling/verify.sh` runs the whole sequence on both stacks and prints `PASS` only when both hold. Experiments:
 
-`bash examples/09-error-handling/verify.sh` runs the whole sequence on both stacks and prints `PASS` only when both hold.
+- **Run the three-alias query.** Two errors with paths `["outage","itinerary","legs",0,"voyage"]` and `["bug","delivery"]`, `ok.trackingId` is `ABC123`, `bug` is null.
+- **Query `MNO901` itinerary legs `loadLocation`.** `itinerary` is null with one error at `["cargo","itinerary","legs",0,"loadLocation"]`. The message names `loadLocation` on Quarkus and is `Internal server error.` on Python.
+- **Ask for `a: voyage(voyageNumber: "V404X")` and `b: voyage(voyageNumber: "V100S")`.** One error at `["a"]` with code `SERVICE_UNAVAILABLE`, `a` null, and `b.number` `V100S`.
+- **Register a `LOAD` at `DEHAM` on `V999X`.** No `errors`; `userErrors` holds `UNKNOWN_VOYAGE` at `["input","voyageNumber"]`, and no `appendEvent` runs.
 
-<div class="callout callout--safe"><p class="callout__title">Decision</p><p>Error handling is where the <em>aggregation across sources</em> axis of the decision framework gets its operating rule: when one of several owners fails, the response keeps the rest and says which part is missing, with a path and a code a client can act on. The <em>contract and evolution style</em> axis decides the shape. Codes are contract and messages are not, so a new <code>extensions.code</code> value is a change to review like an enum value, and a payload <code>userErrors</code> list can grow where a result union cannot gain a member safely. The <em>operational and security cost</em> axis decides the masking and the monitoring: an allowlist hides every unexpected exception by default and keeps the detail in the log, and because both stacks answer <code>200</code> under both media types, where the GraphQL-over-HTTP draft recommends a <code>4xx</code>, the monitor counts <code>errors</code> entries by code. The tracking view therefore exposes outages with <code>SERVICE_UNAVAILABLE</code>, masks everything else as <code>Internal server error.</code>, keeps expected domain failures in <code>userErrors</code>, and treats the status code as no signal at all.</p></div>
-
-## Review
-
-- A request error means no resolver ran; an execution error leaves partial `data` plus a `path` to the field that failed.
-- An error's `message`, `locations`, `path`, and `extensions` each carry a different kind of information, and a client can rely only on `path` and `extensions.code`.
-- An unexpected exception is masked as `Internal server error.` behind an allowlist, while a known outage like `SERVICE_UNAVAILABLE` reaches the client through `extensions.code`.
-- The null in `data` lands at the nearest nullable ancestor, which can sit above the field named in the error's `path`.
-- Top-level `errors`, payload `userErrors`, and a result union are three ways to report failure, each suited to a different kind of failure.
-
-## Where this goes next
-
-This chapter gave failures a contract: the difference between request and execution errors, the parts of an error, partial data with a path to each hole, a code vocabulary, masking by allowlist on both stacks with the detail kept in the log, the status codes the GraphQL-over-HTTP draft asks for against the `200` the stacks send, and the choice between top-level errors, payload `userErrors` and a result union.
-
-Schema design patterns come next, including the `Node` interface and its `nodes` field. The breaking-change gate treats a new `extensions.code` value or a new union member as an evolution decision. Relay-style pagination reuses the exposed and masked machinery from this example: its connection arguments raise `BAD_USER_INPUT` for an invalid cursor and a page size outside `0..50`, and its booking outage for `GHI345` is a `SERVICE_UNAVAILABLE`. Later, the error count becomes a metric.
-
-For the formal definitions, read "Response" with its "Errors" and "Error Result Format" sections, and "Handling Execution Errors", in the [GraphQL specification](https://spec.graphql.org/), and "Status Codes" with the response media types in the current working draft of the [GraphQL-over-HTTP specification](https://http-spec.graphql.org/draft/). The framework behaviour is in the Quarkus [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql), where the error settings are documented, and in the Strawberry documentation under "Dealing with errors" and the `MaskErrors` extension. Artur Czemiel's *GraphQL Best Practices* covers the same ground in its treatment of error descriptions, and Samer Buna's *GraphQL in Action* gives the user-error context in "Implementing mutations"; both are listed on the [Bibliography](../../bibliography/) page.
+> **Decision**
+>
+> When one of several owners fails, keep the rest of the response and say which part is missing, with a `path` and an `extensions.code` a client can act on. Codes are contract and messages are not, so review a new code like an enum value. Expose outages as `SERVICE_UNAVAILABLE`, mask everything else as `Internal server error.` through an allowlist and keep the detail in the log, return expected domain failures as `userErrors`, and count `errors` entries by code, because the status code carries no signal on either stack.
 
 ## For deeper coverage
 
 - [GraphQL specification: Response, Errors, Error Result Format, Handling Execution Errors](https://spec.graphql.org/): the anatomy of an error and the partial-data model.
 - [GraphQL-over-HTTP working draft: Status Codes](https://http-spec.graphql.org/draft/): what a request error and an execution error should answer with, versus what both stacks send.
-- *Cloud Native Design Patterns*, "API Error Handling" (Appendix E): the broader error-contract patterns this chapter's exposed/masked split is one instance of.
+- The Quarkus [SmallRye GraphQL guide](https://quarkus.io/guides/smallrye-graphql) documents the error settings; the Strawberry documentation covers "Dealing with errors" and the `MaskErrors` extension.
+- *Cloud Native Design Patterns*, "API Error Handling" (Appendix E): the broader error-contract patterns the exposed/masked split is one instance of.
 - Artur Czemiel, *GraphQL Best Practices* (Packt, 2024): error descriptions and message design.
 - Samer Buna, *GraphQL in Action* (Manning, 2021): the user-error context in "Implementing mutations."
+- The [Bibliography](../../bibliography/) page lists the books.

@@ -16,8 +16,8 @@ import generate_diagram as g  # noqa: E402
 g.OUT = str(ROOT / "assets" / "diagrams")
 
 bands = [
-    dict(x=20, y=50, w=290, h=300, label="Chapter 27 values on minikube"),
-    dict(x=345, y=50, w=310, h=300, label="Chapter 27 chart, unchanged"),
+    dict(x=20, y=50, w=290, h=300, label="Final-project values on minikube"),
+    dict(x=345, y=50, w=310, h=300, label="Final-project chart, unchanged"),
     dict(x=690, y=50, w=290, h=300, label="Appendix A wrapper chart"),
 ]
 nodes = [
@@ -29,7 +29,7 @@ nodes = [
     dict(x=710, y=95, w=250, h=70, style="box", lines=["Chart.yaml dependency, alias final", "file://../../27-final-project/helm"]),
     dict(x=710, y=180, w=250, h=70, style="box", lines=["final.* values", "ClusterIP, plain edge, IfNotPresent"]),
     dict(x=710, y=265, w=250, h=70, style="box", lines=["Routes x6, BuildConfigs x2,", "ImageStreams x2, anyuid RoleBinding"]),
-    dict(x=40, y=385, w=920, h=90, style="ghost", lines=["Application code, Containerfiles and images: the same in every tier", "quarkus/ and python/ of Chapter 27 build with their Containerfile unchanged;", "the cluster only changes who builds them, who terminates TLS and which SCC admits a pod"]),
+    dict(x=40, y=385, w=920, h=90, style="ghost", lines=["Application code, Containerfiles and images: the same in every tier", "quarkus/ and python/ of the final project build with their Containerfile unchanged;", "the cluster only changes who builds them, who terminates TLS and which SCC admits a pod"]),
 ]
 edges = [
     dict(x1=290, y1=130, x2=365, y2=150, amber=True, label="values", lx=0, ly=-12),

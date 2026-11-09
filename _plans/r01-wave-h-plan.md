@@ -589,8 +589,8 @@ Plus cover, agenda, series map, closing, and an appendix (divider + 3 full listi
 - `~/Dev/api-patterns-and-practices-grpc/presentation/_shared/` (`deck-helpers.js`, `render_svgs.py`, `README.md`, `package.json`, `package-lock.json`): templates to port
 - `~/Dev/api-patterns-and-practices-grpc/presentation/api-patterns-grpc-{100,quarkus,python}/deck.js`: structure templates (cover, divider, appendix loop, closing)
 - `~/.claude/skills/lgtm-presentation/SKILL.md`, `references/deck-builder.md`, `references/theme.md`; `~/.claude/skills/lgtm-professional-voice/SKILL.md`, `references/surfaces.md`, `scripts/scan.sh`
-- `~/Dev/api-patterns-and-practices-graphql/_docs/*.md` (figure captions, "On the wire" blocks), `~/Dev/api-patterns-and-practices-graphql/contracts/schema/shipping/*.graphql`, `~/Dev/api-patterns-and-practices-graphql/examples/*/{quarkus,python}/**`
-- `~/Dev/api-patterns-and-practices-graphql/.gitignore`, `~/Dev/api-patterns-and-practices-graphql/README.md`
+- `<repo>/_docs/*.md` (figure captions, "On the wire" blocks), `<repo>/contracts/schema/shipping/*.graphql`, `<repo>/examples/*/{quarkus,python}/**`
+- `<repo>/.gitignore`, `<repo>/README.md`
 
 ---
 
@@ -622,4 +622,4 @@ Plus cover, agenda, series map, closing, and an appendix (divider + 3 full listi
 - ~/Dev/api-patterns-and-practices-grpc/presentation/_shared/render_svgs.py
 - ~/Dev/api-patterns-and-practices-grpc/presentation/api-patterns-grpc-100/deck.js
 - ~/.claude/skills/lgtm-presentation/references/deck-builder.md
-- ~/Dev/api-patterns-and-practices-graphql/_plans/r01-execution-plan.md
+- <repo>/_plans/r01-execution-plan.md

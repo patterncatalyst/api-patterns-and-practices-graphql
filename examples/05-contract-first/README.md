@@ -1,13 +1,13 @@
-# Ch5 - Schema-first and contract-first
+# Chapter 5: Schema-first and contract-first
 
-The Ch3 object graph on both stacks, plus the loop that keeps the code-first schemas aligned with the contract:
+The Chapter 3 object graph on both stacks, plus the loop that keeps the code-first schemas aligned with the contract:
 each stack exports the SDL it builds, the exports and the live introspection are diffed
 against the canonical SDL, and five kinds of seeded drift prove that the diff fails when it
 should.
 
 ## The served slice
 
-The slice is the one Ch3 serves, from the same in-memory seed (healthy cargos `ABC123` and
+The slice is the one Chapter 3 serves, from the same in-memory seed (healthy cargos `ABC123` and
 `XYZ789` only):
 
 - `Query.cargo`, `Query.location`, `Query.voyage` and `Query.node`.
@@ -35,7 +35,7 @@ Two things are new:
 bash examples/05-contract-first/verify.sh
 ```
 
-`verify.sh` brings both services up with `docker compose`, checks the Ch3 values and the
+`verify.sh` brings both services up with `docker compose`, checks the Chapter 3 values and the
 scalar `specifiedByURL`s, exports each schema, runs the conformance checks on the exports and
 on the live endpoints, compares the two exports, runs `npm --prefix contracts run lint`,
 seeds the five drifts into copies of each export, and tears the stack down. It prints `PASS`
@@ -110,7 +110,7 @@ in `python/uv.lock`.
 
 ## Code-first notes
 
-**Quarkus.** The code is the Ch3 code. The one change is in `application.properties`:
+**Quarkus.** The code is the Chapter 3 code. The one change is in `application.properties`:
 
 ```properties
 quarkus.smallrye-graphql.schema-include-scalars=true

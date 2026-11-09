@@ -15,11 +15,11 @@ import generate_diagram as g  # noqa: E402
 g.OUT = str(ROOT / "assets" / "diagrams")
 
 nodes = [
-    dict(x=30, y=70, w=235, h=150, style="user", lines=["1. Client cache", "key: __typename + id", "removed by: a newer response", "for the same object", "(Chapter 22)"]),
+    dict(x=30, y=70, w=235, h=150, style="user", lines=["1. Client cache", "key: __typename + id", "removed by: a newer response", "for the same object"]),
     dict(x=305, y=70, w=235, h=150, style="accent", lines=["2. Edge: nginx proxy_cache", "key: method + URL", "stores what Cache-Control allows", "skips: Authorization, no-store", "removed by: max-age"]),
     dict(x=580, y=70, w=235, h=150, style="accent", lines=["3. Server: field caches", "key: voyage no., UN/LOCODE,", "tracking id", "removed by: TTL, or a write", "(registerHandlingEvent)"]),
     dict(x=855, y=70, w=215, h=150, style="box", lines=["4. Source: the owners", "booking, routing, voyage,", "location, handling", "the system of record", "every call is logged"]),
-    dict(x=580, y=260, w=490, h=60, style="ghost", lines=["Chapter 13 loader cache: one request, then gone", "it sits above layer 3 and shares nothing between requests"]),
+    dict(x=580, y=260, w=490, h=60, style="ghost", lines=["DataLoader cache: one request, then gone", "it sits above layer 3 and shares nothing between requests"]),
 ]
 edges = [
     dict(x1=265, y1=145, x2=305, y2=145, label="GET", lx=0, ly=-8),

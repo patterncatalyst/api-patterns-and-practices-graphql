@@ -1,4 +1,4 @@
-# Ch3 - SDL and the type system
+# Chapter 3: SDL and the type system
 
 The tracking view's object graph, served from an in-memory seed on both stacks. The
 chapter walks the type system (scalars, enums, objects, the `Node` interface, wrappers)

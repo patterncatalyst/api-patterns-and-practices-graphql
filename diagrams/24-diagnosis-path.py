@@ -30,7 +30,7 @@ nodes = [
     dict(x=540, y=100, w=215, h=150, style="box", lines=["3  The record in Loki", "trace_id = the same id", "exception_type KeyError", "exception_message XXBAD"]),
     dict(x=790, y=100, w=170, h=150, style="accent", lines=["4  The data", "evt_10: UNLOAD", "at XXBAD", "leg 2 ends at XXBAD", "location source: no XXBAD"]),
     dict(x=540, y=320, w=215, h=95, style="accent", lines=["5  The fix", "the location owner adds XXBAD,", "or the derivation treats an", "unknown location as null"]),
-    dict(x=790, y=320, w=170, h=95, style="ink", lines=["6  A regression test", "JKL012 delivery answers", "(Chapter 23)"]),
+    dict(x=790, y=320, w=170, h=95, style="ink", lines=["6  A regression test", "JKL012 delivery answers"]),
 ]
 edges = [
     dict(x1=255, y1=175, x2=290, y2=175, amber=True, label="id", lx=0, ly=-8),

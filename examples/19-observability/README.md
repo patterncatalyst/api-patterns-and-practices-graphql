@@ -1,4 +1,4 @@
-# Ch19 - Observability
+# Chapter 19: Observability
 
 Both stacks export traces, metrics and logs over OTLP to one container, `grafana/otel-lgtm`, and
 `verify.sh` reads the result back from it. Every traced request carries a trace id chosen by the script,

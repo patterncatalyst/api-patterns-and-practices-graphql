@@ -27,7 +27,7 @@ layers = [
      ["data beside errors", "8 or 6 calls; 7,651 refused"], ["Test image", "mvn verify | pytest"]),
     ("4  Contract", "exported and live SDL", ["Both schemas", "contracts/schema/ is the base"],
      ["No breaking change either way", "only Subscription is unserved"], ["verify.sh", "graphql-inspector"]),
-    ("5  Client document", "what clients send", ["documents/ vs the contract", "Chapter 22's four operations"],
+    ("5  Client document", "what clients send", ["documents/ vs the contract", "the four client operations"],
      ["Valid documents pass", "Cargo.weight is refused"], ["verify.sh", "graphql-inspector"]),
     ("6  Load", "the running stack", ["k6 virtual users", "exact numbers of iterations"],
      ["Every check true, same calls", "per request; one write for 40 retries"], ["verify.sh", "k6 image"]),

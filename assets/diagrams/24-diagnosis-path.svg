@@ -32,9 +32,8 @@
 <text x="647.5" y="382.5" font-size="11.5" fill="#555555" text-anchor="middle">or the derivation treats an</text>
 <text x="647.5" y="397.5" font-size="11.5" fill="#555555" text-anchor="middle">unknown location as null</text>
 <rect x="790" y="320" width="170" height="95" rx="9" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
-<text x="875.0" y="358.0" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">6  A regression test</text>
-<text x="875.0" y="375.0" font-size="11.5" fill="#dddddd" text-anchor="middle">JKL012 delivery answers</text>
-<text x="875.0" y="390.0" font-size="11.5" fill="#dddddd" text-anchor="middle">(Chapter 23)</text>
+<text x="875.0" y="365.5" font-size="13.5" font-weight="700" fill="#ffffff" text-anchor="middle">6  A regression test</text>
+<text x="875.0" y="382.5" font-size="11.5" fill="#dddddd" text-anchor="middle">JKL012 delivery answers</text>
 <path d="M255,175 L290,175" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
 <text x="272.5" y="167.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">id</text>
 <text x="272.5" y="167.0" font-size="11" fill="#b8650a" text-anchor="middle">id</text>

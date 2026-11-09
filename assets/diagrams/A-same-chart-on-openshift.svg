@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="'Red Hat Text', system-ui, sans-serif" role="img">
 <defs><marker id="a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="am" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8870c"/></marker></defs>
 <rect x="20" y="50" width="290" height="300" rx="12" fill="#fafafa" stroke="#ddd"/>
-<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Chapter 27 values on minikube</text>
+<text x="32" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Final-project values on minikube</text>
 <rect x="345" y="50" width="310" height="300" rx="12" fill="#fafafa" stroke="#ddd"/>
-<text x="357" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Chapter 27 chart, unchanged</text>
+<text x="357" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Final-project chart, unchanged</text>
 <rect x="690" y="50" width="290" height="300" rx="12" fill="#fafafa" stroke="#ddd"/>
 <text x="702" y="70" font-size="12" font-weight="700" fill="#1d1d1d">Appendix A wrapper chart</text>
 <rect x="40" y="95" width="250" height="70" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
@@ -37,7 +37,7 @@
 <text x="835.0" y="315.0" font-size="11.5" fill="#555555" text-anchor="middle">ImageStreams x2, anyuid RoleBinding</text>
 <rect x="40" y="385" width="920" height="90" rx="9" fill="#ffffff" stroke="#8a8d91" stroke-width="1.5" stroke-dasharray="6 4"/>
 <text x="500.0" y="420.5" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Application code, Containerfiles and images: the same in every tier</text>
-<text x="500.0" y="437.5" font-size="11.5" fill="#555555" text-anchor="middle">quarkus/ and python/ of Chapter 27 build with their Containerfile unchanged;</text>
+<text x="500.0" y="437.5" font-size="11.5" fill="#555555" text-anchor="middle">quarkus/ and python/ of the final project build with their Containerfile unchanged;</text>
 <text x="500.0" y="452.5" font-size="11.5" fill="#555555" text-anchor="middle">the cluster only changes who builds them, who terminates TLS and which SCC admits a pod</text>
 <path d="M290,130 L365,150" fill="none" stroke="#b8650a" stroke-width="2" marker-end="url(#am)"/>
 <text x="327.5" y="128.0" font-size="11" fill="#ffffff" stroke="#ffffff" stroke-width="3" paint-order="stroke" text-anchor="middle">values</text>

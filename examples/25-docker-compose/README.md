@@ -1,4 +1,4 @@
-# Ch25 - Local with Docker Compose
+# Chapter 25: Local with Docker Compose
 
 The tracking view as one local tier. An nginx edge terminates TLS 1.3, refuses bodies over 64k and routes
 only `/graphql`; both stacks sit on an internal network with no published port; the edge's configuration

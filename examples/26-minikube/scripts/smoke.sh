@@ -135,7 +135,7 @@ check_release() {
   assert_eq "Succeeded" "$(kn get pod "$RELEASE-graphql-test" -o jsonpath='{.status.phase}')" "the helm test pod"
   for stack in lgtm quarkus python edge; do
     kn rollout status "deploy/$stack" --timeout=60s >/dev/null
-    echo "lib.sh: ok — deploy/$stack is rolled out" >&2
+    echo "lib.sh: ok, deploy/$stack is rolled out" >&2
   done
   values="$(hc get values "$RELEASE" -n "$NAMESPACE" -a -o json)"
   for stack in quarkus python; do
@@ -226,7 +226,7 @@ check_trace() {
   pod="$pods"
   assert_contains "$pod" "$(pod_names "$stack")" "$stack: k8s.pod.name is a pod of the Deployment"
   loki_wait "$LOKI" "{service_name=\"ch26-$stack\"} | trace_id=\"$trace_id\"" 90 1 >/dev/null
-  echo "lib.sh: ok — $stack: Loki holds a record for trace $trace_id" >&2
+  echo "lib.sh: ok, $stack: Loki holds a record for trace $trace_id" >&2
 }
 
 # --- 5. NetworkPolicy --------------------------------------------------------------
@@ -259,9 +259,9 @@ check_config_roll() {
   after_sum="$(kn get deploy/python -o 'jsonpath={.spec.template.metadata.annotations.checksum/config}')"
   after_pod="$(pod_names python)"
   [[ "$after_sum" != "$before_sum" ]] || { echo "FAIL - the python checksum/config did not change" >&2; return 1; }
-  echo "lib.sh: ok — python checksum/config changed" >&2
+  echo "lib.sh: ok, python checksum/config changed" >&2
   [[ "$after_pod" != "$before_pod" ]] || { echo "FAIL - the python pod was not replaced" >&2; return 1; }
-  echo "lib.sh: ok — the python pod was replaced ($before_pod -> $after_pod)" >&2
+  echo "lib.sh: ok, the python pod was replaced ($before_pod -> $after_pod)" >&2
   assert_eq "100" "$(kn exec deploy/python -- printenv TRACKING_SOURCE_LATENCY_MS)" "the new pod runs with TRACKING_SOURCE_LATENCY_MS=100"
   assert_eq "$quarkus_sum" "$(kn get deploy/quarkus -o 'jsonpath={.spec.template.metadata.annotations.checksum/config}')" "quarkus checksum/config is unchanged"
   assert_eq "$quarkus_pod" "$(pod_names quarkus)" "the quarkus pod was not replaced"

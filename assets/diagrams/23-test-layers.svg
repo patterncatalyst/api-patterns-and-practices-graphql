@@ -57,7 +57,7 @@
 <text x="110.0" y="444.0" font-size="11.5" fill="#555555" text-anchor="middle">what clients send</text>
 <rect x="215" y="400" width="220" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
 <text x="325.0" y="427.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">documents/ vs the contract</text>
-<text x="325.0" y="444.0" font-size="11.5" fill="#555555" text-anchor="middle">Chapter 22&#x27;s four operations</text>
+<text x="325.0" y="444.0" font-size="11.5" fill="#555555" text-anchor="middle">the four client operations</text>
 <rect x="455" y="400" width="300" height="58" rx="9" fill="#ffffff" stroke="#1a1a1a" stroke-width="2"/>
 <text x="605.0" y="427.0" font-size="13.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">Valid documents pass</text>
 <text x="605.0" y="444.0" font-size="11.5" fill="#555555" text-anchor="middle">Cargo.weight is refused</text>

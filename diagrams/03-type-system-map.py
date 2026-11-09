@@ -42,7 +42,7 @@ nodes = [
     dict(x=col(3) + 74, y=472, w=130, h=44, style="box", lines=["UnLocode", "custom, @specifiedBy"]),
     dict(x=col(5) - 40, y=472, w=180, h=44, style="box", lines=["DateTime", "custom, @specifiedBy"]),
     # Input and wrappers
-    dict(x=col(0), y=584, w=270, h=44, style="ghost", lines=["RegisterHandlingEventInput", "input type, served in Chapter 8"]),
+    dict(x=col(0), y=584, w=270, h=44, style="ghost", lines=["RegisterHandlingEventInput", "input type, used by mutations"]),
     dict(x=col(3) - 20, y=584, w=330, h=44, style="sub", lines=["Wrappers: T!  [T]  [T!]!", "Itinerary.legs reads inside-out as [Leg!]!"]),
 ]
 edges = [

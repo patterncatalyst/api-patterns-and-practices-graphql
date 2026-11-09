@@ -293,7 +293,7 @@ import json, sys
 errors = json.loads(sys.stdin.read())["errors"]
 assert errors and all("traceId" not in (e.get("extensions") or {}) for e in errors), errors
 ' <<<"$(body_of "$resp")" || { echo "FAIL - $stack: a request error carries a traceId" >&2; return 1; }
-  echo "lib.sh: ok — $stack: a request error carries no traceId" >&2
+  echo "lib.sh: ok, $stack: a request error carries no traceId" >&2
 
   # 3b. An exposed error carries the trace id too.
   trace_id="$(new_trace_id)"
@@ -309,7 +309,7 @@ assert errors and all("traceId" not in (e.get("extensions") or {}) for e in erro
     echo "FAIL - $stack: extensions.traceId is not 32 lowercase hex characters: $trace_id" >&2
     return 1
   fi
-  echo "lib.sh: ok — $stack: the server-chosen trace id is 32 lowercase hex characters" >&2
+  echo "lib.sh: ok, $stack: the server-chosen trace id is 32 lowercase hex characters" >&2
   trace="$(tempo_trace "$TEMPO" "$trace_id" 90 "$f2_spans")"
   assert_span "$trace" "$(op_re DeliveryOfJkl)" 1 1 "$stack: the trace the server chose is findable by the id the response carried"
 

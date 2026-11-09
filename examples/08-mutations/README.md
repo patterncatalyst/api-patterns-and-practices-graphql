@@ -1,4 +1,4 @@
-# Ch8 - Mutations and input types
+# Chapter 8: Mutations and input types
 
 The tracking view's first write. `Mutation.registerHandlingEvent` records a handling event for a
 cargo and returns the event together with the cargo, whose `delivery` is derived again after the
